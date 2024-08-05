@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "492280643443",
+    "project_id": "ifca-residence-2-aug-24",
+    "storage_bucket": "ifca-residence-2-aug-24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492280643443:android:787df46f3d73d6aadacf06",
+        "android_client_info": {
+          "package_name": "com.ifcasoftware.ifcaresidence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs7pG0xTKRDlSgE03PImQcgtVgtZg28Yk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

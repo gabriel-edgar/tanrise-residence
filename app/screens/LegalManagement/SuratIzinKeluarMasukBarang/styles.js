@@ -1,0 +1,114 @@
+import { StyleSheet, Dimensions, PixelRatio } from "react-native";
+//import { BaseColor, useTheme } from "@config";
+const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
+//const { colors } = useTheme();
+//console.log("6 colors: ", colors);
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  button: {
+    padding: 15,
+    backgroundColor: "#f4f4f4",
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "#A4A4A4",
+    textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    //justifyContent: "flex-end",
+    //backgroundColor: "black",
+  },
+  modalContent: {
+    //backgroundColor: colors.background != "white" ? "black" : "white",
+    padding: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  nextButtonContainer: {
+    // position: 'absolute',
+    // bottom: 40,
+    // right: 20,
+    marginVertical: 20,
+    marginTop: 40,
+    width: 100,
+    alignSelf: "center",
+  },
+  nextButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    //backgroundColor: colors.primary, //"#315447",
+    padding: 10,
+    borderRadius: 10,
+    justifyContent: "space-between",
+  },
+  nextButtonText: {
+    color: "white",
+    fontSize: 18,
+    marginRight: 10,
+  },
+  picker: {
+    width: "100%",
+  },
+  iosPicker: {
+    height: 200,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#315447",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "white",
+    textAlign: "center",
+  },
+  checkBoxSize: {
+    transform: [{ scale: 0.8 }],
+    marginRight: 10,
+  },
+  checkBoxFontSize: {
+    fontSize: 12,
+    marginTop: 10,
+    marginRight: 10,
+    //alignSelf: "flex-start",
+    //backgroundColor: "blue",
+  },
+  containerDate: {
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // padding: 16,
+    // borderColor: 'red',
+    // borderWidth: 1
+  },
+  buttonDate: {
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  buttonTextDate: {
+    color: "white",
+    textAlign: "center",
+  },
+  selectedDate: {
+    marginTop: 20,
+    fontSize: 18,
+  },
+  datePicker: {
+    height: 120,
+    marginTop: -10,
+  },
+  pickerButton: {
+    paddingHorizontal: 20,
+  },
+});

@@ -1,0 +1,35 @@
+yarn add
+@react-native-community/checkbox
+@react-native-picker/picker
+@react-native-seoul/masonry-list
+react-native-calendars
+react-native-camera
+react-native-chart-kit
+react-native-dark-mode
+react-native-date-picker
+react-native-draggable
+react-native-dynamic-tab-view
+react-native-elements
+react-native-gifted-chat
+react-native-image-pan-zoom
+react-native-linear-gradient
+react-native-modal-datetime-picker
+react-native-modal-selector
+react-native-paper
+react-native-pdf
+react-native-push-notification
+react-native-qrcode-svg
+react-native-segment-control
+react-native-segmented-control-tab
+react-native-select-dropdown
+react-native-signature-canvas
+react-native-simple-radio-button
+react-native-star-rating
+react-native-swiper
+react-native-tab-view
+react-native-timeline-flatlist
+rn-range-slider
+
+yarn add @react-native-community/checkbox @react-native-picker/picker @react-native-seoul/masonry-list
+
+yarn add react-native-calendars react-native-camera react-native-chart-kit react-native-dark-mode react-native-date-picker react-native-draggable react-native-dynamic-tab-view react-native-elements react-native-gifted-chat react-native-image-pan-zoom react-native-linear-gradient react-native-modal-datetime-picker react-native-modal-selector react-native-paper react-native-pdf react-native-push-notification react-native-qrcode-svg react-native-segment-control react-native-segmented-control-tab react-native-select-dropdown react-native-signature-canvas react-native-simple-radio-button react-native-star-rating react-native-swiper react-native-tab-view react-native-timeline-flatlist rn-range-slider

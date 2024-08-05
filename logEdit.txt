@@ -1,0 +1,210 @@
+splashscreen, android - app - src - main - res - launch_screen.xml
+
+ "versionName": "5.2.0.7",
+
+ UrbanNewMobiles to Asthana
+
+ https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.
+ 0562023506177!2d106.94914061431056!3d-6.
+ 256326762994648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.
+ 1!3m3!1m2!1s0x2e698d025205b039:0xa098a5ebb4506b44!2sJl
+ . Caman Raya No.22, RT.007/RW.001, Jatibening, Kec. Pondokgede
+ , Kota Bks, Jawa Barat 17412!5e0!3m2!1sid!2sid!4v1584097135879
+ !5m2!1sid!2sid
+
+ https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0562023506177!2d106.94914061431056!3d-6.256326762994648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698d025205b039:0xa098a5ebb4506b44!2sJl. Caman Raya No.22, RT.007/RW.001, Jatibening, Kec. Pondokgede, Kota Bks, Jawa Barat 17412!5e0!3m2!1sid!2sid!4v1584097135879!5m2!1sid!2sid
+
+ [
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "11",
+    "OrderSeq": "1",
+    "PARENT_SEQ": "1",
+    "ParentMenuID": "0",
+    "Title": "All Project",
+    "URL": null,
+    "URL_angular": "ListingProjectPage",
+    "isProject": null,
+    "picture": "buildings2.png",
+    "title_descs": "Information Project"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "4",
+    "OrderSeq": "8",
+    "PARENT_SEQ": "8",
+    "ParentMenuID": "0",
+    "Title": "News",
+    "URL": "#",
+    "URL_angular": "NewsPage",
+    "isProject": null,
+    "picture": "news.png",
+    "title_descs": null
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "10",
+    "OrderSeq": "10",
+    "PARENT_SEQ": "10",
+    "ParentMenuID": "0",
+    "Title": "Calculator KPA/R",
+    "URL": "",
+    "URL_angular": "SimulasiPage",
+    "isProject": null,
+    "picture": "calculator.png",
+    "title_descs": "Calculator KPA/R Simulation"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "2",
+    "OrderSeq": "12",
+    "PARENT_SEQ": "12",
+    "ParentMenuID": "0",
+    "Title": "Find Unit & Price",
+    "URL": "#",
+    "URL_angular": "ProductProjectPage",
+    "isProject": "1",
+    "picture": "search.png",
+    "title_descs": "Information Unit And Price"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "Ticketentry",
+    "Is_parent": "0",
+    "MenuID": "15",
+    "OrderSeq": "20",
+    "PARENT_SEQ": "20",
+    "ParentMenuID": "0",
+    "Title": "Customer Care",
+    "URL": "TWPProjectPage",
+    "URL_angular": "TWPProjectPage",
+    "isProject": null,
+    "picture": "twp.png",
+    "title_descs": null
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "Billing",
+    "Is_parent": "0",
+    "MenuID": "16",
+    "OrderSeq": "21",
+    "PARENT_SEQ": "21",
+    "ParentMenuID": "0",
+    "Title": "My Billing",
+    "URL": "TWPBillProjectPage",
+    "URL_angular": "TWPBillProjectPage",
+    "isProject": null,
+    "picture": "mybilling2.png",
+    "title_descs": "My Billing"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "8",
+    "OrderSeq": "2",
+    "PARENT_SEQ": "2",
+    "ParentMenuID": "0",
+    "Title": "Booking",
+    "URL": null,
+    "URL_angular": "BookingPage",
+    "isProject": null,
+    "picture": "payment.png",
+    "title_descs": "Booking Unit"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "13",
+    "OrderSeq": "3",
+    "PARENT_SEQ": "3",
+    "ParentMenuID": "0",
+    "Title": "Unit Enquiry",
+    "URL": null,
+    "URL_angular": "ProductProjectPage",
+    "isProject": "1",
+    "picture": "findunit3.png",
+    "title_descs": "Information Unit And Price"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "7",
+    "OrderSeq": "4",
+    "PARENT_SEQ": "4",
+    "ParentMenuID": "0",
+    "Title": "My Customer",
+    "URL": "",
+    "URL_angular": "MyReservationProjectPage",
+    "isProject": null,
+    "picture": "reserved.png",
+    "title_descs": "List Customer of Unit"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "9",
+    "OrderSeq": "5",
+    "PARENT_SEQ": "5",
+    "ParentMenuID": "0",
+    "Title": "My Unit",
+    "URL": null,
+    "URL_angular": "MyUnitPage",
+    "isProject": null,
+    "picture": "house.png",
+    "title_descs": "List Unit"
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "14",
+    "OrderSeq": "6",
+    "PARENT_SEQ": "6",
+    "ParentMenuID": "0",
+    "Title": "Reports",
+    "URL": null,
+    "URL_angular": "ReportProject",
+    "isProject": null,
+    "picture": "profits.png",
+    "title_descs": null
+  },
+  {
+    "CHILD_SEQ": "0",
+    "GroupCd": "ADMINWEB",
+    "IconClass": "fa fa-sun-o",
+    "Is_parent": "1",
+    "MenuID": "12",
+    "OrderSeq": "7",
+    "PARENT_SEQ": "7",
+    "ParentMenuID": "0",
+    "Title": "Download",
+    "URL": null,
+    "URL_angular": "ProjectDownloadPage",
+    "isProject": "1",
+    "picture": "download.png",
+    "title_descs": null
+  }
+]

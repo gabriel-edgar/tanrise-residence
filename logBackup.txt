@@ -1,0 +1,39 @@
+backup ProjectScreen, ProjectDetails
+                           <View style={{alignItems: 'center', marginTop: 8}}>
+                                <Button
+                                    style={{
+                                        backgroundColor: BaseColor.corn10,
+                                        width: '50%',
+                                        height: 40,
+                                    }}
+                                    onPress={() => {
+                                        console.log(
+                                            '628 item.coordinat_project: ',
+                                            item.coordinat_project,
+                                        );
+                                        return item.coordinat_project == null
+                                            ? Alert.alert(
+                                                  'No available location project',
+                                              )
+                                            : Linking.openURL(
+                                                  item.coordinat_project,
+                                              );
+                                    }}>
+                                    <View style={{flexDirection: 'row'}}>
+                                        <Text
+                                            style={{
+                                                fontFamily: Fonts.type.LatoBold,
+                                                color: BaseColor.corn70,
+                                                fontSize: 12,
+                                                paddingRight: 5,
+                                            }}>
+                                            Find Location
+                                        </Text>
+                                        <Icon
+                                            name={'location-arrow'}
+                                            color={BaseColor.corn70}
+                                            size={14}></Icon>
+                                    </View>
+                                </Button>
+                            </View>
+

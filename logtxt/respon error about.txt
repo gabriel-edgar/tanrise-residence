@@ -1,0 +1,69 @@
+
+{
+  "headers": {
+    "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNR1IiLCJuYW1lIjoiTUdSIiwiaWF0IjoxNzE4MzMyNjIzfQ.xKZi93CGtytnGx-LDBhLoZl4kIGzl94eJZsLWmMN-mk",
+    "content-type": "application/json"
+  },
+  "method": "get",
+  "params": {},
+  "url": "https://dev.ifca.co.id/apiasthana/api/about-us/index"
+}
+
+{"config": {"adapter": ["xhr", "http"], "data": undefined, "env": {"Blob": [Function Blob], "FormData": [Function FormData]}, "headers": [Object], "maxBodyLength": -1, "maxContentLength": -1, "method": "get", "params": {}, "timeout": 0, "transformRequest": [[Function transformRequest]], "transformResponse": [[Function transformResponse]], "transitional": {"clarifyTimeoutError": false, "forcedJSONParsing": true, "silentJSONParsing": true}, "url": "https://dev.ifca.co.id/apiasthana/api/about-us/index", "validateStatus": [Function validateStatus], "xsrfCookieName": "XSRF-TOKEN", "xsrfHeaderName": "X-XSRF-TOKEN"}, "data": {"Error": true, "Pesan": "SQLSTATE[42S02]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Invalid object name 'mgr.about_us'. (SQL: SELECT * FROM mgr.about_us)"}, "headers": {"access-control-allow-origin": "*", "cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Fri, 14 Jun 2024 09:32:48 GMT", "server": "Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", "transfer-encoding": "chunked", "vary": "Authorization", "x-powered-by": "PHP/7.4.30", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "59"}, "request": {"DONE": 4, "HEADERS_RECEIVED": 2, "LOADING": 3, "OPENED": 1, "UNSENT": 0, "_aborted": false, "_cachedResponse": undefined, "_hasError": false, "_headers": {"accept": "application/json, text/plain, */*", "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNR1IiLCJuYW1lIjoiTUdSIiwiaWF0IjoxNzE4MzMyNjIzfQ.xKZi93CGtytnGx-LDBhLoZl4kIGzl94eJZsLWmMN-mk"}, "_incrementalEvents": false, "_lowerCaseResponseHeaders": {"access-control-allow-origin": "*", "cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Fri, 14 Jun 2024 09:32:48 GMT", "server": "Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", "transfer-encoding": "chunked", "vary": "Authorization", "x-powered-by": "PHP/7.4.30", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "59"}, "_method": "GET", "_perfKey": "network_XMLHttpRequest_https://dev.ifca.co.id/apiasthana/api/about-us/index", "_performanceLogger": {"_closed": false, "_extras": [Object], "_isLoggingForWebPerformance": false, "_pointExtras": [Object], "_points": [Object], "_timespans": [Object]}, "_requestId": null, "_response": "{\"Pesan\":\"SQLSTATE[42S02]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Invalid object name 'mgr.about_us'. (SQL: SELECT * FROM mgr.about_us)\",\"Error\":true}", "_responseType": "", "_sent": true, "_subscriptions": [], "_timedOut": false, "_trackingName": "unknown", "_url": "https://dev.ifca.co.id/apiasthana/api/about-us/index", "readyState": 4, "responseHeaders": {"Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache, private", "Connection": "close", "Content-Type": "application/json", "Date": "Fri, 14 Jun 2024 09:32:48 GMT", "Server": "Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", "Transfer-Encoding": "chunked", "Vary": "Authorization", "X-Powered-By": "PHP/7.4.30", "X-RateLimit-Limit": "60", "X-RateLimit-Remaining": "59"}, "responseURL": "https://dev.ifca.co.id/apiasthana/api/about-us/index", "status": 400, "timeout": 0, "upload": {}, "withCredentials": true}, "status": 400, "statusText": undefined}
+
+{"config": 
+{"adapter": ["xhr", "http"], 
+"data": undefined, "env": 
+{"Blob": [Function Blob], "FormData": [Function FormData]}, 
+"headers": [Object], "maxBodyLength": -1, 
+"maxContentLength": -1, "method": "get", "params": {}, 
+"timeout": 0, "transformRequest": [[Function transformRequest]], 
+"transformResponse": [[Function transformResponse]], 
+"transitional": {"clarifyTimeoutError": false, 
+"forcedJSONParsing": true, "silentJSONParsing": true}, 
+"url": "https://dev.ifca.co.id/apiasthana/api/about-us/index", 
+"validateStatus": [Function validateStatus], 
+"xsrfCookieName": "XSRF-TOKEN", "xsrfHeaderName": "X-XSRF-TOKEN"}, 
+"data": {"Error": true, "Pesan": "SQLSTATE[42S02]: 
+[Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Invalid 
+object name 'mgr.about_us'. (SQL: SELECT * FROM mgr.about_us)"}, 
+"headers": {"access-control-allow-origin": "*", "cache-control": 
+"no-cache, private", "connection": "close", "content-type": 
+"application/json", "date": "Fri, 14 Jun 2024 09:32:48 GMT", 
+"server": "Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", 
+"transfer-encoding": "chunked", "vary": "Authorization", 
+"x-powered-by": "PHP/7.4.30", "x-ratelimit-limit": "60", 
+"x-ratelimit-remaining": "59"}, "request": {"DONE": 4, 
+"HEADERS_RECEIVED": 2, "LOADING": 3, "OPENED": 1, "UNSENT": 0, 
+"_aborted": false, "_cachedResponse": undefined, 
+"_hasError": false, "_headers": {"accept": "application/json, 
+text/plain, */*", "authorization": 
+"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNR1IiLCJuYW1lIjoiTUdSIiwiaWF0IjoxNzE4MzMyNjIzfQ.xKZi93CGtytnGx-LDBhLoZl4kIGzl94eJZsLWmMN-mk"}, 
+"_incrementalEvents": false, "_lowerCaseResponseHeaders": 
+{"access-control-allow-origin": "*", "cache-control": 
+"no-cache, private", "connection": "close", "content-type": 
+"application/json", "date": "Fri, 14 Jun 2024 09:32:48 GMT", 
+"server": "Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", 
+"transfer-encoding": "chunked", "vary": "Authorization", 
+"x-powered-by": "PHP/7.4.30", "x-ratelimit-limit": "60", 
+"x-ratelimit-remaining": "59"}, "_method": "GET", "_perfKey": 
+"network_XMLHttpRequest_https://dev.ifca.co.id/apiasthana/api/about-us/index", 
+"_performanceLogger": {"_closed": false, "_extras": [Object], 
+"_isLoggingForWebPerformance": false, "_pointExtras": [Object], 
+"_points": [Object], "_timespans": [Object]}, "_requestId": null, 
+"_response": "{\"Pesan\":\"SQLSTATE[42S02]: 
+[Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Invalid 
+object name 'mgr.about_us'. (SQL: SELECT * FROM mgr.about_us)\",
+\"Error\":true}", "_responseType": "", "_sent": true, 
+"_subscriptions": [], "_timedOut": false, "_trackingName": 
+"unknown", "_url": "https://dev.ifca.co.id/apiasthana/api/about-us/index", 
+"readyState": 4, "responseHeaders": {"Access-Control-Allow-Origin": "*", 
+"Cache-Control": "no-cache, private", "Connection": "close", "Content-Type": 
+"application/json", "Date": "Fri, 14 Jun 2024 09:32:48 GMT", "Server": 
+"Apache/2.4.54 (Win64) OpenSSL/1.1.1p PHP/7.4.30", "Transfer-Encoding": 
+"chunked", "Vary": "Authorization", "X-Powered-By": "PHP/7.4.30", 
+"X-RateLimit-Limit": "60", "X-RateLimit-Remaining": "59"}, "responseURL": 
+"https://dev.ifca.co.id/apiasthana/api/about-us/index", "status": 400, 
+"timeout": 0, "upload": {}, "withCredentials": true}, "status": 400, 
+"statusText": undefined}
+

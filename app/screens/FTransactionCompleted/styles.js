@@ -1,0 +1,20 @@
+import { StyleSheet } from "react-native";
+import { BaseColor } from "@config";
+import * as Utils from "@utils";
+
+export default StyleSheet.create({
+  headerView: {
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 60,
+  },
+  viewCart: {
+    width: Utils.scaleWithPixel(90),
+    height: Utils.scaleWithPixel(90),
+    borderRadius: Utils.scaleWithPixel(90 / 2),
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 20,
+  },
+});
