@@ -12,6 +12,7 @@ import {
   Tag,
   colors,
   PlaceItem,
+  ButtonChooseProject,
 } from "@components";
 import { BaseStyle, useTheme } from "@config";
 import {
@@ -107,6 +108,20 @@ const Rent = (props) => {
     navigation.navigate("Category");
   };
 
+  //dropdownProject
+  const [choosedProject, setChoosedProject] = useState("");
+  const handleSelect = (value) => {
+    console.log("Selected Value:", value);
+    //setState(value);
+    setChoosedProject(value);
+  };
+  const dropdownItems = [
+    // { label: "choose project", value: "" },
+    { label: "Project 1", value: "Project 1" },
+    { label: "Project 2", value: "Project 2" },
+    { label: "Project 3", value: "Project 3" },
+  ];
+
   const renderContent = () => {
     const mainNews = PostListData[0];
     return (
@@ -127,6 +142,12 @@ const Rent = (props) => {
             navigation.goBack();
           }}
         />
+        <ButtonChooseProject
+          items={dropdownItems}
+          placeholder="Select project"
+          onSelect={handleSelect}
+        />
+        <Text>Choosed project: {choosedProject}</Text>
         <ScrollView contentContainerStyle={styles.paddingSrollView}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {TABS.map((item, index) => (

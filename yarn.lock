@@ -13371,6 +13371,11 @@ react-native-draggable@^3.3.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-dropdown-picker@^5.4.6:
+  version "5.4.6"
+  resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.6.tgz#3736fc468de4a295e4df8d1f65ed2eadaf9b445f"
+  integrity sha512-T1XBHbE++M6aRU3wFYw3MvcOuabhWZ29RK/Ivdls2r1ZkZ62iEBZknLUPeVLMX3x6iUxj4Zgr3X2DGlEGXeHsA==
+
 react-native-dynamic-tab-view@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-dynamic-tab-view/-/react-native-dynamic-tab-view-1.1.0.tgz#1e2cb7df0b59b3440c8547a41fbea008ea92d7a2"

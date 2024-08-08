@@ -9,29 +9,30 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox} from 'react-native-elements';
-import {FFriends} from '@data';
-import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
-import React, {useEffect, useState, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import {SceneMap} from 'react-native-tab-view';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
+  ButtonChooseProject,
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox } from "react-native-elements";
+import { FFriends } from "@data";
+import { useNavigation } from "@react-navigation/native";
+import { haveChildren } from "@utils";
+import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import { SceneMap } from "react-native-tab-view";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import client from "../../controllers/HttpClient";
+import styles from "./styles";
 
-import ModalDropdown_debtor from '@components/ModalDropdown_debtor';
-import ModalDropdown_lotno from '@components/ModalDropdown_lotno';
+import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
 
 const Friends = () => {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [friends, setFriends] = useState(FFriends);
   const navigation = useNavigation();
 
@@ -51,11 +52,11 @@ const Friends = () => {
   //   };
 
   const onSend = () => {
-    navigation.navigate('FSendMoney');
+    navigation.navigate("FSendMoney");
   };
 
   return (
-    <View style={{flex: 1, paddingHorizontal: 20}}>
+    <View style={{ flex: 1, paddingHorizontal: 20 }}>
       {/* <View
         style={{
           paddingTop: 15,
@@ -76,15 +77,15 @@ const Friends = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         data={friends}
-        keyExtractor={item => item.id}
-        renderItem={({item, index}) => (
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
           <ListTextButton
             image={item.image}
             name={item.name}
             description={item.total}
             componentRight={
               <Tag
-                onPress={e => {
+                onPress={(e) => {
                   e.stopPropagation();
                   onSend(item);
                 }}
@@ -92,8 +93,9 @@ const Friends = () => {
                 style={{
                   paddingHorizontal: 20,
                   backgroundColor: colors.background,
-                }}>
-                {`${t('send')}`}
+                }}
+              >
+                {`${t("send")}`}
               </Tag>
             }
           />
@@ -104,8 +106,8 @@ const Friends = () => {
 };
 
 export default function Helpdesk() {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [dataLocation, setLocation] = useState([]);
@@ -113,15 +115,15 @@ export default function Helpdesk() {
   const [urlApi, seturlApi] = useState(client);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'newticket', title: 'New Ticket'},
-    {key: 'status', title: 'Status'},
+    { key: "newticket", title: "New Ticket" },
+    { key: "status", title: "Status" },
   ]);
 
   const icons = [
-    {key: '1', icon: 'home'},
-    {key: '2', icon: 'bell'},
+    { key: "1", icon: "home" },
+    { key: "2", icon: "bell" },
   ];
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const renderScene = SceneMap({
     newticket: Friends,
     status: Friends,
@@ -133,13 +135,62 @@ export default function Helpdesk() {
     }, 1000);
   }, []);
 
+  //dropdownProject
+  const [choosedProject, setChoosedProject] = useState(null);
+  const handleSelect = (value) => {
+    console.log("Selected Value:", value);
+    //setState(value);
+    setChoosedProject(value);
+  };
+  const dropdownItems = [
+    // { label: "choose project", value: "" },
+    { label: "Project 1", value: "Project 1" },
+    { label: "Project 2", value: "Project 2" },
+    { label: "Project 3", value: "Project 3" },
+  ];
+
+  console.log("152 choosedProject: ", choosedProject);
+
+  if (choosedProject == null) {
+    return (
+      <SafeAreaView
+        style={BaseStyle.safeAreaView}
+        edges={["right", "top", "left"]}
+      >
+        <Header
+          // title={t('choose_friend')}
+          title={t("helpdesk")} //belum ada lang translatenya
+          renderLeft={() => {
+            return (
+              <Icon
+                name="angle-left"
+                size={20}
+                color={colors.text}
+                enableRTL={true}
+              />
+            );
+          }}
+          onPressLeft={() => {
+            navigation.goBack();
+          }}
+        />
+        <ButtonChooseProject
+          items={dropdownItems}
+          placeholder="Select project"
+          onSelect={handleSelect}
+        />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
         // title={t('choose_friend')}
-        title={t('helpdesk')} //belum ada lang translatenya
+        title={t("helpdesk")} //belum ada lang translatenya
         renderLeft={() => {
           return (
             <Icon
@@ -154,6 +205,12 @@ export default function Helpdesk() {
           navigation.goBack();
         }}
       />
+      <ButtonChooseProject
+        items={dropdownItems}
+        placeholder="Select project"
+        onSelect={handleSelect}
+      />
+      <Text>Choosed project: {choosedProject}</Text>
       {/* {dataLocation.map((data, index) => (
         <ModalFilterLocation
           options={data}
@@ -168,33 +225,34 @@ export default function Helpdesk() {
       ))} */}
       <View
         style={{
-          flexDirection: 'row',
-        }}>
+          flexDirection: "row",
+        }}
+      >
         <CategoryBoxColor
           loading={loading}
           style={{
             // paddingLeft: index % 2 == 0 ? 0 : 15,
             paddingBottom: 15,
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             paddingHorizontal: 10,
           }}
-          title={'Helpdesk'}
-          icon={'headset'}
+          title={"Helpdesk"}
+          icon={"headset"}
           color={colors.primary}
-          onPress={() => navigation.navigate('SpecHelpDesk')}
+          onPress={() => navigation.navigate("SpecHelpDesk")}
         />
         <CategoryBoxColor
           loading={loading}
           style={{
             // paddingLeft: index % 2 == 0 ? 0 : 15,
             paddingBottom: 15,
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             paddingHorizontal: 10,
           }}
-          title={'Status'}
-          icon={'list-alt'}
+          title={"Status"}
+          icon={"list-alt"}
           color={colors.primary}
-          onPress={() => navigation.navigate('StatusHelp')}
+          onPress={() => navigation.navigate("StatusHelp")}
         />
       </View>
 

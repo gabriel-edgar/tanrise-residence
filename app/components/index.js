@@ -110,6 +110,7 @@ export { default as FormCounterSelectH } from "./Form/CounterSelectH";
 // Common components
 export { default as Text } from "./Text";
 export { default as Button } from "./Button";
+export { default as ButtonChooseProject } from "./ButtonChooseProject";
 export { default as Tag } from "./Tag";
 export { default as Icon } from "./Icon";
 export { default as Image } from "./Image";

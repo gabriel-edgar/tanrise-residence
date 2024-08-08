@@ -143,6 +143,9 @@ import AttachRenov from "@screens/LegalManagement/Renovation/Permit/PDFAttach";
 import SuratIzinKerja from "@screens/LegalManagement/SuratIzinKerja";
 import SuratIzinKeluarMasukBarang from "@screens/LegalManagement/SuratIzinKeluarMasukBarang";
 
+import ProjectScreen from "@screens/ProjectScreen";
+import ProjectDetails from "@screens/ProjectScreen/ProjectDetails";
+
 const Stack = createStackNavigator();
 
 export const WalletTabScreens = {
@@ -153,20 +156,20 @@ export const WalletTabScreens = {
       tabBarIcon: ({ color }) => tabBarIcon({ color, name: "home" }),
     },
   },
-  EmegerncyScreen: {
-    component: Emergency,
-    options: {
-      title: "Emergency",
-      tabBarIcon: ({ color }) => tabBarIcon({ color, name: "phone" }),
-    },
-  },
-  NotificationScreen: {
-    component: Notification,
-    options: {
-      title: "Notification",
-      tabBarIcon: ({ color }) => tabBarIconHaveNoty({ color, name: "bell" }),
-    },
-  },
+  // EmegerncyScreen: {
+  //   component: Emergency,
+  //   options: {
+  //     title: "Emergency",
+  //     tabBarIcon: ({ color }) => tabBarIcon({ color, name: "phone" }),
+  //   },
+  // },
+  // NotificationScreen: {
+  //   component: Notification,
+  //   options: {
+  //     title: "Notification",
+  //     tabBarIcon: ({ color }) => tabBarIconHaveNoty({ color, name: "bell" }),
+  //   },
+  // },
   ProfileScreen: {
     component: ProfileScreen,
     options: {
@@ -216,6 +219,16 @@ function MainStack() {
       <Stack.Screen
         name="Package"
         component={Package}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProjectScreen"
+        component={ProjectScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProjectDetails"
+        component={ProjectDetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen

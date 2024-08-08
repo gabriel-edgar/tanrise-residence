@@ -1,0 +1,34 @@
+{
+  "data_floorplan": [
+    {
+      "key": 1,
+      "project_no": 1,
+
+      "image": "require('@assets/images/floorplan/gf1.png')",
+
+      "project_name": " 31 Sudirman Suites",
+      "location": "Makassar, Indonesia",
+      "title": "Promo 1",
+      "descs": "Keuntungan Tinggal di Apartemen: Kenali Semua Faktanya"
+    },
+
+    {
+      "key": 2,
+      "project_no": 2,
+      "image": "require('@assets/images/floorplan/gf1.png')",
+      "project_name": "Beachwalk Residence",
+      "location": "Bali, Indonesia",
+      "title": "Promo 2",
+      "descs": "Dapatkan diskon akhir tahunn sekarang juga!"
+    },
+    {
+      "key": 3,
+      "project_no": 3,
+      "image": "require('@assets/images/floorplan/gf1.png')",
+      "project_name": "Antasari Place",
+      "location": "Jakarta, Indonesia",
+      "title": "Promo 1",
+      "descs": "Keuntungan Tinggal di Apartemen: Kenali Semua Faktanya"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+import {
+  Text,
+  Header,
+  Icon,
+  Button
+} from "@components";
+
+  Text,
+                      <Text style={{ fontWeight: "bold", fontSize: 14 }}>
+                        # {item.package_id}
+                      </Text>
+
+  Header,
+        <Header
+          title={t("Rent or Sale")}
+          renderLeft={() => {
+            return (
+              <Icon
+                name="angle-left"
+                size={20}
+                color={colors.primary}
+                enableRTL={true}
+              />
+            );
+          }}
+          onPressLeft={() => {
+            navigation.goBack();
+          }}
+        />
+
+  Icon,
+              <Icon
+                name="angle-left"
+                size={20}
+                color={colors.primary}
+                enableRTL={true}
+              />
+
+  Button
+        <Button style={{height: 35}} onPress={() => clickAttachment()}>
+        <Text style={{color: '#fff', fontSize: 14}}>Attachment</Text>
+      </Button>
+
+==============================
+  //dropdownProject
+  const [choosedProject, setChoosedProject] = useState("");
+  const handleSelect = (value) => {
+    console.log("Selected Value:", value);
+    //setState(value);
+    setChoosedProject(value);
+  };
+  const dropdownItems = [
+    // { label: "choose project", value: "" },
+    { label: "Project 1", value: "Project 1" },
+    { label: "Project 2", value: "Project 2" },
+    { label: "Project 3", value: "Project 3" },
+  ];
+
+
+        <ButtonChooseProject
+        items={dropdownItems}
+        placeholder="Select project"
+        onSelect={handleSelect}
+      />
+      <Text>Choosed project: {choosedProject}</Text>

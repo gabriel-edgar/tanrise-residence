@@ -58,12 +58,18 @@ const Categories = ({ style = {} }) => {
                 // width: 60,
                 // alignItems: 'center',
                 // justifyContent: 'center',
+                //backgroundColor: "blue",
               }}
             >
               <CategoryIconSoft
                 isRound
                 // icon={item.icon}
-                style={{ padding: 0 }}
+                style={{
+                  padding: 0,
+                  //backgroundColor: "blue",
+                  //maxWidth: 120,
+                  alignSelf: "center",
+                }}
                 icon_url={item.icon_url}
                 icon={item.icon}
                 title={t(item.title)}
