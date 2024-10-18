@@ -1,37 +1,37 @@
-export {LanguageData} from './language';
-export {UserData} from './user';
-export {MessagesData} from './messages';
-export {NotificationData} from './notification';
-export {ReviewData} from './review';
-export {CategoryData} from '././category';
-export {AboutUsData} from './aboutUs';
-export {FavouriteData} from './favourite';
-export {HomeTopicData} from './hometopic';
-export {HomeListData} from './homelist';
-export {HomePopularData} from './homepopulars';
-export {HomeChannelData} from './homechannel';
-export {PostListData, FPostListData, EPostProductData} from './post';
-export {RecentListData} from './recentView';
-export {EPostListData, ESortOption} from './ePost';
-export {ProductsData} from './eCart';
-export {CompletedOrders} from './eMyOrder';
-export {OrderDetail} from './eTrackOrder';
-export {WishlistsData, EOptions} from './eWishlist';
-export {ENotificationData} from './eNotification';
-export {EAddressData} from './eAddress';
-export {EPaymentItemsData} from './eSettingPayment';
+export { LanguageData } from "./language";
+export { UserData } from "./user";
+export { MessagesData } from "./messages";
+export { NotificationData } from "./notification";
+export { ReviewData } from "./review";
+export { CategoryData } from "././category";
+export { AboutUsData } from "./aboutUs";
+export { FavouriteData } from "./favourite";
+export { HomeTopicData } from "./hometopic";
+export { HomeListData } from "./homelist";
+export { HomePopularData } from "./homepopulars";
+export { HomeChannelData } from "./homechannel";
+export { PostListData, FPostListData, EPostProductData } from "./post";
+export { RecentListData } from "./recentView";
+export { EPostListData, ESortOption } from "./ePost";
+export { ProductsData } from "./eCart";
+export { CompletedOrders } from "./eMyOrder";
+export { OrderDetail } from "./eTrackOrder";
+export { WishlistsData, EOptions } from "./eWishlist";
+export { ENotificationData } from "./eNotification";
+export { EAddressData } from "./eAddress";
+export { EPaymentItemsData } from "./eSettingPayment";
 export {
   ECategories,
   EFeaturedShop,
   EPopulars,
   EYourStores,
   EWishlistHome,
-} from './eHome';
-export {ECategoryData} from './eCategory';
-export {EFilterColors, EFilterCategories, EFilterSizes} from './eFilter';
-export {EProductOfStore} from './eProductStoreProfile';
-export {EFollowers} from './eFollowers';
-export {EReviewsData} from './eReviews';
+} from "./eHome";
+export { ECategoryData } from "./eCategory";
+export { EFilterColors, EFilterCategories, EFilterSizes } from "./eFilter";
+export { EProductOfStore } from "./eProductStoreProfile";
+export { EFollowers } from "./eFollowers";
+export { EReviewsData } from "./eReviews";
 export {
   FCategories,
   FRecentTransactions,
@@ -41,8 +41,8 @@ export {
   FChartItems,
   FTransactions,
   FHotNews2,
-} from './fHome';
-export {FLinks, FTransactionsTab} from './fCryptol';
+} from "./fHome";
+export { FLinks, FTransactionsTab } from "./fCryptol";
 export {
   FBuyList,
   FSellList,
@@ -51,13 +51,13 @@ export {
   FChooseCategories,
   FMarkers,
   FCurrencies,
-} from './fAddTransaction';
-export {FFriends} from './fFriend';
-export {FPaymentItemsData} from './fBank';
-export {FHistory} from './fHistory';
-export {FPayment, FPeriod} from './fActivityFilter';
-export {FNotificationData} from './fNotification';
+} from "./fAddTransaction";
+export { FFriends } from "./fFriend";
+export { FPaymentItemsData } from "./fBank";
+export { FHistory } from "./fHistory";
+export { FPayment, FPeriod } from "./fActivityFilter";
+export { FNotificationData } from "./fNotification";
 // export { MaziListApp } from "./maziHome";
-export {FCategoryData} from './fCategory';
-export {notfound} from './notfound.json';
-export {dummyPackage} from './dummyPackage';
+export { FCategoryData } from "./fCategory";
+export { notfound } from "./notfound.json";
+export { dummyPackage } from "./dummyPackage";

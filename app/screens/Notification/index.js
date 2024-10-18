@@ -73,7 +73,7 @@ const Notification = (props) => {
     dispatch(
       apiCall(
         API_URL_LOKAL +
-          `/notification?email=${email}&entity_cd=01&project_no=01`
+          `/setting/notification?email=${email}&entity_cd=01&project_no=01`
       )
     );
   }, []);
@@ -82,7 +82,7 @@ const Notification = (props) => {
     dispatch(
       apiCall(
         API_URL_LOKAL +
-          `/notification?email=${email}&entity_cd=01&project_no=01`
+          `/setting/notification?email=${email}&entity_cd=01&project_no=01`
       )
     );
   };
@@ -91,7 +91,7 @@ const Notification = (props) => {
   console.log("minus", goNotif);
   // const cobanotif = useSelector(state => getNotifRed(state));
 
-  // http://apps.pakubuwono-residence.com/apiwebpbi/api/notification
+  // http://apps.pakubuwono-residence.com/apiwebpbi/api/setting/notification
 
   // POST
   // body : email, entity_cd, project_no, device (hardcode aja valuenya Mobile)
@@ -121,7 +121,9 @@ const Notification = (props) => {
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`)
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`
+      )
       .then((res) => {
         const datas = res.data;
 
@@ -172,13 +174,13 @@ const Notification = (props) => {
     };
 
     console.log(
-      `http://apps.pakubuwono-residence.com/apiwebpbi/api/notification?email=${formData.email}&entity_cd=${formData.entity_cd}&project_no=${formData.project_no}`
+      `http://apps.pakubuwono-residence.com/apiwebpbi/api/setting/notification?email=${formData.email}&entity_cd=${formData.entity_cd}&project_no=${formData.project_no}`
     );
 
     await axios
       .get(
         API_URL_LOKAL +
-          `/notification?email=${formData.email}&entity_cd=${formData.entity_cd}&project_no=${formData.project_no}`
+          `/setting/notification?email=${formData.email}&entity_cd=${formData.entity_cd}&project_no=${formData.project_no}`
       )
       .then((res) => {
         // console.log('res tiket multi', res.data);
@@ -219,7 +221,7 @@ const Notification = (props) => {
     };
     console.log("params", params);
     await axios
-      .post(API_URL_LOKAL + `/notification-read`, params)
+      .post(API_URL_LOKAL + `/setting/setting/notification-read`, params)
       .then((res) => {
         console.log("res change read", res.data);
         //  const resNotif = res.data;

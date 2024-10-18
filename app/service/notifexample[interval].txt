@@ -1,0 +1,30 @@
+// App.js
+import React, { useEffect } from 'react';
+import { View, Button } from 'react-native';
+import NotificationService from './NotificationService';
+
+const App = () => {
+  useEffect(() => {
+    NotificationService.configure();
+    
+    // Schedule a notification every 1 hour when the component mounts
+    const intervalId = setInterval(() => {
+      NotificationService.scheduleNotification(
+        'Periodic Notification',
+        'This is your notification message!',
+        0 // Setting 0 means the notification will be immediate
+      );
+    }, 60 * 60 * 1000); // 1 hour in milliseconds
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return (
+    <View>
+      <Button title="Configure Notifications" onPress={() => {}} />
+    </View>
+  );
+};
+
+export default App;

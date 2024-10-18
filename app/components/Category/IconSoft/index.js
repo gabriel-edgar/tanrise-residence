@@ -9,6 +9,8 @@ import styles from "./styles";
 import { parseHexTransparency } from "@utils";
 import Loading from "./Loading";
 import { Image } from "react-native-elements";
+import { useSelector } from "react-redux";
+
 export default function CategoryIconSoft({
   style = "",
   icon = "",
@@ -21,8 +23,24 @@ export default function CategoryIconSoft({
   isRound = false,
   isBlack = false,
   maxWidth = 150,
+  font,
 }) {
   const { colors } = useTheme();
+  const data = useSelector((state) => state.apiReducer.data);
+  let sum = 0;
+  data.map((item, index) => {
+    sum += parseInt(item.IsRead);
+  });
+
+  const counter = useSelector((state) => state.counter);
+  console.log("counter badge di tabbar", counter);
+  const total = data.length;
+  const finalCount = total - sum;
+
+  const stateReduxHelpdeskDot = useSelector(
+    (state) => state.Dataproject.helpdesk_dot
+  );
+
   if (loading) {
     return <Loading style={style} />;
   }
@@ -50,6 +68,7 @@ export default function CategoryIconSoft({
       <View
         style={StyleSheet.flatten([
           styles.iconContent,
+          // { width: 300, backgroundColor: "blue" },
           isNormal && {
             backgroundColor: parseHexTransparency(colors.primary, 100),
           },
@@ -72,8 +91,42 @@ export default function CategoryIconSoft({
           solid
         />
       </View>
-      <View style={{ marginTop: 15, maxWidth: maxWidth }}>
-        <Text footnote numberOfLines={1} style={{ textAlign: "center" }}>
+      {title == "Helpdesk" ? (
+        stateReduxHelpdeskDot ? (
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: BaseColor.whiteColor,
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              width: 20,
+              height: 20,
+              backgroundColor: "red",
+              top: 0,
+              right: 25,
+              borderRadius: 10,
+            }}
+          >
+            {/* <Text whiteColor caption2>
+            {finalCount < 0 ? 0 : finalCount}
+          </Text> */}
+          </View>
+        ) : null
+      ) : null}
+      <View
+        style={{
+          marginTop: 15, //maxWidth: maxWidth
+        }}
+      >
+        <Text
+          footnote
+          numberOfLines={2}
+          style={{
+            textAlign: "center",
+            fontSize: font == "monospace" ? 12 : 12,
+          }}
+        >
           {title}
         </Text>
       </View>

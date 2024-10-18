@@ -10,20 +10,26 @@ import {
   Button,
   CardBooking,
   FormCounterSelect,
-} from '@components';
-import CounterSelectCheckout from '@components/Form/CounterSelectCheckout';
-import ProductList from './List';
-import numFormat from '../../components/numFormat';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from "@components";
+import CounterSelectCheckout from "@components/Form/CounterSelectCheckout";
+import ProductList from "./List";
+import numFormat from "../../components/numFormat";
+import { BaseColor, BaseStyle, useTheme } from "@config";
 // Load sample data
-import {EPostListData, ESortOption} from '@data';
-import {useNavigation} from '@react-navigation/native';
-import * as Utils from '@utils';
-import {parseHexTransparency} from '@utils';
-import React, {Fragment, useEffect, useRef, useState, useCallback} from 'react';
-import {useTranslation} from 'react-i18next';
-import {addItemToCart, updateCartItem} from '../../actions/cartActions';
-import Checkout from './Checkout';
+import { EPostListData, ESortOption } from "@data";
+import { useNavigation } from "@react-navigation/native";
+import * as Utils from "@utils";
+import { parseHexTransparency } from "@utils";
+import React, {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
+import { useTranslation } from "react-i18next";
+import { addItemToCart, updateCartItem } from "../../actions/cartActions";
+import Checkout from "./Checkout";
 import {
   Dimensions,
   FlatList,
@@ -32,44 +38,44 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-} from 'react-native';
-import LottieView from 'lottie-react-native';
-import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import styles from './styles';
-import getProject from '../../selectors/ProjectSelector';
-import {useSelector, useDispatch} from 'react-redux';
-import axios from 'axios';
-import {ActivityIndicator, Divider} from 'react-native-paper';
+} from "react-native";
+import LottieView from "lottie-react-native";
+import { SceneMap, TabBar, TabView } from "react-native-tab-view";
+import styles from "./styles";
+import getProject from "../../selectors/ProjectSelector";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { ActivityIndicator, Divider } from "react-native-paper";
 
-import Modal from 'react-native-modal';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {CheckBox, Badge} from 'react-native-elements';
+import Modal from "react-native-modal";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { CheckBox, Badge } from "react-native-elements";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import getCartData from '../../selectors/cartSelectors';
-import {data_cart} from '../../actions/cartActions';
-import numFormattanpaRupiah from '../../components/numFormattanpaRupiah';
-import {API_URL_LOKAL} from '@env';
+import getCartData from "../../selectors/cartSelectors";
+import { data_cart } from "../../actions/cartActions";
+import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
+import { API_URL_LOKAL } from "@env";
 let timeoutChangeMode = null;
 
-const initialLayout = {width: Dimensions.get('window').width};
+const initialLayout = { width: Dimensions.get("window").width };
 
-const Product = params => {
+const Product = (params) => {
   const [dataMember, setDataMember] = useState(params.params);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const [modeView, setModeView] = useState('list');
+  const [modeView, setModeView] = useState("list");
   const [list, setList] = useState(EPostListData);
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(true);
 
   const [dataItemStore, setItemStore] = useState([]);
   const [dataItemStoreFilter, setItemStoreFilter] = useState([]);
-  const projectSelector = useSelector(state => getProject(state));
+  const projectSelector = useSelector((state) => getProject(state));
   //   console.log('project selector di product', projectSelector);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -85,10 +91,10 @@ const Product = params => {
 
   const [disableAddToCart, setDisableAddToCart] = useState(false);
 
-  const cartSelector = useSelector(state => getCartData(state));
+  const cartSelector = useSelector((state) => getCartData(state));
   // console.log('cart selector item store', cartSelector.length);
   //   const {navigation, route} = props;
-  console.log('routes di product', dataMember);
+  console.log("routes di product", dataMember);
 
   //testing
   const [tambahItem, setTambahItem] = useState(false);
@@ -96,34 +102,34 @@ const Product = params => {
   const [totalTax, setTotalTax] = useState(0);
   const [totalHarga, setTotals] = useState(0);
   const [ArrayDataCheckout, setArrayDataCheckout] = useState([]);
-  const [trxRate, setTrxRate] = useState('');
+  const [trxRate, setTrxRate] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [valueCurrent, setValueCurrent] = useState(0);
   const [valueChangeQty, setValue] = useState(0);
 
   const getItemStore = () => {
     const entity_cd = projectSelector.Data[0].entity_cd;
-    console.log('entity', entity_cd);
+    console.log("entity", entity_cd);
     const project_no = projectSelector.Data[0].project_no;
     console.log(
-      'url menu store di product',
-      `http://apps.pakubuwono-residence.com/apiwebpbi/api/pos/getProductsNew?entity_cd=${entity_cd}&project_no=${project_no}&trx_class=H&facility_type=${dataMember.facility_type}`,
+      "url menu store di product",
+      `http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/store/products?entity_cd=${entity_cd}&project_no=${project_no}&trx_class=H&facility_type=${dataMember.facility_type}`
     );
     axios
       .get(
         API_URL_LOKAL +
-          `/pos/getProductsNew?entity_cd=${entity_cd}&project_no=${project_no}&trx_class=H&facility_type=${dataMember.facility_type}`,
+          `/modules/store/products?entity_cd=${entity_cd}&project_no=${project_no}&trx_class=H&facility_type=${dataMember.facility_type}`
       )
-      .then(res => {
+      .then((res) => {
         console.log(res.data.Error);
         if (res.data.Error == false) {
           const datas = res.data;
           const arrLocation = datas.Data;
-          console.log('res api >', datas);
-          console.log('arrLocation >', arrLocation);
-          console.log('ItemStoreFilter >', dataItemStoreFilter);
-          console.log('dataItemStore >', dataItemStore);
-          const qtyArrayItem = arrLocation.map(item => {
+          console.log("res api >", datas);
+          console.log("arrLocation >", arrLocation);
+          console.log("ItemStoreFilter >", dataItemStoreFilter);
+          console.log("dataItemStore >", dataItemStore);
+          const qtyArrayItem = arrLocation.map((item) => {
             return {
               ...item,
               qty: 0,
@@ -136,7 +142,7 @@ const Product = params => {
           setSpinner(false);
         }
         const datas = res.data.Data;
-        const qtyArrayItem = datas.map(item => {
+        const qtyArrayItem = datas.map((item) => {
           return {
             ...item,
             qty: 0,
@@ -157,35 +163,35 @@ const Product = params => {
     }, 1000);
   }, []);
 
-  const goProductDetail = item => {
-    navigation.navigate('EProductDetailStore', {item: item});
+  const goProductDetail = (item) => {
+    navigation.navigate("EProductDetailStore", { item: item });
   };
 
-  const goStore = item => {
+  const goStore = (item) => {
     navigation.goBack();
   };
 
-  const searchFilterFunction = text => {
-    console.log('text', text);
+  const searchFilterFunction = (text) => {
+    console.log("text", text);
     // console.log('arrayholder', arrayholder);
 
-    const newData = dataItemStore.filter(item => {
+    const newData = dataItemStore.filter((item) => {
       const itemData = `${item.descs.toUpperCase()}`;
       // console.log('item qty??', item.trx_qty);
       const textData = text;
       return itemData.indexOf(textData) > -1;
     });
-    console.log('new data', newData);
+    console.log("new data", newData);
     setItemStoreFilter(newData);
     // console.log('dataItemStoreFilter??', dataItemStoreFilter);
   };
 
-  const onSearch = keyword => {
-    const found = dataItemStore.some(item => item.descs == keyword);
+  const onSearch = (keyword) => {
+    const found = dataItemStore.some((item) => item.descs == keyword);
     let searchData = [];
 
     if (found) {
-      searchData = dataItemStore.map(item => {
+      searchData = dataItemStore.map((item) => {
         return {
           ...item,
           checked: item.keyword == keyword,
@@ -197,7 +203,7 @@ const Product = params => {
     //     keyword: item.descs,
     //   });
     // }
-    console.log('keyword search', searchData);
+    console.log("keyword search", searchData);
     // setSearch(keyword);
     // setSearchHistory(searchData);
     // setLoading(true);
@@ -208,21 +214,21 @@ const Product = params => {
     setShowAlert(false);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View key={index}>
         <ProductList
           loading={loading}
           title={item.descs}
           description={item.remarks}
-          style={{marginVertical: 8}}
+          style={{ marginVertical: 8 }}
           // image={item.picture}
           image={
             // require('@assets/images/logo.png')
             // item.images
-            item.images != '' && item.images != null
-              ? {uri: item.images}
-              : require('@assets/images/logo.png')
+            item.images != "" && item.images != null
+              ? { uri: item.images }
+              : require("@assets/images/logo.png")
           }
           // costPrice={item.default_price}
           salePrice={item.default_price}
@@ -257,15 +263,16 @@ const Product = params => {
   const renderList = () => {
     return spinner ? (
       <ActivityIndicator color={colors.primary} />
-    ) : dataItemStore == '' || dataItemStore == null ? (
+    ) : dataItemStore == "" || dataItemStore == null ? (
       <View
         style={{
           flex: 1,
-          alignItems: 'center',
-          alignContent: 'center',
-          justifyContent: 'center',
-          paddingTop: '50%',
-        }}>
+          alignItems: "center",
+          alignContent: "center",
+          justifyContent: "center",
+          paddingTop: "50%",
+        }}
+      >
         <View>
           {/* <Icon
           name={'exclamation-triangle'}
@@ -275,9 +282,9 @@ const Product = params => {
           }}
         /> */}
           <LottieView
-            source={require('@data/91191-404-notfound.json')}
+            source={require("@data/91191-404-notfound.json")}
             autoPlay
-            style={{width: 300, height: 300}}
+            style={{ width: 300, height: 300 }}
           />
         </View>
         <Text
@@ -285,37 +292,38 @@ const Product = params => {
           bold
           style={{
             color: parseHexTransparency(colors.text, 50),
-          }}>
+          }}
+        >
           Data Not Found
         </Text>
       </View>
     ) : (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <CardBooking
           loading={loading}
-          description={t('total_price')}
+          description={t("total_price")}
           price={numFormattanpaRupiah(totalHarga)}
-          secondDescription={'Tax included'}
-          textButton={t('checkout')}
+          secondDescription={"Tax included"}
+          textButton={t("checkout")}
           //   // onPress={() => navigation.navigate('EShipping')}
           onPress={() =>
             totalHarga == 0 ? setShowAlert(true) : checkoutSave()
           }
           // onPress={() => checkoutSave()}
         />
-        <Divider style={{marginTop: 10, marginBottom: 20}} />
+        <Divider style={{ marginTop: 10, marginBottom: 20 }} />
         <TextInput
           placeholder="Search"
           style={{
-            color: '#555',
+            color: "#555",
             fontSize: 14,
-            borderColor: '#000',
+            borderColor: "#000",
             borderWidth: 0.5,
             borderRadius: 10,
             marginHorizontal: 20,
           }}
           // onChangeText={this.handleSearch}
-          onChangeText={text => searchFilterFunction(text.toUpperCase())}
+          onChangeText={(text) => searchFilterFunction(text.toUpperCase())}
           // onChangeText={text => onSearch(text)}
           autoCorrect={false}
         />
@@ -338,25 +346,26 @@ const Product = params => {
           }
           data={dataItemStoreFilter}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: "row",
                 flex: 1,
-                justifyContent: 'center',
-              }}>
+                justifyContent: "center",
+              }}
+            >
               <Checkout
                 loading={loading}
-                style={{marginTop: 10, flex: 1, marginLeft: 10}}
+                style={{ marginTop: 10, flex: 1, marginLeft: 10 }}
                 title={item.descs}
                 description={item.remarks}
                 // image={item.image}
                 image={
                   // require('@assets/images/logo.png')
 
-                  item.images != '' && item.images != null
-                    ? {uri: item.images}
-                    : require('@assets/images/logo.png')
+                  item.images != "" && item.images != null
+                    ? { uri: item.images }
+                    : require("@assets/images/logo.png")
                 }
                 //image di component checkoutnya sengaja di tutup, karena tidak pakai url uri
                 salePrice={numFormattanpaRupiah(item.default_price)}
@@ -365,9 +374,9 @@ const Product = params => {
                 onDelete={() =>
                   setDataListCheckout(
                     dataListCheckout.filter(
-                      dataListCheckout =>
-                        dataListCheckout.trx_code != item.trx_code,
-                    ),
+                      (dataListCheckout) =>
+                        dataListCheckout.trx_code != item.trx_code
+                    )
                   )
                 }
                 // onDelete={() => onDelete()}
@@ -385,10 +394,11 @@ const Product = params => {
                   styles.contentPicker,
                   {
                     backgroundColor: colors.background,
-                    flexDirection: 'column',
+                    flexDirection: "column",
                   },
                   // style,
-                ]}>
+                ]}
+              >
                 <TouchableOpacity
                   onPress={() =>
                     changeQty(
@@ -396,12 +406,13 @@ const Product = params => {
                       item.default_price,
                       index,
                       item,
-                      'up',
+                      "up"
                     )
-                  }>
+                  }
+                >
                   <Icon name="plus-circle" size={24} color={colors.primary} />
                 </TouchableOpacity>
-                <Text title2 style={{width: 'auto', textAlign: 'center'}}>
+                <Text title2 style={{ width: "auto", textAlign: "center" }}>
                   {item.qty}
                 </Text>
                 <TouchableOpacity
@@ -411,9 +422,10 @@ const Product = params => {
                       item.default_price,
                       index,
                       item,
-                      'down',
+                      "down"
                     )
-                  }>
+                  }
+                >
                   <Icon
                     name="minus-circle"
                     size={24}
@@ -471,35 +483,39 @@ const Product = params => {
         <View>
           <Modal
             isVisible={showAlert}
-            style={{height: '100%'}}
-            onBackdropPress={() => onCloseAlert()}>
+            style={{ height: "100%" }}
+            onBackdropPress={() => onCloseAlert()}
+          >
             <View
               style={{
                 // flex: 1,
 
                 // alignContent: 'center',
                 padding: 10,
-                backgroundColor: '#fff',
+                backgroundColor: "#fff",
                 // height: ,
                 borderRadius: 8,
-              }}>
-              <View style={{alignItems: 'center'}}>
+              }}
+            >
+              <View style={{ alignItems: "center" }}>
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 'bold',
+                    fontWeight: "bold",
                     color: colors.primary,
                     marginBottom: 10,
-                  }}>
-                  {'Alert'}
+                  }}
+                >
+                  {"Alert"}
                 </Text>
                 <Text>You have to set the quantity</Text>
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}>
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <Button
                   style={{
                     marginTop: 10,
@@ -508,9 +524,10 @@ const Product = params => {
                     width: 70,
                     height: 40,
                   }}
-                  onPress={() => onCloseAlert()}>
-                  <Text style={{fontSize: 13, color: colors.whiteColor}}>
-                    {t('OK')}
+                  onPress={() => onCloseAlert()}
+                >
+                  <Text style={{ fontSize: 13, color: colors.whiteColor }}>
+                    {t("OK")}
                   </Text>
                 </Button>
               </View>
@@ -527,7 +544,7 @@ const Product = params => {
 
     const qtyCurrent = arraytes[index].qty;
 
-    if (type == 'up') {
+    if (type == "up") {
       // valueNew = qtyArrayItem + 1;
       arraytes[index].qty = qtyCurrent + 1;
       setItemStore(arraytes);
@@ -539,9 +556,9 @@ const Product = params => {
       setItemStoreFilter(arraytes);
     }
 
-    console.log('value change', value);
-    console.log('unit price change qty', unit_price);
-    console.log('item cgange qty', item);
+    console.log("value change", value);
+    console.log("unit price change qty", unit_price);
+    console.log("item cgange qty", item);
     // console.log('data member', dataMember);
 
     setTambahItem(true);
@@ -550,15 +567,15 @@ const Product = params => {
     // setTotal(value * unit_price);
 
     const totalAwal = item.qty * unit_price;
-    console.log('total awal koma??', totalAwal);
+    console.log("total awal koma??", totalAwal);
     // const totalAwal = value * parseFloat(unit_price).toFixed(2);
     const totalAwaldenganTax =
       totalAwal + item.qty * Math.round(unit_price * (item.tax_rate / 100));
-    console.log('total wal dengan tx??', totalAwaldenganTax); //disini yang menyebabkan banyak koma-koma dibelakang
+    console.log("total wal dengan tx??", totalAwaldenganTax); //disini yang menyebabkan banyak koma-koma dibelakang
     const taxSebelumdiJumlah = Math.round(
-      (item.qty * unit_price) / item.tax_rate,
+      (item.qty * unit_price) / item.tax_rate
     );
-    console.log('taxSebelumdiJumlah', taxSebelumdiJumlah);
+    console.log("taxSebelumdiJumlah", taxSebelumdiJumlah);
     const dataCheckout = {
       totalHarga: item.qty * unit_price,
       trx_qty: item.qty,
@@ -566,7 +583,7 @@ const Product = params => {
       // ...dataMember,
 
       count_tax_rate_per_item: Math.round(
-        item.qty * unit_price * (item.tax_rate / 100),
+        item.qty * unit_price * (item.tax_rate / 100)
       ),
       total_harga_with_tax: totalAwaldenganTax,
 
@@ -587,13 +604,13 @@ const Product = params => {
     };
 
     const arrayCart = [...ArrayDataCheckout, dataCheckout];
-    console.log('array checkout', arrayCart);
+    console.log("array checkout", arrayCart);
 
     const newArray = [
-      ...new Map(arrayCart.map(item => [item.trx_code, item])).values(),
+      ...new Map(arrayCart.map((item) => [item.trx_code, item])).values(),
     ];
 
-    console.log('newarray', newArray);
+    console.log("newarray", newArray);
 
     setArrayDataCheckout(newArray);
 
@@ -603,7 +620,7 @@ const Product = params => {
         : newArray.reduce(
             (total, currentItem) =>
               (total = total + currentItem.total_harga_with_tax),
-            0,
+            0
           );
 
     const itemFortax =
@@ -612,9 +629,9 @@ const Product = params => {
         : newArray.reduce(
             (tax, currentItem) =>
               (tax = tax + currentItem.count_tax_rate_per_item),
-            0,
+            0
           );
-    console.log('itemFortax', itemFortax);
+    console.log("itemFortax", itemFortax);
     // const total = newArray.reduce(
     //   (total, currentItem) =>
     //     (total = total + currentItem.total_harga_with_tax),
@@ -623,30 +640,30 @@ const Product = params => {
 
     const floatTotal =
       itemFortotal == 0 ? 0 : parseFloat(itemFortotal).toFixed(2);
-    console.log('tes decimal', floatTotal);
+    console.log("tes decimal", floatTotal);
 
     const floatTax = itemFortax == 0 ? 0 : parseFloat(itemFortax).toFixed(2);
-    console.log('tax decimal', floatTax);
+    console.log("tax decimal", floatTax);
 
-    console.log('tes tax', itemFortotal);
+    console.log("tes tax", itemFortotal);
     setTotalTax(floatTax);
     setTotals(floatTotal);
   };
 
   const checkoutSave = () => {
-    console.log('dataListCheckout di button checkout save', ArrayDataCheckout);
+    console.log("dataListCheckout di button checkout save", ArrayDataCheckout);
 
     const dataSplice = ArrayDataCheckout;
 
     // dataSplice.splice(0, 1);
-    const indexOfObject = dataSplice.findIndex(object => {
+    const indexOfObject = dataSplice.findIndex((object) => {
       return object.trx_qty === 0;
     });
     console.log(indexOfObject); // 👉️ 1
 
     if (indexOfObject == -1) {
-      console.log('remaining', dataSplice);
-      console.log('itemsStore: ', dataItemStore);
+      console.log("remaining", dataSplice);
+      console.log("itemsStore: ", dataItemStore);
       const formData = {
         entity_cd: dataMember.entity_cd, // sebenernya ini cukup ambil dari data array 0, karena termasuk member item yang sama disetiap array produk
         project_no: dataMember.project_no, // sebenernya ini cukup ambil dari data array 0, karena termasuk member item yang sama disetiap array produk
@@ -658,13 +675,13 @@ const Product = params => {
         images: dataItemStore.images,
         datadetail: dataSplice, // dapet dari isi redux (ini yg nantinya ada kode item, qty, total, dll)
       };
-      console.log('formdata', formData);
-      navigation.navigate('DeliveryAndPayment', formData);
+      console.log("formdata", formData);
+      navigation.navigate("DeliveryAndPayment", formData);
     } else {
       dataSplice.splice(indexOfObject, 1);
 
       // console.log(arr); // 👉️ [{id: 1}, {id: 5}]
-      console.log('remaining', dataSplice);
+      console.log("remaining", dataSplice);
       const formData = {
         entity_cd: dataMember.entity_cd, // sebenernya ini cukup ambil dari data array 0, karena termasuk member item yang sama disetiap array produk
         project_no: dataMember.project_no, // sebenernya ini cukup ambil dari data array 0, karena termasuk member item yang sama disetiap array produk
@@ -676,8 +693,8 @@ const Product = params => {
         images: dataItemStore.images,
         datadetail: dataSplice, // dapet dari isi redux (ini yg nantinya ada kode item, qty, total, dll)
       };
-      console.log('formdata', formData);
-      navigation.navigate('DeliveryAndPayment', formData);
+      console.log("formdata", formData);
+      navigation.navigate("DeliveryAndPayment", formData);
     }
   };
 
@@ -685,7 +702,8 @@ const Product = params => {
     <SafeAreaView>
       <ScrollView
         // stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         {/* <View
           style={{
             flexDirection: 'row',
@@ -798,11 +816,11 @@ const Product = params => {
   );
 };
 
-export default function ItemStore({route}) {
-  const {colors} = useTheme();
-  console.log('routeee', route);
+export default function ItemStore({ route }) {
+  const { colors } = useTheme();
+  console.log("routeee", route);
   const navigation = useNavigation();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -814,24 +832,24 @@ export default function ItemStore({route}) {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'all', title: 'All'},
+    { key: "all", title: "All" },
     // {key: 'feedback', title: 'Feedback'},
   ]);
-  console.log('rputes', routes);
+  console.log("rputes", routes);
   const renderScene = SceneMap({
     all: Product,
     // feedback: Product,
   });
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
       renderIndicator={() => null}
       scrollEnabled
-      style={[styles.tabbar, {backgroundColor: colors.background}]}
+      style={[styles.tabbar, { backgroundColor: colors.background }]}
       tabStyle={styles.tab}
       activeColor={BaseColor.whiteColor}
       inactiveColor={colors.text}
-      renderLabel={({route, focused, color}) => (
+      renderLabel={({ route, focused, color }) => (
         <Tag
           primary={true}
           style={{
@@ -839,7 +857,8 @@ export default function ItemStore({route}) {
           }}
           textStyle={{
             color: color,
-          }}>
+          }}
+        >
           {route.title}
         </Tag>
       )}
@@ -849,9 +868,10 @@ export default function ItemStore({route}) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={'Items Store'}
+        title={"Items Store"}
         renderLeft={() => {
           return (
             <Icon

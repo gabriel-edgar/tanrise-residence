@@ -9,14 +9,14 @@ import {
   RefreshControl,
   Header,
   Icon,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox} from 'react-native-elements';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox } from "react-native-elements";
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   TouchableOpacity,
@@ -24,98 +24,108 @@ import {
   Platform,
   TouchableHighlight,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import httpClient from "../../controllers/HttpClient";
+import styles from "./styles";
 
-import {RadioButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {API_URL_LOKAL} from '@env';
-export default function CategoryHelp({route}) {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+import { RadioButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL_LOKAL } from "@env";
+
+export default function CategoryHelp({ route }) {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
-  const [urlApi, seturlApi] = useState(client);
+  //const [urlApi, seturlApi] = useState(client);
 
   const [spinner, setSpinner] = useState(true);
 
   const [dataCategory, setDataCategory] = useState([]);
 
-  const [typeLocation, setTypeLocation] = useState('');
+  const [typeLocation, setTypeLocation] = useState("U");
   const [passPropStorage, setPassPropStorage] = useState();
   const [passProp, setpassProp] = useState(route.params.saveStorage);
   //   console.log('passprop kategori help', passProp);
-  console.log('arrDataTowerUser', arrDataTowerUser);
-  console.log('dataTowerUser >', dataTowerUser.project_no);
+  console.log("arrDataTowerUser", arrDataTowerUser);
+  console.log("dataTowerUser >", dataTowerUser.project_no);
   const styleItem = {
     ...styles.profileItem,
     borderBottomColor: colors.border,
   };
+
+  const stateReduxChoosedProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+
   //-----FOR GET ENTITY & PROJJECT
   const getTower = async () => {
     setEmail(passProp.dataDebtor.email);
     const data = {
       email: email,
-      app: 'O',
+      app: "O",
     };
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
         // token: "",
       },
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`, {
-        config,
-      })
-      .then(res => {
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
+        {
+          config,
+        }
+      )
+      .then((res) => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
-        arrDataTower.map(dat => {
+        arrDataTower.map((dat) => {
           if (dat) {
             setdataTowerUser(dat);
           }
         });
         setArrDataTowerUser(arrDataTower);
-        console.log('arrDataTower', arrDataTower);
+        console.log("arrDataTower", arrDataTower);
         setSpinner(false);
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get tower api", error);
+        alert("error get");
       });
   };
 
   const getDataStorage = async () => {
-    const value = await AsyncStorage.getItem('@helpdeskStorage');
-    const DataTower = await AsyncStorage.getItem('@DataTower');
-    console.log('data tower', DataTower);
+    const value = await AsyncStorage.getItem("@helpdeskStorage");
+    const DataTower = await AsyncStorage.getItem("@DataTower");
+    console.log("data tower", DataTower);
 
     const passPropStorage = JSON.parse(value);
 
     setPassPropStorage(passPropStorage);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      getTower(users);
+      //getTower(users);
       getDataStorage();
       defaultLocation();
       // getCategoryHelp;
@@ -123,9 +133,13 @@ export default function CategoryHelp({route}) {
     }, 3000);
   }, []);
 
-  const defaultLocation = () => {
-    getTower(users);
-    getCategoryHelp('U');
+  useEffect(() => {
+    getCategoryHelp(typeLocation);
+  }, [typeLocation]);
+
+  const defaultLocation = async () => {
+    //getTower(users);
+    await getCategoryHelp("U");
   };
 
   // const handleSetRadio = (checked, type) => {
@@ -148,45 +162,51 @@ export default function CategoryHelp({route}) {
   //   }
   // };
 
-  const getCategoryHelp = async type => {
+  const getCategoryHelp = async (type) => {
     const params = {
-      entity: dataTowerUser.entity_cd,
-      project: dataTowerUser.project_no,
+      entity_cd: stateReduxChoosedProject.entity_cd,
+      project_no: stateReduxChoosedProject.project_no,
       location_type: type, //ini nanti pake radiobutton
     };
-    console.log('params category', params);
 
-    const config = {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
-      },
-    };
+    console.log("183 category run: ", params);
 
-    await axios
-      .post(API_URL_LOKAL + '/csentry-getCategoryHelp', params, {
-        config,
+    // const config = {
+    //   headers: {
+    //     accept: "application/json",
+    //     "Content-Type": "application/json",
+    //     token: "",
+    //   },
+    // };
+
+    // await axios
+    //   .post(API_URL_LOKAL + "/modules/cs/category-help", params, {
+    //     config,
+    //   })
+    await httpClient
+      .request({
+        url: "/modules/cs/category-help",
+        method: "GET",
+        params,
       })
-      .then(res => {
-        const datas = res.data;
-        const dataCategorys = datas.Data;
-        console.log('data kategori', dataCategorys);
+      .then((res) => {
+        const datas = res.data.data;
+        console.log("183 category: ", datas);
 
-        setDataCategory(dataCategorys);
+        setDataCategory(datas);
         setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error.response);
-        alert('error get');
+      .catch((error) => {
+        console.log("183 category: ", error.response);
+        //alert("error get");
       });
   };
 
   const handleClick = async (data, index) => {
-    console.log('category_grop_cd', data.category_group_cd);
-    console.log('loc_type', data.location_type);
-    console.log('passprops', passProp);
+    console.log("category_grop_cd", data.category_group_cd);
+    console.log("loc_type", data.location_type);
+    console.log("passprops", passProp);
     const saveParams = {
       //   ...passPropStorage,
       passProp,
@@ -199,18 +219,19 @@ export default function CategoryHelp({route}) {
       category_group_cd: data.category_group_cd,
       location_type: data.location_type,
     };
-    console.log('urutan kedua props', saveStorage);
-    console.log('urutan kedua params', saveParams);
+    console.log("urutan kedua props", saveStorage);
+    console.log("urutan kedua params", saveParams);
 
     const jsonValue = JSON.stringify(saveStorage);
-    await AsyncStorage.setItem('@helpdeskStorage', jsonValue);
+    await AsyncStorage.setItem("@helpdeskStorage", jsonValue);
 
-    const jsonValueNullLocation = JSON.stringify('');
-    await AsyncStorage.setItem('@locationStorage', jsonValueNullLocation);
+    const jsonValueNullLocation = JSON.stringify("");
+    await AsyncStorage.setItem("@locationStorage", jsonValueNullLocation);
 
-    navigation.navigate('SelectCategory', {
+    navigation.navigate("SelectCategory", {
       // screen: 'Settings',
       saveParams,
+      category_group_cd: data.category_group_cd,
     });
   };
 
@@ -222,9 +243,10 @@ export default function CategoryHelp({route}) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('category_help')} //belum dibuat lang
+        title={t("category_help")} //belum dibuat lang
         renderLeft={() => {
           return (
             <Icon
@@ -240,15 +262,15 @@ export default function CategoryHelp({route}) {
         }}
       />
       <View style={styles.wrap}>
-        <Text title2>Ticket</Text>
-        <Text headline style={{fontWeight: 'normal'}}>
+        <Text title2>Ticket (2/4)</Text>
+        <Text headline style={{ fontWeight: "normal" }}>
           Service Request Form
         </Text>
-        <Text headline style={{fontWeight: 'normal', paddingTop: 20}}>
-          Location
+        <Text headline style={{ fontWeight: "normal", paddingTop: 20 }}>
+          Location type:
         </Text>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: "row" }}>
           {/* <View style={{flexDirection: 'row'}}>
             <RadioButton
               color={BaseColor.hijau_pkbw}
@@ -262,21 +284,45 @@ export default function CategoryHelp({route}) {
               Public Area
             </Text>
           </View> */}
-          <View style={{flexDirection: 'row', marginTop: 10}}>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <RadioButton
               color={BaseColor.hijau_pkbw}
               value="U"
-              // status={typeLocation == 'U' ? 'checked' : 'unchecked'}
-              status={'checked'}
-              // onPress={() => setTypeLocation('U')}
-              // onPress={() => handleSetRadio(true, 'U')}
+              status={typeLocation == "U" ? "checked" : "unchecked"}
+              //status={"checked"}
+              onPress={() => {
+                setTypeLocation("U");
+                //handleSetRadio(true, "U");
+              }}
             />
-            <Text headline style={{alignSelf: 'center', fontWeight: 'normal'}}>
+            <Text
+              headline
+              style={{ alignSelf: "center", fontWeight: "normal" }}
+            >
               Unit
+            </Text>
+            <View style={{ marginLeft: 60 }}>
+              <RadioButton
+                color={BaseColor.hijau_pkbw}
+                value="P"
+                // status={typeLocation == 'U' ? 'checked' : 'unchecked'}
+                status={typeLocation == "P" ? "checked" : "unchecked"}
+                onPress={() => {
+                  setTypeLocation("P");
+                  //handleSetRadio(true, "P");
+                }}
+                style={{ marginLeft: 100 }}
+              />
+            </View>
+            <Text
+              headline
+              style={{ alignSelf: "center", fontWeight: "normal" }}
+            >
+              Public
             </Text>
           </View>
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{ marginTop: 20 }}>
           {/* {!typeLocation ? (
             <Text
               headline
@@ -292,31 +338,36 @@ export default function CategoryHelp({route}) {
           {spinner ? (
             <View>
               {/* <Spinner visible={this.state.spinner} /> */}
-              <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
-                <PlaceholderLine width={100} noMargin style={{height: 40}} />
+              <Placeholder style={{ marginVertical: 4, paddingHorizontal: 10 }}>
+                <PlaceholderLine width={100} noMargin style={{ height: 40 }} />
               </Placeholder>
             </View>
           ) : (
-            <ScrollView style={{marginHorizontal: 10}}>
+            <ScrollView style={{ marginHorizontal: 10 }}>
               {/* <Text headline style={{fontWeight: 'normal', paddingTop: 20}}>
                 Choose Category
               </Text> */}
-              {dataCategory.map((data, index) => (
-                <View key={index}>
-                  <TouchableOpacity
-                    style={styleItem}
-                    onPress={() => handleClick(data, index)}>
-                    <Text body1>{data.descs}</Text>
-                    <Icon
-                      name="angle-right"
-                      size={18}
-                      color={colors.primary}
-                      style={{marginLeft: 5}}
-                      enableRTL={true}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ))}
+              {dataCategory.length == 0 ? (
+                <Text style={{ textAlign: "center" }}>Category not found</Text>
+              ) : (
+                dataCategory.map((data, index) => (
+                  <View key={index}>
+                    <TouchableOpacity
+                      style={styleItem}
+                      onPress={() => handleClick(data, index)}
+                    >
+                      <Text body1>{data.descs}</Text>
+                      <Icon
+                        name="angle-right"
+                        size={18}
+                        color={colors.primary}
+                        style={{ marginLeft: 5 }}
+                        enableRTL={true}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))
+              )}
             </ScrollView>
           )}
         </View>

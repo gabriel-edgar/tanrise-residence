@@ -6,10 +6,10 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -19,91 +19,91 @@ import {
   RefreshControl,
   TouchableOpacity,
   ImageBackground,
-} from 'react-native';
-import styles from './styles';
-import {Picker} from '@react-native-picker/picker';
-import {useSelector, useDispatch} from 'react-redux';
-import getUser from '../../../selectors/UserSelectors';
-import getProject from '../../../selectors/ProjectSelector';
-import axios from 'axios';
-import ModalDropdown_lotno from '@components/ModalDropdown_lotno';
-import ModalDropdown_ListPayment from '../../../components/ModalDropdown_ListPayment';
-import ModalDropdown_debtor from '../../../components/ModalDropdown_debtor';
-import Modal from 'react-native-modal';
-import IconAnt from 'react-native-vector-icons/AntDesign';
+} from "react-native";
+import styles from "./styles";
+import { Picker } from "@react-native-picker/picker";
+import { useSelector, useDispatch } from "react-redux";
+import getUser from "../../../selectors/UserSelectors";
+import getProject from "../../../selectors/ProjectSelector";
+import axios from "axios";
+import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import ModalDropdown_ListPayment from "../../../components/ModalDropdown_ListPayment";
+import ModalDropdown_debtor from "../../../components/ModalDropdown_debtor";
+import Modal from "react-native-modal";
+import IconAnt from "react-native-vector-icons/AntDesign";
 
-import {Divider} from 'react-native-paper';
-import numFormattanpaRupiah from '../../../components/numFormattanpaRupiah';
-import MaskInput, {Masks, createNumberMask} from 'react-native-mask-input';
-import {API_URL_LOKAL} from '@env';
+import { Divider } from "react-native-paper";
+import numFormattanpaRupiah from "../../../components/numFormattanpaRupiah";
+import MaskInput, { Masks, createNumberMask } from "react-native-mask-input";
+import { API_URL_LOKAL } from "@env";
 const rupiahMask = createNumberMask({
   prefix: [],
-  delimiter: '.',
-  separator: ',',
+  delimiter: ".",
+  separator: ",",
   precision: 0,
 });
 
 // import TextInputs as TextInput from 'react-native-paper';
 // import {TextInput} from 'react-native-paper';
 
-export default function DeliveryAndPayment({route, navigation}) {
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+export default function DeliveryAndPayment({ route, navigation }) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const [dataParams, setDataParams] = useState(route.params);
   const [dataParamsTransaction, setDataParamsTransaction] = useState(
-    route.params.datadetail,
+    route.params.datadetail
   );
-  console.log('data params', dataParams);
-  console.log('data params ?', dataParams.facility_type);
+  console.log("data params", dataParams);
+  console.log("data params ?", dataParams.facility_type);
 
   const [refreshing, setRefreshing] = useState(false);
   const [spinner, setSpinner] = useState(true);
 
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [postCode, setPostCode] = useState('');
-  const [country, setCountry] = useState('');
-  const [contactName, setContactName] = useState('');
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [postCode, setPostCode] = useState("");
+  const [country, setCountry] = useState("");
+  const [contactName, setContactName] = useState("");
 
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState('home'); // home or office
+  const [type, setType] = useState("home"); // home or office
   const [hasError, setErrors] = useState(false);
-  const user = useSelector(state => getUser(state));
+  const user = useSelector((state) => getUser(state));
   // console.log('user cek debtor', user);
 
-  const project = useSelector(state => getProject(state));
+  const project = useSelector((state) => getProject(state));
   const facility_type = dataParams.facility_type;
 
-  const [email, setEmail] = useState(user != null ? user.user : '');
+  const [email, setEmail] = useState(user != null ? user.user : "");
 
   const [lotNo, setLotno] = useState([]);
   const [entity_cd, setEntity] = useState(project.Data[0].entity_cd);
   const [project_no, setProjectNo] = useState(project.Data[0].project_no);
   const [default_text_lotno, setDefaultLotno] = useState(false);
-  const [text_lotno, setTextLotno] = useState('');
+  const [text_lotno, setTextLotno] = useState("");
 
   const [listPayment, setListPayment] = useState([]);
-  const [textPayment, setTextPayment] = useState('');
-  const [trxCode, setTrxCode] = useState('');
+  const [textPayment, setTextPayment] = useState("");
+  const [trxCode, setTrxCode] = useState("");
 
-  const [amountPaid, setAmountPaid] = useState('');
-  const [balancetoPay, setBalancetoPay] = useState('');
+  const [amountPaid, setAmountPaid] = useState("");
+  const [balancetoPay, setBalancetoPay] = useState("");
 
-  const [debtor, setDebtor] = useState('');
+  const [debtor, setDebtor] = useState("");
   const [dataDebtor, setDataDebtor] = useState([]);
-  const [textDebtor, settextDebtor] = useState('');
-  const [textNameDebtor, settextNameDebtor] = useState('');
+  const [textDebtor, settextDebtor] = useState("");
+  const [textNameDebtor, settextNameDebtor] = useState("");
   const [defaultDebtor, setDefaultDebtor] = useState(false);
 
   const [showAlertMinusPayment, setShowAlertMinusPayment] = useState(false);
 
   const [modalSuccessPayment, setModalSuccessPayment] = useState(false);
-  const [statusResult, setStatus] = useState('');
-  const [messageAlert, setMessageAlert] = useState('');
-  const [message, setMessage] = useState('');
-  const [amountPaidMask, setAmountPaidMask] = useState('');
+  const [statusResult, setStatus] = useState("");
+  const [messageAlert, setMessageAlert] = useState("");
+  const [message, setMessage] = useState("");
+  const [amountPaidMask, setAmountPaidMask] = useState("");
 
   const [success] = useState({
     street: true,
@@ -126,20 +126,20 @@ export default function DeliveryAndPayment({route, navigation}) {
   const totalTax = dataParamsTransaction.reduce(
     (total, currentItem) =>
       (total = total + currentItem.count_tax_rate_per_item),
-    0,
+    0
   );
 
   const totalHarga = dataParamsTransaction.reduce(
     (total, currentItem) => (total = total + currentItem.totalHarga),
-    0,
+    0
   );
 
   const round = Math.ceil(totalHarga);
-  console.log('rounds', round);
-  console.log('rounds', totalHarga);
+  console.log("rounds", round);
+  console.log("rounds", totalHarga);
   const totalHargadenganTax = dataParamsTransaction.reduce(
     (total, currentItem) => (total = total + currentItem.total_harga_with_tax),
-    0,
+    0
   );
 
   /**
@@ -149,30 +149,30 @@ export default function DeliveryAndPayment({route, navigation}) {
 
   async function getLotNo() {
     console.log(
-      'url api lotno',
-      'http://apps.pakubuwono-residence.com/apiwebpbi/api/facility/book/unit?entity=' +
+      "url api lotno",
+      "http://apps.pakubuwono-residence.com/apiwebpbi/api/home/common-unit?entity=" +
         entity_cd +
-        '&' +
-        'project=' +
+        "&" +
+        "project=" +
         project_no +
-        '&' +
-        'email=' +
-        email,
+        "&" +
+        "email=" +
+        email
     );
     try {
       const res = await axios.get(
         API_URL_LOKAL +
-          `/facility/book/unit?entity=` +
+          `/home/common-unit?entity=` +
           entity_cd +
-          '&' +
-          'project=' +
+          "&" +
+          "project=" +
           project_no +
-          '&' +
-          'email=' +
-          email,
+          "&" +
+          "email=" +
+          email
       );
       const resLotno = res.data.data;
-      console.log('reslotno', resLotno);
+      console.log("reslotno", resLotno);
 
       // setTextLotno(resLotno[0].lot_no);
 
@@ -196,32 +196,32 @@ export default function DeliveryAndPayment({route, navigation}) {
 
   async function getListPayment() {
     console.log(
-      'url api lotno',
-      'http://apps.pakubuwono-residence.com/apiwebpbi/api/pos/getPayment?entity_cd=' +
+      "url api lotno",
+      "http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/store/payment-type?entity_cd=" +
         entity_cd +
-        '&' +
-        'project_no=' +
+        "&" +
+        "project_no=" +
         project_no +
-        '&' +
-        'facility_type=' +
-        facility_type,
+        "&" +
+        "facility_type=" +
+        facility_type
     );
     try {
       const res = await axios.get(
         API_URL_LOKAL +
-          `/pos/getPayment?entity_cd=` +
+          `/modules/store/payment-type?entity_cd=` +
           entity_cd +
-          '&' +
-          'project_no=' +
+          "&" +
+          "project_no=" +
           project_no +
-          '&' +
-          'facility_type=' +
-          facility_type,
+          "&" +
+          "facility_type=" +
+          facility_type
       );
       const resPayment = res.data.Data;
       // resPayment.push({trx_code: 'others', descs: 'Others'});
 
-      console.log('listpayment', resPayment);
+      console.log("listpayment", resPayment);
 
       setListPayment(resPayment);
 
@@ -232,57 +232,57 @@ export default function DeliveryAndPayment({route, navigation}) {
     }
   }
 
-  const chooseListPayment = ({data, index}) => {
-    console.log('data list choose', data);
-    console.log('index list choose', index);
+  const chooseListPayment = ({ data, index }) => {
+    console.log("data list choose", data);
+    console.log("index list choose", index);
 
     setTextPayment(index.descs);
     setTrxCode(index.trx_code);
   };
 
   //-----FOR GET DEBTOR
-  const getDebtor = async data => {
+  const getDebtor = async (data) => {
     // console.log(object)
-    console.log('data for debtor', data);
+    console.log("data for debtor", data);
 
     const params =
-      '?' +
-      'entity_cd=' +
+      "?" +
+      "entity_cd=" +
       entity_cd +
-      '&' +
-      'project_no=' +
+      "&" +
+      "project_no=" +
       project_no +
-      '&' +
-      'email=' +
+      "&" +
+      "email=" +
       email;
 
     console.log(
-      'api debtor',
-      'http://apps.pakubuwono-residence.com/apiwebpbi/api/csentry-getDebtor' +
-        params,
+      "api debtor",
+      "http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/cs/debtor" +
+        params
     );
 
-    console.log('data for', params);
-    console.log('text_lotno>', text_lotno);
+    console.log("data for", params);
+    console.log("text_lotno>", text_lotno);
     // console.log('dataDebtors[0]', dataDebtor);
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
     await axios
-      .post(API_URL_LOKAL + '/csentry-getDebtor' + params, {
+      .post(API_URL_LOKAL + "/modules/cs/debtor" + params, {
         config,
       })
-      .then(res => {
+      .then((res) => {
         // console.log('res', res);
         const datas = res.data;
         const dataDebtors = datas.Data;
-        console.log('res debtor', dataDebtors);
-        console.log('ada berapa length debtor', dataDebtors.length);
+        console.log("res debtor", dataDebtors);
+        console.log("ada berapa length debtor", dataDebtors.length);
 
         if (dataDebtors.length > 1) {
           setDefaultDebtor(false);
@@ -303,11 +303,11 @@ export default function DeliveryAndPayment({route, navigation}) {
           setDebtor(dataDebtors[0].debtor_acct);
 
           settextDebtor(
-            dataDebtors[0].debtor_acct + ' - ' + dataDebtors[0].name,
+            dataDebtors[0].debtor_acct + " - " + dataDebtors[0].name
           );
           console.log(
-            'debn',
-            dataDebtors[0].debtor_acct + ' - ' + dataDebtors[0].name,
+            "debn",
+            dataDebtors[0].debtor_acct + " - " + dataDebtors[0].name
           );
           settextNameDebtor(dataDebtors[0].name);
 
@@ -321,14 +321,14 @@ export default function DeliveryAndPayment({route, navigation}) {
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get debtor api', error);
+      .catch((error) => {
+        console.log("error get debtor api", error);
         // alert('error get');
       });
   };
 
-  const handleChangeModal = ({data, index}) => {
-    console.log('index,', index);
+  const handleChangeModal = ({ data, index }) => {
+    console.log("index,", index);
     setDefaultDebtor(index);
     // console.log('data change debtor', data);
     // data.data.map(dat => {
@@ -338,8 +338,8 @@ export default function DeliveryAndPayment({route, navigation}) {
     setDebtor(index.debtor_acct);
     // setTenantNo(index.tenant_no);
     setTextLotno(index.lot_no);
-    console.log('text_lot', text_lotno);
-    settextDebtor(index.debtor_acct + ' - ' + index.name);
+    console.log("text_lot", text_lotno);
+    settextDebtor(index.debtor_acct + " - " + index.name);
     settextNameDebtor(index.name);
     // getLot('', index.tenant_no);
     //   }
@@ -348,8 +348,8 @@ export default function DeliveryAndPayment({route, navigation}) {
     setSpinner(false);
   };
 
-  const changeBalancePay = items => {
-    console.log('items amount paid', items);
+  const changeBalancePay = (items) => {
+    console.log("items amount paid", items);
     setAmountPaid(items);
 
     const balance = items - totalHargadenganTax;
@@ -363,7 +363,7 @@ export default function DeliveryAndPayment({route, navigation}) {
 
     // const showAlertMinusPayment = totalHargadenganTax > items ? false : true;
 
-    console.log('kembalian', Number(balance.toFixed()));
+    console.log("kembalian", Number(balance.toFixed()));
     // setShowAlertMinusPayment(showAlertMinusPayment);
     setBalancetoPay(fixBalance);
   };
@@ -374,14 +374,14 @@ export default function DeliveryAndPayment({route, navigation}) {
 
   const onCloseAlertPayment = () => {
     setModalSuccessPayment(false);
-    navigation.navigate('Store');
+    navigation.navigate("Store");
   };
 
   const onCheckOut = () => {
     // const fixBalance = balance ;
-    console.log('balance to pay = 0', balancetoPay);
+    console.log("balance to pay = 0", balancetoPay);
     if (!trxCode && !textPayment) {
-      alert('Please Choose Payment');
+      alert("Please Choose Payment");
     }
     // check if number is greater than 0
     else if (balancetoPay > 0) {
@@ -397,16 +397,16 @@ export default function DeliveryAndPayment({route, navigation}) {
         debtor_acct: dataParams.tenant_no, // dapet dari choose member_id di screen index.js choose member id
         lot_no: text_lotno.lot_no, //
         audit_user: dataParams.member_id, // udah dijelasin di sebelumnya ka
-        cash: amountPaid == '' ? 0 : amountPaid, // ini tuh nominal kita bayar berapa ka
-        return: balancetoPay == '' ? 0 : balancetoPay, // ini nominal kembaliannya
+        cash: amountPaid == "" ? 0 : amountPaid, // ini tuh nominal kita bayar berapa ka
+        return: balancetoPay == "" ? 0 : balancetoPay, // ini nominal kembaliannya
         datadetail: dataParams.datadetail, // udah dijelasin di sebelumnya ka
-        status_order: 'M', // ini untuk validasi status pembelian dari Mobiles
+        status_order: "M", // ini untuk validasi status pembelian dari Mobiles
       };
-      console.log('form data payment', formData);
+      console.log("form data payment", formData);
 
       axios
-        .post(API_URL_LOKAL + '/pos/save/order_payment', formData)
-        .then(res => {
+        .post(API_URL_LOKAL + "/modules/store/save", formData)
+        .then((res) => {
           if (res.data.Error == false) {
             setModalSuccessPayment(true);
             setMessageAlert(res.data.Pesan);
@@ -420,7 +420,7 @@ export default function DeliveryAndPayment({route, navigation}) {
             // alert(res.data.Pesan);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response);
         });
     }
@@ -439,16 +439,16 @@ export default function DeliveryAndPayment({route, navigation}) {
         debtor_acct: dataParams.tenant_no, // dapet dari choose member_id di screen index.js choose member id
         lot_no: text_lotno, //
         audit_user: dataParams.member_id, // udah dijelasin di sebelumnya ka
-        cash: amountPaid == '' ? 0 : amountPaid, // ini tuh nominal kita bayar berapa ka
-        return: balancetoPay == '' ? 0 : balancetoPay, // ini nominal kembaliannya
+        cash: amountPaid == "" ? 0 : amountPaid, // ini tuh nominal kita bayar berapa ka
+        return: balancetoPay == "" ? 0 : balancetoPay, // ini nominal kembaliannya
         datadetail: dataParams.datadetail, // udah dijelasin di sebelumnya ka
-        status_order: 'M', // ini untuk validasi status pembelian dari Mobiles
+        status_order: "M", // ini untuk validasi status pembelian dari Mobiles
       };
-      console.log('form data payment', formData);
+      console.log("form data payment", formData);
 
       axios
-        .post(API_URL_LOKAL + '/pos/save/order_payment', formData)
-        .then(res => {
+        .post(API_URL_LOKAL + "/modules/store/save", formData)
+        .then((res) => {
           if (res.data.Error == false) {
             setModalSuccessPayment(true);
             setMessageAlert(res.data.Pesan);
@@ -462,7 +462,7 @@ export default function DeliveryAndPayment({route, navigation}) {
             // alert(res.data.Pesan);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response);
         });
     }
@@ -476,12 +476,14 @@ export default function DeliveryAndPayment({route, navigation}) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-        style={{flex: 1}}>
+        behavior={Platform.OS === "android" ? "height" : "padding"}
+        style={{ flex: 1 }}
+      >
         <Header
-          title={t('Payment')}
+          title={t("Payment")}
           renderLeft={() => {
             return (
               <Icon
@@ -497,22 +499,24 @@ export default function DeliveryAndPayment({route, navigation}) {
           }}
         />
         <ScrollView
-          contentContainerStyle={{paddingHorizontal: 20, paddingTop: 20}}>
+          contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20 }}
+        >
           <ModalDropdown_debtor
             label="Debtor"
             data={dataDebtor}
-            onChange={index => handleChangeModal({data: dataDebtor, index})}
+            onChange={(index) => handleChangeModal({ data: dataDebtor, index })}
             value={textDebtor}
-            style={{marginBottom: 0, paddingBottom: 0}}
+            style={{ marginBottom: 0, paddingBottom: 0 }}
           />
 
-          <View style={{flexDirection: 'row', marginTop: 10}}>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View
               style={{
                 flex: 3,
                 paddingTop: 10,
-              }}>
-              <Text style={{fontSize: 14}}>Unit No : </Text>
+              }}
+            >
+              <Text style={{ fontSize: 14 }}>Unit No : </Text>
             </View>
             <View style={[styles.inputItem]}>
               <ModalDropdown_lotno
@@ -528,7 +532,7 @@ export default function DeliveryAndPayment({route, navigation}) {
                   // }
                   setTextLotno(
                     itemValue.lot_no,
-                    console.log('itemvalue', itemValue.lot_no),
+                    console.log("itemvalue", itemValue.lot_no)
                   )
                 }
                 value={text_lotno}
@@ -544,7 +548,7 @@ export default function DeliveryAndPayment({route, navigation}) {
             </View>
           </View>
 
-          <Divider style={{marginVertical: 10}} />
+          <Divider style={{ marginVertical: 10 }} />
 
           {/* ------- ITEMS CHECKOUT HERE ------- */}
           <View>
@@ -565,39 +569,40 @@ export default function DeliveryAndPayment({route, navigation}) {
                 }
                 data={dataParamsTransaction}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => (
+                renderItem={({ item, index }) => (
                   <View style={[styles.contain]} activeOpacity={0.9}>
                     <TouchableOpacity>
                       <ImageBackground
                         // source={image}
                         source={
                           // {uri: item.images}
-                          item.images != '' && item.images != null
-                            ? {uri: item.images}
-                            : require('@assets/images/logo.png')
+                          item.images != "" && item.images != null
+                            ? { uri: item.images }
+                            : require("@assets/images/logo.png")
                           // require('@assets/images/logo.png')
                         }
                         style={styles.imageBackgroundCard1}
-                        imageStyle={{borderRadius: 8}}
+                        imageStyle={{ borderRadius: 8 }}
                       />
                     </TouchableOpacity>
-                    <View style={{flex: 1, paddingVertical: 4}}>
+                    <View style={{ flex: 1, paddingVertical: 4 }}>
                       <View
                         style={{
-                          flexDirection: 'row',
+                          flexDirection: "row",
                           paddingHorizontal: 10,
                           flex: 1,
-                        }}>
-                        <View style={{flex: 1, paddingBottom: 4}}>
-                          <View style={{flex: 1}}>
+                        }}
+                      >
+                        <View style={{ flex: 1, paddingBottom: 4 }}>
+                          <View style={{ flex: 1 }}>
                             <View>
-                              <Text semibold style={{fontSize: 16}}>
+                              <Text semibold style={{ fontSize: 16 }}>
                                 {item.trx_descs}
                               </Text>
                             </View>
                             <View>
-                              <Text semibold style={{fontSize: 16}}>
-                                {item.trx_qty} x{' '}
+                              <Text semibold style={{ fontSize: 16 }}>
+                                {item.trx_qty} x{" "}
                                 {numFormattanpaRupiah(item.unit_price)}
                               </Text>
                             </View>
@@ -605,7 +610,7 @@ export default function DeliveryAndPayment({route, navigation}) {
                         </View>
                         <View>
                           <View>
-                            <Text semibold style={{fontSize: 16}}>
+                            <Text semibold style={{ fontSize: 16 }}>
                               {numFormattanpaRupiah(item.totalHarga)}
                             </Text>
                           </View>
@@ -620,52 +625,57 @@ export default function DeliveryAndPayment({route, navigation}) {
           </View>
           {/* ------- CLOSE ITEMS CHECKOUT HERE ------- */}
 
-          <Divider style={{marginVertical: 10}} />
+          <Divider style={{ marginVertical: 10 }} />
 
           {/* ------- SUM TOTAL HERE -------- */}
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}>
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
             <View
               style={{
-                alignSelf: 'flex-start',
+                alignSelf: "flex-start",
                 width: 150,
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: 16,
 
-                  alignSelf: 'flex-start',
-                }}>
+                  alignSelf: "flex-start",
+                }}
+              >
                 Subtotal
               </Text>
             </View>
-            <View style={{justifyContent: 'flex-end', width: 80}}>
-              <Text semibold style={{fontSize: 16, alignSelf: 'flex-end'}}>
+            <View style={{ justifyContent: "flex-end", width: 80 }}>
+              <Text semibold style={{ fontSize: 16, alignSelf: "flex-end" }}>
                 {/* {parseFloat(totalHarga).toFixed(2)} */}
                 {numFormattanpaRupiah(totalHarga)}
               </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <View
               style={{
-                alignSelf: 'flex-start',
+                alignSelf: "flex-start",
                 width: 150,
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: 16,
 
-                  alignSelf: 'flex-start',
-                }}>
+                  alignSelf: "flex-start",
+                }}
+              >
                 Tax
               </Text>
             </View>
-            <View style={{justifyContent: 'flex-end', width: 80}}>
-              <Text semibold style={{fontSize: 16, alignSelf: 'flex-end'}}>
+            <View style={{ justifyContent: "flex-end", width: 80 }}>
+              <Text semibold style={{ fontSize: 16, alignSelf: "flex-end" }}>
                 {/* {parseFloat(totalTax).toFixed(2)}
                  */}
                 {numFormattanpaRupiah(totalTax)}
@@ -673,26 +683,33 @@ export default function DeliveryAndPayment({route, navigation}) {
             </View>
           </View>
           <View
-            style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
+            style={{
+              flexDirection: "row",
+              flex: 1,
+              justifyContent: "flex-end",
+            }}
+          >
             <View
               style={{
                 // justifyContent: 'flex-start',
-                alignSelf: 'flex-start',
+                alignSelf: "flex-start",
                 // paddingHorizontal: 20,
 
                 width: 150,
-              }}>
+              }}
+            >
               <Text
                 style={{
                   fontSize: 16,
 
-                  alignSelf: 'flex-start',
-                }}>
+                  alignSelf: "flex-start",
+                }}
+              >
                 Total
               </Text>
             </View>
-            <View style={{justifyContent: 'flex-end', width: 80}}>
-              <Text semibold style={{fontSize: 16, alignSelf: 'flex-end'}}>
+            <View style={{ justifyContent: "flex-end", width: 80 }}>
+              <Text semibold style={{ fontSize: 16, alignSelf: "flex-end" }}>
                 {/* {parseFloat(totalHargadenganTax).toFixed(2)} */}
                 {numFormattanpaRupiah(totalHargadenganTax)}
               </Text>
@@ -700,29 +717,30 @@ export default function DeliveryAndPayment({route, navigation}) {
           </View>
           {/* ------- CLOSE SUM TOTAL HERE -------- */}
 
-          <Divider style={{marginVertical: 10}} />
+          <Divider style={{ marginVertical: 10 }} />
 
           {/* ----- PAYMENT TYPE HERE ----- */}
-          <View style={{flexDirection: 'row', marginTop: 10}}>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View
               style={{
                 flex: 3,
                 paddingTop: 10,
-              }}>
-              <Text style={{fontSize: 14}}>Payment Type : </Text>
+              }}
+            >
+              <Text style={{ fontSize: 14 }}>Payment Type : </Text>
             </View>
             <View style={[styles.inputItem]}>
               <ModalDropdown_ListPayment
                 // label="Unit"
                 data={listPayment.sort((a, b) =>
-                  a.descs.localeCompare(b.descs),
+                  a.descs.localeCompare(b.descs)
                 )}
                 // onChange={(itemValue, itemIndex) =>
                 //   setTextPayment(itemValue.trx_code)
                 // }
-                placeholder={'halo'}
-                onChange={index =>
-                  chooseListPayment({data: listPayment, index})
+                placeholder={"halo"}
+                onChange={(index) =>
+                  chooseListPayment({ data: listPayment, index })
                 }
                 value={textPayment}
                 icon={
@@ -739,13 +757,13 @@ export default function DeliveryAndPayment({route, navigation}) {
           {/* ----- CLOSE PAYMENT TYPE HERE ----- */}
 
           {/* ------ AMOUNT PAID HERE ----- */}
-          {textPayment.includes('CASH') ? (
-            <View style={{flexDirection: 'row', marginTop: 10}}>
-              <View style={{flex: 3.5}}>
+          {textPayment.includes("CASH") ? (
+            <View style={{ flexDirection: "row", marginTop: 10 }}>
+              <View style={{ flex: 3.5 }}>
                 <Text>Amount Paid</Text>
                 <MaskInput
-                  style={{backgroundColor: colors.card, borderRadius: 10}}
-                  placeholder={'0'}
+                  style={{ backgroundColor: colors.card, borderRadius: 10 }}
+                  placeholder={"0"}
                   value={amountPaidMask}
                   // onChangeText={text => changeBalancePay(text)}
                   onChangeText={(masked, unmasked) => {
@@ -776,11 +794,11 @@ export default function DeliveryAndPayment({route, navigation}) {
                   // onChangeText={balancetoPay}
                   editable={false}
                   keyboardType="numeric"
-                  placeholder={t('Change')}
+                  placeholder={t("Change")}
                   // success={success.postCode}
                   value={
-                    balancetoPay.toString() <= '0'
-                      ? '0'
+                    balancetoPay.toString() <= "0"
+                      ? "0"
                       : numFormattanpaRupiah(balancetoPay)
                   }
                   // defaultValue={balancetoPay.toString()}
@@ -793,14 +811,15 @@ export default function DeliveryAndPayment({route, navigation}) {
         </ScrollView>
 
         {/* ---- BUTTON PAYMENT HERE ---- */}
-        <View style={{paddingHorizontal: 20, paddingVertical: 15}}>
+        <View style={{ paddingHorizontal: 20, paddingVertical: 15 }}>
           <Button
             loading={loading}
             full
             onPress={() => {
               onCheckOut();
-            }}>
-            {t('payment')}
+            }}
+          >
+            {t("payment")}
           </Button>
         </View>
         {/* ---- CLOSE BUTTON PAYMENT HERE ---- */}
@@ -810,35 +829,39 @@ export default function DeliveryAndPayment({route, navigation}) {
       <View>
         <Modal
           isVisible={showAlertMinusPayment}
-          style={{height: '100%'}}
-          onBackdropPress={() => onCloseModal()}>
+          style={{ height: "100%" }}
+          onBackdropPress={() => onCloseModal()}
+        >
           <View
             style={{
               // flex: 1,
 
               // alignContent: 'center',
               padding: 10,
-              backgroundColor: '#fff',
+              backgroundColor: "#fff",
               // height: ,
               borderRadius: 8,
-            }}>
-            <View style={{alignItems: 'center'}}>
+            }}
+          >
+            <View style={{ alignItems: "center" }}>
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 'bold',
+                  fontWeight: "bold",
                   color: colors.primary,
                   marginBottom: 10,
-                }}>
-                {'Alert'}
+                }}
+              >
+                {"Alert"}
               </Text>
               <Text>Payment is Less than the Total Price</Text>
             </View>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-              }}>
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
               <Button
                 style={{
                   marginTop: 10,
@@ -847,9 +870,10 @@ export default function DeliveryAndPayment({route, navigation}) {
                   width: 70,
                   height: 40,
                 }}
-                onPress={() => onCloseModal()}>
-                <Text style={{fontSize: 13, color: colors.whiteColor}}>
-                  {t('OK')}
+                onPress={() => onCloseModal()}
+              >
+                <Text style={{ fontSize: 13, color: colors.whiteColor }}>
+                  {t("OK")}
                 </Text>
               </Button>
             </View>
@@ -862,27 +886,30 @@ export default function DeliveryAndPayment({route, navigation}) {
       <View>
         <Modal
           isVisible={modalSuccessPayment}
-          style={{height: '100%'}}
-          onBackdropPress={() => onCloseAlertPayment()}>
+          style={{ height: "100%" }}
+          onBackdropPress={() => onCloseAlertPayment()}
+        >
           <View
             style={{
               // flex: 1,
 
               // alignContent: 'center',
               padding: 10,
-              backgroundColor: '#fff',
+              backgroundColor: "#fff",
               // height: ,
               borderRadius: 8,
-            }}>
+            }}
+          >
             {statusResult == false ? (
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: "center" }}>
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 'bold',
+                    fontWeight: "bold",
                     color: colors.primary,
                     marginBottom: 10,
-                  }}>
+                  }}
+                >
                   {/* {messageAlert.includes('success') ? 'Success' : 'Failed'} */}
                 </Text>
                 <Text>{messageAlert}</Text>
@@ -890,33 +917,36 @@ export default function DeliveryAndPayment({route, navigation}) {
                 <IconAnt
                   name="checkcircleo"
                   size={80}
-                  color={colors.primary}></IconAnt>
+                  color={colors.primary}
+                ></IconAnt>
                 <Text></Text>
                 <Text>On Bill No :</Text>
                 <Text>{message}</Text>
               </View>
             ) : (
               statusResult == true && (
-                <View style={{alignItems: 'center'}}>
+                <View style={{ alignItems: "center" }}>
                   <Text
                     style={{
                       fontSize: 16,
-                      fontWeight: 'bold',
-                      color: 'salmon',
+                      fontWeight: "bold",
+                      color: "salmon",
                       marginBottom: 10,
-                    }}>
-                    {messageAlert.includes('success') ? 'Success' : 'Failed'}
+                    }}
+                  >
+                    {messageAlert.includes("success") ? "Success" : "Failed"}
                   </Text>
                   <Text></Text>
                   <IconAnt
                     name="closecircleo"
                     size={80}
-                    color={'salmon'}></IconAnt>
+                    color={"salmon"}
+                  ></IconAnt>
                   <Text></Text>
                   <Text>Result :</Text>
                   <Text></Text>
                   {/* <Text>{message}</Text> */}
-                  <Text style={{alignSelf: 'center', textAlign: 'center'}}>
+                  <Text style={{ alignSelf: "center", textAlign: "center" }}>
                     {messageAlert}
                   </Text>
                 </View>
@@ -925,9 +955,10 @@ export default function DeliveryAndPayment({route, navigation}) {
 
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
               <Button
                 style={{
                   marginTop: 10,
@@ -936,9 +967,10 @@ export default function DeliveryAndPayment({route, navigation}) {
                   width: 70,
                   height: 40,
                 }}
-                onPress={() => onCloseAlertPayment()}>
-                <Text style={{fontSize: 13, color: colors.whiteColor}}>
-                  {t('OK')}
+                onPress={() => onCloseAlertPayment()}
+              >
+                <Text style={{ fontSize: 13, color: colors.whiteColor }}>
+                  {t("OK")}
                 </Text>
               </Button>
             </View>

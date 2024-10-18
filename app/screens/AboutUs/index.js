@@ -17,26 +17,41 @@ import styles from "./styles";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { API_URL_LOKAL } from "@env";
+import { useSelector, useDispatch } from "react-redux";
+import httpClient from "../../controllers/HttpClient";
+import RenderHtml from "react-native-render-html";
+import { color } from "react-native-elements/dist/helpers";
 
 const AboutUs = (props) => {
   const { navigation } = props;
   const { colors } = useTheme();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
+  //console.log("26 colors: ", colors);
+  const stateRedux = useSelector((state) => state.user);
+  const token = stateRedux.accessToken;
 
   // const [ourTeam, setOurTeam] = useState(AboutUsData);
 
   const [data, setData] = useState([]);
 
-  //https://dev.ifca.co.id/apiifcares/api/about_mobile
+  //https://dev.ifca.co.id/apiifcares/api/setting/about-us
   const dataAbout = async () => {
-    await axios
-      .get(API_URL_LOKAL + `/about_mobile`)
+    // await axios
+    //   .get(API_URL_LOKAL + `/setting/about-us`)
+    await httpClient
+      .request({
+        url: "/setting/about-us",
+        method: "GET",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      })
       .then((res) => {
-        console.log("35 res.data[0]: ", res);
+        //console.log("35 res.data.data[0]: ", res.data.data[0]);
         // console.log('data images', res.data[0].images);
 
-        setData(res.data[0]);
+        setData(res.data.data[0]);
         // return res.data;
       })
       .catch((error) => {
@@ -75,11 +90,22 @@ const AboutUs = (props) => {
         }}
       />
       <ScrollView>
-        <View>
+        <View
+          style={
+            {
+              //padding: 0,
+              //backgroundColor: "white",
+              //alignSelf: "center",
+              //width: "80%",
+            }
+          }
+        >
           {/* <Image source={Images.trip4} style={{width: '100%', height: 135}} /> */}
           <Image
             //source={require("../../assets/images/Logo-Carstensz.png")}
-            source={require("../../assets/images/logoIFCA.png")}
+            //source={require("../../assets/images/logoIFCA.png")}
+            source={require("../../assets/images/image-home/logo-tanrise-blackfont.png")}
+            resizeMode="contain"
             style={{
               //height: 150,
               //width: 250,
@@ -89,15 +115,16 @@ const AboutUs = (props) => {
               //flexDirection: "row",
               //justifyContent: "center",
               //alignSelf: "center",
-              marginTop: 20,
-              height: 130,
-              width: "40%",
+              marginVertical: 10,
+              height: 150,
+              width: "80%",
               alignSelf: "center",
               //marginHorizontal: 100,
-              flexDirection: "row",
-              resizeMode: "contain",
+              //flexDirection: "row",
               //objectFit: "fill",
-              padding: 50,
+              //padding: 60,
+              //backgroundColor: "white",
+              borderRadius: 5,
             }}
           />
         </View>
@@ -125,13 +152,23 @@ const AboutUs = (props) => {
               {data.about_us?.replace(/<\/?[^>]+(>|$;)/gi, '')}
             </Text>
           </View> */}
-          <View style={styles.address}>
+          <View style={{ marginHorizontal: 30 }}>
+            <RenderHtml
+              source={{ html: data.about_descs }}
+              //contentWidth={"70%"}
+              tagsStyles={{ p: { color: colors.text } }}
+            />
+          </View>
+          <View
+            style={[styles.address, { backgroundColor: colors.background }]}
+          >
             <Text
               semibold
               style={{
                 fontSize: 20,
-                paddingBottom: 20,
+                paddingBottom: 0,
                 paddingTop: 15,
+                marginBottom: 0,
               }}
             >
               Contact Us
@@ -140,7 +177,7 @@ const AboutUs = (props) => {
               semibold
               style={{
                 paddingTop: 0,
-                paddingBottom: 10,
+                //paddingBottom: 10,
                 fontSize: 15,
                 textAlign: "center",
               }}
@@ -148,12 +185,45 @@ const AboutUs = (props) => {
               {data.contact_name}
             </Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{
+                flexDirection: "row",
+                //justifyContent: "center",
+                alignItems: "center",
+                //backgroundColor: "blue",
+                marginTop: 0,
+                paddingTop: 0,
+              }}
             >
-              <Icon name="mobile" size={20} />
-              <Text> {data.contact_no}</Text>
+              <Icon
+                style={{
+                  alignSelf: "center", //backgroundColor: "blue"
+                  marginRight: 10,
+                  color: colors.text,
+                }}
+                name="mobile"
+                size={20}
+              />
+              {/* <Text> {data.contact_no}</Text> */}
+              <View
+                style={{
+                  //justifyContent: "center",
+                  marginTop: 20,
+                  //backgroundColor: "blue",
+                }}
+              >
+                <RenderHtml
+                  source={{ html: data.contact_info }}
+                  contentWidth={"90%"}
+                  tagsStyles={{ p: { color: colors.text } }}
+                  style={{
+                    //marginTop: 50,
+                    backgroundColor: "red",
+                    alignSelf: "center",
+                  }}
+                />
+              </View>
             </View>
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -162,19 +232,20 @@ const AboutUs = (props) => {
             >
               <Icon name="envelope" size={20} />
               <Text> {data.contact_email}</Text>
-            </View>
+            </View> */}
 
             <Text
               semibold
               style={{
                 fontSize: 15,
-                paddingBottom: 10,
+                paddingBottom: 30,
                 paddingTop: 15,
+                color: colors.text,
               }}
             >
               Address
             </Text>
-            <Text
+            {/* <Text
               body
               style={{
                 paddingBottom: 5,
@@ -183,7 +254,15 @@ const AboutUs = (props) => {
               }}
             >
               {data.address}
-            </Text>
+            </Text> */}
+            <RenderHtml
+              source={{ html: data.address }}
+              contentWidth={"90%"}
+              tagsStyles={{
+                p: { color: colors.text },
+                div: { color: colors.text },
+              }}
+            />
           </View>
         </View>
       </ScrollView>

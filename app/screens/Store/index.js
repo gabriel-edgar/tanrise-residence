@@ -117,12 +117,12 @@ const Store = (props) => {
     const project_no = projectSelector.Data[0].project_no;
     console.log(
       "url menu store",
-      `http://apps.pakubuwono-residence.com/apiwebpbi/api/pos/factype?entity_cd=${entity_cd}&project_no=${project_no}`
+      `http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/store/facility-type?entity_cd=${entity_cd}&project_no=${project_no}`
     );
     axios
       .get(
         API_URL_LOKAL +
-          `/pos/factype?entity_cd=${entity_cd}&project_no=${project_no}`
+          `/modules/store/facility-type?entity_cd=${entity_cd}&project_no=${project_no}`
       )
       .then((res) => {
         // console.log('ress :', res.data.data);
@@ -143,12 +143,12 @@ const Store = (props) => {
     const email = user.user;
     console.log(
       "url menu store",
-      `http://apps.pakubuwono-residence.com/apiwebpbi/api/pos/member_mobile?entity_cd=${entity_cd}&project_no=${project_no}&email=${email}`
+      `http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/store/member?entity_cd=${entity_cd}&project_no=${project_no}&email=${email}`
     );
     axios
       .get(
         API_URL_LOKAL +
-          `/pos/member_mobile?entity_cd=${entity_cd}&project_no=${project_no}&email=${email}`
+          `/modules/store/member?entity_cd=${entity_cd}&project_no=${project_no}&email=${email}`
       )
       .then((res) => {
         console.log("ress member:", res.data.Data);

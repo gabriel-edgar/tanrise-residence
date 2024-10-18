@@ -17,13 +17,14 @@ import {
 import { BaseStyle, useTheme } from "@config";
 import { FRecentTransactions, FHotNews } from "@data";
 import { useNavigation, useRoute } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { enableExperimental } from "@utils";
 
 import moment from "moment";
 import Modal from "react-native-modal";
 import { API_URL_LOKAL } from "@env";
+import httpClient from "../../controllers/HttpClient";
 
 import {
   ScrollView,
@@ -42,19 +43,28 @@ import numFormat from "../../components/numFormat";
 import CurrencyFormatter from "../../components/CurrencyFormatter";
 import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
 import { ActivityIndicator } from "react-native-paper";
+//import { store, persist } from "../../reducers";
+import { store, persist } from "../../store";
+import { homeCommonProject } from "../FunctionAxios/home-common-project";
 
-const Billing = ({
-  isCenter = false,
-  isPrimary = false,
-  style = {},
-  onPress = () => {},
-  disabled = false,
-}) => {
+const Billing = (
+  props,
+  {
+    isCenter = false,
+    isPrimary = false,
+    style = {},
+    onPress = () => {},
+    disabled = false,
+  }
+) => {
+  const itemData = props.route.params.item;
+  //console.log("54 itemData: ", itemData);
   const { t } = useTranslation();
   const { colors } = useTheme();
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const scrollViewRef = useRef(null);
   const user = useSelector((state) => getUser(state));
   const [hasError, setErrors] = useState(false);
   const [bill, setBill] = useState([]);
@@ -62,22 +72,38 @@ const Billing = ({
   const [dataCurrent, setDataCurrent] = useState([]);
   console.log("user,", user);
   const [dataTowerUser, setdataTowerUser] = useState([]);
-  const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
+  const [arrDataProject, setArrDataProject] = useState([]);
+  const [dataDD, setDataDD] = useState([]);
 
-  const [email, setEmail] = useState(user.user);
+  const [email, setEmail] = useState(user.email);
   const [entity, setEntity] = useState("");
   const [project_no, setProjectNo] = useState("");
   const [db_profile, setDb_Profile] = useState("");
   const [spinner, setSpinner] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  const stateRedux = useSelector((state) => state.user);
+  console.log("81 accessTokenStateRedux: ", stateRedux.accessToken);
+
+  const stateStore = store.getState();
+  const token = stateStore.user.accessToken;
+  console.log("82 accessToken: ", token);
+
+  const stateReduxChoosedUnit = useSelector(
+    (state) => state.Dataproject.choosedUnit
+  );
+  const stateReduxChoosedProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+
   const TABS = [
     {
       id: 1,
-      title: t("Paid"),
+      title: t("Not Paid"),
     },
     {
       id: 2,
-      title: t("Not Paid"),
+      title: t("Paid"),
     },
   ];
   const [tab, setTab] = useState(TABS[0]);
@@ -91,82 +117,133 @@ const Billing = ({
     }
   }, [route?.params?.id]);
   //-----FOR GET ENTITY & PROJJECT
-  const getTower = async () => {
-    const data = {
-      email: email,
-      //   email: 'haniyya.ulfah@ifca.co.id',
-      app: "O",
-    };
+  // const getTower = async () => {
+  //   const data = {
+  //     email: email,
+  //     //   email: 'haniyya.ulfah@ifca.co.id',
+  //     //app: "O",
+  //   };
 
-    const config = {
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        // token: "",
-      },
-    };
+  //   await homeCommonProject(token, data, setDataDD, setArrDataProject);
 
-    await axios
-      .get(
-        // `http://apps.pakubuwono-residence.com/apisysadmin/api/getProject/${data.email}`,
-        API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`,
-        {
-          config,
-        }
-      )
-      .then((res) => {
-        const datas = res.data;
+  //   return;
 
-        const arrDataTower = datas.Data;
-        // let dataArr = {};
-        arrDataTower.map((dat) => {
-          if (dat) {
-            console.log("data trower", dat.entity_cd);
-            setdataTowerUser(dat);
-            setEntity(dat.entity_cd);
-            setProjectNo(dat.project_no);
-            // const jsonValue = JSON.stringify(dat);
-            //   setdataFormHelp(saveStorage);
-            // console.log('storage', saveStorage);
-            // dataArr.push(jsonValue);
-            // getDebtor(dat);
-          }
-        });
-        // AsyncStorage.setItem('@DataTower', dataArr);
-        setArrDataTowerUser(arrDataTower);
+  //   console.log("105 token: ", token);
 
-        setSpinner(false);
-        // return res.data;
-      })
-      .catch((error) => {
-        console.log("error get tower api", error);
-        alert("error get");
-      });
-  };
+  //   const config = {
+  //     // headers: {
+  //     //   accept: "application/json",
+  //     //   "Content-Type": "application/json",
+  //     //   // token: "",
+  //     // },
+  //     params: data,
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       //Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVkZW50aWFscyI6eyJlbWFpbCI6Im1nckBpZmNhLmNvLmlkIiwicGFzc3dvcmQiOiJwYXNzMTIzNCJ9LCJleHAiOjE3MjM0NDc1NDR9.nQdbeI7VN6t0g5QvUn0vsNhp1frkYNjwr_dMuinMRZA`,
+  //     },
+  //   };
+
+  //   await axios
+  //     .get(API_URL_LOKAL + `/home/common-project`, config)
+  //     .then((res) => {
+  //       console.log("125 res: ", res.data.data);
+
+  //       const arrDataTower = res.data.data;
+  //       console.log("141 res: ", arrDataTower);
+
+  //       const arrayDropDown = arrDataTower.map((item, index) => {
+  //         return { label: item.descs, value: index };
+  //       });
+
+  //       console.log("147 arrayDropDown: ", arrayDropDown);
+  //       setDataDD(arrayDropDown);
+
+  //       // let dataArr = {};
+  //       arrDataTower.map((dat) => {
+  //         if (dat) {
+  //           console.log("data trower", dat.entity_cd);
+  //           setdataTowerUser(dat);
+  //           setEntity(dat.entity_cd);
+  //           setProjectNo(dat.project_no);
+  //           // const jsonValue = JSON.stringify(dat);
+  //           //   setdataFormHelp(saveStorage);
+  //           // console.log('storage', saveStorage);
+  //           // dataArr.push(jsonValue);
+  //           // getDebtor(dat);
+  //         }
+  //       });
+  //       // AsyncStorage.setItem('@DataTower', dataArr);
+  //       setArrDataTowerUser(arrDataTower);
+
+  //       setSpinner(false);
+  //       // return res.data;
+  //     })
+  //     .catch((error) => {
+  //       console.log("125 error get tower api", error);
+  //       //alert("125 error get: ", error);
+  //     });
+  // };
 
   useEffect(() => {
-    getTower(user);
-    setLoading(false);
+    //getTower(user);
+
+    fetchData();
+    fetchDataCurrent();
+
+    //setLoading(false);
     // setTimeout(() => {
     //   setLoading(false);
     //   getTower(user);
     //   // setSpinner(false);
     // }, 3000);
   }, []);
+
   // Make function to call the api
   async function fetchData() {
     try {
-      const res = await axios.get(
-        API_URL_LOKAL + `/getDataDueSummary/IFCAPB/${user.user}`
-      );
-      setDataCurrent(res.data.Data);
-      console.log("DATA DUE DATE -->", res.data.Data);
+      // const res = await axios.get(
+      //   API_URL_LOKAL + `/modules/billing/due-summary/${user.email}`
+      // );
+      const res = await httpClient.request({
+        url: `/modules/billing/due-summary/${user.email}`,
+        method: "GET",
+      });
+
+      function checkLotno(currentValue, index, arr) {
+        return (
+          currentValue.lot_no == stateReduxChoosedUnit.lot_no &&
+          currentValue.entity_cd == stateReduxChoosedProject.entity_cd &&
+          currentValue.project_no == stateReduxChoosedProject.project_no
+        );
+      }
+
+      const filter = res.data.data.filter(checkLotno);
+
+      //console.log("214 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
+
+      function isEmptyObject(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+      }
+
+      if (isEmptyObject(stateReduxChoosedUnit)) {
+        setDataCurrent(res.data.data);
+      } else {
+        setDataCurrent(filter);
+      }
+
+      console.log("200 DATA DUE DATE -->", res.data);
       setLoading(false);
     } catch (error) {
-      setErrors(error.ressponse.data);
+      setErrors(error.response.data);
       // alert(hasError.toString());
+      setLoading(false);
     }
   }
+
+  const scrollToBottom = () => {
+    console.log("237 run scroll");
+    scrollViewRef.current.scrollToEnd({ animated: true });
+  };
 
   // ----- ini gak kepake kan? ga ada yang panggil const sum
   const sum =
@@ -179,25 +256,47 @@ const Billing = ({
 
   async function fetchDataCurrent() {
     try {
-      const res = await axios.get(
-        API_URL_LOKAL + `/getDataCurrentSummary/IFCAPB/${user.user}`
-      );
-      setData(res.data.Data);
-      console.log("data current", res.data.Data);
+      // const res = await axios.get(
+      //   API_URL_LOKAL + `/modules/billing/current-summary/IFCAPB/${user.user}`
+      // );
+      const res = await httpClient.request({
+        url: `/modules/billing/current-summary/${user.email}`,
+        method: "GET",
+      });
+      function checkLotno(currentValue, index, arr) {
+        return (
+          currentValue.lot_no == stateReduxChoosedUnit.lot_no &&
+          currentValue.entity_cd == stateReduxChoosedProject.entity_cd &&
+          currentValue.project_no == stateReduxChoosedProject.project_no
+        );
+      }
+
+      const filter = res.data.data.filter(checkLotno);
+
+      function isEmptyObject(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+      }
+
+      console.log("251 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
+
+      if (isEmptyObject(stateReduxChoosedUnit)) {
+        setData(res.data.data);
+      } else {
+        setData(filter);
+      }
+      console.log("data current", res.data);
       setLoading(false);
     } catch (error) {
-      setErrors(error.ressponse.data);
+      setErrors(error.response.data);
       // alert(hasError.toString());
+      setLoading(false);
     }
   }
 
-  useEffect(() => {
-    fetchData();
-    fetchDataCurrent();
-  }, []);
+  console.log("240 data: ", data);
 
   //dropdownProject
-  const [choosedProject, setChoosedProject] = useState("");
+  const [choosedProject, setChoosedProject] = useState();
   const handleSelect = (value) => {
     console.log("Selected Value:", value);
     //setState(value);
@@ -209,6 +308,42 @@ const Billing = ({
     { label: "Project 2", value: "Project 2" },
     { label: "Project 3", value: "Project 3" },
   ];
+
+  if (itemData.isProject == 1) {
+    if (
+      choosedProject == null //|| choosedProject == ""
+    ) {
+      return (
+        <SafeAreaView
+          style={BaseStyle.safeAreaView}
+          edges={["right", "top", "left"]}
+        >
+          <Header
+            // title={t('choose_friend')}
+            title={t("Invoice")} //belum ada lang translatenya
+            renderLeft={() => {
+              return (
+                <Icon
+                  name="angle-left"
+                  size={20}
+                  color={colors.primary}
+                  enableRTL={true}
+                />
+              );
+            }}
+            onPressLeft={() => {
+              navigation.goBack();
+            }}
+          />
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+          />
+        </SafeAreaView>
+      );
+    }
+  }
 
   return (
     <SafeAreaView
@@ -231,15 +366,48 @@ const Billing = ({
           navigation.goBack();
         }}
       />
-      <ButtonChooseProject
-        items={dropdownItems}
-        placeholder="Select project"
-        onSelect={handleSelect}
-      />
-      <Text>Choosed project: {choosedProject}</Text>
+      {itemData.isProject == 1 && (
+        <>
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+            value2={choosedProject}
+          />
+          <Text>Choosed Project: {choosedProject}</Text>
+        </>
+      )}
+      {/* <View
+        style={{
+          //borderWidth: 1,
+          padding: 10,
+          margin: 10,
+          backgroundColor: "white",
+          borderRadius: 8,
+          padding: 16,
+          margin: 16,
+          shadowColor: "#000", // Shadow color for iOS
+          shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
+          shadowOpacity: 0.25, // Shadow opacity for iOS
+          shadowRadius: 4, // Shadow radius for iOS
+          elevation: 5, // Elevation for Android
+        }}
+      >
+        <Text>
+          Entity Code {"   "}: {stateReduxChoosedUnit.entity_cd}
+        </Text>
+        <Text>
+          Project No {"     "}: {stateReduxChoosedUnit.project_no}
+        </Text>
+        <Text>Cluster Code : {stateReduxChoosedUnit.cluster_cd}</Text>
+        <Text>
+          Lot No {"            "}: {stateReduxChoosedUnit.lot_no}
+        </Text>
+      </View> */}
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           {TABS.map((item, index) => (
@@ -288,8 +456,11 @@ const Billing = ({
                     debtor_acct={item.debtor_acct}
                     entity_cd={entity}
                     project_no={project_no}
-                    email={user.user}
+                    email={user.email}
                     tab_id={1}
+                    item={item}
+                    scrollToBottom={scrollToBottom}
+                    isLast={dataCurrent.length == key + 1}
                   />
                 ))
               : tab.id == 1 &&
@@ -325,7 +496,7 @@ const Billing = ({
                         marginTop: 10,
                       }}
                     >
-                      Sorry! Data not available.
+                      Data not available.
                     </Text>
                   </View>
                 )}
@@ -333,7 +504,7 @@ const Billing = ({
         )}
 
         <View style={{ flex: 1, paddingHorizontal: 20 }}>
-          {tab.id == 2 && data != null
+          {tab.id == 2 && data.length != 0
             ? data.map((item, key) => (
                 <ListTransactionExpand
                   onPress={() => navigation.navigate("FHistoryDetail")}
@@ -351,8 +522,11 @@ const Billing = ({
                   debtor_acct={item.debtor_acct}
                   entity_cd={entity}
                   project_no={project_no}
-                  email={user.user}
+                  email={user.email}
                   tab_id={2}
+                  item={item}
+                  scrollToBottom={scrollToBottom}
+                  isLast={data.length == key + 1}
                 />
               ))
             : tab.id == 2 && (
@@ -385,9 +559,10 @@ const Billing = ({
                       alignSelf: "center",
                       fontSize: 16,
                       marginTop: 10,
+                      //color: "white",
                     }}
                   >
-                    Sorry! Data not available.
+                    Data not available.
                   </Text>
                 </View>
               )}

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "492280643443",
-    "project_id": "ifca-residence-2-aug-24",
-    "storage_bucket": "ifca-residence-2-aug-24.appspot.com"
+    "project_number": "34345479278",
+    "project_id": "tanrise-residence",
+    "storage_bucket": "tanrise-residence.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:492280643443:android:787df46f3d73d6aadacf06",
+        "mobilesdk_app_id": "1:34345479278:android:5cff16b1da8242a4f48a7f",
         "android_client_info": {
-          "package_name": "com.ifcasoftware.ifcaresidence"
+          "package_name": "com.ifcasoftware.tanriseresidence"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCs7pG0xTKRDlSgE03PImQcgtVgtZg28Yk"
+          "current_key": "AIzaSyB3NuniwFFYVzizqGeEYIvuZXsnUVnjxm8"
         }
       ],
       "services": {

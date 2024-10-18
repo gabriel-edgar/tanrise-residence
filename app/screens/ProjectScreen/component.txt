@@ -42,24 +42,21 @@ import {
       </Button>
 
 ==============================
-  //dropdownProject
-  const [choosedProject, setChoosedProject] = useState("");
-  const handleSelect = (value) => {
-    console.log("Selected Value:", value);
-    //setState(value);
-    setChoosedProject(value);
-  };
-  const dropdownItems = [
-    // { label: "choose project", value: "" },
-    { label: "Project 1", value: "Project 1" },
-    { label: "Project 2", value: "Project 2" },
-    { label: "Project 3", value: "Project 3" },
-  ];
 
+props,
 
-        <ButtonChooseProject
-        items={dropdownItems}
-        placeholder="Select project"
-        onSelect={handleSelect}
-      />
-      <Text>Choosed project: {choosedProject}</Text>
+  const itemData = props.route.params.item;
+
+  if (itemData.isProject == 1) {
+
+  }
+
+      {itemData.isProject == 1 && (
+        <>
+          <ButtonChooseProject
+            items={dropdownItems}
+            placeholder="Select project"
+            onSelect={handleSelect}
+          />
+        </>
+      )}

@@ -28,11 +28,13 @@ end
 use_frameworks! :linkage => :static
 $RNFirebaseAsStaticFramework = true
 
-target 'IFCAResidence' do
+target 'TanriseResidence' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
   flags = get_default_flags()
+
+pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   use_react_native!(
     # :modular_headers => true,
@@ -49,7 +51,7 @@ target 'IFCAResidence' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'IFCAResidenceTests' do
+  target 'TanriseResidenceTests' do
     inherit! :complete
     # Pods for testing
   end

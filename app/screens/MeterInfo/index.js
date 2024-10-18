@@ -193,7 +193,7 @@ class MeterInfo extends React.Component {
 
     fetch(
       API_URL_LOKAL +
-        "/getDataFilter/IFCAPB/" +
+        "/modules/meter/data-filter/IFCAPB/" +
         entitycds +
         "/" +
         projectnos +
@@ -263,7 +263,7 @@ class MeterInfo extends React.Component {
     console.log("cek isi retrieve", data);
     fetch(
       API_URL_LOKAL +
-        "/getDataFilter/IFCAPB/" +
+        "/modules/meter/data-filter/IFCAPB/" +
         data.Entitycdz +
         "/" +
         data.Projectnoz +

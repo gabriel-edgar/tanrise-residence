@@ -11,16 +11,16 @@ import {
   Tag,
   Price3Col,
   ListTransactionExpand,
-} from '@components';
-import {BaseStyle, useTheme} from '@config';
-import {FRecentTransactions, FHotNews} from '@data';
-import {useNavigation, useRoute} from '@react-navigation/core';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {enableExperimental} from '@utils';
-import SegmentedControl from './SegmendControl';
+} from "@components";
+import { BaseStyle, useTheme } from "@config";
+import { FRecentTransactions, FHotNews } from "@data";
+import { useNavigation, useRoute } from "@react-navigation/core";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { enableExperimental } from "@utils";
+import SegmentedControl from "./SegmendControl";
 
-import moment from 'moment';
+import moment from "moment";
 
 import {
   ScrollView,
@@ -28,15 +28,15 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
-import getUser from '../../selectors/UserSelectors';
-import {useDispatch, useSelector} from 'react-redux';
-import axios from 'axios';
-import numFormat from '../../components/numFormat';
-import DynamicTabView from 'react-native-dynamic-tab-view';
-import styles from './styles';
-import {API_URL_LOKAL} from '@env'
+import getUser from "../../selectors/UserSelectors";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import numFormat from "../../components/numFormat";
+import DynamicTabView from "react-native-dynamic-tab-view";
+import styles from "./styles";
+import { API_URL_LOKAL } from "@env";
 
 const Segmented = ({
   isCenter = false,
@@ -45,11 +45,11 @@ const Segmented = ({
   onPress = () => {},
   disabled = false,
 }) => {
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const route = useRoute();
   const navigation = useNavigation();
-  const user = useSelector(state => getUser(state));
+  const user = useSelector((state) => getUser(state));
   const [hasError, setErrors] = useState(false);
   const [bill, setBill] = useState([]);
   const [data, setData] = useState([]);
@@ -57,7 +57,7 @@ const Segmented = ({
   const [hours, setHours] = useState([]);
   const [days, setDays] = useState([]);
   const [tabIndex, setTabIndex] = React.useState(1);
-  const handleTabsChange = index => {
+  const handleTabsChange = (index) => {
     setTabIndex(index);
   };
 
@@ -67,10 +67,10 @@ const Segmented = ({
   async function fetchData() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + `/getDataDue/IFCAPB/${user.user}`,
+        API_URL_LOKAL + `/home/common-projectDue/IFCAPB/${user.user}`
       );
       setDataCurrent(res.data.Data);
-      console.log('datasss', data);
+      console.log("datasss", data);
     } catch (error) {
       setErrors(error.ressponse.data);
       alert(hasError.toString());
@@ -79,11 +79,9 @@ const Segmented = ({
 
   async function fetchDataTime() {
     try {
-      const res = await axios.get(
-        API_URL_LOKAL + '/facility/book/time',
-      );
+      const res = await axios.get(API_URL_LOKAL + "/home/common-current-time");
       setTime(res.data.Data);
-      console.log('time', time);
+      console.log("time", time);
     } catch (error) {
       setErrors(error.ressponse.data);
       alert(hasError.toString());
@@ -93,10 +91,11 @@ const Segmented = ({
   async function fetchDataDays() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + '/facility/book/days?entity_cd=01&project_no=01&facility_cd=CA',
+        API_URL_LOKAL +
+          "/facility/book/days?entity_cd=01&project_no=01&facility_cd=CA"
       );
       setDays(res.data);
-      console.log('days', res.data);
+      console.log("days", res.data);
     } catch (error) {
       setErrors(error.ressponse.data);
       alert(hasError.toString());
@@ -106,19 +105,19 @@ const Segmented = ({
   async function fetchDataHours() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + '/facility/book/hours',
+        API_URL_LOKAL + "/modules/facilitites/booking-hours",
         {
           params: {
-            id: '01',
-            entity_cd: '01',
-            project_no: '01',
-            facility_cd: 'CA',
-            book_date: '2021-12-06',
+            id: "01",
+            entity_cd: "01",
+            project_no: "01",
+            facility_cd: "CA",
+            book_date: "2021-12-06",
           },
-        },
+        }
       );
       setHours(res.data);
-      console.log('hours', res.data);
+      console.log("hours", res.data);
     } catch (error) {
       setErrors(error.ressponse.data);
       alert(hasError.toString());
@@ -138,14 +137,14 @@ const Segmented = ({
   // // console.log('daytimess', daysTimes);
   // console.log('daytime', daysTime);
 
-  const daysArray = days.map(sweetItem => {
+  const daysArray = days.map((sweetItem) => {
     return {
       id: sweetItem.id,
-      title: moment(sweetItem.book_date).format('DD MMM').replace(' ', '\n'),
-      book: sweetItem.slot_hours.map(x => x.jam),
+      title: moment(sweetItem.book_date).format("DD MMM").replace(" ", "\n"),
+      book: sweetItem.slot_hours.map((x) => x.jam),
     };
   });
-  console.log('daytime', daysArray);
+  console.log("daytime", daysArray);
 
   // let arr3 = daysArray.map((item, i) =>
   //   Object.assign({}, item, hours[i].slot_hours),
@@ -153,28 +152,29 @@ const Segmented = ({
   // console.log('arr3', arr3);
 
   const renderItem = (item, index) => {
-    console.log('rendder', renderItem);
+    console.log("rendder", renderItem);
 
     return (
       // <View key={item['id']} style={{flex: 1}}>
       //   <Text key={item['id']}>{item['book']}</Text>
       // </View>
       <View
-        key={item['id']}
+        key={item["id"]}
         style={{
           marginVertical: 5,
           paddingHorizontal: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignContent: "space-between",
           borderRadius: 15,
-          borderColor: '#dbdbdb',
+          borderColor: "#dbdbdb",
           borderBottomWidth: 1,
           padding: 10,
-        }}>
+        }}
+      >
         <TouchableOpacity>
-          <Text bold style={{padding: 20}}>
-            {item['book']}
+          <Text bold style={{ padding: 20 }}>
+            {item["book"]}
           </Text>
         </TouchableOpacity>
         {/* <TouchableOpacity
@@ -193,7 +193,7 @@ const Segmented = ({
 
   const defaultIndex = useState(0);
 
-  const onChangeTab = index => {};
+  const onChangeTab = (index) => {};
 
   useEffect(() => {
     fetchData();
@@ -204,10 +204,11 @@ const Segmented = ({
 
   return (
     <SafeAreaView
-      style={[BaseStyle.safeAreaView, {flex: 1}]}
-      edges={['right', 'top', 'left']}>
+      style={[BaseStyle.safeAreaView, { flex: 1 }]}
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('Billing')}
+        title={t("Billing")}
         renderLeft={() => {
           return (
             <Icon
@@ -233,8 +234,8 @@ const Segmented = ({
         DynamicdefaultStyle
         headerTextStyle={styles.title}
         containerStyle={styles.container}
-        headerBackgroundColor={'white'}
-        headerUnderLayColor={'blue'}
+        headerBackgroundColor={"white"}
+        headerUnderLayColor={"blue"}
       />
       {/* </ScrollView> */}
     </SafeAreaView>

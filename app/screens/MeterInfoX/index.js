@@ -146,7 +146,7 @@ const MeterInfoX = (params) => {
   //   console.log('emails', emails);
   //   console.log(
   //     'dataFilter',
-  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/getDataFilter/IFCAPB/' +
+  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/' +
   //       entitycds +
   //       '/' +
   //       projectnos +
@@ -159,7 +159,7 @@ const MeterInfoX = (params) => {
   //   );
 
   //   fetch(
-  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/getDataFilter/IFCAPB/' +
+  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/' +
   //       entitycds +
   //       '/' +
   //       projectnos +
@@ -211,7 +211,7 @@ const MeterInfoX = (params) => {
       console.log("toEmail", toEmail);
       console.log(
         "cek isi retrieve >",
-        "http://apps.pakubuwono-residence.com/apiwebpbi/api/getDataFilter/IFCAPB/" +
+        "http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/" +
           Entitycdz +
           "/" +
           Projectnoz +
@@ -224,7 +224,7 @@ const MeterInfoX = (params) => {
       );
       fetch(
         API_URL_LOKAL +
-          "/getDataFilter/IFCAPB/" +
+          "/modules/meter/data-filter/IFCAPB/" +
           Entitycdz +
           "/" +
           Projectnoz +

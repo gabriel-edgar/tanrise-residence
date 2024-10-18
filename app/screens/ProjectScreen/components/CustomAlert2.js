@@ -2,17 +2,24 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-const CustomAlert2 = ({ visible, message, onConfirm, onCancel }) => {
+const CustomAlert2 = ({
+  visible,
+  message,
+  onConfirm,
+  onCancel,
+  style = {},
+}) => {
   return (
     <Modal
       transparent={true}
       animationType="slide"
       visible={visible}
       onRequestClose={onCancel}
+      //style={style}
     >
-      <View style={styles.overlay}>
-        <View style={styles.alertContainer}>
-          <Text style={styles.message}>{message}</Text>
+      <View style={[styles.overlay]}>
+        <View style={[styles.alertContainer]}>
+          <Text style={[styles.message, { color: "black" }]}>{message}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={onCancel}>
               <Text style={styles.buttonText}>Cancel</Text>

@@ -2,8 +2,8 @@
  * Basic Setting Variables Define
  */
 export const BaseSetting = {
-  name: "IFCA Residence",
-  displayName: "IFCA Residence",
+  name: "Tanrise Residence",
+  displayName: "Tanrise Residence",
   appVersion: "0.0.1",
   defaultLanguage: "en",
   languageSupport: [

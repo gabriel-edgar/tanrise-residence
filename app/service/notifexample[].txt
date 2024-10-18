@@ -1,0 +1,28 @@
+// App.js
+import React, { useEffect } from 'react';
+import { View, Button } from 'react-native';
+import NotificationService from './NotificationService';
+
+const App = () => {
+  useEffect(() => {
+    NotificationService.configure();
+  }, []);
+
+  const handleScheduleNotification = () => {
+    // Schedule a notification every 1 hour
+    const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+    NotificationService.scheduleNotification(
+      'Periodic Notification',
+      'This is your notification message!',
+      oneHour
+    );
+  };
+
+  return (
+    <View>
+      <Button title="Schedule Notification" onPress={handleScheduleNotification} />
+    </View>
+  );
+};
+
+export default App;

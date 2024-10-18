@@ -9,7 +9,7 @@ import {
 import { BaseColor, BaseStyle, useTheme } from "@config";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+//import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 
@@ -60,7 +60,10 @@ const ContactUs = (props) => {
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'top', 'left']}>
+    <SafeAreaView
+      style={BaseStyle.safeAreaView}
+      edges={["right", "top", "left"]}
+    >
       <Header
         title={t("contact_us")}
         renderLeft={() => {
@@ -80,7 +83,7 @@ const ContactUs = (props) => {
       <ScrollView>
         <View style={styles.contain}>
           <View style={{ height: 180, width: "100%" }}>
-            <MapView
+            {/* <MapView
               provider={PROVIDER_GOOGLE}
               style={styles.map}
               region={region}
@@ -92,7 +95,7 @@ const ContactUs = (props) => {
                   longitude: 106.709938,
                 }}
               />
-            </MapView>
+            </MapView> */}
           </View>
           <Text headline style={{ marginVertical: 10 }}>
             {t("contact_details")}

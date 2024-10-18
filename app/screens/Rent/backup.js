@@ -11,42 +11,44 @@ import {
   Icon,
   colors,
   PlaceItem,
-} from '@components';
-import {BaseStyle, useTheme} from '@config';
+} from "@components";
+import { BaseStyle, useTheme } from "@config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from '@data';
-import axios from 'axios';
-import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, ScrollView, View, ActivityIndicator} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {ProductBlock} from '../../components';
-import numFormat from '../../components/numFormat';
-import List from '../../components/Product/List';
-import styles from './styles';
+} from "@data";
+import axios from "axios";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, ScrollView, View, ActivityIndicator } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { ProductBlock } from "../../components";
+import numFormat from "../../components/numFormat";
+import List from "../../components/Product/List";
+import styles from "./styles";
 
-const Rent = props => {
-  const {navigation} = props;
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+const Rent = (props) => {
+  const { navigation } = props;
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setErrors] = useState(false);
 
   useEffect(() => {
     axios
-      .get('http://apps.pakubuwono-residence.com/apiwebpbi/api/rsentryMobile/')
-      .then(({data}) => {
-        console.log('defaultApp -> data', data);
+      .get(
+        "http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/rs/rent-unit/"
+      )
+      .then(({ data }) => {
+        console.log("defaultApp -> data", data);
         setData(data);
       })
-      .catch(error => console.error(error))
+      .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
 
@@ -56,26 +58,26 @@ const Rent = props => {
     }, 1000);
   }, []);
 
-  const goPost = item => () => {
-    navigation.navigate('Post', {item: item});
+  const goPost = (item) => () => {
+    navigation.navigate("Post", { item: item });
   };
-  const goProductDetail = item => {
-    navigation.navigate('EProductDetail', {item: item});
+  const goProductDetail = (item) => {
+    navigation.navigate("EProductDetail", { item: item });
   };
-  const goPostDetail = item => () => {
-    navigation.navigate('PostDetail', {item: item});
+  const goPostDetail = (item) => () => {
+    navigation.navigate("PostDetail", { item: item });
   };
 
   const goToCategory = () => {
-    navigation.navigate('Category');
+    navigation.navigate("Category");
   };
 
   const renderContent = () => {
     const mainNews = PostListData[0];
     return (
-      <SafeAreaView edges={['right', 'top', 'left']}>
+      <SafeAreaView edges={["right", "top", "left"]}>
         <Header
-          title={t('Rent or Sale')}
+          title={t("Rent or Sale")}
           renderLeft={() => {
             return (
               <Icon
@@ -95,12 +97,12 @@ const Rent = props => {
             scrollEnabled={false}
             contentContainerStyle={styles.paddingFlatList}
             data={data}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <ProductBlock
                 loading={loading}
                 description={item.description}
                 subject={item.subject}
-                style={{marginVertical: 8}}
+                style={{ marginVertical: 8 }}
                 pict={item.pict}
                 avatar={item.avatar}
                 email={item.email}
@@ -109,7 +111,7 @@ const Rent = props => {
                 land_area={item.land_area}
                 build_area={item.build_area}
                 agent_name={item.agent_name}
-                publish_date={moment(item.publish_date).format('H:mm:ss')}
+                publish_date={moment(item.publish_date).format("H:mm:ss")}
                 price_descs={item.price_descs}
                 onPress={() => goProductDetail(item)}
                 isFavorite={item.isFavorite}
@@ -123,10 +125,11 @@ const Rent = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={['right', 'top', 'left']}>
+        edges={["right", "top", "left"]}
+      >
         {renderContent()}
       </SafeAreaView>
     </View>

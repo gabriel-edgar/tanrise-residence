@@ -16,12 +16,40 @@ import getUser from "../../selectors/UserSelectors";
 import { useSelector } from "react-redux";
 import * as Utils from "@utils";
 import { BaseColor, BaseStyle, Images, useTheme } from "@config";
+import Helpdesk from "../Helpdesk/index copy";
 
-const Categories = ({ style = {} }) => {
+const Categories = ({ style = {}, menu = [], font }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const goToScreen = (name) => name && navigation.navigate(name);
+
+  const stateReduxChoosedProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+
+  const stateReduxChoosedUnit = useSelector(
+    (state) => state.Dataproject.choosedUnit
+  );
+
+  const goToScreen = (name, item) => {
+    if (
+      (item.Title == "Helpdesk" || item.Title == "Help") &&
+      !stateReduxChoosedProject
+    ) {
+      return alert("Please choose project first");
+    }
+    console.log("38 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
+    if (
+      (item.Title == "Helpdesk" || item.Title == "Billing") &&
+      Object.keys(stateReduxChoosedUnit).length === 0
+    ) {
+      return alert("Please choose unit first");
+    }
+
+    name && navigation.navigate(name, { item: item });
+  };
+
+  //navigation.navigate('ChooseProject', {goTo: item.URL});
   const [expand, setExpand] = useState(false);
   const user = useSelector((state) => getUser(state));
   console.log("user for user faccility ->", user);
@@ -36,11 +64,46 @@ const Categories = ({ style = {} }) => {
     setExpand(true);
   };
 
+  const menuSandbox = {
+    id: 123,
+    Title: "SandBox",
+    IconClass: "hotel",
+    Screen: "SandBox",
+    user_facility: "N",
+    user_menu: "Y",
+    //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
+    //isProject: 0,
+  };
+  const menuHelp = {
+    id: 234,
+    Title: "Help",
+    IconClass: "headset",
+    //IconClass: "phone-alt",
+    Screen: "Emergency",
+    user_facility: "N",
+    user_menu: "Y",
+    //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
+    //isProject: 0,
+  };
+
+  const menuOther = {
+    id: 88,
+    Title: "Others",
+    IconClass: "bars", //"ellipsis-v",
+    Screen: "FCategory",
+    user_facility: "N",
+    user_menu: "Y",
+    //icon_url: require("../assets/images/icon_at_home/icon-8.jpeg"),
+  };
+
+  const modMenu = [...menu, menuHelp];
+
   return (
     <View>
       <View style={[{ flexDirection: "row" }, style]}>
         <FlatList
-          data={FCategories}
+          data={modMenu}
+          //data={FCategories}
           renderItem={({ item }) => (
             // console.log(
             //   'coba userfacility == user_facility,',
@@ -54,29 +117,37 @@ const Categories = ({ style = {} }) => {
               style={{
                 flex: 1,
                 marginVertical: 12,
-                // marginHorizontal: 20,
-                // width: 60,
-                // alignItems: 'center',
+                //marginLeft: 15,
+                //marginRight: 0,
+                //width: "25%",
+                //alignItems: "center",
                 // justifyContent: 'center',
                 //backgroundColor: "blue",
+
+                // borderWidth: 1,
+                // borderColor: "red",
+                //backgroundColor: "red",
               }}
             >
               <CategoryIconSoft
+                font={font}
                 isRound
                 // icon={item.icon}
-                style={{
-                  padding: 0,
-                  //backgroundColor: "blue",
-                  //maxWidth: 120,
-                  alignSelf: "center",
-                }}
+                style={
+                  {
+                    //padding: 0,
+                    //backgroundColor: "blue",
+                    //maxWidth: 120,
+                    //alignSelf: "center",
+                  }
+                }
                 icon_url={item.icon_url}
-                icon={item.icon}
-                title={t(item.title)}
+                icon={item.IconClass}
+                title={t(item.Title)}
                 onPress={() =>
                   user.UserFacility == item.user_facility ||
                   item.user_menu == "Y"
-                    ? goToScreen(item.screen)
+                    ? goToScreen(item.Screen, item)
                     : onExpand(user.Pesan_Facility)
                 }
               />

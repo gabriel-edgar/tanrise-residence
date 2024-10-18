@@ -89,9 +89,12 @@ const Facility = (props) => {
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`, {
-        config,
-      })
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
+        {
+          config,
+        }
+      )
       .then((res) => {
         const datas = res.data;
         // console.log('tower entity projek', datas);
@@ -129,7 +132,13 @@ const Facility = (props) => {
     console.log("next abis tower", entity_cd);
     const project_no = data.project_no;
     axios
-      .get(API_URL_LOKAL + "/fb-facilitylist/" + entity_cd + "/" + project_no)
+      .get(
+        API_URL_LOKAL +
+          "/modules/facilities/facility/" +
+          entity_cd +
+          "/" +
+          project_no
+      )
       .then((res) => {
         console.log("ress fcacility:", res.data);
         setData(res.data);

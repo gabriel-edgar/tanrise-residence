@@ -4,9 +4,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text, StyleSheet } from "react-native";
 import { BaseStyle, useTheme } from "@config";
 
-const CustomDropdownPicker = ({ items, placeholder, onSelect }) => {
+const CustomDropdownPicker = ({ items, placeholder, onSelect, value2 }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(value2);
   const { colors } = useTheme();
 
   return (

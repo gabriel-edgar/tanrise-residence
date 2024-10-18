@@ -1,6 +1,6 @@
 import { Text, Header, Icon } from "@components";
 //import data_dummy from '../Home/data_dummy.json';
-import { projectAsthana } from "./dummy.js";
+//import { projectAsthana } from "./dummy.js";
 
 import {
   View,
@@ -19,8 +19,10 @@ import { useSelector, useDispatch, connect } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 //import {API_URL} from '@env'; // shila
-//import { API_URL_LOKAL } from "@env";
-const API_URL = "https://dev.ifca.co.id:4414/apishilla/api";
+import { API_URL_LOKAL } from "@env";
+//const API_URL = "https://dev.ifca.co.id:4414/apishilla/api";
+import { store, persist } from "../../store";
+import { homeCommonProject } from "../FunctionAxios/home-common-project";
 
 const ProjectScreen = (props) => {
   const { colors } = useTheme();
@@ -30,11 +32,25 @@ const ProjectScreen = (props) => {
   const { navigation } = props;
   const { t } = useTranslation();
   const user = useSelector((state) => getUser(state));
-  const [projectData, setProjectData] = useState(projectAsthana);
+  const [projectData, setProjectData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [arrDataProject, setArrDataProject] = useState([]);
+  const [dataDD, setDataDD] = useState([]);
+  const stateStore = store.getState();
+  const token = stateStore.user.accessToken;
+
   useEffect(() => {
+    loadData();
     //getProject();
   }, []);
+
+  const loadData = async () => {
+    const data = {
+      email: stateStore.user.user.userData.email,
+    };
+    await homeCommonProject(token, data, setDataDD, setProjectData);
+  };
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     //getProject();
@@ -70,14 +86,21 @@ const ProjectScreen = (props) => {
       console.log("ini konsol eror", error);
     }
   };
+
+  console.log("85 projectData: ", projectData);
   return (
     <SafeAreaView
       edges={["right", "top", "left"]}
       style={[
         BaseStyle.safeAreaView,
-        { backgroundColor: BaseColor.whiteColor },
+        { flex: 1 },
+        { backgroundColor: colors.background },
       ]}
     >
+      {/* <SafeAreaView
+      style={[BaseStyle.safeAreaView, { flex: 1 }]}
+      edges={["right", "top", "left"]}
+    ></SafeAreaView> */}
       <Header
         title={t("Choose Project")}
         renderLeft={() => {
@@ -86,12 +109,12 @@ const ProjectScreen = (props) => {
               name="angle-left"
               //name="arrow-left"
               size={18}
-              color={BaseColor.corn70}
+              color={colors.primary}
               enableRTL={true}
             />
           );
         }}
-        style={{ height: 80 }}
+        //style={{ height: 80 }}
         onPressLeft={() => {
           navigation.goBack();
         }}
@@ -174,12 +197,13 @@ const ProjectScreen = (props) => {
                     <Text
                       style={{
                         fontFamily: "DMSerifDisplay",
-                        color: colors.primary,
+                        color: "grey",
                         marginVertical: 5,
                         fontWeight: "bold",
                       }}
                     >
-                      {item.caption_address}
+                      {/* {item.caption_address} */}
+                      {item.entity_name}
                     </Text>
                   </View>
                 </View>

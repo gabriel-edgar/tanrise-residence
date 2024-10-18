@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD4Lbway7tATJy8xOdLJ4ZYp-DtsF-8utQ</string>
+	<string>AIzaSyBLMFSM1FG5ogEjqYxihwm-Vn-xTgKVWnU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>492280643443</string>
+	<string>34345479278</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ifcasoftware.ifcaresidence</string>
+	<string>com.ifcasoftware.tanriseresidence</string>
 	<key>PROJECT_ID</key>
-	<string>ifca-residence-2-aug-24</string>
+	<string>tanrise-residence</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ifca-residence-2-aug-24.appspot.com</string>
+	<string>tanrise-residence.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:492280643443:ios:888c2ae5cd893b46dacf06</string>
+	<string>1:34345479278:ios:26f20598f0f210dbf48a7f</string>
 </dict>
 </plist>

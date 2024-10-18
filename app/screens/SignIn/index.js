@@ -34,9 +34,11 @@ import { data_project } from "../../actions/ProjectActions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from "@react-native-firebase/messaging";
 import { API_URL_LOKAL } from "@env";
+import { useNavigation, useRoute } from "@react-navigation/core";
 
 const SignIn = (props) => {
   const { navigation } = props;
+  //const navigation = useNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
   const dispatch = useDispatch();
@@ -57,14 +59,57 @@ const SignIn = (props) => {
   const errors = useSelector((state) =>
     errorsSelector([actionTypes.LOGIN], state)
   );
-  const loginklik = () => {
+  const loginklik = async () => {
+    console.log("63 run login");
+    if (email === "" || password === "") {
+      alert("Please input email and password");
+      return;
+    }
+
     console.log("54 run loginKlik");
-    loginUser();
-    loadProject();
+    setLoading(true);
+    await loginUser();
+    //loadProject();
+    //fastLoginUser();
+    //fastLoadProject();
+    setLoading(false);
   };
+
+  const loginklikMGR = () => {
+    console.log("54 run loginKlik");
+    setLoading(true);
+    fastLoginUser("mgr@ifca.co.id", "pass1234");
+    //fastLoadProject("mgr@ifca.co.id", "pass1234");
+    //setLoading(false);
+  };
+
+  const loginklikAriffandy = () => {
+    console.log("54 run loginKlik");
+    setLoading(true);
+    fastLoginUser("ahmad.ariffandy@ifca.co.id", "pass1234");
+    //fastLoadProject("ahmad.ariffandy@ifca.co.id", "pass1234");
+    //setLoading(false);
+  };
+
+  const loginklikGhalung = async () => {
+    console.log("64 run loginKlik");
+    setLoading(true);
+    await fastLoginUser("ghalung.sandhika@ifca.co.id", "pass1234");
+    //fastLoadProject("ahmad.ariffandy@ifca.co.id", "pass1234");
+    setLoading(false);
+  };
+
   const loginUser = useCallback(
     () => dispatch(login(email, password, token_firebase)),
     [email, password, token_firebase, dispatch]
+  );
+
+  const fastLoginUser = useCallback((emailFunction, passwordFunction) =>
+    dispatch(login(emailFunction, passwordFunction, token_firebase))
+  );
+
+  const fastLoadProject = useCallback((emailFunction) =>
+    dispatch(data_project({ emails: emailFunction }))
   );
 
   const loadProject = useCallback(
@@ -83,10 +128,24 @@ const SignIn = (props) => {
   useEffect(() => {
     console.log("user for reset? ", user);
     console.log("project di useeffect signin -->", project);
-    if (user !== null && project !== null) {
+    if (user !== null && project !== null && user?.length < 0) {
       // loadProject();
+      //props.navigation.navigate("Index");
       props.navigation.navigate("MainStack");
-      // navigation.navigate('MainStack');
+
+      // props.navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: "MainStack" }],
+      // });
+
+      //navigation.navigate("MainStack");
+
+      //props.navigation.goBack();
+      // props.navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 0,
+      //   })
+      // );
     }
   });
 
@@ -107,13 +166,17 @@ const SignIn = (props) => {
   };
 
   const getFcmToken = async () => {
+    // Optionally, you can get the new token
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
       console.log(fcmToken);
-      console.log("Your Firebase Token is:", fcmToken);
+      console.log("888 Your Firebase Token is:", fcmToken);
+      //alert("Your Firebase Token is: " + fcmToken);
       setTokenFirebase(fcmToken);
+      //setEmail(fcmToken);
     } else {
-      console.log("Failed", "No token received");
+      console.log("888 Failed", "No token received");
+      //alert("Failed", "No token received");
     }
   };
 
@@ -124,8 +187,8 @@ const SignIn = (props) => {
 
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset="100"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={80}
+      behavior={Platform.OS == "ios" ? "padding" : "height"} //height
       style={{
         flex: 1,
       }}
@@ -136,20 +199,26 @@ const SignIn = (props) => {
       > */}
       <View style={{ marginVertical: 50 }} />
       <View></View>
+
       <View style={styles.contain}>
         <Image
           // source={require('../../assets/images/pakubuwono.png')}
           //source={require("../../assets/images/Default-Black.webp")}
-          source={require("../../assets/images/logoIFCA.png")}
+          //source={require("../../assets/images/logoIFCA.png")}
+          source={require("../../assets/images/image-home/logo-tanrise-blackfont.png")}
+          //resizeMode="cover"
           style={{
-            height: 300,
+            height: 180,
             width: "100%",
             alignSelf: "center",
-            marginHorizontal: 100,
-            marginBottom: 40,
+            //marginHorizontal: 100,
+            //marginBottom: 40,
             //marginTop: 10,
-            flexDirection: "row",
+            //flexDirection: "row",
             resizeMode: "contain",
+            // backgroundColor: "white",
+            //borderRadius: 10,
+            marginBottom: 100,
           }}
         />
         <TextInput
@@ -197,12 +266,33 @@ const SignIn = (props) => {
               {t("forgot_your_password")}
             </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate("Skip")}>
-            <Text body2 primaryColor>
-              {t("Skip Login")}
+          {/* <TouchableOpacity onPress={loginklikMGR}>
+            <Text body2 grayColor>
+              {t("MGR")}
+            </Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+          //onPress={loginklikGhalung}
+          >
+            <Text
+              body2
+              style={{
+                color: colors.background,
+                //backgroundColor: "black",
+                alignSelf: "center",
+                //fontSize: 5,
+                marginRight: 30,
+              }}
+            >
+              {t(".")}
             </Text>
           </TouchableOpacity>
+
+          {/* <TouchableOpacity onPress={() => navigation.navigate("AboutUs")}>
+            <Text body2 primaryColor>
+              {t("About Us")}
+            </Text>
+          </TouchableOpacity> */}
         </View>
       </View>
 

@@ -3,82 +3,87 @@ import { Images, BaseColor } from "@config";
 export const FCategories = [
   {
     id: 1,
-    screen: "Billing", //v
-    icon: "credit-card",
-    title: "Billing",
+    Screen: "Billing", //v
+    IconClass: "credit-card",
+    Title: "Billing",
     user_facility: "N",
     user_menu: "Y",
     icon_url: require("../assets/images/icon_at_home/icon-1.jpeg"),
+    //isProject: 1,
   },
   {
     id: 2,
-    title: "Rent or Sell", //v
-    icon: "handshake",
-    screen: "Rent",
+    Title: "Rent or Sell", //v
+    IconClass: "handshake",
+    Screen: "Rent",
     user_facility: "N",
     user_menu: "Y",
     icon_url: require("../assets/images/icon_at_home/icon-2.jpeg"),
+    //isProject: 1,
   },
   //??
   // {
   //   id: 3,
-  //   title: "TR Office", //??
-  //   icon: "phone", //"h-square",
-  //   // screen: 'ComingSoon',
-  //   screen: "TROffice",
+  //   Title: "TR Office", //??
+  //   IconClass: "phone", //"h-square",
+  //   // Screen: 'ComingSoon',
+  //   Screen: "TROffice",
   //   user_facility: "N",
   //   user_menu: "Y",
   //   icon_url: require("../assets/images/icon_at_home/icon-3.jpeg"),
   // },
   {
     id: 4,
-    screen: "Announce", //v
-    icon: "bullhorn",
-    title: "Announcement",
+    Screen: "Announce", //v
+    IconClass: "bullhorn",
+    Title: "Announcement",
     user_facility: "N",
     user_menu: "Y",
     icon_url: require("../assets/images/icon_at_home/icon-4.jpeg"),
+    //isProject: 0,
   },
   // {
   //   id: 5,
-  //   title: "Facilities", //jadi facility
-  //   icon: "table-tennis",
-  //   screen: "Facility",
+  //   Title: "Facilities", //jadi facility
+  //   IconClass: "table-tennis",
+  //   Screen: "Facility",
   //   user_facility: "Y",
   //   user_menu: "N",
   //   icon_url: require("../assets/images/icon_at_home/icon-5.jpeg"),
   // },
   // {
   //   id: 6,
-  //   title: "Package",
-  //   icon: "cube",
-  //   screen: "Package",
+  //   Title: "Package",
+  //   IconClass: "cube",
+  //   Screen: "Package",
   //   user_facility: "N",
   //   user_menu: "Y",
   //   icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
   // },
   {
     id: 7,
-    title: "Helpdesk", //"Customer Service", //"Repair", //v
-    icon: "phone", //"tools",
-    screen: "Helpdesk",
+    Title: "Helpdesk", //"Customer Service", //"Repair", //v
+    IconClass: "phone", //"tools",
+    Screen: "Helpdesk",
     user_facility: "N",
     user_menu: "Y",
     icon_url: require("../assets/images/icon_at_home/icon-7.jpeg"),
+    //isProject: 1,
   },
   {
     id: 71,
-    title: "All Project",
-    icon: "hotel",
-    screen: "ProjectScreen",
+    Title: "All Project",
+    IconClass: "hotel",
+    Screen: "ProjectScreen",
     user_facility: "N",
     user_menu: "Y",
     icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
+    //isProject: 0,
   },
   // {
   //   id: 1,
   //   screen: 'News',
-  //   icon: 'newspaper',
+  //   IconClass: 'newspaper',
   //   title: 'News',
   //   user_facility: 'N',
   //   user_menu: 'Y',

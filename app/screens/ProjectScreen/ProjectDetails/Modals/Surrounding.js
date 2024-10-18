@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
 
-import { BaseStyle, Fonts, BaseColor } from "@config";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 import { useIsFocused } from "@react-navigation/native";
@@ -21,6 +21,7 @@ import entities from "entities";
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
 const Surrounding = (props) => {
   const { onPress, datas, icon, ...attrs } = props;
+  const { colors } = useTheme();
   const systemFonts = [
     ...defaultSystemFonts,
     "Arial Black",
@@ -55,12 +56,12 @@ const Surrounding = (props) => {
 
   return (
     <ScrollView>
-      <Modal {...attrs} animationType="slide" transparent={false}>
+      <Modal {...attrs} animationType="slide" transparent={true}>
         <View
           style={[
             styles.centeredView,
             {
-              backgroundColor: BaseColor.whiteColor,
+              backgroundColor: colors.background,
               borderTopRightRadius: 25,
               borderTopLeftRadius: 25,
               paddingBottom: 30,
@@ -87,7 +88,7 @@ const Surrounding = (props) => {
                 <Text
                   style={{
                     fontFamily: "DMSerifDisplay",
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     fontSize: 16,
                     fontWeight: "bold",
                   }}
@@ -100,7 +101,7 @@ const Surrounding = (props) => {
             {/* <View
               style={{
                 borderWidth: 0.3,
-                borderColor: BaseColor.corn70,
+                borderColor: colors.corn70,
                 borderStyle: "solid",
               }}
             ></View> */}
@@ -130,18 +131,18 @@ const Surrounding = (props) => {
                             : "time"
                         }
                         size={16}
-                        color={BaseColor.corn70}
+                        color={colors.text}
                         style={{ margin: 5 }}
                       ></Icon>
 
                       <View
                         style={{
-                          borderBottomColor: BaseColor.corn70,
+                          borderBottomColor: colors.text,
                           borderBottomWidth: 1,
                           borderStyle: "solid",
                         }}
                       >
-                        <Text style={styles.textBold}>
+                        <Text style={[styles.textBold, { color: colors.text }]}>
                           {itemType == "I"
                             ? "INFRASTRUCTURE"
                             : itemType == "S"
@@ -166,7 +167,7 @@ const Surrounding = (props) => {
                             ignoredStyles={["fontSize", "fontFamily", "color"]}
                             tagsStyles={{
                               em: {
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 // fontSize: 12,
                                 fontFamily: "DMSerifDisplay",
                                 // fontFamily: Fonts.type.ComicSansMS,
@@ -174,7 +175,7 @@ const Surrounding = (props) => {
                                 fontStyle: "normal",
                               },
                               strong: {
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 // fontSize: 12,
                                 // fontFamily: "DMSerifDisplay",
                                 fontWeight: "600",
@@ -184,7 +185,7 @@ const Surrounding = (props) => {
                                 }),
                               },
                               b: {
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 // fontSize: 12,
                                 // fontFamily: "DMSerifDisplay",
                                 fontWeight: "600",
@@ -195,14 +196,14 @@ const Surrounding = (props) => {
                               },
 
                               p: {
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 fontSize: 13,
                                 fontFamily: "DMSerifDisplay",
                                 // fontFamily: Fonts.type.ComicSansMS,
                                 textAlign: "justify",
                               },
                               span: {
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 fontSize: 13,
                                 fontFamily: "DMSerifDisplay",
                                 // fontFamily: Fonts.type.ComicSansMS,
@@ -210,7 +211,7 @@ const Surrounding = (props) => {
                               },
                               li: {
                                 // color: isDarkMode ? 'blue' : 'red',
-                                color: BaseColor.corn70,
+                                color: colors.text,
                                 // fontSize: 12,
                                 fontFamily: "DMSerifDisplay",
                               },

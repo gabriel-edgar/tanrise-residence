@@ -1,17 +1,17 @@
-import Icon from '@components/Icon';
-import Tag from '@components/Tag';
-import Text from '@components/Text';
-import Image from '@components/Image';
+import Icon from "@components/Icon";
+import Tag from "@components/Tag";
+import Text from "@components/Text";
+import Image from "@components/Image";
 
-import {BaseColor, Images, useTheme} from '@config';
-import PropTypes from 'prop-types';
-import {parseHexTransparency} from '@utils';
+import { BaseColor, Images, useTheme } from "@config";
+import PropTypes from "prop-types";
+import { parseHexTransparency } from "@utils";
 
-import React from 'react';
-import {ImageBackground, Linking, TouchableOpacity, View} from 'react-native';
-import styles from './styles';
-import Loading from './Loading';
-import Button from '@components/Button';
+import React from "react";
+import { ImageBackground, Linking, TouchableOpacity, View } from "react-native";
+import styles from "./styles";
+import Loading from "./Loading";
+import Button from "@components/Button";
 
 const Block = ({
   description,
@@ -44,18 +44,47 @@ const Block = ({
   currency,
   price,
 }) => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
+  console.log(
+    "49 comp produck block: ",
+    " 1 description: ",
+    description,
+    //style,
+    " 2 images: ",
+    images,
+    //onPress,
+    " 3 subject: ",
+    subject,
+    " 4 bed_room: ",
+    bed_room,
+    " 5 land_area: ",
+    land_area,
+    " 6 build_area: ",
+    build_area,
+    " 7 bath_room: ",
+    bath_room,
+    " 8 salePercent: ",
+    salePercent,
+    " 9 advID: ",
+    advID,
+    " 10 loading: ",
+    loading,
+    " 11 currency: ",
+    currency,
+    " 12 price: ",
+    price
+  );
 
   const message =
-    '\n Advertising ID : ' +
+    "\n Advertising ID : " +
     `${advID}` +
-    '\n Name : ' +
+    "\n Name : " +
     Block.agent_name +
-    '\n Email : ' +
+    "\n Email : " +
     Block.email +
-    '\n Phone Number : ' +
+    "\n Phone Number : " +
     Block.hp_wa +
-    '\n Contact me for the details information.';
+    "\n Contact me for the details information.";
 
   if (loading) {
     return <Loading style={style} />;
@@ -74,15 +103,16 @@ const Block = ({
         borderBottomWidth: 1,
         marginVertical: 1,
       }}
-      onPress={onPress}>
+      onPress={onPress}
+    >
       {images.map((item, index) =>
-        item.flag == 'Y' ? (
+        true ? ( // item.flag == "Y"
           <ImageBackground
             key={index}
             source={
               `${item.pict}` != null
-                ? {uri: `${item.pict}`.replace('https', 'http')}
-                : require('../../../assets/images/image-home/Main_Image.png')
+                ? { uri: `${item.pict}`.replace("https", "https") }
+                : require("../../../assets/images/image-home/Main_Image.png")
             }
             // {
             // uri:
@@ -91,7 +121,8 @@ const Block = ({
             //     : require('../../assets/images/image-home/Main_Image.png'),
             // }
             // }
-            style={styles.imageBackground}>
+            style={[styles.imageBackground, { backgroundColor: "lightgrey" }]}
+          >
             {/* <Icon
               name="heart"
               solid={isFavorite}
@@ -104,39 +135,59 @@ const Block = ({
               </Tag>
             ) : null}
           </ImageBackground>
-        ) : null,
+        ) : null
       )}
 
-      <View style={{paddingHorizontal: 16, paddingVertical: 8}}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
         <Text title3 semibold>
           {subject}
         </Text>
-        <Text title3 style={{marginTop: 10}}>
+        <Text title3 style={{ marginTop: 10 }}>
           {currency} {price}
         </Text>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
           <Icon
             name="bath"
             size={14}
-            style={{flexDirection: 'row', marginRight: 10}}>
+            style={{
+              flexDirection: "row",
+              marginRight: 10,
+              color: colors.text,
+            }}
+          >
             {bath_room}
           </Icon>
           <Icon
             name="bed"
             size={14}
-            style={{flexDirection: 'row', marginRight: 10}}>
+            style={{
+              flexDirection: "row",
+              marginRight: 10,
+              color: colors.text,
+            }}
+          >
             {bed_room}
           </Icon>
           <Icon
             name="building"
             size={14}
-            style={{flexDirection: 'row', marginRight: 10}}>
+            style={{
+              flexDirection: "row",
+              marginRight: 10,
+              color: colors.text,
+            }}
+          >
             {land_area}
           </Icon>
           <Icon
             name="map"
             size={14}
-            style={{flexDirection: 'row', marginRight: 10}}>
+            style={{
+              flexDirection: "row",
+              marginRight: 10,
+              color: colors.text,
+            }}
+          >
             {build_area}
           </Icon>
           {/* <Icon
@@ -156,7 +207,8 @@ const Block = ({
           numberOfLines={2}
           style={{
             paddingVertical: 15,
-          }}>
+          }}
+        >
           {description}
         </Text>
 
@@ -245,19 +297,19 @@ Block.propTypes = {
 };
 
 Block.defaultProps = {
-  description: '',
-  title: '',
+  description: "",
+  title: "",
   style: {},
-  pict: '',
-  currency: '',
-  price: '',
-  avatar: '',
+  pict: "",
+  currency: "",
+  price: "",
+  avatar: "",
   user: {},
-  publish_date: '',
+  publish_date: "",
   image: Images.home,
-  costPrice: '',
-  salePrice: '',
-  salePercent: '',
+  costPrice: "",
+  salePrice: "",
+  salePercent: "",
   onPress: () => {},
   isFavorite: false,
 };

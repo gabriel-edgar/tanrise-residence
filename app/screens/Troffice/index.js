@@ -10,27 +10,27 @@ import {
   CategoryBoxColor,
   CategoryBoxColor2,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox} from 'react-native-elements';
-import {enableExperimental} from '@utils';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox } from "react-native-elements";
+import { enableExperimental } from "@utils";
 
-import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
-import React, {useEffect, useState, useMemo} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import {SceneMap} from 'react-native-tab-view';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
-import {API_URL_LOKAL} from '@env';
+import { useNavigation } from "@react-navigation/native";
+import { haveChildren } from "@utils";
+import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import { SceneMap } from "react-native-tab-view";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import client from "../../controllers/HttpClient";
+import styles from "./styles";
+import { API_URL_LOKAL } from "@env";
 
 export default function Troffice() {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [dataLocation, setLocation] = useState([]);
@@ -39,16 +39,16 @@ export default function Troffice() {
   const [index, setIndex] = useState(0);
   const [getCategories, setGetCategory] = useState([]);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const TABS = [
     {
-      id: 'C',
-      title: t('Customer Service'),
+      id: "C",
+      title: t("Customer Service"),
     },
     {
-      id: 'H',
-      title: t('House Keeping'),
+      id: "H",
+      title: t("House Keeping"),
     },
   ];
 
@@ -63,16 +63,16 @@ export default function Troffice() {
 
   const getCategory = async () => {
     await axios
-      .get(API_URL_LOKAL + `/troffice/getcategory`)
-      .then(res => {
+      .get(API_URL_LOKAL + `/modules/troffice/category`)
+      .then((res) => {
         // console.log('res greetings', res.data.data);
         // const getdata = res.data.data[0].status;
         const getdata = res.data.data;
         setGetCategory(getdata);
-        console.log('res greetings', getdata);
+        console.log("res greetings", getdata);
       })
-      .catch(error => {
-        console.log('error res get category', error);
+      .catch((error) => {
+        console.log("error res get category", error);
       });
   };
 
@@ -97,10 +97,11 @@ export default function Troffice() {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
         // title={t('choose_friend')}
-        title={t('TR Office')} //belum ada lang translatenya
+        title={t("TR Office")} //belum ada lang translatenya
         renderLeft={() => {
           return (
             <Icon
@@ -115,11 +116,12 @@ export default function Troffice() {
           navigation.goBack();
         }}
       />
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         {TABS.map((item, index) => (
           <View
             key={index}
-            style={{flex: 1, paddingHorizontal: 20, marginBottom: 30}}>
+            style={{ flex: 1, paddingHorizontal: 20, marginBottom: 30 }}
+          >
             <Tag
               primary
               style={{
@@ -129,11 +131,13 @@ export default function Troffice() {
               onPress={() => {
                 enableExperimental();
                 setTab(item);
-              }}>
+              }}
+            >
               <Text
                 body1={tab.id != item.id}
                 light={tab.id != item.id}
-                whiteColor={tab.id == item.id}>
+                whiteColor={tab.id == item.id}
+              >
                 {item.title}
               </Text>
             </Tag>
@@ -142,32 +146,33 @@ export default function Troffice() {
       </View>
 
       <View>
-        {tab.id == 'C' ? (
+        {tab.id == "C" ? (
           <View>
             <View
               style={{
-                flexDirection: 'row',
-              }}>
+                flexDirection: "row",
+              }}
+            >
               {getCategories.map((data, index) => (
                 <CategoryBoxColor
                   loading={loading}
                   style={{
                     // paddingLeft: index % 2 == 0 ? 0 : 15,
                     paddingBottom: 15,
-                    justifyContent: 'space-between',
+                    justifyContent: "space-between",
                     paddingHorizontal: 10,
                   }}
                   title={
-                    data.category_cd == 'MU52' ? 'Water Heater' : data.descs
+                    data.category_cd == "MU52" ? "Water Heater" : data.descs
                   }
                   // icon={'list-alt'}
-                  icon={data.category_cd == 'AU01' ? 'wind' : 'water'}
+                  icon={data.category_cd == "AU01" ? "wind" : "water"}
                   color={colors.primary}
                   onPress={() => {
-                    data.category_cd == 'AU01'
-                      ? navigation.navigate('SpecTroffice', {data, index})
-                      : data.category_cd == 'MU52' &&
-                        navigation.navigate('SpecTrofficeWaterHeater', {
+                    data.category_cd == "AU01"
+                      ? navigation.navigate("SpecTroffice", { data, index })
+                      : data.category_cd == "MU52" &&
+                        navigation.navigate("SpecTrofficeWaterHeater", {
                           data,
                           index,
                         });
@@ -176,52 +181,52 @@ export default function Troffice() {
                 />
               ))}
             </View>
-            <View style={{flexDirection: 'column'}}>
+            <View style={{ flexDirection: "column" }}>
               <CategoryBoxColor
                 loading={loading}
                 style={{
                   // paddingLeft: index % 2 == 0 ? 0 : 15,
                   paddingBottom: 15,
                   // justifyContent: 'space-between',
-                  justifyContent: 'center',
+                  justifyContent: "center",
                   paddingHorizontal: 10,
                 }}
-                title={'Booking List'}
-                icon={'list-alt'}
+                title={"Booking List"}
+                icon={"list-alt"}
                 color={colors.primary}
-                onPress={() => navigation.navigate('StatusHelpTROffice')}
+                onPress={() => navigation.navigate("StatusHelpTROffice")}
               />
             </View>
           </View>
         ) : null}
 
-        {tab.id == 'H' ? (
-          <View style={{flexDirection: 'column'}}>
-            <View style={{flexDirection: 'row'}}>
+        {tab.id == "H" ? (
+          <View style={{ flexDirection: "column" }}>
+            <View style={{ flexDirection: "row" }}>
               {getCategories.map(
                 (data, index) =>
-                  data.category_cd == 'PC01' && (
+                  data.category_cd == "PC01" && (
                     <CategoryBoxColor
                       loading={loading}
                       style={{
                         // paddingLeft: index % 2 == 0 ? 0 : 15,
                         paddingBottom: 15,
                         // justifyContent: 'space-between',
-                        justifyContent: 'center',
+                        justifyContent: "center",
                         paddingHorizontal: 10,
                       }}
-                      title={'Pest Control'}
-                      icon={'spider'}
+                      title={"Pest Control"}
+                      icon={"spider"}
                       color={colors.primary}
                       onPress={() =>
-                        data.category_cd == 'PC01' &&
-                        navigation.navigate('SpecTrofficePestControl', {
+                        data.category_cd == "PC01" &&
+                        navigation.navigate("SpecTrofficePestControl", {
                           data,
                           index,
                         })
                       }
                     />
-                  ),
+                  )
               )}
               <CategoryBoxColor
                 loading={loading}
@@ -229,29 +234,29 @@ export default function Troffice() {
                   // paddingLeft: index % 2 == 0 ? 0 : 15,
                   paddingBottom: 15,
                   // justifyContent: 'space-between',
-                  justifyContent: 'center',
+                  justifyContent: "center",
                   paddingHorizontal: 10,
                 }}
-                title={'Unit Cleaning Attendant'}
-                icon={'home'}
+                title={"Unit Cleaning Attendant"}
+                icon={"home"}
                 color={colors.primary}
-                onPress={() => navigation.navigate('SpecTrofficeUnitCleaning')}
+                onPress={() => navigation.navigate("SpecTrofficeUnitCleaning")}
               />
             </View>
-            <View style={{flexDirection: 'column'}}>
+            <View style={{ flexDirection: "column" }}>
               <CategoryBoxColor
                 loading={loading}
                 style={{
                   // paddingLeft: index % 2 == 0 ? 0 : 15,
                   paddingBottom: 15,
                   // justifyContent: 'space-between',
-                  justifyContent: 'center',
+                  justifyContent: "center",
                   paddingHorizontal: 10,
                 }}
-                title={'Booking List'}
-                icon={'list-alt'}
+                title={"Booking List"}
+                icon={"list-alt"}
                 color={colors.primary}
-                onPress={() => navigation.navigate('StatusHelpHouse')}
+                onPress={() => navigation.navigate("StatusHelpHouse")}
               />
             </View>
             {/* <View style={{flexDirection: 'row'}}>

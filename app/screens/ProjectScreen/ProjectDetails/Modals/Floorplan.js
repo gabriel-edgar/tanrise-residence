@@ -12,7 +12,7 @@ import {
 import React, { useState } from "react";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
-import { BaseStyle, Fonts, BaseColor } from "@config";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
 import { ScrollView } from "react-native-gesture-handler";
 
 import {
@@ -29,6 +29,7 @@ import CustomAlert from "../../components/CustomAlert";
 
 const Floorplan = (props) => {
   const { onPress, datas, icon, ...attrs } = props;
+  const { colors } = useTheme();
   console.log("attrs ?", attrs);
   console.log("datas nya", datas);
   const images = datas.data_floorplan;
@@ -177,7 +178,7 @@ const Floorplan = (props) => {
   //           style={{
   //             fontFamily: "DMSerifDisplay",
   //             fontSize: 12,
-  //             color: BaseColor.redStateColor,
+  //             color: colors.redStateColor,
   //           }}
   //         >
   //           Close
@@ -200,14 +201,15 @@ const Floorplan = (props) => {
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        backgroundColor: "red",
       }}
     >
-      <Modal {...attrs} animationType="slide" transparent={false}>
+      <Modal {...attrs} animationType="slide" transparent={true}>
         <View
           style={[
             styles.centeredView,
             {
-              backgroundColor: BaseColor.whiteColor,
+              backgroundColor: colors.background,
               borderTopRightRadius: 25,
               borderTopLeftRadius: 25,
               paddingBottom: 40,
@@ -234,7 +236,7 @@ const Floorplan = (props) => {
                 <Text
                   style={{
                     fontFamily: "DMSerifDisplay",
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     fontSize: 16,
                     fontWeight: "bold",
                   }}
@@ -247,7 +249,7 @@ const Floorplan = (props) => {
             {/* <View
               style={{
                 borderWidth: 0.3,
-                borderColor: BaseColor.corn70,
+                borderColor: colors.corn70,
                 borderStyle: "solid",
               }}
             ></View> */}
@@ -256,7 +258,7 @@ const Floorplan = (props) => {
                 style={[
                   styles.centeredView,
                   {
-                    backgroundColor: BaseColor.whiteColor,
+                    backgroundColor: colors.background,
                     borderTopRightRadius: 25,
                     borderTopLeftRadius: 25,
                   },
@@ -288,12 +290,13 @@ const Floorplan = (props) => {
                             height: 200,
                             resizeMode: "contain",
                             borderRadius: 10,
+                            //backgroundColor: "lightgray",
                             // ...Platform.select({
                             //   android: {
                             //     elevation: 1,
                             //   },
                             //   default: {
-                            //     shadowColor: BaseColor.corn90,
+                            //     shadowColor: colors.corn90,
                             //     shadowOffset: {height: 0, width: 0},
                             //     shadowOpacity: 3,
                             //     shadowRadius: 3,
@@ -347,7 +350,7 @@ const Floorplan = (props) => {
                     <Text
                       style={{
                         fontFamily: "DMSerifDisplay",
-                        color: BaseColor.corn30,
+                        color: colors.text,
                       }}
                     >{`${imageIndex + 1} / ${dataImage.length}`}</Text>
                   </View>
@@ -372,7 +375,7 @@ const Floorplan = (props) => {
                       style={{
                         fontFamily: "DMSerifDisplay",
                         fontSize: 12,
-                        color: BaseColor.redStateColor,
+                        color: "red",
                       }}
                     >
                       Close

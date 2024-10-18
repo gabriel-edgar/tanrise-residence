@@ -19,6 +19,7 @@ import FCategory from "@screens/FCategory";
 import { BottomTabNavigatorMazi, tabBarIcon } from "./components";
 import Billing from "../screens/Billing";
 import AttachmentBilling from "../screens/Billing/AttachmentBilling";
+import PaymentDetail from "../screens/Billing/PaymentDetail";
 import BillingHistory from "../screens/BillingHistory";
 import HistoryBilling from "../screens/BillingHistory/HistoryBilling";
 import PDFAttach from "../screens/Billing/PDFAttach";
@@ -55,6 +56,10 @@ import StatusHelp from "../screens/Helpdesk/StatusHelp";
 import ViewHistoryStatus from "../screens/Helpdesk/ViewHistoryStatus";
 import ViewHistoryDetail from "../screens/Helpdesk/ViewHistoryDetail";
 import PreviewImageHelpdesk from "../screens/Helpdesk/PreviewImageHelpdesk";
+import Messaging from "../screens/Helpdesk/Messaging";
+
+import Messages from "../screens/Messages";
+import Messenger from "../screens/Messenger";
 
 import HouseRoles from "../screens/HouseRoles";
 
@@ -145,6 +150,9 @@ import SuratIzinKeluarMasukBarang from "@screens/LegalManagement/SuratIzinKeluar
 
 import ProjectScreen from "@screens/ProjectScreen";
 import ProjectDetails from "@screens/ProjectScreen/ProjectDetails";
+import DownloadBrochure from "@screens/ProjectScreen/DownloadBrochure";
+
+import SandBox from "@screens/SandBoxScreen/index";
 
 const Stack = createStackNavigator();
 
@@ -232,6 +240,11 @@ function MainStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="DownloadBrochure"
+        component={DownloadBrochure}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Privacy"
         component={Privacy}
         options={{ headerShown: false }}
@@ -284,6 +297,23 @@ function MainStack() {
       <Stack.Screen
         name="Billing"
         component={Billing}
+        options={{ headerShown: false }}
+      />
+      {/* import Messages from "../screens/Messages"; 
+      import Messenger from "../screens/Messenger"; */}
+      <Stack.Screen
+        name="Messages"
+        component={Messages}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Messenger"
+        component={Messenger}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Messaging"
+        component={Messaging}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -432,6 +462,16 @@ function MainStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="SandBox"
+        component={SandBox}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Emergency"
+        component={Emergency}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="NotificationDetail"
         component={NotificationDetail}
         options={{ headerShown: false }}
@@ -474,6 +514,11 @@ function MainStack() {
       <Stack.Screen
         name="AttachmentBilling"
         component={AttachmentBilling}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentDetail"
+        component={PaymentDetail}
         options={{ headerShown: false }}
       />
       <Stack.Screen

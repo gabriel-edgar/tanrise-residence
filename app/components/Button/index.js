@@ -1,12 +1,12 @@
-import Text from '@components/Text';
-import {BaseColor, useTheme} from '@config';
-import PropTypes from 'prop-types';
-import React from 'react';
-import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
-import styles from './styles';
+import Text from "@components/Text";
+import { BaseColor, useTheme } from "@config";
+import PropTypes from "prop-types";
+import React from "react";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import styles from "./styles";
 
 export default function Button(props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const {
     style,
     styleText,
@@ -24,7 +24,7 @@ export default function Button(props) {
     <TouchableOpacity
       {...rest}
       style={StyleSheet.flatten([
-        [styles.default, {backgroundColor: colors.primary}],
+        [styles.default, { backgroundColor: colors.primary }],
         outline && [
           styles.outline,
           {
@@ -37,22 +37,28 @@ export default function Button(props) {
         style,
       ])}
       activeOpacity={0.9}
-      disabled={disable}>
+      disabled={disable}
+    >
       {icon ? icon : null}
       <Text
         style={StyleSheet.flatten([
           styles.textDefault,
-          outline && {color: colors.primary},
+          outline && { color: colors.primary },
           styleText,
         ])}
-        numberOfLines={1}>
+        numberOfLines={1}
+      >
         {children}
       </Text>
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={outline ? colors.primary : BaseColor.whiteColor}
-          style={{paddingLeft: 5}}
+          color={
+            outline
+              ? "blue" //colors.primary
+              : "blue" //BaseColor.whiteColor
+          }
+          style={{ paddingLeft: 5 }}
         />
       ) : null}
     </TouchableOpacity>

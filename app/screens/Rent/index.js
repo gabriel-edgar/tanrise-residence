@@ -35,8 +35,13 @@ import List from "../../components/Product/List";
 import styles from "./styles";
 import { enableExperimental } from "@utils";
 import { API_URL_LOKAL } from "@env";
+import { store, persist } from "../../store";
+import { homeCommonProject } from "../FunctionAxios/home-common-project";
+import httpClient from "../../controllers/HttpClient";
+
 const Rent = (props) => {
   const { navigation } = props;
+  const itemData = props.route.params.item;
   const { t } = useTranslation();
   const { colors } = useTheme();
   const route = useRoute();
@@ -44,6 +49,12 @@ const Rent = (props) => {
   const [rent, setRent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setErrors] = useState(false);
+  const [arrDataProject, setArrDataProject] = useState([]);
+  const [dataDD, setDataDD] = useState([]);
+
+  const stateStore = store.getState();
+  const token = stateStore.user.accessToken;
+
   const TABS = [
     {
       id: 1,
@@ -66,33 +77,63 @@ const Rent = (props) => {
   }, [route?.params?.id]);
 
   useEffect(() => {
-    axios
-      .get(API_URL_LOKAL + "/rsentryMobileSale/")
-      .then(({ data }) => {
-        console.log("defaultApp -> data", data);
-        setData(data);
-        console.log("data >", data[0].images);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    const data = {
+      email: stateStore.user.user.userData.email,
+    };
+
+    console.log("83 data: ", data);
+
+    loadData();
+    setLoading(false);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 1000);
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(API_URL_LOKAL + "/rsentryMobile")
-      .then(({ data }) => {
-        console.log("defaultApp -> data", rent);
-        setRent(data);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
+  const loadData = async () => {
+    //await homeCommonProject(token, data, setDataDD, setArrDataProject);
+    //await getSale();
+    //await delay(1000);
+    await getRent();
+    await getSale();
+  };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const getRent = async () => {
+    // axios
+    //   .get(API_URL_LOKAL + "/modules/rs/rent-unit")
+    console.log("102 run getRent");
+    await httpClient
+      .request({
+        url: "/modules/rs/rent-unit",
+        method: "GET",
+      })
+      .then(({ data }) => {
+        console.log("96 rent: ", data.data);
+        setRent(data.data);
+      })
+      .catch((error) => console.error("96 errorRent: ", error));
+    // .finally(() => setLoading(false));
+  };
+
+  const getSale = async () => {
+    // axios
+    //   .get(API_URL_LOKAL + "/modules/rs/sale-unit/")
+    console.log("102 run getSale");
+    await httpClient
+      .request({
+        url: "/modules/rs/sale-unit",
+        method: "GET",
+      })
+      .then(({ data }) => {
+        console.log("96 sale: ", data.data);
+        setData(data.data);
+        //console.log("data >", data.data[0].images);
+      })
+      .catch((error) =>
+        console.error("96 errorSale1234: ", error.response.data.message)
+      );
+    // .finally(() => setLoading(false));
+  };
 
   const goPost = (item) => () => {
     navigation.navigate("Post", { item: item });
@@ -109,7 +150,7 @@ const Rent = (props) => {
   };
 
   //dropdownProject
-  const [choosedProject, setChoosedProject] = useState("");
+  const [choosedProject, setChoosedProject] = useState();
   const handleSelect = (value) => {
     console.log("Selected Value:", value);
     //setState(value);
@@ -122,10 +163,45 @@ const Rent = (props) => {
     { label: "Project 3", value: "Project 3" },
   ];
 
+  if (itemData.isProject == 1) {
+    if (choosedProject == null) {
+      return (
+        <SafeAreaView
+          style={[BaseStyle.safeAreaView, { backgroundColor: "blue" }]}
+          edges={["right", "top", "left"]}
+        >
+          <Header
+            // title={t('choose_friend')}
+            title={t("Rent or Sale2")} //belum ada lang translatenya
+            renderLeft={() => {
+              return (
+                <Icon
+                  name="angle-left"
+                  size={20}
+                  color={colors.primary}
+                  enableRTL={true}
+                />
+              );
+            }}
+            onPressLeft={() => {
+              navigation.goBack();
+            }}
+          />
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+          />
+        </SafeAreaView>
+      );
+    }
+  }
+
   const renderContent = () => {
     const mainNews = PostListData[0];
     return (
-      <SafeAreaView edges={["right", "top", "left"]}>
+      // <SafeAreaView edges={["right", "top", "left"]}>
+      <>
         <Header
           title={t("Rent or Sale")}
           renderLeft={() => {
@@ -142,12 +218,16 @@ const Rent = (props) => {
             navigation.goBack();
           }}
         />
-        <ButtonChooseProject
-          items={dropdownItems}
-          placeholder="Select project"
-          onSelect={handleSelect}
-        />
-        <Text>Choosed project: {choosedProject}</Text>
+        {itemData.isProject == 1 && (
+          <>
+            <ButtonChooseProject
+              items={dataDD}
+              placeholder="Select project"
+              onSelect={handleSelect}
+              value2={choosedProject}
+            />
+          </>
+        )}
         <ScrollView contentContainerStyle={styles.paddingSrollView}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {TABS.map((item, index) => (
@@ -185,19 +265,19 @@ const Rent = (props) => {
                   <ProductBlock
                     key={index}
                     loading={loading}
-                    description={item.description}
-                    subject={item.subject}
+                    description={item.adv_descs}
+                    subject={item.adv_title}
                     style={{ marginVertical: 8 }}
                     // images={item.images[0].pict}
                     images={item.images}
                     avatar={item.avatar}
                     email={item.email}
-                    bath_room={item.bath_room}
-                    bed_room={item.bed_room}
-                    land_area={item.land_area}
-                    build_area={item.build_area}
+                    bath_room={item.qty_bathroom}
+                    bed_room={item.qty_bedroom}
+                    land_area={item.nett} // nett
+                    build_area={item.semi_gross} //semi gross
                     agent_name={item.agent_name}
-                    publish_date={moment(item.publish_date).format("H:mm:ss")}
+                    publish_date={moment(item.date_created).format("H:mm:ss")}
                     price_descs={item.price_descs}
                     onPress={() => goProductDetail(item)}
                     isFavorite={item.isFavorite}
@@ -220,20 +300,20 @@ const Rent = (props) => {
                   <ProductBlock
                     key={index}
                     loading={loading}
-                    description={item.description}
-                    subject={item.subject}
+                    description={item.adv_descs}
+                    subject={item.adv_title}
                     style={{ marginVertical: 8 }}
                     // images={item.images[0].pict}
                     images={item.images}
                     avatar={item.avatar}
                     email={item.email}
-                    advID={item.advID}
-                    bath_room={item.bath_room}
-                    bed_room={item.bed_room}
-                    land_area={item.land_area}
-                    build_area={item.build_area}
+                    advID={item.adv_no}
+                    bath_room={item.qty_bathroom}
+                    bed_room={item.qty_bedroom}
+                    land_area={item.nett}
+                    build_area={item.semi_gross}
                     agent_name={item.agent_name}
-                    publish_date={moment(item.publish_date).format("H:mm:ss")}
+                    publish_date={moment(item.date_created).format("H:mm:ss")}
                     price_descs={item.price_descs}
                     onPress={() => goProductDetail(item)}
                     isFavorite={item.isFavorite}
@@ -272,19 +352,20 @@ const Rent = (props) => {
             )}
           /> */}
         </ScrollView>
-      </SafeAreaView>
+      </>
+      // </SafeAreaView>
     );
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView
-        style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
-      >
-        {renderContent()}
-      </SafeAreaView>
-    </View>
+    // <View style={{ flex: 1 }}>
+    <SafeAreaView
+      style={BaseStyle.safeAreaView}
+      edges={["right", "top", "left"]}
+    >
+      {renderContent()}
+    </SafeAreaView>
+    // </View>
   );
 };
 

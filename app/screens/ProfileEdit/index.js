@@ -24,6 +24,8 @@ import {
 import { TouchableOpacity } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import ReactNativeBlobUtil from "react-native-blob-util";
+import PreviewImages from "../AnnouceDetail/PreviewImages";
+import httpClient from "../../controllers/HttpClient";
 
 const ProfileEdit = (props) => {
   const { navigation } = props;
@@ -34,11 +36,16 @@ const ProfileEdit = (props) => {
   const [images, setImage] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => getUser(state));
-  console.log("user di profil", user);
+  console.log("38 user di profil", user);
   const [name, setName] = useState(user.name);
   const [phone, setPhone] = useState(user.Handphone || user.handphone);
   const [emailuser, setEmail] = useState(user.user);
   const [datas, setData] = useState();
+  const [imageProfile, setImageProfile] = useState(user.pict);
+  const stateRedux = useSelector((state) => state.user);
+  console.log("46 stateRedux: ", stateRedux);
+  const token = stateRedux.accessToken;
+
   const saveProfilerResult = useCallback(
     () => dispatch(saveProfile()),
     [dispatch]
@@ -69,21 +76,21 @@ const ProfileEdit = (props) => {
     () =>
       dispatch(
         saveProfile({
-          emails: user.user,
+          email: user.email,
           name,
           phone,
-          genders: "Male",
+          gender: "Male",
         })
       ),
     // console.log('You clicked ', event);
-    [{ emails: user.user, name, phone, genders: "Male" }, dispatch]
+    [{ emails: user.email, name, phone, gender: "Male" }, dispatch]
   );
 
   const handphonechanged = useCallback((value) => setPhone(value), []);
   const namechanged = useCallback((value) => setName(value), []);
 
-  const savePhoto = useCallback(() =>
-    dispatch(saveFotoProfil({ image: images, email: user.user }))
+  const savePhoto = useCallback((uri) =>
+    dispatch(saveFotoProfil({ uri: uri, email: user.email }))
   );
 
   const handlePhotoPick = () => {
@@ -104,7 +111,7 @@ const ProfileEdit = (props) => {
     );
   };
 
-  const fromCamera = () => {
+  const fromCamera = async () => {
     ImagePicker.openCamera({
       width: 500,
       height: 500,
@@ -121,21 +128,61 @@ const ProfileEdit = (props) => {
             mime: images.mime,
           },
         ]);
-        // savePhoto();
-        // uploadPhoto();
-        // setImage(prevState => ({
-        //   image: [
-        //     ...prevState.image,
-        //     {
-        //       uri: image.path,
-        //       width: image.width,
-        //       height: image.height,
-        //       mime: image.mime,
-        //     },
-        //   ],
-        // }));
+
+        //savePhoto();
+
+        savePhoto(images.path);
+        setImageProfile(images.path);
+
+        return;
+
+        uploadPhoto2(images.path).then((dataPhoto) => {
+          console.log("147: ", typeof dataPhoto);
+
+          const body = {
+            email: user.email,
+            dataPhoto: dataPhoto,
+          };
+
+          //setImageProfile(images.path);
+
+          httpClient
+            .request({
+              url: "/auth/change-photo",
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              data: body,
+            })
+            .then((response) => {
+              alert(response.data.message);
+              console.log("147 response: ", response.data.message);
+              setImageProfile(images.path);
+            })
+            .catch((e) => console.log("147 error: ", e.response.data));
+        });
+
+        return;
+
+        // setState({
+        //   ...images,
+        //   [stringType]: dataPhoto,
+        // });
+
+        setImage((prevState) => ({
+          image: [
+            ...prevState.image,
+            {
+              uri: image.path,
+              width: image.width,
+              height: image.height,
+              mime: image.mime,
+            },
+          ],
+        }));
       })
-      .catch((e) => console.log("tag", e));
+      .catch((e) => console.log("147 error: ", e));
   };
 
   const fromGallery = (cropping, mediaType = "photo") => {
@@ -157,33 +204,64 @@ const ProfileEdit = (props) => {
             mime: images.mime,
           },
         ]);
-        // savePhoto();
-        // uploadPhoto();
-        // image.map(image => {
-        //   imageList.push({
-        //     uri: image.path,
-        //     width: image.width,
-        //     height: image.height,
-        //     mime: image.mime,
-        //   });
-        // });
-        // console.log('received images', image);
-        // console.log('received images >', imageList);
-        // setImage(imageList);
-        // for (var i = 0; i < image.length; i++) {
-        //   setImage({
-        //     images: [
-        //       {
-        //         uri: image[i].path,
-        //         width: image[i].width,
-        //         height: image[i].height,
-        //         mime: image[i].mime,
-        //       },
-        //     ],
-        //   });
-        // }
+
+        savePhoto(images.path);
+        setImageProfile(images.path);
+
+        return;
+
+        const dataPhoto = uploadPhoto2(images.path);
+
+        return;
+
+        images.map((image) => {
+          imageList.push({
+            uri: image.path,
+            width: image.width,
+            height: image.height,
+            mime: image.mime,
+          });
+        });
+
+        console.log("received images", image);
+        console.log("received images >", imageList);
+        setImage(imageList);
+        for (var i = 0; i < image.length; i++) {
+          setImage({
+            images: [
+              {
+                uri: image[i].path,
+                width: image[i].width,
+                height: image[i].height,
+                mime: image[i].mime,
+              },
+            ],
+          });
+        }
       })
-      .catch((e) => console.log("tag", e));
+      .catch((e) => console.log("195 error: ", e));
+  };
+
+  const uploadPhoto2 = async (path) => {
+    try {
+      const b64 = await ReactNativeBlobUtil.fs.readFile(path, "base64");
+      console.log("69 typeOf: ", typeof b64);
+      const dataPhoto = "data:image/png;base64," + b64;
+
+      //console.log("69 dataPhoto: ", dataPhoto, "6912345");
+
+      const result = dataPhoto;
+
+      // setState({
+      //   ...imagesState,
+      //   [stringType]: data.uri,
+      //   [stringType + "_base64"]: dataPhoto,
+      // });
+
+      return result;
+    } catch (error) {
+      console.log("69 error", error, " error 69");
+    }
   };
 
   useEffect(() => {
@@ -240,14 +318,14 @@ const ProfileEdit = (props) => {
             <View>
               <Icon
                 name="camera"
-                size={22}
+                size={33}
                 color={colors.primary}
                 enableRTL={true}
               />
             </View>
           </TouchableOpacity>
           <View>
-            <Image source={{ uri: `${user.pict}` }} style={styles.thumb} />
+            <Image source={{ uri: `${imageProfile}` }} style={styles.thumb} />
           </View>
 
           {/* <View style={styles.contentTitle}>
@@ -280,7 +358,7 @@ const ProfileEdit = (props) => {
             value={name}
             selectionColor={colors.primary}
           />
-          <View style={styles.contentTitle}>
+          {/* <View style={styles.contentTitle}>
             <Text headline semibold>
               {t("email")}
             </Text>
@@ -295,8 +373,8 @@ const ProfileEdit = (props) => {
             placeholderTextColor={BaseColor.grayColor}
             value={user.user}
             // value={emailuser}
-          />
-          <View style={styles.contentTitle}>
+          /> */}
+          <View style={[styles.contentTitle, { marginTop: 15 }]}>
             <Text headline semibold>
               {t("Handphone")}
             </Text>
@@ -310,6 +388,7 @@ const ProfileEdit = (props) => {
             placeholderTextColor={BaseColor.grayColor}
             value={phone}
             selectionColor={colors.primary}
+            keyboardType="numeric" // This will show the numeric keyboard
           />
         </View>
       </ScrollView>

@@ -6,14 +6,14 @@ import {
   ProfileGridSmall,
   FilterESort,
   Header,
-} from '@components';
-import Icon from '@components/Icon';
-import LabelUpper2Row from '@components/Label/Upper2Row';
-import {BaseColor, Images, useTheme} from '@config';
-import {FLinks} from '@data';
-import {useNavigation} from '@react-navigation/core';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+} from "@components";
+import Icon from "@components/Icon";
+import LabelUpper2Row from "@components/Label/Upper2Row";
+import { BaseColor, Images, useTheme } from "@config";
+import { FLinks } from "@data";
+import { useNavigation } from "@react-navigation/core";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ScrollView,
   View,
@@ -24,45 +24,45 @@ import {
   // Modal,
   TouchableOpacity,
   Dimensions,
-} from 'react-native';
+} from "react-native";
 // import { Checkbox } from '@react-native-community/checkbox';
-import CheckBox from '@react-native-community/checkbox';
-import {Button, ProfileGroup} from '../../components';
-import axios from 'axios';
-import {EFilterColors, EFilterSizes, FRecentTransactions} from '@data';
-import ModalProduct from './ModalProduct';
+import CheckBox from "@react-native-community/checkbox";
+import { Button, ProfileGroup } from "../../components";
+import axios from "axios";
+import { EFilterColors, EFilterSizes, FRecentTransactions } from "@data";
+import ModalProduct from "./ModalProduct";
 
 // or any pure javascript modules available in npm
-import {Card} from 'react-native-paper';
-import styles from './styles';
-import Modal from 'react-native-modal';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
+import { Card } from "react-native-paper";
+import styles from "./styles";
+import Modal from "react-native-modal";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
 
-import {EPostListData, ESortOption} from '@data';
-import * as Utils from '@utils';
+import { EPostListData, ESortOption } from "@data";
+import * as Utils from "@utils";
 
-import {API_URL_LOKAL} from '@env';
+import { API_URL_LOKAL } from "@env";
 
 const dataProduk = [
-  {id: 1, txt: 'first check', isChecked: false},
-  {id: 2, txt: 'second check', isChecked: false},
-  {id: 3, txt: 'third check', isChecked: false},
-  {id: 4, txt: 'fourth check', isChecked: false},
-  {id: 5, txt: 'fifth check', isChecked: false},
-  {id: 6, txt: 'sixth check', isChecked: false},
-  {id: 7, txt: 'seventh check', isChecked: false},
+  { id: 1, txt: "first check", isChecked: false },
+  { id: 2, txt: "second check", isChecked: false },
+  { id: 3, txt: "third check", isChecked: false },
+  { id: 4, txt: "fourth check", isChecked: false },
+  { id: 5, txt: "fifth check", isChecked: false },
+  { id: 6, txt: "sixth check", isChecked: false },
+  { id: 7, txt: "seventh check", isChecked: false },
 ];
 
-export default ChooseEditPartner = props => {
-  const {navigation, route} = props;
+export default ChooseEditPartner = (props) => {
+  const { navigation, route } = props;
   // const {params} = props;
-  console.log('routes from bookinglistdetail', route.params);
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+  console.log("routes from bookinglistdetail", route.params);
+  const { colors } = useTheme();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(true);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   // const navigation = useNavigation();
   // const [params, setParams] = useState(route?.params);
@@ -88,12 +88,12 @@ export default ChooseEditPartner = props => {
   const [errorSubmit, setErrorSubmit] = useState(false);
 
   const [modalAlertVisible, showModalAlert] = useState(false);
-  const deviceWidth = Dimensions.get('window').width;
+  const deviceWidth = Dimensions.get("window").width;
 
   const [list, setList] = useState(EPostListData);
 
-  const chooseCoba = item => {
-    console.log('item partner details', item);
+  const chooseCoba = (item) => {
+    console.log("item partner details", item);
     // setCeklis(true);
 
     setPartnerDetail(item);
@@ -105,10 +105,12 @@ export default ChooseEditPartner = props => {
       const reservation_no = route.params.reservation_no;
 
       const res = await axios.get(
-        API_URL_LOKAL + `/facility/book/edit/getstaffs/` + reservation_no,
+        API_URL_LOKAL +
+          `/modules/facilities/available-partner-by-reservation/` +
+          reservation_no
       );
       if (res) {
-        console.log('res post get partners edit', res);
+        console.log("res post get partners edit", res);
         const resPartner = res.data.Data;
         setPartner(resPartner); //akan ditambah ischecklis
         setPartnerItems(resPartner);
@@ -116,7 +118,7 @@ export default ChooseEditPartner = props => {
       }
       return res;
     } catch (err) {
-      console.log('error', err.response);
+      console.log("error", err.response);
     }
   };
 
@@ -124,30 +126,32 @@ export default ChooseEditPartner = props => {
     getPartners();
   }, []);
 
-  const renderFlatListPartner = renderData => {
-    console.log('render data params', renderData);
+  const renderFlatListPartner = (renderData) => {
+    console.log("render data params", renderData);
     return (
       <FlatList
         data={renderData}
         // keyExtractor={(item, index) => item.ro}
-        renderItem={({item, key}) => (
-          <Card style={{margin: 5}} key={key}>
+        renderItem={({ item, key }) => (
+          <Card style={{ margin: 5 }} key={key}>
             <View
               style={{
                 padding: 10,
                 margin: 5,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
-              key={key}>
+              key={key}
+            >
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   flex: 1,
-                  justifyContent: 'space-between',
-                }}>
+                  justifyContent: "space-between",
+                }}
+              >
                 <CheckBox
-                  style={{justifyContent: 'center', alignSelf: 'center'}}
+                  style={{ justifyContent: "center", alignSelf: "center" }}
                   value={item.isChecked}
                   onChange={() => {
                     handleChangePartner(item.rowID);
@@ -159,13 +163,13 @@ export default ChooseEditPartner = props => {
                 />
                 <TouchableOpacity onPress={() => chooseCoba(item)}>
                   <Image
-                    source={{uri: item.url_picture}}
-                    style={{width: 60, height: 60, borderRadius: 50}}
+                    source={{ uri: item.url_picture }}
+                    style={{ width: 60, height: 60, borderRadius: 50 }}
                   />
-                  <Text style={{textAlign: 'center'}}>
+                  <Text style={{ textAlign: "center" }}>
                     {item.staff_first_name} {item.staff_last_name}
                   </Text>
-                  <Text style={{textAlign: 'center', fontWeight: 'bold'}}>
+                  <Text style={{ textAlign: "center", fontWeight: "bold" }}>
                     {item.position}
                   </Text>
                 </TouchableOpacity>
@@ -178,17 +182,17 @@ export default ChooseEditPartner = props => {
     );
   };
 
-  const handleChangePartner = rowID => {
+  const handleChangePartner = (rowID) => {
     // console.log('row id partner', rowID);
-    console.log('coba partner disini array apa ga', partners);
-    let temp = partners.map(partners => {
+    console.log("coba partner disini array apa ga", partners);
+    let temp = partners.map((partners) => {
       if (rowID === partners.rowID) {
-        return {...partners, isChecked: !partners.isChecked};
+        return { ...partners, isChecked: !partners.isChecked };
       }
       return partners;
       //   console.log('partner choose', partners);
     });
-    console.log('handlechange partner', temp);
+    console.log("handlechange partner", temp);
     setPartner(temp);
   };
 
@@ -198,44 +202,44 @@ export default ChooseEditPartner = props => {
     // choosedPartnerBefore();
   }, []);
 
-  const choosedPartnerBefore = index => {
+  const choosedPartnerBefore = (index) => {
     // console.log('row id partner', rowID);
 
     const choosed = route.params.datapartner_choosed;
-    console.log('choosed for rowid', choosed);
+    console.log("choosed for rowid", choosed);
     // console.log('partners.rowID', partners[0].staff_id);s
     // console.log('choosed.rowID', choosed.rowID);
 
-    let temp = choosed?.map(choosed => {
-      if (choosed.isChecked == '1' || choosed.staff_id == partners.staff_id) {
+    let temp = choosed?.map((choosed) => {
+      if (choosed.isChecked == "1" || choosed.staff_id == partners.staff_id) {
         let isChecked__ = true;
-        return {...partners, isChecked: isChecked__}; //true
+        return { ...partners, isChecked: isChecked__ }; //true
       }
       return partners;
       //   console.log('partner choose', partners);
     });
 
-    console.log('choosed partner before', temp);
+    console.log("choosed partner before", temp);
     // setChoosedPartner(temp);
     setPartner(temp);
   };
 
   let selectedpartner = partners.filter(
-    partners => partners.isChecked,
-    partners.staff_first_name,
+    (partners) => partners.isChecked,
+    partners.staff_first_name
   );
 
   const bookFacility = async () => {
     try {
       const reservation_no = route.params;
       const audit_user = users.UserId;
-      console.log('audit_user', audit_user);
+      console.log("audit_user", audit_user);
       const dataselected_partner = selectedpartner
         .filter(function (item) {
           return item.rowID;
         })
-        .map(function ({staff_first_name, staff_last_name, staff_id}) {
-          return {staff_first_name, staff_last_name, staff_id};
+        .map(function ({ staff_first_name, staff_last_name, staff_id }) {
+          return { staff_first_name, staff_last_name, staff_id };
         });
 
       const data = {
@@ -244,22 +248,22 @@ export default ChooseEditPartner = props => {
         datapartner: dataselected_partner,
       };
       const res = await axios.post(
-        API_URL_LOKAL + '/facility/book/edit/staff',
-        data,
+        API_URL_LOKAL + "/modules/facilities/update-reservation-partner",
+        data
       );
       if (res) {
-        console.log('res post', res);
+        console.log("res post", res);
       }
       return res;
     } catch (err) {
-      console.log('error', err.response);
+      console.log("error", err.response);
     }
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header
-        title={t('Booking List Detail')}
+        title={t("Booking List Detail")}
         renderLeft={() => {
           return (
             <Icon
@@ -274,17 +278,18 @@ export default ChooseEditPartner = props => {
           navigation.goBack();
         }}
       />
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{paddingHorizontal: 20}}>
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+        >
           {/* <View>{renderFilterPartner(partners)}</View> */}
-          <View style={{paddingVertical: 20}}>
+          <View style={{ paddingVertical: 20 }}>
             <Text>Choose Partners</Text>
           </View>
           <ScrollView>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               {/* // coba dulu height nya 100%, kayak gimana */}
               {renderFlatListPartner(partners)}
             </View>
@@ -301,8 +306,9 @@ export default ChooseEditPartner = props => {
         }}
         onPress={() => {
           bookFacility();
-        }}>
-        <Text style={{textAlign: 'center'}}>{t('Book Facility')}</Text>
+        }}
+      >
+        <Text style={{ textAlign: "center" }}>{t("Book Facility")}</Text>
       </Button>
       <ScrollView>
         <ModalProduct

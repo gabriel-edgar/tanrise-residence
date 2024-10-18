@@ -7,6 +7,7 @@ import {
   Image as RNImage,
   ImageBackground,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import styles from "./styles";
 import Loading from "./Loading";
@@ -72,7 +73,8 @@ const ButtonMenuHome = (props) => {
             // alignItems: 'center',
             // alignContent: 'center',
             // alignSelf: 'center',
-            fontSize: 11.5,
+            fontSize: 11.1, //(Platform.OS = "ios" ? 11.1 : 11.5),
+            color: "black", //BaseColor.corn70,
           },
         ]}
         numberOfLines={2}
@@ -85,7 +87,7 @@ const ButtonMenuHome = (props) => {
 
 ButtonMenuHome.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  image: PropTypes.node.isRequired,
+  //image: PropTypes.node.isRequired,
   date: PropTypes.string,
   title: PropTypes.string,
   nameicon: PropTypes.string,
@@ -95,7 +97,7 @@ ButtonMenuHome.propTypes = {
 
 ButtonMenuHome.defaultProps = {
   style: {},
-  image: Images.antasari,
+  //image: Images.antasari,
   date: "",
   title: "",
   title: "",

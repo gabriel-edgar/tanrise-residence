@@ -10,52 +10,52 @@ import {
   // CheckBox,
   PlaceholderLine,
   Placeholder,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox} from 'react-native-elements';
-import {FFriends} from '@data';
-import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import {SceneMap} from 'react-native-tab-view';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import {API_URL} from '@env';
-import styles from './styles';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox } from "react-native-elements";
+import { FFriends } from "@data";
+import { useNavigation } from "@react-navigation/native";
+import { haveChildren } from "@utils";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import { SceneMap } from "react-native-tab-view";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import { API_URL } from "@env";
+import styles from "./styles";
 
-import ModalDropdown_debtor from '@components/ModalDropdown_debtor';
-import ModalDropdown_lotno from '@components/ModalDropdown_lotno';
+import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
 
 const sortOptionInit = [
   {
-    value: 'remove',
-    icon: 'sort-amount-up',
-    text: 'remove',
+    value: "remove",
+    icon: "sort-amount-up",
+    text: "remove",
   },
   {
-    value: 'share_this_article',
-    icon: 'sort-amount-down',
-    text: 'share_this_article',
+    value: "share_this_article",
+    icon: "sort-amount-down",
+    text: "share_this_article",
   },
   {
-    value: 'view_detail',
-    icon: 'sort-amount-up',
-    text: 'view_detail',
+    value: "view_detail",
+    icon: "sort-amount-up",
+    text: "view_detail",
   },
   {
-    value: 'reset_all',
-    icon: 'sort-amount-up',
-    text: 'reset_all',
+    value: "reset_all",
+    icon: "sort-amount-up",
+    text: "reset_all",
   },
 ];
 
 const Friends = () => {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [friends, setFriends] = useState(FFriends);
   const navigation = useNavigation();
 
@@ -75,11 +75,11 @@ const Friends = () => {
   //   };
 
   const onSend = () => {
-    navigation.navigate('FSendMoney');
+    navigation.navigate("FSendMoney");
   };
 
   return (
-    <View style={{flex: 1, paddingHorizontal: 20}}>
+    <View style={{ flex: 1, paddingHorizontal: 20 }}>
       {/* <View
         style={{
           paddingTop: 15,
@@ -100,15 +100,15 @@ const Friends = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         data={friends}
-        keyExtractor={item => item.id}
-        renderItem={({item, index}) => (
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
           <ListTextButton
             image={item.image}
             name={item.name}
             description={item.total}
             componentRight={
               <Tag
-                onPress={e => {
+                onPress={(e) => {
                   e.stopPropagation();
                   onSend(item);
                 }}
@@ -116,8 +116,9 @@ const Friends = () => {
                 style={{
                   paddingHorizontal: 20,
                   backgroundColor: colors.background,
-                }}>
-                {`${t('send')}`}
+                }}
+              >
+                {`${t("send")}`}
               </Tag>
             }
           />
@@ -127,62 +128,62 @@ const Friends = () => {
   );
 };
 
-const SpecHelp = props => {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+const SpecHelp = (props) => {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [dataSpec, setdataSpec] = useState([]);
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [urlApi, seturlApi] = useState(API_URL);
   const [checkedEntity, setCheckedEntity] = useState(false);
   const [dataDebtor, setDataDebtor] = useState([]);
-  const [entity, setEntity] = useState('');
-  const [project_no, setProjectNo] = useState('');
-  const [db_profile, setDb_Profile] = useState('');
+  const [entity, setEntity] = useState("");
+  const [project_no, setProjectNo] = useState("");
+  const [db_profile, setDb_Profile] = useState("");
   const [spinner, setSpinner] = useState(true);
 
   const [sortOption, setSortOption] = useState(sortOptionInit);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [debtor, setDebtor] = useState('');
-  const [textDebtor, settextDebtor] = useState('');
-  const [textNameDebtor, settextNameDebtor] = useState('');
+  const [debtor, setDebtor] = useState("");
+  const [textDebtor, settextDebtor] = useState("");
+  const [textNameDebtor, settextNameDebtor] = useState("");
   const [dataLotno, setDataLotno] = useState([]);
-  const [textLot, setLotno] = useState('');
+  const [textLot, setLotno] = useState("");
   const [reportName, setreportName] = useState(users.name);
 
   //-----FOR GET ENTITY & PROJJECT
   const getTower = async () => {
     const data = {
       email: email,
-      app: 'O',
+      app: "O",
     };
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
         // token: "",
       },
     };
 
     await axios
       .get(
-        `http://apps.pakubuwono-residence.com/apiwebpbi/api/getData/mysql/${data.email}/${data.app}`,
+        `http://apps.pakubuwono-residence.com/apiwebpbi/api/home/common-project/mysql/${data.email}/${data.app}`,
         {
           config,
-        },
+        }
       )
-      .then(res => {
+      .then((res) => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
-        arrDataTower.map(dat => {
+        arrDataTower.map((dat) => {
           if (dat) {
             setdataTowerUser(dat);
           }
@@ -191,39 +192,39 @@ const SpecHelp = props => {
         setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get tower api", error);
+        alert("error get");
       });
   };
 
   //-----FOR GET DEBTOR
-  const getDebtor = async data => {
-    console.log('data for debtor', data);
+  const getDebtor = async (data) => {
+    console.log("data for debtor", data);
 
     const params =
-      '?' +
-      'entity_cd=' +
+      "?" +
+      "entity_cd=" +
       data.entity_cd +
-      '&' +
-      'project_no=' +
+      "&" +
+      "project_no=" +
       data.project_no +
-      '&' +
-      'email=' +
+      "&" +
+      "email=" +
       email;
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
     await axios
-      .post(urlApi + '/csentry-getDebtor' + params, {
+      .post(urlApi + "/modules/cs/debtor" + params, {
         config,
       })
-      .then(res => {
+      .then((res) => {
         // console.log('res', res);
         const datas = res.data;
         const dataDebtors = datas.Data;
@@ -231,9 +232,9 @@ const SpecHelp = props => {
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error.response);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get tower api", error.response);
+        alert("error get");
       });
   };
 
@@ -254,14 +255,14 @@ const SpecHelp = props => {
     getDebtor(data);
   };
 
-  const onSelectFilter = selected => {
+  const onSelectFilter = (selected) => {
     setSortOption(
-      sortOption.map(item => {
+      sortOption.map((item) => {
         return {
           ...item,
           checked: item.value == selected.value,
         };
-      }),
+      })
     );
   };
 
@@ -278,11 +279,11 @@ const SpecHelp = props => {
     }
   };
 
-  const handleChangeModal = data => {
-    data.data.map(dat => {
+  const handleChangeModal = (data) => {
+    data.data.map((dat) => {
       if (dat) {
         setDebtor(dat.debtor_acct);
-        settextDebtor(dat.debtor_acct + ' - ' + dat.name);
+        settextDebtor(dat.debtor_acct + " - " + dat.name);
         settextNameDebtor(dat.name);
         getLot(dat.debtor_acct);
       }
@@ -290,7 +291,7 @@ const SpecHelp = props => {
     setSpinner(false);
   };
 
-  const getLot = async data => {
+  const getLot = async (data) => {
     // const params =
     //   '?' +
     //   'entity=' +
@@ -301,7 +302,7 @@ const SpecHelp = props => {
     //   '&' +
     //   'email=' +
     //   email;
-    console.log('params lotno', params);
+    console.log("params lotno", params);
     const params = {
       entity_cd: entity,
       project_no: project_no,
@@ -309,54 +310,54 @@ const SpecHelp = props => {
     };
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
 
     await axios
-      .post(urlApi + '/csentry-getLotno', params, {
+      .post(urlApi + "/modules/cs/lot-no", params, {
         config,
       })
-      .then(res => {
+      .then((res) => {
         const datas = res.data;
         const dataLotno = datas.Data;
         setDataLotno(dataLotno);
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error.response);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get tower api", error.response);
+        alert("error get");
       });
   };
 
-  const handleLotChange = lot => {
-    console.log('lot', lot);
+  const handleLotChange = (lot) => {
+    console.log("lot", lot);
     setLotno(lot);
     // this.setState({textLot: lot});
     getFloor(lot);
   };
 
-  const getFloor = lot => {
-    console.log('lot floor', lot);
+  const getFloor = (lot) => {
+    console.log("lot floor", lot);
   };
 
   return (
     <View style={styles.wrap}>
       <Text title2>Ticket</Text>
-      <Text headline style={{fontWeight: 'normal'}}>
+      <Text headline style={{ fontWeight: "normal" }}>
         Specification Help Desk
       </Text>
-      <View style={[styles.subWrap, {paddingBottom: 0, marginBottom: 10}]}>
+      <View style={[styles.subWrap, { paddingBottom: 0, marginBottom: 10 }]}>
         <View>
-          <Text style={{color: '#3f3b38', fontSize: 14}}>Choose Project</Text>
+          <Text style={{ color: "#3f3b38", fontSize: 14 }}>Choose Project</Text>
           {spinner ? (
             <View>
               {/* <Spinner visible={this.state.spinner} /> */}
-              <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
-                <PlaceholderLine width={100} noMargin style={{height: 40}} />
+              <Placeholder style={{ marginVertical: 4, paddingHorizontal: 10 }}>
+                <PlaceholderLine width={100} noMargin style={{ height: 40 }} />
               </Placeholder>
             </View>
           ) : (
@@ -375,31 +376,32 @@ const SpecHelp = props => {
       </View>
       {checkedEntity === false ? null : (
         <View>
-          <View style={{marginBottom: 5, paddingBottom: 0, marginTop: 5}}>
+          <View style={{ marginBottom: 5, paddingBottom: 0, marginTop: 5 }}>
             <ModalDropdown_debtor
               label="Debtor"
               data={dataDebtor}
-              onChange={() => handleChangeModal({data: dataDebtor})}
+              onChange={() => handleChangeModal({ data: dataDebtor })}
               value={textDebtor}
-              style={{marginBottom: 0, paddingBottom: 0}}
+              style={{ marginBottom: 0, paddingBottom: 0 }}
             />
           </View>
 
           <Text
             style={{
-              color: '#3f3b38',
+              color: "#3f3b38",
               fontSize: 14,
               marginBottom: 0,
               paddingBottom: 0,
               marginTop: 0,
               paddingTop: 0,
-            }}>
+            }}
+          >
             Username
           </Text>
           <TextInput
             editable={false} //wajib true kalo mau di klik-klik / di isi manual
             value={textNameDebtor} //dari nama debtor
-            onChangeText={text => settextNameDebtor(text)}
+            onChangeText={(text) => settextNameDebtor(text)}
             style={{
               marginBottom: 0,
               paddingBottom: 0,
@@ -408,31 +410,32 @@ const SpecHelp = props => {
             }}
           />
 
-          <View style={{marginTop: 15}}>
+          <View style={{ marginTop: 15 }}>
             <ModalDropdown_lotno
               label="Lot No"
               data={dataLotno}
-              onChange={option => handleLotChange(option.lot_no)}
+              onChange={(option) => handleLotChange(option.lot_no)}
               value={textLot}
             />
           </View>
 
           <Text
             style={{
-              color: '#3f3b38',
+              color: "#3f3b38",
               fontSize: 14,
               marginBottom: 0,
               paddingBottom: 0,
               marginTop: 0,
               paddingTop: 0,
-            }}>
+            }}
+          >
             Report No
           </Text>
           <TextInput
             label="Reported By"
             editable={true}
             value={reportName}
-            onChangeText={text => setreportName(text)}
+            onChangeText={(text) => setreportName(text)}
           />
         </View>
       )}
@@ -441,15 +444,15 @@ const SpecHelp = props => {
 };
 
 export default function Helpdesk() {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [loading, setLoading] = useState('');
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [loading, setLoading] = useState("");
   const navigation = useNavigation();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'newticket', title: 'New Ticket'},
-    {key: 'status', title: 'Status'},
+    { key: "newticket", title: "New Ticket" },
+    { key: "status", title: "Status" },
   ]);
   const renderScene = SceneMap({
     newticket: SpecHelp,
@@ -459,10 +462,11 @@ export default function Helpdesk() {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
         // title={t('choose_friend')}
-        title={t('helpdesk')} //belum ada lang translatenya
+        title={t("helpdesk")} //belum ada lang translatenya
         renderLeft={() => {
           return (
             <Icon
@@ -478,7 +482,7 @@ export default function Helpdesk() {
         }}
       />
       <TabSlider
-        navigationState={{index, routes}}
+        navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
       />

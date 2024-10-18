@@ -3,10 +3,12 @@ import { setAuthStorage } from "../config/Storage";
 import httpClient from "./HttpClient";
 import ReactNativeBlobUtil from "react-native-blob-util";
 import { API_URL_LOKAL as API_URL_LOKAL } from "@env";
+import { Alert, Platform } from "react-native";
+import { store, persist } from "../store";
 
 class UserController {
   constructor() {
-    // this.basePath = '/login_mobile';
+    // this.basePath = '/auth/login';
     this.basePath = API_URL_LOKAL;
   }
 
@@ -25,38 +27,59 @@ class UserController {
       console.log("25 try controller login begin");
       console.log("API: " + API_URL_LOKAL);
       const result = await httpClient.request({
-        url: "/login_mobile",
+        url: "/auth/login",
         method: "POST",
         data: {
           email,
           password,
-          token: "",
-          device: "ios",
+          device: Platform.OS,
           mac: "mac",
           token_firebase: token_firebase,
+          apps_type: "S",
         },
       });
       // alert(result.Pesan);
-      console.log("39 after try");
-      console.log("31 login response -->", result);
+      console.log("25 after try: ", JSON.stringify(result));
+      //console.log("25 login response -->", result.data.data.userData);
       // ini ada isreset dalemnya, sementara dihilangin, buat biar ga nyangkut insert token firebase
-      if (result.Error) {
-        console.log("34 first pesan", result.Pesan);
-        return Promise.reject(result.Pesan);
+      // if (result.Error) {
+      //   console.log("34 first pesan", result.Pesan);
+      //   return Promise.reject(result.Pesan);
+      // } else {
+      //   console.log("37 if succes", result);
+      //   return result;
+      // }
+
+      if (result.data.success == false) {
+        Platform.OS == "android"
+          ? Alert.alert("Sorry! ", JSON.stringify(result.data.message))
+          : alert(JSON.stringify(result.data.message)); //Alert.prompt("Sorry!", msgPesan);
       } else {
-        console.log("37 if succes", result);
-        return result;
+        //Alert("55 success", result.message);
+        return result.data;
       }
     } catch (error) {
-      console.log("41 if errorz", error);
-      return Promise.reject(error);
+      console.log("25 if errorz: ", error.response.data.message);
+      //Alert(error.response.data.message);
+      Platform.OS == "android"
+        ? Alert.alert("Sorry! ", JSON.stringify(error.response.data.message))
+        : alert(JSON.stringify(error.response.data.message));
+      //return Promise.reject(error);
+
+      if (error.response) {
+        // Request made and server responded with a status code
+        // that falls out of the range of 2xx
+        console.log("64 Error Status:", error.response.status); // 404
+        console.log("64 Error Data:", error.response.data); // Response data if available
+        console.log("64 Error Headers:", error.response.headers); // Response headers if available
+      }
     }
   };
 
   resetPassword = async (conPass, newPass, email) => {
     try {
       const result = await httpClient.request({
-        url: `${this.basePath}/Resetpass`,
+        url: `${this.basePath}/auth/reset-pass`,
 
         method: "POST",
         data: {
@@ -71,29 +94,33 @@ class UserController {
     }
   };
 
-  logout = () => {
+  logout = async (email) => {
+    console.log("102 run res: ");
+    const stateStore = store.getState();
+    const accessToken = stateStore.user.accessToken;
     try {
-      //  const result = await httpClient.request({
-      //    url: '/login_mobile',
-      //    method: 'POST',
-      //    data: {
-      //      email,
-      //      password,
-      //      token: '',
-      //      device: 'ios',
-      //      mac: 'mac',
-      //      token_firebase,
-      //    },
-      //  });
-      //  // alert(result.Pesan);
-
-      //  if (result.Error) {
-      //    return Promise.reject(result.Pesan);
-      //  } else {
-      //    return result;
-      //  }
+      const result = await httpClient.request({
+        url: API_URL_LOKAL + `/auth/logout`,
+        method: "POST",
+        data: {
+          email: email,
+          apps_type: "S",
+          device: "ios",
+          token: accessToken,
+          // name: data.name,
+          // hp: data.phone,
+          //gender: data.gender,
+          // device: "ios",
+          // mac: "mac",
+          // token_firebase: token_firebase,
+          // apps_type: "S",
+        },
+      });
+      console.log("102 res: ", result);
       console.log("logout");
+      return "success";
     } catch (error) {
+      console.log("102 error: ", error.response.data.message);
       return Promise.reject(error);
     }
   };
@@ -104,14 +131,13 @@ class UserController {
     console.log("save profile daata controler", data);
     try {
       const result = await httpClient.request({
-        url: API_URL_LOKAL + `/changeprofile_mobile`,
-
+        url: API_URL_LOKAL + `/auth/change-profile`,
         method: "POST",
         data: {
-          email: data.emails,
+          email: data.email,
           name: data.name,
           hp: data.phone,
-          gender: data.genders,
+          //gender: data.gender,
         },
       });
       return result;
@@ -122,24 +148,21 @@ class UserController {
 
   saveFotoProfil = async (data) => {
     console.log("data akan save foto profil", data);
-    console.log("isi images", data.image[0].uri);
-    let fileName = "profile.png";
-    let fileImg = ReactNativeBlobUtil.wrap(
-      data.image[0].uri.replace("file://", "")
-    );
+    //console.log("isi images", data.image[0].uri);
+    // let fileName = "profile.png";
+    // let fileImg = ReactNativeBlobUtil.wrap(
+    //   data.image[0].uri.replace("file://", "")
+    // );
     // const b64 = fileImg.base64;
-    const b64 = await ReactNativeBlobUtil.fs.readFile(
-      data.image[0].uri,
-      "base64"
-    );
-    console.log("fileimg", fileImg);
+    const b64 = await ReactNativeBlobUtil.fs.readFile(data.uri, "base64");
+    // console.log("fileimg", fileImg);
     // console.log('yeyeyelalala', b64);
 
     // const data_tes = [{email: data.email, dataPhoto: b64}];
     // console.log('daata_tes', data_tes);
     // ReactNativeBlobUtil.fetch(
     //   'POST',
-    //   'http://apps.pakubuwono-residence.com/apiwebpbi/api/changephoto_mobile',
+    //   'http://apps.pakubuwono-residence.com/apiwebpbi/api/auth/change-photo',
     //   {
     //     'Content-Type': 'application/octet-stream',
     //     // Token: this.state.token,
@@ -157,8 +180,8 @@ class UserController {
     // console.log('save foto profil data controler', data);
     try {
       const result = await httpClient.request({
-        url: API_URL_LOKAL + `/changephoto_mobile`,
-        // url: `/changephoto_mobile`,
+        url: API_URL_LOKAL + `/auth/change-photo`,
+        // url: `/auth/change-photo`,
         method: "POST",
         data: {
           dataPhoto: "data:image/png;base64," + b64,

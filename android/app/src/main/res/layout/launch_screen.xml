@@ -9,7 +9,7 @@
         android:id="@+id/image_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/logoifca"
+        android:src="@drawable/logo_tanrise_blackfont"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:layout_centerInParent="true"

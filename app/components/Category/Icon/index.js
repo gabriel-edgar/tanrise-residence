@@ -20,30 +20,46 @@ export default function CategoryIcon(props) {
     <TouchableOpacity
       style={[
         styles.contain,
-        { backgroundColor: colors.backgroundColor },
+        {
+          backgroundColor: colors.backgroundColor,
+          //backgroundColor: "blue",
+          flex: 1,
+          justifyContent: "space-between",
+        },
         style,
       ]}
       onPress={onPress}
       activeOpacity={0.9}
     >
-      <View style={[styles.iconContent, { backgroundColor: colors.primary }]}>
-        <Icon
-          name={icon}
-          size={32}
-          color={
-            "white" //BaseColor.goldColor
-          }
-          solid
-        />
+      <View style={{ flexDirection: "row" }}>
+        <View style={[styles.iconContent, { backgroundColor: colors.primary }]}>
+          <Icon
+            name={icon}
+            size={32}
+            color={
+              "white" //BaseColor.goldColor
+            }
+            solid
+          />
+        </View>
+        <View style={{ padding: 10 }}>
+          <Text headline semibold>
+            {title}
+          </Text>
+          <Text footnote semibold grayColor style={{ marginTop: 5 }}>
+            {subtitle}
+          </Text>
+        </View>
       </View>
-      <View style={{ padding: 10 }}>
-        <Text headline semibold>
-          {title}
-        </Text>
-        <Text footnote semibold grayColor style={{ marginTop: 5 }}>
-          {subtitle}
-        </Text>
-      </View>
+      <Icon
+        name="arrow-right"
+        size={25}
+        style={{
+          flexDirection: "row",
+          marginRight: 20,
+          color: colors.primary,
+        }}
+      ></Icon>
     </TouchableOpacity>
   );
 }

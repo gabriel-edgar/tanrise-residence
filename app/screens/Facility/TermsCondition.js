@@ -4,11 +4,11 @@ import {
   ListThumbCircleNotif,
   SafeAreaView,
   Text,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
 // Load sample data
-import {NotificationData} from '@data';
-import React, {useState, useEffect} from 'react';
+import { NotificationData } from "@data";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -16,22 +16,22 @@ import {
   View,
   StyleSheet,
   Dimensions,
-} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import Pdf from 'react-native-pdf';
-import {API_URL_LOKAL} from '@env';
+} from "react-native";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import Pdf from "react-native-pdf";
+import { API_URL_LOKAL } from "@env";
 
-const TermsConditions = props => {
-  const {navigation, route} = props;
-  console.log('props params', route.params);
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+const TermsConditions = (props) => {
+  const { navigation, route } = props;
+  console.log("props params", route.params);
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(NotificationData);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [loading, setLoading] = useState(true);
 
@@ -45,12 +45,12 @@ const TermsConditions = props => {
 
     const response = await axios(
       API_URL_LOKAL +
-        '/fb_master-getFacilityTermsAndConditions/' +
+        "/modules/facilities/facility-tnc/" +
         entity_cd +
-        '/' +
-        project_no,
+        "/" +
+        project_no
     );
-    console.log('response terms data: ', response.data);
+    console.log("response terms data: ", response.data);
     setData(response.data.Data);
     setSpinner(false);
   };
@@ -63,9 +63,10 @@ const TermsConditions = props => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('terms_conditions')}
+        title={t("terms_conditions")}
         renderLeft={() => {
           return (
             <Icon
@@ -93,10 +94,10 @@ const TermsConditions = props => {
             onPageChanged={(page, numberOfPages) => {
               console.log(`Current page: ${page}`);
             }}
-            onError={error => {
+            onError={(error) => {
               console.log(error);
             }}
-            onPressLink={uri => {
+            onPressLink={(uri) => {
               console.log(`Link pressed: ${uri}`);
             }}
             style={stylesCurrent.pdf}
@@ -112,13 +113,13 @@ export default TermsConditions;
 const stylesCurrent = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     // marginTop: 25,
   },
   pdf: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });

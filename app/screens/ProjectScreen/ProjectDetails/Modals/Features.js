@@ -12,10 +12,12 @@ import styles from "./styles";
 import { ButtonMenuHome } from "@components";
 import { BaseStyle, Fonts, BaseColor } from "@config";
 import dummy_feature from "./dummy_features.json";
+import { useTheme } from "@config";
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
 
 const Features = (props) => {
   const { onPress, datas, visibleMod, icon, ...attrs } = props;
+  const { colors } = useTheme();
   console.log("attrs ?", attrs);
   console.log("datas nya", datas);
   console.log("visiblemodal", visibleMod);
@@ -41,12 +43,12 @@ const Features = (props) => {
     setVisibleModal(false);
   };
   return (
-    <Modal {...attrs} animationType="slide" transparent={false}>
+    <Modal {...attrs} animationType="slide" transparent={true}>
       <View
         style={[
           styles.centeredView,
           {
-            backgroundColor: BaseColor.whiteColor,
+            backgroundColor: colors.background,
             borderTopRightRadius: 25,
             borderTopLeftRadius: 25,
           },
@@ -72,7 +74,7 @@ const Features = (props) => {
               <Text
                 style={{
                   fontFamily: "DMSerifDisplay",
-                  color: BaseColor.corn70,
+                  color: colors.text,
                   fontSize: 16,
                   fontWeight: "bold",
                 }}
@@ -85,7 +87,7 @@ const Features = (props) => {
           {/* <View
             style={{
               borderWidth: 0.3,
-              borderColor: BaseColor.corn70,
+              borderColor: colors.corn70,
               borderStyle: "solid",
             }}
           ></View> */}
@@ -103,9 +105,9 @@ const Features = (props) => {
                       disabled={true}
                       style={{
                         margin: 7,
-                        backgroundColor: BaseColor.whiteColor,
+                        backgroundColor: colors.whiteColor,
                         borderWidth: 0.5,
-                        borderColor: BaseColor.corn30,
+                        borderColor: colors.corn30,
                         borderStyle: 'solid',
                       }}
                       // onPress={() => clik()}
@@ -127,7 +129,7 @@ const Features = (props) => {
                 ignoredStyles={["fontSize", "fontFamily", "color"]}
                 tagsStyles={{
                   em: {
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     fontFamily: "DMSerifDisplay",
                     // fontFamily: Fonts.type.ComicSansMS,
@@ -135,7 +137,7 @@ const Features = (props) => {
                     fontStyle: "normal",
                   },
                   strong: {
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     // fontFamily: "DMSerifDisplay",
                     fontWeight: "600",
@@ -145,7 +147,7 @@ const Features = (props) => {
                     }),
                   },
                   b: {
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     // fontFamily: "DMSerifDisplay",
                     fontWeight: "600",
@@ -156,21 +158,21 @@ const Features = (props) => {
                   },
 
                   a: {
-                    // color: BaseColor.corn70,
+                    // color: colors.corn70,
                     // fontSize: 12,
                     fontFamily: "DMSerifDisplay",
                     // fontFamily: Fonts.type.ComicSansMS,
                     // textAlign: 'justify',
                   },
                   p: {
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     fontFamily: "DMSerifDisplay",
                     // fontFamily: Fonts.type.ComicSansMS,
                     textAlign: "justify",
                   },
                   span: {
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     fontFamily: "DMSerifDisplay",
                     // fontFamily: Fonts.type.ComicSansMS,
@@ -178,7 +180,7 @@ const Features = (props) => {
                   },
                   li: {
                     // color: isDarkMode ? 'blue' : 'red',
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     // fontSize: 12,
                     fontFamily: "DMSerifDisplay",
                   },
@@ -189,7 +191,7 @@ const Features = (props) => {
               //   key={index}
               //   style={{
               //     fontFamily: "DMSerifDisplay",
-              //     color: BaseColor.corn70,
+              //     color: colors.corn70,
               //     fontSize: 12,
               //   }}>
               //   {item.feature_info

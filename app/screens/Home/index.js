@@ -11,7 +11,7 @@ import {
   NewsList,
   SafeAreaView,
   Text,
-  Button,
+  //Button,
   Transaction2Col,
   SearchInput,
   TextInput,
@@ -25,6 +25,7 @@ import {
   useTheme,
   Typography,
   FontWeight,
+  useFont,
 } from "@config";
 import {
   HomeChannelData,
@@ -52,6 +53,8 @@ import {
   Dimensions,
   Pressable,
   PixelRatio,
+  Button,
+  AppState,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ImageZoom from "react-native-image-pan-zoom";
@@ -70,7 +73,16 @@ import numFormat from "../../components/numFormat";
 import { notifikasi_nbadge, actionTypes } from "../../actions/NotifActions";
 import getNotifRed from "../../selectors/NotifSelectors";
 import getProject from "../../selectors/ProjectSelector";
-import { data_project } from "../../actions/ProjectActions";
+import {
+  data_project,
+  data_unit,
+  choosed_unit,
+  choosed_project,
+  action_helpdesk_dot,
+  action_project_dot,
+  action_data_notification,
+  action_data_notification_persist,
+} from "../../actions/ProjectActions";
 import messaging from "@react-native-firebase/messaging";
 import apiCall from "../../config/ApiActionCreator";
 // import {TextInput} from '../../components';
@@ -80,47 +92,92 @@ import ModalSelector from "react-native-modal-selector";
 
 import MasonryList from "@react-native-seoul/masonry-list";
 import { ActivityIndicator } from "react-native-paper";
-import { Platform } from "react-native";
+//import { Platform } from "react-native";
 
 import Modal from "react-native-modal";
-import { color } from "react-native-reanimated";
-import { useFocusEffect } from "@react-navigation/native";
+//import { color } from "react-native-reanimated";
+//import { useFocusEffect } from "@react-navigation/native";
 
 import { fontPixel, pixelSizeVertical } from "./normalize";
 
 import { API_URL_LOKAL } from "@env";
+import httpClient from "../../controllers/HttpClient";
+import ProjectController from "../../controllers/ProjectController";
+import { store, persist } from "../../reducers";
+import { SwiperFlatList } from "react-native-swiper-flatlist";
+const { width } = Dimensions.get("window");
+import { useIsFocused } from "@react-navigation/native";
+import { check_version } from "./functions";
+
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 const Home = (props) => {
-  console.log("hah ini api url dari env??", API_URL_LOKAL);
+  const stateStore = store.getState();
+  //console.log("100 RT:", stateStore.user.refreshToken);
   const { navigation, route } = props;
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const font = useFont();
+  //console.log("106 font: ", font);
+  const [homeMenu, setHomeMenu] = useState([]);
   const [topics, setTopics] = useState(HomeTopicData);
   const [channels, setChannels] = useState(HomeChannelData);
   const [popular, setPopular] = useState(HomePopularData);
   const [list, setList] = useState(HomeListData);
   const [loading, setLoading] = useState(true);
+  const [appState, setAppState] = useState(AppState.currentState);
   const user = useSelector((state) => getUser(state));
+  //console.log("119 user: ", user);
+  const stateRedux = useSelector((state) => state.user);
+  const stateReduxDataProject = useSelector(
+    (state) => state.Dataproject.Dataproject
+  );
+  const stateReduxDataUnit = useSelector(
+    (state) => state.Dataproject.dataUnit //.Dataproject.Dataproject
+  );
+  const stateReduxChoosedUnit = useSelector(
+    (state) => state.Dataproject.choosedUnit
+  );
+  const stateReduxChoosedProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+  const stateReduxHelpdeskDot = useSelector(
+    (state) => state.Dataproject.helpdesk_dot
+  );
+  const stateReduxProjectDot = useSelector(
+    (state) => state.Dataproject.project_dot
+  );
+  const stateReduxNotificationData = useSelector(
+    (state) => state.Dataproject.notificationData
+  );
+  //console.log("142 stateReduxNotificationData: ", stateReduxNotificationData);
+  ////console.log("142 stateReduxHelpdeskDot: ", stateReduxHelpdeskDot);
+  ////console.log("142 stateReduxProjectDot: ", stateReduxProjectDot);
+  ////console.log("108 stateReduxOri: ", stateReduxOri);
+  // //console.log("123 stateReduxDataUnit: ", stateReduxDataUnit);
+  ////console.log("131 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
+  console.log("159 project: ", stateReduxChoosedProject);
+  // //console.log("109 stateRedux.accessToken: ", stateRedux.accessToken);
+  const [token, setToken] = useState(stateRedux.accessToken);
   const notif = useSelector((state) => getNotifRed(state));
   const project = useSelector((state) => getProject(state));
-  console.log("project selector", project);
-  console.log("cobanotif di home", notif);
-  // console.log(
+  //console.log("122 project selector: ", project);
+  //console.log("cobanotif di home", notif);
+  // //console.log(
   //   "99 state",
   //   useSelector((state) => state)
   // );
   // const email = user.user;
-  const [email, setEmail] = useState(user != null ? user.user : "");
-  console.log("user di home", user);
+  const [email, setEmail] = useState(user != null ? user?.email : "");
+  //console.log("user di home", user);
   const [fotoprofil, setFotoProfil] = useState(
-    user.pict != null
-      ? { uri: user.pict }
+    user?.pict != null
+      ? { uri: user?.pict }
       : require("../../assets/images/image-home/Main_Image.png")
   );
-  const [name, setName] = useState(user != null ? user.name : "");
+  const [name, setName] = useState(user != null ? user?.name : "");
   const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
   const scrollY = useRef(new Animated.Value(0)).current;
   const [getDataDue, setDataDue] = useState([]);
@@ -137,15 +194,16 @@ const Home = (props) => {
   const [project_no, setProjectNo] = useState("01");
   //const [entity_cd, setEntity] = useState(project.Data[0].entity_cd);
   //const [project_no, setProjectNo] = useState(project.Data[0].project_no);
-  const [lotno, setLotno] = useState([]);
-  console.log("lotno array 0", lotno.lot_no);
-  console.log("fotoprofil >", fotoprofil);
+  //const [lotno, setLotno] = useState([]);
+  //console.log("lotno array 0", lotno.lot_no);
+  //console.log("fotoprofil >", fotoprofil);
   const repl =
-    user.pict != null
-      ? fotoprofil.uri.replace("https", "http")
+    user?.pict != null
+      ? fotoprofil.uri //.replace("https", "http")
       : require("../../assets/images/image-home/Main_Image.png");
-  console.log("repll", repl);
-  const [text_lotno, setTextLotno] = useState("");
+  //console.log("repll", repl);
+  const [text_lotno, setTextLotno] = useState(stateReduxChoosedUnit);
+  const [text_project, setTextProject] = useState(stateReduxChoosedProject);
   const [default_text_lotno, setDefaultLotno] = useState(true);
   const [keyword, setKeyword] = useState("");
 
@@ -168,105 +226,512 @@ const Home = (props) => {
   const [imageGreetings, setImageGreetings] = useState([]);
   const [modalShowImage, setmodalShowImage] = useState(false);
   const [urlImageGreetings, setUrlGreetingsImage] = useState("");
+  const [dotList, setDotList] = useState([]);
+  const [dotChooseUnit, setDotChooseUnit] = useState(false);
+
+  const [dataNotif, setDataNotif] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const [dummyArray, setDummyArray] = useState([
+    {
+      cluster_cd: "GSE",
+      entity_cd: "1001",
+      lot_no: "AA-23",
+      project_no: "1001001",
+    },
+    // {
+    //   cluster_cd: "GSE",
+    //   entity_cd: "1001",
+    //   lot_no: "AA-25",
+    //   project_no: "1001001",
+    // },
+  ]);
+  //console.log("243 dummyArray: ", dummyArray);
+  // const fetchData = async () => {
+  //   setIsFetching(true);
+  //   try {
+  //     const response = await fetch("https://api.example.com/data"); // Replace with your API
+  //     //const json = await response.json();
+  //     setData(response.data);
+  //   } catch (response) {
+  //     console.error("232 home Error fetching data:", error);
+  //   } finally {
+  //     setIsFetching(false);
+  //   }
+  // };
+
+  // Set up the interval
+  //notification
+
+  // const [intervalIdNotif, setIntervalIdNotif] = useState(null);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
+  //     setAppState(nextAppState);
+
+  //     if (nextAppState === "active") {
+  //       // App has come to the foreground, start the interval
+  //       if (!intervalIdNotif) {
+  //         const id = setInterval(() => {
+  //           projectDot();
+  //         }, 15000);
+  //         setIntervalIdNotif(id);
+  //       }
+  //     } else {
+  //       // App is in the background, clear the interval
+  //       if (intervalIdNotif) {
+  //         clearInterval(intervalIdNotif);
+  //         setIntervalIdNotif(null);
+  //       }
+  //     }
+  //   });
+
+  //   // Start the interval if the app is already active
+  //   if (appState === "active") {
+  //     const id = setInterval(() => {
+  //       projectDot();
+  //     }, 15000);
+  //     setIntervalIdNotif(id);
+  //   }
+
+  //   // Cleanup function to clear the interval and remove the AppState listener
+  //   return () => {
+  //     if (intervalIdNotif) {
+  //       clearInterval(intervalIdNotif);
+  //     }
+  //     subscription.remove();
+  //   };
+  // }, [appState, intervalIdNotif]);
+
+  useEffect(() => {
+    let intervalIdNotif;
+    if (appState === "active") {
+      intervalIdNotif = setInterval(() => {
+        console.log("308 appState: ", appState);
+        if (appState === "active") {
+          projectDot();
+        }
+      }, 15000); // Update every 1000 milliseconds (1 second)
+    }
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalIdNotif);
+  }, [appState]);
+
+  //appState
+  // active
+  // background
+  // inactive
+
+  //dummy notification
+  //dotList;
+  useEffect(() => {
+    onChangelot(stateReduxChoosedUnit);
+  }, [dotList]);
+
+  const dataImageHeader = [
+    {
+      img_url:
+        "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/featuredimage-apartment.jpg",
+    },
+    {
+      img_url:
+        "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/featuredimage-apartment.jpg",
+    },
+  ];
+
+  // const [urlImageHeader, setUrlImageHeader] = useState(dataImageHeader);
+
+  const [urlImageHeader, setUrlImageHeader] = useState([
+    {
+      img_url: "null",
+    },
+  ]);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [dataDD, setDataDD] = useState([]);
+
   // const isFocused = useFocusEffect();
   const dispatch = useDispatch();
 
+  //const isFocused = useIsFocused();
+
+  const headerAuth = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    user;
+    //user;
+    loadData();
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  // useEffect List
+  //UE1
+  // useEffect(() => {
+  //   messaging().onNotificationOpenedApp((remoteMessage) => {
+  //     console.log(
+  //       "Notification caused app to open from background state:",
+  //       remoteMessage.notification
+  //     );
+  //     navigation.navigate("Notification", remoteMessage);
+  //   });
+
+  //   // Check whether an initial notification is available
+  //   messaging()
+  //     .getInitialNotification()
+  //     .then((remoteMessage) => {
+  //       if (remoteMessage) {
+  //         console.log(
+  //           "Notification caused app to open from quit state:",
+  //           remoteMessage.notification
+  //         );
+  //         navigation.navigate("Notification", remoteMessage);
+  //       }
+  //       //setLoading(false);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        "Notification caused app to open from background state:",
-        remoteMessage.notification
-      );
-      navigation.navigate("Notification", remoteMessage);
-    });
+    //console.log("332_home useeffect");
+    // This effect will run whenever stateReduxChoosedUnit changes
+    if (stateReduxNotificationData) {
+      //console.log("332_home useeffect true");
+      setDotList(stateReduxNotificationData);
+      //console.log("332_home notifRedux: ", stateReduxNotificationData);
+      if (
+        stateReduxNotificationData.some(
+          (obj) =>
+            obj?.entity_cd === text_project?.entity_cd &&
+            obj?.project_no === text_project?.project_no &&
+            obj?.lot_no === stateReduxChoosedUnit?.lot_no
+        )
+      ) {
+        //masih ada
+      } else {
+        //setDotChooseUnit(false);
+        //onChangelot(stateReduxChoosedUnit);
+        saveHelpdeskDotNotification(false);
+      }
 
-    // Check whether an initial notification is available
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage.notification
-          );
-          navigation.navigate("Notification", remoteMessage);
-        }
-        setLoading(false);
-      });
-  }, []);
+      if (
+        stateReduxNotificationData.some(
+          (obj) =>
+            obj?.entity_cd === text_project?.entity_cd &&
+            obj?.project_no === text_project?.project_no
+          //obj.lot_no === stateReduxChoosedUnit.lot_no
+        )
+      ) {
+        //masih ada
+      } else {
+        setDotChooseUnit(false);
+        //onChangelot(stateReduxChoosedUnit);
+        //saveHelpdeskDotNotification(false);
+      }
+      // Perform any actions based on the new state
+      // For example, fetching data or updating local state
+    }
+  }, [stateReduxNotificationData]); // Dependency array includes stateReduxChoosedUnit
 
+  //UE2
   //untuk load badge notif
+  // useEffect(() => {
+  //   dispatch(
+  //     apiCall(
+  //       API_URL_LOKAL +
+  //         `/setting/notification?email=${email}&entity_cd=01&project_no=01`
+  //     )
+  //   );
+  // }, []);
+
   useEffect(() => {
-    dispatch(
-      apiCall(
-        API_URL_LOKAL +
-          `/notification?email=${email}&entity_cd=01&project_no=01`
-      )
-    );
+    //console.log("119_1 user?.pict: ", user?.pict);
+    setFotoProfil({ uri: user?.pict });
+  }, [user]);
+
+  useEffect(() => {
+    onChangelot(stateReduxChoosedUnit, true);
+  }, [stateReduxChoosedUnit]);
+
+  //UE4
+  useEffect(() => {
+    setLoading(true);
+
+    //console.log("uE 0: ", user?.pict);
+    setFotoProfil({ uri: user?.pict });
+
+    loadData();
+    check_version();
+    //alert("276 test");
+    setLoading(false);
   }, []);
+
+  const loadUnitReact = useCallback((item) =>
+    dispatch(data_unit(item.entity_cd, item.project_no, email))
+  );
+
+  const loadData = async () => {
+    const fcmToken = await messaging()
+      .getToken()
+      .catch((error) => {
+        console.log("460 error: ", error);
+      });
+    console.log("460 run0 : ", fcmToken);
+    ////console.log("galery", galery);
+    //console.log("uE 1");
+    await doSomething();
+    //dataImage();
+    //console.log("uE 2");
+
+    console.log("460 run1 :", text_project);
+    if (text_project) {
+      console.log("460 run2");
+      loadUnitReact(text_project);
+    }
+
+    //console.log("uE 4");
+    await dataMobileHeader();
+    // carouselRef.current.snapToItem(0);
+    ////console.log("about", data);
+    //fetchDataDue();
+    //fetchDataNotDue();
+    //fetchDataHistory();
+
+    //getLotNo();
+    //getLotNo2();
+    //console.log("uE 5");
+    //await getHelpdeskNotification();
+    await firstLogin();
+    //await notifUser();
+    //console.log("uE 6");
+
+    //const dataproject = await ProjectController.data_project(email);
+    // try {
+    //   //console.log("15c start try " + token);
+    //   const result = await httpClient({
+    //     url: API_URL_LOKAL + "/home/common-project",
+    //     method: "GET",
+    //     params: { email: email },
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
+    //   //console.log("15c res: ", result);
+    //   // if (!result.data.success) {
+    //   //   return Promise.reject(result.data.message);
+    //   // } else {
+    //   //return result.data.data;
+    //   // }
+    //   loadProject(result.data.data);
+    // } catch (error) {
+    //   //console.log("15c error: ", error.response.data.message);
+    //   alert(error.response.data.message);
+    //   //return Promise.reject(error);
+    // }
+
+    await httpClient
+      .request({
+        url: "/home/common-project",
+        method: "GET",
+        params: { email: email },
+      })
+      .then((res) => {
+        //setHomeMenu(res.data.data);
+        //console.log("333 res: ", res.data.data);
+        dispatch(data_project(res.data.data));
+        //loadProject(dataproject);
+        ////console.log("333 loadFinish: ");
+      })
+      .catch((error) => {
+        //console.log("333 error: " + error.response.data.message);
+      });
+
+    //loadProject(dataproject);
+
+    // setEntity(project[0].entity_cd);
+    // setProjectNo(project[0].project_no);
+    ////console.log("272 entity: ", project[0].entity_cd, project[0].project_no);
+
+    //await loadUnit();
+    await dataNewsAnnounce();
+    //console.log("uE 3");
+    await dataPromoClubFacilities();
+    await projectDot();
+  };
+
+  const projectDot = async () => {
+    const arrayNotification = await httpClient
+      .request({
+        url: "/setting/notification",
+        method: "GET",
+        params: { email: user.email },
+      })
+      .then((res) => {
+        //console.log("435 res: ", res.data.data);
+        return res.data.data;
+      })
+      .catch((error) => {
+        //console.log("435 error: " + error.response.data.message);
+        return [];
+      });
+
+    const dots = arrayNotification.notifications.filter(
+      (item) => item.isRead === "0"
+    );
+    // Filter notifications with isRead = 0
+    ////console.log("436 stateReduxDataProject: ", stateReduxDataProject);
+    //console.log("435 notif dots: ", dots);
+    ////console.log("436 notif arrayNotification: ", arrayNotification);
+    saveDataNotification(dots);
+    saveDataNotificationPersist(dots);
+    await setDotList(dots);
+    if (text_project) {
+      // //console.log(
+      //   "436 condition: ",
+      //   dots.some((obj) => obj.entity_cd != text_project.entity_cd),
+      //   text_project.entity_cd
+      // );
+      if (
+        dots.some((obj) => obj.entity_cd != text_project.entity_cd)
+        //|| dots?.length > 1
+      ) {
+        saveProjectDotNotification(true);
+      } else {
+        saveProjectDotNotification(false);
+      }
+
+      if (
+        dots.some(
+          (obj) =>
+            obj.entity_cd === text_project.entity_cd &&
+            obj.lot_no === stateReduxChoosedUnit.lot_no
+        )
+      ) {
+        saveHelpdeskDotNotification(true);
+      } else {
+        saveHelpdeskDotNotification(false);
+      }
+    }
+  };
+
+  const firstLogin = async () => {
+    //fetch api
+
+    await httpClient
+      .request({
+        // url: "/home/menu",
+        method: "GET",
+        params: { group_cd: user.Group_Cd },
+      })
+      .then((res) => {
+        //console.log("249 res: ", res.data.data);
+
+        const firstLogin = res.data.data;
+        if (firstLogin) {
+          navigation.navigate("ChangePassword", null);
+        }
+      })
+      .catch((error) => {
+        //console.log("249 error: " + error.response.data.message);
+      });
+
+    //ChangePassword;
+  };
 
   //untuk load data get chairman message
   // (sebenernya terpakai hanya sekali, saat open screen pertama kali.
   // jika tidak dibatasi dengan akhir[] maka akan menimbulkan load limit.
   // tidak error parah, cuma mengganggu saja)
 
-  const doSomething = async () => {
-    // console.log(
-    //   'url greetings chairman',
-    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/first_login_Get/` + email,
-    // );
-    await axios
-      .get(API_URL_LOKAL + `/first_login_Get/` + email)
-      .then((res) => {
-        console.log("res greetings", res.data.data);
-        const status_user = res.data.data[0].status;
-        // console.log('status user new old', status_user);
-        setStatusUser(status_user);
+  const loadProject = useCallback(
+    (dataproject) => dispatch(data_project(dataproject))
+    //,[email, dispatch]
+  );
 
-        if (status_user == "N") {
-          setModalImage(true); // sementara di jadiin false dulu, untuk hide modal.
-          getImageGreetings();
-        } else {
-          setModalImage(false);
-        }
-        setLoadNews(false);
-        // return res.data;
+  // const loadUnit = useCallback(
+  //   () =>
+  //     dispatch(data_unit(project[0].entity_cd, project[0].project_no, email)),
+  //   [entity_cd, project_no, email, dispatch]
+  // );
+
+  const saveUnit = useCallback((unit) => dispatch(choosed_unit(unit)));
+  const saveProject = useCallback((project) =>
+    dispatch(choosed_project(project))
+  );
+  const saveHelpdeskDotNotification = useCallback((state) =>
+    dispatch(action_helpdesk_dot(state))
+  );
+  const saveProjectDotNotification = useCallback((state) =>
+    dispatch(action_project_dot(state))
+  );
+  const saveDataNotification = useCallback((state) =>
+    dispatch(action_data_notification(state))
+  );
+  const saveDataNotificationPersist = useCallback((state) =>
+    dispatch(action_data_notification_persist(state))
+  );
+
+  const doSomething = async () => {
+    // //console.log(
+    //   'url greetings chairman',
+    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/home/greetings-change-status_Get/` + email,
+    // );
+
+    await httpClient
+      .request({
+        url: "/home/menu",
+        method: "GET",
+        params: { group_cd: user.Group_Cd },
+      })
+      .then((res) => {
+        setHomeMenu(res.data.data);
+        //console.log("249 res: ", res.data.data);
       })
       .catch((error) => {
-        console.log("error res greeting", error);
-        // alert('error get');
+        //console.log("249 error: " + error.response.data.message);
       });
+
+    // await axios
+    //   .get(API_URL_LOKAL + `/home/greetings-change-status_Get/` + email)
+    //   .then((res) => {
+    //     //console.log("res greetings", res.data.data);
+    //     const status_user = res.data.data[0].status;
+    //     // //console.log('status user new old', status_user);
+    //     setStatusUser(status_user);
+
+    //     if (status_user == "N") {
+    //       setModalImage(true); // sementara di jadiin false dulu, untuk hide modal.
+    //       getImageGreetings();
+    //     } else {
+    //       setModalImage(false);
+    //     }
+    //     setLoadNews(false);
+    //     // return res.data;
+    //   })
+    //   .catch((error) => {
+    //     //console.log("error res greeting", error);
+    //     // alert('error get');
+    //   });
   };
 
-  useEffect(() => {
-    doSomething();
-  }, []);
-
   const getImageGreetings = async () => {
-    // console.log(
+    // //console.log(
     //   'url greetings chairman',
-    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/first_login_Get/` + email,
+    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/home/greetings-change-status_Get/` + email,
     // );
     await axios
-      .get(API_URL_LOKAL + `/greetings_mobile`)
+      .get(API_URL_LOKAL + `/home/greetings`)
       .then((res) => {
-        // console.log('res greetings', res.data.data);
+        // //console.log('res greetings', res.data.data);
         const image_greetings = res.data.data;
-        console.log("image_greetings", image_greetings);
+        //console.log("image_greetings", image_greetings);
         setImageGreetings(image_greetings);
         setLoadNews(false);
         // return res.data;
       })
       .catch((error) => {
-        console.log("error res image greeting", error);
+        //console.log("error res image greeting", error);
         // alert('error get');
       });
   };
@@ -276,16 +741,16 @@ const Home = (props) => {
     // setModalImage(false);
 
     await axios
-      .post(API_URL_LOKAL + `/first_login/` + email)
+      .post(API_URL_LOKAL + `/home/greetings-change-status/` + email)
       .then((res) => {
-        console.log("res update tanggal greetings", res.data.data);
-        // console.log('status user new old', status_user);
+        //console.log("res update tanggal greetings", res.data.data);
+        // //console.log('status user new old', status_user);
         setModalImage(false);
         setLoadNews(false);
         // return res.data;
       })
       .catch((error) => {
-        console.log("error update tanggal greetings", error);
+        //console.log("error update tanggal greetings", error);
         // alert('error get');
       });
 
@@ -299,50 +764,155 @@ const Home = (props) => {
     setmodalShowImage(true);
   };
 
-  //https://dev.ifca.co.id/apiifcares/api/facility/book/unit?entity=01&project=01&email=martin7id@yahoo.com
-  // https://dev.ifca.co.id/apicarstensz/api/facility/book/unit?entity=01&project=01&email=martin7id@yahoo.com
+  //https://dev.ifca.co.id/apiifcares/api/home/common-unit?entity=01&project=01&email=martin7id@yahoo.com
+  // https://dev.ifca.co.id/apicarstensz/api/home/common-unit?entity=01&project=01&email=martin7id@yahoo.com
 
-  async function getLotNo() {
-    console.log(
-      "302 url api '/facility/book/unit': ",
-      //"http://apps.pakubuwono-residence.com/apiwebpbi/api/facility/book/unit?entity=" +
-      entity_cd + "&" + "project=" + project_no + "&" + "email=" + email
-    );
-    try {
-      await axios
-        .get(
-          API_URL_LOKAL +
-            `/facility/book/unit?entity=` +
-            entity_cd +
-            "&" +
-            "project=" +
-            project_no +
-            "&" +
-            "email=" +
-            email
-        )
-        .then((res) => {
-          const resLotno = res.data.data;
-          console.log("reslotno", resLotno);
-          console.log("reslotno", res);
+  //console.log("361 lotno: ", lotno, "&&", dataDD);
 
-          setLotno(resLotno);
+  const getLotNo2 = async () => {
+    // const params = {
+    //   entity_cd: "1001",
+    //   project_no: "1001001",
+    //   email: "ahmad.ariffandy@ifca.co.id",
+    // }; // hardcode
+    const params = {
+      entity_cd: "1001",
+      project_no: "1001001",
+      email: "ahmad.ariffandy@ifca.co.id",
+    };
 
-          if (default_text_lotno == true) {
-            setTextLotno(resLotno[0]);
-          }
+    await httpClient
+      .request({
+        url: "/home/common-unit",
+        method: "GET",
+        params: params,
+      })
+      .then((res) => {
+        //console.log("380 res: ", res.data.data);
 
-          setSpinner(false);
-        })
-        .catch((error) => {
-          console.log("error reslotno", error);
-          // alert('error get');
+        //setLotno(res.data.data);
+
+        const arrDataTower = res.data.data;
+        //console.log("380 res: ", arrDataTower);
+
+        const arrayDropDown = arrDataTower.map((item, index) => {
+          return { label: item.descs, value: index };
         });
-    } catch (error) {
-      setErrors(error);
-      // alert(hasError.toString());
-    }
-  }
+
+        //console.log("380 arrayDropDown: ", arrayDropDown);
+        //setDataDD(arrayDropDown);
+
+        //setArrDataTowerUser(arrDataTower);
+
+        //setSpinner(false);
+        return "finish";
+      })
+      .catch((error) => {
+        //console.log("380 error: ", error.response.data.message);
+        //alert("125 error get: ", error);
+        return "error";
+      });
+
+    return;
+
+    //console.log("125 run getLotNo2");
+    const data = {
+      email: email,
+    };
+    //console.log("125 run 2");
+    const sync = await homeCommonProject(token, data, () => {}, setDataDD);
+    ////console.log('');
+    //setLotno(dataDD);
+
+    const arrayDropDown = dataDD.map((item, index) => {
+      return { lot_no: item.descs };
+    });
+
+    //console.log("125 arrayDropDown: ", arrayDropDown);
+
+    //setLotno(arrayDropDown);
+
+    //console.log("125 ", sync);
+
+    return sync;
+
+    // try {
+    //   await axios
+    //     .get(
+    //       API_URL_LOKAL +
+    //         `/home/common-unit?entity=` +
+    //         entity_cd +
+    //         "&" +
+    //         "project=" +
+    //         project_no +
+    //         "&" +
+    //         "email=" +
+    //         email
+    //     )
+    //     .then((res) => {
+    //       const resLotno = res.data.data;
+    //       //console.log("reslotno", resLotno);
+    //       //console.log("reslotno", res);
+
+    //       setLotno(resLotno);
+
+    //       if (default_text_lotno == true) {
+    //         setTextLotno(resLotno[0]);
+    //       }
+
+    //       setSpinner(false);
+    //     })
+    //     .catch((error) => {
+    //       //console.log("error reslotno", error);
+    //       // alert('error get');
+    //     });
+    // } catch (error) {
+    //   setErrors(error);
+    //   // alert(hasError.toString());
+    // }
+  };
+
+  // async function getLotNo() {
+  //   console.log(
+  //     "302 url api '/home/common-unit': ",
+  //     //"http://apps.pakubuwono-residence.com/apiwebpbi/api/home/common-unit?entity=" +
+  //     entity_cd + "&" + "project=" + project_no + "&" + "email=" + email
+  //   );
+  //   try {
+  //     await axios
+  //       .get(
+  //         API_URL_LOKAL +
+  //           `/home/common-unit?entity=` +
+  //           entity_cd +
+  //           "&" +
+  //           "project=" +
+  //           project_no +
+  //           "&" +
+  //           "email=" +
+  //           email
+  //       )
+  //       .then((res) => {
+  //         const resLotno = res.data.data;
+  //         //console.log("reslotno", resLotno);
+  //         //console.log("reslotno", res);
+
+  //         setLotno(resLotno);
+
+  //         if (default_text_lotno == true) {
+  //           setTextLotno(resLotno[0]);
+  //         }
+
+  //         setSpinner(false);
+  //       })
+  //       .catch((error) => {
+  //         //console.log("error reslotno", error);
+  //         // alert('error get');
+  //       });
+  //   } catch (error) {
+  //     setErrors(error);
+  //     // alert(hasError.toString());
+  //   }
+  // }
 
   const notifUser = useCallback(
     (entity_cd, project_no) =>
@@ -354,13 +924,13 @@ const Home = (props) => {
     await axios
       .get(API_URL_LOKAL + `/about/image`)
       .then((res) => {
-        console.log("res image", res.data.data);
-        // console.log('data images', res.data[0].images);
+        //console.log("res image", res.data.data);
+        // //console.log('data images', res.data[0].images);
         setData(res.data.data);
         // return res.data;
       })
       .catch((error) => {
-        console.log("error get about us image", error);
+        //console.log("error get about us image", error);
         // alert('error get');
       });
   };
@@ -368,10 +938,10 @@ const Home = (props) => {
   async function fetchDataDue() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + `/getDataDueSummary/IFCAPB/${user.user}`
+        API_URL_LOKAL + `/modules/billing/due-summary/IFCAPB/${user?.email}`
       );
       setDataDue(res.data.Data);
-      console.log("data get data due", res.data.Data);
+      //console.log("data get data due", res.data.Data);
     } catch (error) {
       setErrors(error);
       // alert(hasError.toString());
@@ -381,10 +951,10 @@ const Home = (props) => {
   async function fetchDataNotDue() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + `/getDataCurrentSummary/IFCAPB/${user.user}`
+        API_URL_LOKAL + `/modules/billing/current-summary/IFCAPB/${user?.email}`
       );
       setDataNotDue(res.data.Data);
-      console.log("data get data not due", res.data.Data);
+      //console.log("data get data not due", res.data.Data);
     } catch (error) {
       setErrors(error);
       // alert(hasError.toString());
@@ -394,10 +964,10 @@ const Home = (props) => {
   async function fetchDataHistory() {
     try {
       const res = await axios.get(
-        API_URL_LOKAL + `/getSummaryHistory/IFCAPB/${user.user}`
+        API_URL_LOKAL + `/modules/billing/summary-history/IFCAPB/${user?.email}`
       );
       setDataHistory(res.data.Data);
-      // console.log('data get history', res.data.Data);
+      // //console.log('data get history', res.data.Data);
     } catch (error) {
       setErrors(error);
       // alert(hasError.toString());
@@ -405,32 +975,75 @@ const Home = (props) => {
   }
 
   const dataNewsAnnounce = async () => {
-    // console.log('kok ini gada');
-    await axios
-      .get(API_URL_LOKAL + `/news-announce`)
-      .then((res) => {
-        console.log("res news", res.data.data);
-        const datanews = res.data.data;
-        const slicedatanews = datanews.slice(0, 6);
-        console.log("slice data", slicedatanews);
-        setNewsAnnounceSlice(slicedatanews);
-        setNewsAnnounce(datanews);
-        setLoadNews(false);
-        // return res.data;
-      })
-      .catch((error) => {
-        console.log("error get news announce home", error);
-        // alert('error get');
+    // //console.log('kok ini gada');
+    // await axios
+    //   .get(API_URL_LOKAL + `/home/news`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     //console.log("420 res news", res.data.data);
+    //     const datanews = res.data.data;
+    //     const slicedatanews = datanews.slice(0, 6);
+    //     //console.log("slice data", slicedatanews);
+    //     setNewsAnnounceSlice(slicedatanews);
+    //     setNewsAnnounce(datanews);
+    //     setLoadNews(false);
+    //     // return res.data;
+    //   })
+    //   .catch((error) => {
+    //     //console.log("420 error get news announce home", error);
+    //     // alert('error get');
+    //   });
+
+    try {
+      const result = await httpClient.request({
+        url: "/home/news",
+        method: "GET",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+        params: {
+          entity_cd: stateReduxChoosedProject?.entity_cd,
+          project_no: stateReduxChoosedProject?.project_no,
+        },
       });
+
+      //console.log("420 news res news", result.data.data);
+      const datanews = result.data.data;
+      const slicedatanews = datanews.slice(0, 6);
+      //console.log("slice data", slicedatanews);
+      setNewsAnnounceSlice(slicedatanews);
+      setNewsAnnounce(datanews);
+      setLoadNews(false);
+    } catch (error) {
+      //console.log("420 news error: ", error);
+      //console.log("420 news error: ", error.response.data.message);
+    }
   };
 
   const dataPromoClubFacilities = async () => {
-    await axios
-      .get(API_URL_LOKAL + `/promoclubfacilities`)
+    // await axios
+    //   .get(API_URL_LOKAL + `/home/promo`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    await httpClient
+      .request({
+        url: "/home/promo",
+        method: "GET",
+        params: {
+          entity_cd: stateReduxChoosedProject?.entity_cd,
+          project_no: stateReduxChoosedProject?.project_no,
+        },
+      })
       .then((res) => {
-        console.log("res promoclubfacilities", res.data.data);
+        //console.log("445 res promoclubfacilities", res.data.data);
         const datapromoclub = res.data.data;
 
+        //console.log("445 1run");
         // filter by category
 
         const filterForPromo = datapromoclub
@@ -449,6 +1062,7 @@ const Home = (props) => {
           .filter((item) => item.category == "R")
           .map((items) => items);
 
+        //console.log("445 2run");
         // join data atau data gabungan all per 2 category
 
         const joinFilterDataPromoClubFac = [
@@ -461,39 +1075,49 @@ const Home = (props) => {
           ...filterForRestaurant,
         ];
 
+        //console.log("445 3run");
         // slice data for image
 
         const slicedatapromoclubfac = joinFilterDataPromoClubFac.slice(0, 6);
         const slicedataeventresto = joinFilterDataEventRestaurant.slice(0, 6);
 
+        //console.log("445 4run ", slicedatapromoclubfac);
         // pecah array images from data slice
 
         const arrayImagePromoClubFac = slicedatapromoclubfac.map(
           (item, key) => {
             return {
-              ...item.images[0],
+              //...item?.images[0],
+              pict: item?.url_image,
+              title: item?.promo_title,
             };
           }
         );
 
+        //console.log("445 5run ", arrayImagePromoClubFac);
+
         const arrayImageEventResto = slicedataeventresto.map((item, key) => {
           return {
-            ...item.images[0],
+            //...item?.images[0],
+            pict: item?.url_image,
+            title: item?.promo_title,
           };
         });
+        //console.log("445 5.5 ", slicedataeventresto);
+        //console.log("445 6 ", arrayImageEventResto);
 
         // const slicedatapromo = datapromoclub.slice(0, 6);
-        // console.log('slice data promo', slicedatapromo);
-        // console.log('image promo club', datapromoclub.image);
+        // //console.log('slice data promo', slicedatapromo);
+        // //console.log('image promo club', datapromoclub.image);
 
         // const tes = slicedatapromo.map((item, key) => {
         //   return {
         //     ...item.images[0],
         //   };
         // });
-        // console.log('tes gambar map', tes);
+        // //console.log('tes gambar map', tes);
 
-        console.log("image club fac", arrayImagePromoClubFac);
+        //console.log("445 7image club fac", arrayImagePromoClubFac);
 
         setImagePromoClubFac(arrayImagePromoClubFac);
         setPromoClubFacSlice(slicedatapromoclubfac);
@@ -507,12 +1131,43 @@ const Home = (props) => {
         // return res.data;
       })
       .catch((error) => {
-        console.log("error get news announce home", error);
+        //console.log("445 error get news announce home", error);
         // alert('error get');
+
+        if (error.response) {
+          // Request made and server responded with a status code
+          // that falls out of the range of 2xx
+          //console.log("445 Error Message:", error.response.data.message); // 404
+          //console.log("445 Error Status:", error.response.status); // 404
+          ////console.log("445 Error Data:", error.response.data); // Response data if available
+          //console.log("445 Error Headers:", error.response.headers); // Response headers if available
+        }
       });
   };
 
-  const galery = [...data];
+  const dataMobileHeader = async () => {
+    await httpClient
+      .request({
+        url: "/home/common-mobile-header",
+        method: "GET",
+      })
+      .then((res) => {
+        //console.log("848 header: ", res.data.data);
+        //const datapromoclub = res.data.data;
+
+        if (res.data.success == true) {
+          setUrlImageHeader(res.data.data);
+        } else {
+          //setUrlImageHeader(dataImageHeader);
+        }
+      })
+      .catch((error) => {
+        //console.log("848 error header: ", error);
+        //setUrlImageHeader(dataImageHeader);
+      });
+  };
+
+  //const galery = [...data];
 
   //TOTAL DATE DUE
   const sum =
@@ -522,7 +1177,7 @@ const Home = (props) => {
           return (max += parseInt(bills.mbal_amt));
         }, 0);
 
-  console.log("sum", sum);
+  //console.log("sum", sum);
 
   //TOTAL DATE NOT DUE
   const sumNotDue =
@@ -532,10 +1187,10 @@ const Home = (props) => {
           return (max += parseInt(bills.mbal_amt));
         }, 0);
 
-  console.log("sumNotDue", sumNotDue);
+  //console.log("sumNotDue", sumNotDue);
 
   const math_total = Math.floor(sumNotDue) + Math.floor(sum);
-  console.log("math total", math_total);
+  //console.log("math total", math_total);
 
   // const sumHistory =
   //   getDataHistory == null
@@ -544,38 +1199,38 @@ const Home = (props) => {
   //         return (max += parseInt(bills.mdoc_amt));
   //       }, 0);
 
-  // console.log('sumHistory', sumHistory);
+  // //console.log('sumHistory', sumHistory);
 
   //LENGTH
   const onSelect = (indexSelected) => {};
 
   const unique =
     getDataDue == 0 ? 0 : [...new Set(getDataDue.map((item) => item.doc_no))];
-  console.log("unique", unique);
+  //console.log("unique", unique);
 
   const uniqueNotDue =
     getDataNotDue == 0 || getDataNotDue == null
       ? 0
       : [...new Set(getDataNotDue.map((item) => item.doc_no))];
-  console.log("uniqueNotDue", uniqueNotDue);
+  //console.log("uniqueNotDue", uniqueNotDue);
 
   const invoice = unique == 0 ? 0 : unique.length;
-  console.log("invoice", invoice);
+  //console.log("invoice", invoice);
 
   const invoiceNotDue = uniqueNotDue == 0 ? 0 : uniqueNotDue.length;
-  console.log("invoiceNotDue", invoiceNotDue);
+  //console.log("invoiceNotDue", invoiceNotDue);
 
   const total_outstanding = Math.floor(invoice) + Math.floor(invoiceNotDue);
-  console.log("total_outstanding", total_outstanding);
+  //console.log("total_outstanding", total_outstanding);
 
   // const uniqueHistory =
   //   getDataHistory == null
   //     ? setDataHistory([])
   //     : [...new Set(getDataHistory.map(item => item.doc_no))];
-  // console.log('uniqueHistory', uniqueHistory);
+  // //console.log('uniqueHistory', uniqueHistory);
 
   // const invoiceHistory = uniqueHistory.length;
-  // console.log('invoiceHistory', invoiceHistory);
+  // //console.log('invoiceHistory', invoiceHistory);
 
   const headerBackgroundColor = scrollY.interpolate({
     inputRange: [0, 140],
@@ -599,27 +1254,6 @@ const Home = (props) => {
     useNativeDriver: true,
   });
 
-  useEffect(() => {
-    console.log("galery", galery);
-    dataImage();
-    dataNewsAnnounce();
-    dataPromoClubFacilities();
-
-    console.log("datauser", user);
-    console.log("about", data);
-    fetchDataDue();
-    fetchDataNotDue();
-    fetchDataHistory();
-
-    getLotNo();
-    notifUser();
-    setLoading(false);
-  }, [user]);
-
-  useEffect(() => {
-    // getNewsAnnounce();
-  }, []);
-
   const goPostDetail = (item) => () => {
     navigation.navigate("PostDetail", { item: item });
   };
@@ -633,39 +1267,281 @@ const Home = (props) => {
     // );
   };
 
-  const onChangelot = (lot) => {
-    setDefaultLotno(false);
-    console.log("lot", lot);
+  const onChangelot = (lot, fromUseEffectState = false) => {
+    //setDefaultLotno(false);
+    //choosed_unit;
+    fromUseEffectState ? null : saveUnit(lot);
+
+    //console.log("861 lot: ", lot);
     setTextLotno(lot);
+
+    //dot choose unit
+    if (
+      dotList
+        .filter(
+          (item) =>
+            item?.entity_cd === stateReduxChoosedProject?.entity_cd &&
+            item?.project_no === stateReduxChoosedProject?.project_no
+        )
+        .some((obj) => obj?.lot_no != lot?.lot_no)
+      //|| dotList?.length > 1
+    ) {
+      setDotChooseUnit(true);
+    } else {
+      setDotChooseUnit(false);
+    }
+
+    //dot helpdesk
+    if (
+      dotList.some(
+        (obj) =>
+          obj?.entity_cd === text_project?.entity_cd &&
+          obj?.lot_no === lot?.lot_no
+      )
+    ) {
+      saveHelpdeskDotNotification(true);
+    } else {
+      saveHelpdeskDotNotification(false);
+    }
+  };
+
+  // const getHelpdeskNotification = (project) => {
+  //   //fetch notification by project maybe
+  //   // get dot status
+  //   saveProjectDotNotification(true);
+  //   saveHelpdeskDotNotification(true);
+  // };
+
+  const onChangeProject = (project) => {
+    //setDefaultLotno(false);
+    //choosed_project;
+    saveProject(project);
+    //getHelpdeskNotification(project); //if by notification
+    //console.log("861 project: ", project);
+    setTextProject(project);
+
+    loadUnitReact(project);
+    setTextLotno("");
+    //console.log("861 stateReduxDataUnit: ", stateReduxDataUnit);
+    //setLotno(stateReduxDataUnit);
+    saveUnit({});
+
+    //news and promo
+    dataNewsAnnounce();
+    dataPromoClubFacilities();
+
+    //dot management
+    console.log(
+      "861 dotList.some: ",
+      dotList.some((obj) => obj.entity_cd != project.entity_cd)
+    );
+    if (
+      dotList.some((obj) => obj.entity_cd != project.entity_cd)
+      //|| dotList?.length > 1
+    ) {
+      saveProjectDotNotification(true);
+    } else {
+      saveProjectDotNotification(false);
+    }
+    saveHelpdeskDotNotification(false);
+    // if (dotList.some((obj) => obj.entity_cd === project.entity_cd)) {
+    //   saveHelpdeskDotNotification(true);
+    // } else {
+    //   saveHelpdeskDotNotification(false);
+    // }
   };
 
   const goToMoreNewsAnnounce = (item) => {
-    console.log("item go to", item.length);
+    //console.log("item go to", item.length);
     navigation.navigate("NewsAnnounce", { items: item });
   };
 
   const goToEventResto = (item) => {
-    // console.log('item go to', item.length);
+    // //console.log('item go to', item.length);
     navigation.navigate("EventResto", { items: item });
   };
 
   const goToPromoClubFac = (item) => {
-    console.log("item go to", item.length);
+    //console.log("item go to", item.length);
     navigation.navigate("ClubFacilities", { items: item });
   };
 
+  const renderOption = (item) => (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        //justifyContent: "center",
+        //backgroundColor: "blue",
+        //alignSelf: "center",
+        //textAlign: "center",
+        //marginLeft: "90%",
+        //width: "135%",
+        //marginVertical: 0,
+      }}
+    >
+      <Text
+        style={{
+          // color: "#333",
+          // flexDirection: "row",
+          // alignItems: "center",
+          //marginLeft: 20,
+          //backgroundColor: "pink",
+          //marginLeft: "60%",
+          //paddingLeft: "60%",
+          color: "black",
+        }}
+      >
+        {item.descs}
+      </Text>
+      {
+        //dotList.includes(item.entity_cd) && (
+        dotList.some((obj) => obj.entity_cd === item.entity_cd) && (
+          // true ? (
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: "red",
+              borderRadius: 5,
+              marginLeft: 10,
+              position: "absolute",
+              //top: 0,
+              right: -20,
+            }}
+          />
+        )
+      }
+    </View>
+  );
+
+  const renderOptionUnit = (item) => (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
+      <Text
+        style={{
+          //marginLeft: 125,
+          color: "black",
+        }}
+      >
+        {item.lot_no}
+      </Text>
+      {
+        //dotList.includes(item.entity_cd) && (
+        dotList.some(
+          (obj) =>
+            obj.lot_no === item.lot_no &&
+            obj.entity_cd === stateReduxChoosedProject.entity_cd &&
+            obj.project_no === stateReduxChoosedProject.project_no
+        ) && (
+          // true ? (
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: "red",
+              borderRadius: 5,
+              marginLeft: 10,
+              position: "absolute",
+              //top: 0,
+              right: -20,
+            }}
+          />
+        )
+      }
+    </View>
+  );
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // //console.log("1042 stateScreen: ", urlImageHeader);
+
+  const renderItemCarousel_ = ({ item }) => {
+    //console.log("1061 item.img_url: " + item.img_url);
+    // <View
+    //   style={{
+    //     width: width,
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //   }}
+    // >
+    //   <Image
+    //     source={{ uri: item.img_url }}
+    //     style={{
+    //       width: "100%",
+    //       height: 200,
+    //       resizeMode: "cover",
+    //     }}
+    //   />
+    // </View>
+    return (
+      <View style={[{ width, justifyContent: "center" }]}>
+        <ImageBackground
+          //source={require("../../assets/images/image-home/Main_Image.png")}
+          //source={require("../../assets/images/image-home/carstensz.webp")}
+          source={{ uri: item.img_url }}
+          // source={{
+          //   uri: "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/Bangunan-apartemen-di-Jakarta.jpg",
+          // }}
+          //source={{ uri: "https://via.placeholder.com/600x400?text=Image+2" }}
+          style={{
+            // height: '100%',
+            height: 400,
+            width: "100%",
+            flex: 1,
+            // resizeMode: 'cover',
+            // borderBottomLeftRadius: 500,
+            // borderBottomRightRadius: 175,
+            backgroundColor: "lightgray",
+          }}
+          imageStyle={
+            {
+              //height: 400,
+              //width: "100%",
+              // borderBottomLeftRadius: 175,
+              // borderBottomRightRadius: 175,
+            }
+          }
+        ></ImageBackground>
+      </View>
+    );
+  };
+  const renderItemCarousel = ({ item }) => {
+    // Pastikan item berisi URL gambar yang valid atau data lain yang diperlukan
+    return (
+      <View style={{ flex: 1 }}>
+        <Text>ini image</Text>
+        {/* <Image
+          source={{ uri: item }}
+          style={{ width: '100%', height: 200 }} // Sesuaikan style sesuai kebutuhan
+          resizeMode="cover"
+        /> */}
+      </View>
+    );
+  };
+
   const CardItem = ({ i, item }) => {
-    console.log("key card item", i);
-    console.log("item card", item);
+    //console.log("key card item", i);
+    //console.log("item card", item);
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("PreviewImageHome", { images: item.pict })
+          navigation.navigate("PreviewImageHome", {
+            images: item?.pict,
+            title: item?.title,
+          })
         }
       >
         <View key={i} style={([styles.shadow], {})}>
+          {/* <Text style={{ alignSelf: "center" }}>{item?.title}</Text> */}
           <Image
-            source={{ uri: item.pict }}
+            source={{ uri: item?.pict }}
             style={
               ([styles.shadow],
               {
@@ -674,6 +1550,7 @@ const Home = (props) => {
                 margin: 5,
                 borderRadius: 10,
                 alignSelf: "stretch",
+                backgroundColor: "lightgray",
               })
             }
             resizeMode={"cover"}
@@ -683,18 +1560,1066 @@ const Home = (props) => {
     );
   };
 
+  // return (
+  //   <View style={{ flex: 1, backgroundColor: "white" }}>
+  //     <SwiperFlatList
+  //       autoplay
+  //       autoplayDelay={2}
+  //       autoplayLoop
+  //       index={0}
+  //       showPagination
+  //       data={urlImageHeader}
+  //       renderItem={({ item }) => (
+  //         <View
+  //           style={[
+  //             { width, justifyContent: "center" },
+  //             { backgroundColor: item },
+  //           ]}
+  //         >
+  //           {/* <Text style={{ fontSize: width * 0.5, textAlign: "center" }}>
+  //             {item}
+  //           </Text> */}
+  //           <ImageBackground
+  //             //source={require("../../assets/images/image-home/Main_Image.png")}
+  //             //source={require("../../assets/images/image-home/carstensz.webp")}
+  //             source={{ uri: item.img_url }}
+  //             // source={{
+  //             //   uri: "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/Bangunan-apartemen-di-Jakarta.jpg",
+  //             // }}
+  //             //source={{ uri: "https://via.placeholder.com/600x400?text=Image+2" }}
+  //             style={{
+  //               // height: '100%',
+  //               height: 400,
+  //               width: "100%",
+  //               flex: 1,
+  //               // resizeMode: 'cover',
+  //               // borderBottomLeftRadius: 500,
+  //               // borderBottomRightRadius: 175,
+  //             }}
+  //             imageStyle={{
+  //               height: 400,
+  //               width: "100%",
+  //               // borderBottomLeftRadius: 175,
+  //               // borderBottomRightRadius: 175,
+  //             }}
+  //           ></ImageBackground>
+  //         </View>
+  //       )}
+  //     />
+  //   </View>
+  // );
+
   const renderContent = () => {
     const mainNews = PostListData[0];
 
     return (
       <View
-        style={[BaseStyle.safeAreaView, {}]}
+        style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
         edges={["right", "top", "left"]}
       >
         {user == null || user == "" ? (
           <Text>data user dihome null</Text>
         ) : // <HeaderHome />
         null}
+
+        <ScrollView
+          // contentContainerStyle={styles.paddingSrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {/* IMAGE HEADER SWIPER  */}
+          <View style={{ flex: 1 }}>
+            <SwiperFlatList
+              autoplay
+              autoplayDelay={10}
+              autoplayLoop
+              index={0}
+              showPagination
+              autoplayLoopKeepAnimation
+              data={urlImageHeader}
+              //data={dataImageHeader}
+              renderItem={renderItemCarousel_}
+            />
+            <LinearGradient
+              //colors={["rgba(73, 73, 73, 0)", "rgba(73, 73, 73, 1)"]}
+              colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.3)"]}
+              // colors={['#4c669f', '#3b5998', '#192f6a']}
+              // {...otherGradientProps}
+              style={{
+                height: 400,
+                // height: '85%',
+                width: "100%",
+
+                flexDirection: "column",
+                // flex: 1,
+                justifyContent: "center",
+                // top: 30,
+                // borderBottomLeftRadius: 175,
+                // borderBottomRightRadius: 175,
+                position: "absolute",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  flex: 1,
+                  justifyContent: "center",
+                  top: 30,
+                }}
+              >
+                {/* ------- TEXT WELCOME HOME ------- */}
+                <View style={{ alignItems: "center", top: 10 }}>
+                  <Image
+                    style={{
+                      height: 140,
+                      width: "80%",
+                      //padding: 100,
+                      resizeMode: "contain",
+                    }}
+                    //source={require("../../assets/images/image-home/vector-logo-carstensz.webp")}
+                    source={require("../../assets/images/image-home/logo-tanrise-white.png")}
+                  ></Image>
+                </View>
+                <View
+                  style={{
+                    // flex: 1,
+                    alignItems: "center",
+                    alignSelf: "center",
+                    //left: 47,
+                    justifyContent: "center",
+
+                    width: "80%",
+                    marginTop: 50,
+                    //backgroundColor: "blue",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      color: "white",
+                      fontFamily: font, //"DMSerifDisplay",
+                      lineHeight: 30,
+                      textAlign: "center",
+                    }}
+                  >
+                    Welcome
+                    {"\n"}
+                    {user?.name}
+                  </Text>
+                </View>
+                {/* ------- CLOSE TEXT WELCOME HOME ------- */}
+
+                {/* ----- SEARCH INPUT ----- */}
+                {/* <View
+                    style={{
+                      // flex: 1,
+                      alignItems: 'center',
+                      left: 47,
+                      justifyContent: 'center',
+                      width: '80%',
+                    }}>
+                    <SearchInput
+                      style={[BaseStyle.textInput, Typography.body1]}
+                      onChangeText={onChangeText}
+                      autoCorrect={false}
+                      placeholder={t('Explore your luxury lifestyle')}
+                      placeholderTextColor={BaseColor.grayColor}
+                      value={keyword}
+                      selectionColor={colors.primary}
+                      onSubmitEditing={() => {}}
+                      icon={
+                        <Icon
+                          name="search"
+                          solid
+                          size={24}
+                          color={colors.primary}
+                        />
+                      }
+                    />
+                  </View> */}
+                {/* <View style={{ alignItems: "center", top: 20 }}>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontFamily: "DMSerifDisplay",
+                      fontSize: 10,
+                    }}
+                  >
+                    Once Upon Your Lifetime
+                  </Text>
+                </View> */}
+              </View>
+            </LinearGradient>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              //marginLeft: 35,
+              marginTop: 10,
+              marginBottom: 10,
+              //backgroundColor: "red",
+              //alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* <Image
+              style={{
+                height: 60,
+                width: 60,
+                borderRadius: 30,
+                marginRight: 15,
+                marginTop: 10,
+              }}
+              // source={require('../../assets/images/image-home/Main_Image.png')}
+              source={user?.pict != null ? { uri: repl } : fotoprofil}
+            ></Image> */}
+            <View
+              style={{
+                //alignSelf: "center",
+                //justifyContent: "center",
+                alignItems: "center",
+                //backgroundColor: "blue",
+                //marginLeft: 10
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{
+                    height: 60,
+                    width: 60,
+                    borderRadius: 30,
+                    marginRight: 15,
+                    marginTop: 10,
+                  }}
+                  // source={require('../../assets/images/image-home/Main_Image.png')}
+                  source={user?.pict != null ? { uri: repl } : fotoprofil}
+                ></Image>
+                <Text
+                  // adjustsFontSizeToFit={true}
+                  // allowFontScaling={true}
+                  style={{
+                    // fontSize: 18,s
+                    fontSize: fontPixel(18),
+                    paddingVertical: pixelSizeVertical(10),
+                    // marginVertical: 3,
+                    fontFamily: font, //"DMSerifDisplay",
+                  }}
+                >
+                  {/* Nama pemilik */}
+                  {user?.name}
+                </Text>
+                <Icon
+                  name="star"
+                  solid
+                  size={18}
+                  color={colors.primary}
+                  style={{ marginHorizontal: 5 }}
+                />
+              </View>
+              {/* <Text>{lotno.length}</Text> */}
+              {true ? (
+                <View
+                  style={{
+                    //backgroundColor: "blue",
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    width: 350,
+                    //justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    alignContent: "center",
+                    justifyContent: "center",
+                    marginVertical: 15,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      //paddingLeft: 0,
+                      //alignContent: "space-between",
+                    }}
+                  >
+                    <ModalSelector
+                      style={{
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        flex: 1,
+                      }}
+                      childrenContainerStyle={{
+                        color: "#CDB04A",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        // top: 10,
+                        // flex: 1,
+                        justifyContent: "center",
+                        fontWeight: "800",
+                        fontFamily: "KaiseiHarunoUmi",
+                        flexDirection: "row",
+                      }}
+                      //data={project}
+                      data={project.map((item) => ({
+                        ...item,
+                        label: renderOption(item),
+                      }))}
+                      optionTextStyle={{ color: "#333" }}
+                      selectedItemTextStyle={{ color: "#3C85F1" }}
+                      accessible={true}
+                      keyExtractor={(item) => item}
+                      //initValue={stateReduxChoosedProject.descs}
+                      //initValue={project[0].descs}
+                      //labelExtractor={(item) => item.descs}
+                      cancelButtonAccessibilityLabel={"Cancel Button"}
+                      cancelText={"Cancel"}
+                      onChange={(option) => {
+                        onChangeProject(option);
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          flex: 1,
+                          justifyContent: "space-between",
+                          //paddingRight: 15,
+                        }}
+                      >
+                        <Text
+                          adjustsFontSizeToFit={true}
+                          allowFontScaling={true}
+                          style={{
+                            color: "#fff",
+                            alignSelf: "center",
+                            fontSize: 14,
+                            justifyContent: "center",
+                            //paddingRight: 10,
+
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          {text_project ? "" : "Choose Project"}
+                        </Text>
+                        <Text
+                          style={{
+                            color: "#CDB04A",
+                            alignSelf: "center",
+                            fontSize: 16,
+                            // top: 10,
+                            // flex: 1,
+                            justifyContent: "center",
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          {text_project?.project_descs}
+                        </Text>
+                        <Icon
+                          name="caret-down"
+                          solid
+                          size={26}
+                          // color={colors.primary}
+                          style={{ marginLeft: 5 }}
+                          color={"#CDB04A"}
+                        />
+                      </View>
+                    </ModalSelector>
+                    {stateReduxProjectDot ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: BaseColor.whiteColor,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          position: "absolute",
+                          top: -10,
+                          right: -15,
+                          borderRadius: 10,
+                        }}
+                      >
+                        {/* <Text whiteColor caption2>
+            {finalCount < 0 ? 0 : finalCount}
+          </Text> */}
+                      </View>
+                    ) : null}
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    //width: 150,
+                    //justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingLeft: 5,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontSize: 14,
+                        justifyContent: "center",
+                        paddingRight: 5,
+
+                        fontWeight: "800",
+                        fontFamily: font, //"KaiseiHarunoUmi",
+                      }}
+                    >
+                      Project not found
+                    </Text>
+
+                    {
+                      <ModalSelector
+                        style={{
+                          justifyContent: "center",
+                          alignSelf: "center",
+                        }}
+                        childrenContainerStyle={{
+                          color: "#CDB04A",
+                          alignSelf: "center",
+                          fontSize: 16,
+                          // top: 10,
+                          // flex: 1,
+                          justifyContent: "center",
+                          fontWeight: "800",
+                          fontFamily: "KaiseiHarunoUmi",
+                        }}
+                        //data={lotno}
+                        optionTextStyle={{ color: "#333" }}
+                        selectedItemTextStyle={{ color: "#3C85F1" }}
+                        accessible={true}
+                        keyExtractor={(item) => item.lot_no}
+                        // initValue={'ahlo'}
+                        labelExtractor={(item) => item.lot_no} //khusus untuk lotno
+                        cancelButtonAccessibilityLabel={"Cancel Button"}
+                        cancelText={"Cancel"}
+                        onChange={(option) => {
+                          onChangelot(option);
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#CDB04A",
+                            alignSelf: "center",
+                            fontSize: 16,
+                            // top: 10,
+                            // flex: 1,
+                            justifyContent: "center",
+                            fontWeight: "800",
+                            fontFamily: "KaiseiHarunoUmi",
+                          }}
+                        ></Text>
+                      </ModalSelector>
+                    }
+                  </View>
+                </View>
+              )}
+              {stateReduxDataUnit.length != 0 ? (
+                <View
+                  style={{
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    width: 150,
+                    justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    //alignSelf:'center'
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingLeft: 0,
+                      //alignContent: "space-between",
+                    }}
+                  >
+                    <ModalSelector
+                      style={{
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        flex: 1,
+                      }}
+                      childrenContainerStyle={{
+                        color: "#CDB04A",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        // top: 10,
+                        // flex: 1,
+                        justifyContent: "center",
+                        fontWeight: "800",
+                        fontFamily: "KaiseiHarunoUmi",
+                        flexDirection: "row",
+                      }}
+                      data={stateReduxDataUnit}
+                      optionTextStyle={{ color: "#333" }}
+                      selectedItemTextStyle={{ color: "#3C85F1" }}
+                      accessible={true}
+                      keyExtractor={(item) => item.lot_no}
+                      // initValue={'ahlo'}
+                      labelExtractor={(item) => renderOptionUnit(item)} //khusus untuk lotno
+                      cancelButtonAccessibilityLabel={"Cancel Button"}
+                      cancelText={"Cancel"}
+                      onChange={(option) => {
+                        onChangelot(option);
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          flex: 1,
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          adjustsFontSizeToFit={true}
+                          allowFontScaling={true}
+                          style={{
+                            color: "#fff",
+                            alignSelf: "center",
+                            fontSize: 14,
+                            justifyContent: "center",
+                            paddingRight: 10,
+
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          {text_lotno?.lot_no ? "Unit" : "Choose Unit"}
+                        </Text>
+                        <Text
+                          style={{
+                            color: "#CDB04A",
+                            alignSelf: "center",
+                            fontSize: 16,
+                            // top: 10,
+                            // flex: 1,
+                            justifyContent: "center",
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          {text_lotno?.lot_no}
+                        </Text>
+                        <Icon
+                          name="caret-down"
+                          solid
+                          size={26}
+                          // color={colors.primary}
+                          style={{ marginLeft: 5 }}
+                          color={"#CDB04A"}
+                        />
+                      </View>
+                    </ModalSelector>
+                    {dotChooseUnit ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: BaseColor.whiteColor,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: -10,
+                          right: -20,
+                          borderRadius: 10,
+                        }}
+                      >
+                        {/* <Text whiteColor caption2>
+            {finalCount < 0 ? 0 : finalCount}
+          </Text> */}
+                      </View>
+                    ) : null}
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    //width: 150,
+                    justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingLeft: 5,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontSize: 14,
+                        justifyContent: "center",
+                        paddingRight: 5,
+
+                        fontWeight: "800",
+                        fontFamily: font, //"KaiseiHarunoUmi",
+                      }}
+                    >
+                      Unit not found
+                    </Text>
+
+                    <ModalSelector
+                      style={{ justifyContent: "center", alignSelf: "center" }}
+                      childrenContainerStyle={{
+                        color: "#CDB04A",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        // top: 10,
+                        // flex: 1,
+                        justifyContent: "center",
+                        fontWeight: "800",
+                        fontFamily: "KaiseiHarunoUmi",
+                      }}
+                      //data={lotno}
+                      optionTextStyle={{ color: "#333" }}
+                      selectedItemTextStyle={{ color: "#3C85F1" }}
+                      accessible={true}
+                      keyExtractor={(item) => item.lot_no}
+                      // initValue={'ahlo'}
+                      labelExtractor={(item) => item.lot_no} //khusus untuk lotno
+                      cancelButtonAccessibilityLabel={"Cancel Button"}
+                      cancelText={"Cancel"}
+                      onChange={(option) => {
+                        onChangelot(option);
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#CDB04A",
+                          alignSelf: "center",
+                          fontSize: 16,
+                          // top: 10,
+                          // flex: 1,
+                          justifyContent: "center",
+                          fontWeight: "800",
+                          fontFamily: "KaiseiHarunoUmi",
+                        }}
+                      ></Text>
+                    </ModalSelector>
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.paddingContent}>
+            {/* {loading && <ActivityIndicator />} */}
+            {user == null || user == "" ? (
+              <Text>user not available</Text>
+            ) : !loading ? (
+              <Categories
+                style={{ marginTop: 10, fontFamily: font }}
+                menu={homeMenu}
+                font={font}
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
+          </View>
+          {/**errot */}
+          <View style={{ marginBottom: 10, flex: 1, fontFamily: font }}>
+            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  // color: 'white',
+                  fontFamily: font, //"DMSerifDisplay",
+                }}
+              >
+                Our Bulletin
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginRight: 20,
+                }}
+              >
+                <Text>News</Text>
+                {
+                  newsannounce.length >= 6 ? (
+                    <TouchableOpacity
+                      onPress={() => goToMoreNewsAnnounce(newsannounce)}
+                    >
+                      <View
+                        style={{ alignSelf: "center", flexDirection: "row" }}
+                      >
+                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
+                          More
+                        </Text>
+                        <Icon
+                          name="arrow-right"
+                          solid
+                          size={16}
+                          color={colors.primary}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  ) : null
+                  // <Text>kurang dari 6</Text>
+                }
+              </View>
+            </View>
+            <View style={{ marginVertical: 10, marginLeft: 20 }}>
+              {loading ? (
+                <ActivityIndicator />
+              ) : newsannounceslice.length != 0 ? (
+                <SliderNews
+                  data={newsannounceslice}
+                  local={true}
+                  // contentContainerStyle={{paddingHorizontal: 16}}
+                  // onPress={//console.log('klik')}
+                />
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 20,
+                      //backgroundColor: "blue"
+                      color: "grey",
+                    }}
+                  >
+                    No news right now
+                  </Text>
+                </>
+              )}
+            </View>
+          </View>
+
+          <View style={{ marginBottom: 20, flex: 1, fontFamily: font }}>
+            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  // color: 'white',
+                  //fontFamily: "DMSerifDisplay",
+                }}
+              >
+                This Weekend
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginRight: 20,
+                }}
+              >
+                <Text>Event and Restaurant</Text>
+                {
+                  eventresto.length >= 6 ? (
+                    <TouchableOpacity
+                      onPress={() => goToEventResto(eventresto)}
+                    >
+                      <View
+                        style={{ alignSelf: "center", flexDirection: "row" }}
+                      >
+                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
+                          More
+                        </Text>
+                        <Icon
+                          name="arrow-right"
+                          solid
+                          size={16}
+                          color={colors.primary}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  ) : null
+                  // <Text>kurang dari 6</Text>
+                }
+              </View>
+            </View>
+
+            <View
+              style={{
+                marginVertical: 10,
+                marginHorizontal: 10,
+                fontFamily: font,
+              }}
+            >
+              {loading ? (
+                <ActivityIndicator />
+              ) : imageEventResto.length != 0 ? (
+                <ScrollView horizontal>
+                  <MasonryList
+                    data={imageEventResto}
+                    // data={sliceArrEvent}
+                    style={{ alignSelf: "stretch" }}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 10,
+                      alignSelf: "stretch",
+                      // alignSelf: 'flex-start',
+                    }}
+                    keyExtractor={(item, index) => index}
+                    numColumns={3}
+                    renderItem={CardItem}
+                  />
+                </ScrollView>
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 20,
+                      //backgroundColor: "blue"
+                      color: "grey",
+                    }}
+                  >
+                    No event right now
+                  </Text>
+                </>
+              )}
+            </View>
+          </View>
+
+          <View style={{ marginBottom: 20, flex: 1, fontFamily: font }}>
+            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  // color: 'white',
+                  //fontFamily: "DMSerifDisplay",
+                }}
+              >
+                Club And Facilities
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginRight: 20,
+                }}
+              >
+                <Text>Check Our Promo Here</Text>
+                {
+                  promoclubfac.length >= 6 ? (
+                    <TouchableOpacity
+                      onPress={() => goToPromoClubFac(promoclubfac)}
+                    >
+                      <View
+                        style={{ alignSelf: "center", flexDirection: "row" }}
+                      >
+                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
+                          More
+                        </Text>
+                        <Icon
+                          name="arrow-right"
+                          solid
+                          size={16}
+                          color={colors.primary}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  ) : null
+                  // <Text>kurang dari 6</Text>
+                }
+              </View>
+            </View>
+            <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
+              {loading ? (
+                <ActivityIndicator />
+              ) : imagePromoClubFac.length != 0 ? (
+                <ScrollView horizontal>
+                  <FlatList
+                    pagingEnabled={true}
+                    decelerationRate="fast"
+                    bounces={false}
+                    data={imagePromoClubFac}
+                    numColumns={3}
+                    contentContainerStyle={{
+                      paddingHorizontal: 10,
+                    }}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({ item, index }) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate("PreviewImageHome", {
+                            images: item?.pict,
+                          })
+                        }
+                      >
+                        {/* <View
+                          key={item.rowID}
+                          style={{
+                            // //width: Dimensions.get("window").width,
+                            // //height: 300, // Adjust height as needed
+                            // overflow: "hidden",
+                            // margin: 5,
+                            // width: 250,
+                            // height: 450,
+                            // //position: "relative",
+                            width: 250, //Dimensions.get("window").width, // Width of the cropped area
+                            height: 450, // Height of the cropped area
+                            overflow: "hidden", // Crops the image to the container
+                            position: "relative",
+                          }}
+                        >
+                          
+                          <Image
+                            source={{ uri: item?.pict }}
+                            style={
+                              ([styles.shadow],
+                              {
+                                // height: 450,
+                                // //margin: 5,
+                                // width: 250,
+                                // borderRadius: 10,
+                                // //paddingLeft: 50,
+                                // //resizeMode: "cover",
+                                // //position: "absolute",
+                                // //position: "relative",
+                                // left: 0,
+                                width: "100%",
+                                height: "100%", // Height of the image
+                                position: "absolute",
+                                right: -20, // Start cropping from the left
+                              })
+                            }
+                            //resizeMode={"cover"}
+                          ></Image>
+                        </View> */}
+                        {/* <View
+                          style={{
+                            flex: 1,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        > */}
+                        <View
+                          style={[
+                            {
+                              width: 250, //Dimensions.get("window").width, // Width of the cropped area
+                              height: 450, // Height of the cropped area
+                              overflow: "hidden", // Crops the image to the container
+                              position: "relative",
+                              borderRadius: 10,
+                            },
+                            styles.shadow,
+                          ]}
+                        >
+                          <Image
+                            source={{
+                              uri: item?.pict,
+                            }}
+                            style={[
+                              {
+                                height: "100%", // Height of the image
+                                position: "absolute",
+                                left: 0, // Start cropping from the left
+                              },
+                              { width: 450 },
+                            ]}
+                            resizeMode="cover"
+                          />
+                        </View>
+                        {/* </View> */}
+                      </TouchableOpacity>
+                    )}
+                    // keyExtractor={(item, index) => item.toString() + index}
+                    keyExtractor={(item, index) => index}
+                  />
+                </ScrollView>
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 20,
+                      //backgroundColor: "blue"
+                      color: "grey",
+                    }}
+                  >
+                    No promo right now
+                  </Text>
+                </>
+              )}
+            </View>
+          </View>
+          {/*           <Button
+            title={
+              "simulasi notifikasi " +
+              JSON.stringify(dummyArray.length) +
+              " unit"
+            }
+            onPress={
+              () => {
+                if (dummyArray.length == 2) {
+                  const newArray = [
+                    {
+                      cluster_cd: "GSE",
+                      entity_cd: "1001",
+                      lot_no: "AA-23",
+                      project_no: "1001001",
+                    },
+                  ];
+                  setDummyArray(newArray);
+                  saveDataNotification(newArray);
+                  setDotList(newArray);
+                  //await onChangelot(stateReduxChoosedUnit);
+                } else {
+                  const newArray = [
+                    {
+                      cluster_cd: "GSE",
+                      entity_cd: "1001",
+                      lot_no: "AA-23",
+                      project_no: "1001001",
+                    },
+                    {
+                      cluster_cd: "GSE",
+                      entity_cd: "1001",
+                      lot_no: "AA-25",
+                      project_no: "1001001",
+                    },
+                  ];
+                  setDummyArray(newArray);
+                  saveDataNotification(newArray);
+                  setDotList(newArray);
+                  //await onChangelot(stateReduxChoosedUnit);
+                }
+              }
+              // setDummyArray([
+              //   {
+              //     cluster_cd: "GSE",
+              //     entity_cd: "1001",
+              //     lot_no: "AA-23",
+              //     project_no: "1001001",
+              //   },
+              // ])
+            }
+          /> */}
+        </ScrollView>
+        {/* Close Modal Greeting Chairman  */}
         <View>
           <Modal
             isVisible={modalImage}
@@ -1032,599 +2957,20 @@ const Home = (props) => {
           </Modal>
         </View>
         {/* Modal Show Image Greeting Chairman  */}
-
-        <ScrollView
-          // contentContainerStyle={styles.paddingSrollView}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {/* <View style={{flex: 1}}> */}
-          <ImageBackground
-            source={require("../../assets/images/image-home/Main_Image.png")}
-            //source={require("../../assets/images/image-home/carstensz.webp")}
-            style={
-              {
-                // height: '100%',
-                // height: 400,
-                // width: '100%',
-                // flex: 1,
-                // resizeMode: 'cover',
-                // borderBottomLeftRadius: 500,
-                // borderBottomRightRadius: 175,
-              }
-            }
-            imageStyle={{
-              height: 400,
-              width: "100%",
-              // borderBottomLeftRadius: 175,
-              // borderBottomRightRadius: 175,
-            }}
-          >
-            <LinearGradient
-              colors={["rgba(73, 73, 73, 0)", "rgba(73, 73, 73, 1)"]}
-              // colors={['#4c669f', '#3b5998', '#192f6a']}
-              // {...otherGradientProps}
-              style={{
-                height: 400,
-                // height: '85%',
-                width: "100%",
-
-                flexDirection: "column",
-                // flex: 1,
-                justifyContent: "center",
-                // top: 30,
-                // borderBottomLeftRadius: 175,
-                // borderBottomRightRadius: 175,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "column",
-                  flex: 1,
-                  justifyContent: "center",
-                  top: 30,
-                }}
-              >
-                {/* ------- TEXT WELCOME HOME ------- */}
-                <View
-                  style={{
-                    // flex: 1,
-                    alignItems: "center",
-
-                    left: 47,
-                    justifyContent: "center",
-
-                    width: "80%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      color: "white",
-                      fontFamily: "DMSerifDisplay",
-                      lineHeight: 30,
-                    }}
-                  >
-                    Welcome home
-                    {"\n"}
-                    {user.name}
-                  </Text>
-                </View>
-                {/* ------- CLOSE TEXT WELCOME HOME ------- */}
-
-                {/* ----- SEARCH INPUT ----- */}
-                {/* <View
-                    style={{
-                      // flex: 1,
-                      alignItems: 'center',
-                      left: 47,
-                      justifyContent: 'center',
-                      width: '80%',
-                    }}>
-                    <SearchInput
-                      style={[BaseStyle.textInput, Typography.body1]}
-                      onChangeText={onChangeText}
-                      autoCorrect={false}
-                      placeholder={t('Explore your luxury lifestyle')}
-                      placeholderTextColor={BaseColor.grayColor}
-                      value={keyword}
-                      selectionColor={colors.primary}
-                      onSubmitEditing={() => {}}
-                      icon={
-                        <Icon
-                          name="search"
-                          solid
-                          size={24}
-                          color={colors.primary}
-                        />
-                      }
-                    />
-                  </View> */}
-                <View style={{ alignItems: "center", top: 20 }}>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontFamily: "DMSerifDisplay",
-                      fontSize: 10,
-                    }}
-                  >
-                    {/* Once Upon Your Lifetime */}
-                  </Text>
-                </View>
-                <View style={{ alignItems: "center", top: 10 }}>
-                  <Image
-                    style={{
-                      height: 100,
-                      width: "90%",
-                      //padding: 100,
-                      resizeMode: "contain",
-                    }}
-                    //source={require("../../assets/images/image-home/vector-logo-carstensz.webp")}
-                    source={require("../../assets/images/image-home/logoIFCAH.png")}
-                  ></Image>
-                </View>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-          {/* </View> */}
-
-          <View
-            style={{
-              flexDirection: "row",
-              //marginLeft: 35,
-              marginTop: 10,
-              marginBottom: 10,
-              //backgroundColor: "red",
-              //alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              style={{
-                height: 60,
-                width: 60,
-                borderRadius: 30,
-              }}
-              // source={require('../../assets/images/image-home/Main_Image.png')}
-              source={user.pict != null ? { uri: repl } : fotoprofil}
-            ></Image>
-            <View
-              style={{
-                //alignSelf: "center",
-                //justifyContent: "center",
-                alignItems: "center",
-                //backgroundColor: "blue",
-                //marginLeft: 10
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  // adjustsFontSizeToFit={true}
-                  // allowFontScaling={true}
-                  style={{
-                    // fontSize: 18,s
-                    fontSize: fontPixel(18),
-                    paddingVertical: pixelSizeVertical(10),
-                    // marginVertical: 3,
-                    fontFamily: "DMSerifDisplay",
-                  }}
-                >
-                  {/* Nama pemilik */}
-                  {user.name}
-                </Text>
-                <Icon
-                  name="star"
-                  solid
-                  size={18}
-                  color={colors.primary}
-                  style={{ marginHorizontal: 5 }}
-                />
-              </View>
-              {/* <Text>{lotno.length}</Text> */}
-
-              {lotno.length != 0 ? (
-                <View
-                  style={{
-                    backgroundColor: colors.primary, //"#315447",
-                    height: 30,
-                    // width: '100%',
-                    width: 150,
-                    justifyContent: "center",
-                    paddingHorizontal: 10,
-                    borderRadius: 10,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      paddingLeft: 0,
-                    }}
-                  >
-                    <ModalSelector
-                      style={{
-                        justifyContent: "center",
-                        alignSelf: "center",
-                        //flex: 1,
-                      }}
-                      childrenContainerStyle={{
-                        color: "#CDB04A",
-                        alignSelf: "center",
-                        fontSize: 16,
-                        // top: 10,
-                        // flex: 1,
-                        justifyContent: "center",
-                        fontWeight: "800",
-                        fontFamily: "KaiseiHarunoUmi",
-                        flexDirection: "row",
-                      }}
-                      data={lotno}
-                      optionTextStyle={{ color: "#333" }}
-                      selectedItemTextStyle={{ color: "#3C85F1" }}
-                      accessible={true}
-                      keyExtractor={(item) => item.lot_no}
-                      // initValue={'ahlo'}
-                      labelExtractor={(item) => item.lot_no} //khusus untuk lotno
-                      cancelButtonAccessibilityLabel={"Cancel Button"}
-                      cancelText={"Cancel"}
-                      onChange={(option) => {
-                        onChangelot(option);
-                      }}
-                    >
-                      <Text
-                        adjustsFontSizeToFit={true}
-                        allowFontScaling={true}
-                        style={{
-                          color: "#fff",
-                          alignSelf: "center",
-                          fontSize: 14,
-                          justifyContent: "center",
-                          paddingRight: 10,
-
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                      >
-                        Unit
-                      </Text>
-                      <Text
-                        style={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                      >
-                        {text_lotno.lot_no}
-                      </Text>
-                      <Icon
-                        name="caret-down"
-                        solid
-                        size={26}
-                        // color={colors.primary}
-                        style={{ marginLeft: 5 }}
-                        color={"#CDB04A"}
-                      />
-                    </ModalSelector>
-                  </View>
-                </View>
-              ) : (
-                <View
-                  style={{
-                    backgroundColor: colors.primary, //"#315447",
-                    height: 30,
-                    // width: '100%',
-                    width: 150,
-                    justifyContent: "center",
-                    paddingHorizontal: 10,
-                    borderRadius: 10,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      paddingLeft: 10,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#fff",
-                        alignSelf: "center",
-                        fontSize: 14,
-                        justifyContent: "center",
-                        paddingRight: 10,
-
-                        fontWeight: "800",
-                        fontFamily: "KaiseiHarunoUmi",
-                      }}
-                    >
-                      Unit not found
-                    </Text>
-
-                    <ModalSelector
-                      style={{ justifyContent: "center", alignSelf: "center" }}
-                      childrenContainerStyle={{
-                        color: "#CDB04A",
-                        alignSelf: "center",
-                        fontSize: 16,
-                        // top: 10,
-                        // flex: 1,
-                        justifyContent: "center",
-                        fontWeight: "800",
-                        fontFamily: "KaiseiHarunoUmi",
-                      }}
-                      data={lotno}
-                      optionTextStyle={{ color: "#333" }}
-                      selectedItemTextStyle={{ color: "#3C85F1" }}
-                      accessible={true}
-                      keyExtractor={(item) => item.lot_no}
-                      // initValue={'ahlo'}
-                      labelExtractor={(item) => item.lot_no} //khusus untuk lotno
-                      cancelButtonAccessibilityLabel={"Cancel Button"}
-                      cancelText={"Cancel"}
-                      onChange={(option) => {
-                        onChangelot(option);
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                      >
-                        {/* Lot No Available */}
-                      </Text>
-                    </ModalSelector>
-                  </View>
-                </View>
-              )}
-            </View>
-          </View>
-
-          <View style={styles.paddingContent}>
-            {user == null || user == "" ? (
-              <Text>user not available</Text>
-            ) : (
-              <Categories style={{ marginTop: 10 }} />
-            )}
-          </View>
-
-          <View style={{ marginBottom: 10, flex: 1 }}>
-            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
-              <Text
-                style={{
-                  fontSize: 24,
-                  // color: 'white',
-                  fontFamily: "DMSerifDisplay",
-                }}
-              >
-                Our Bulletin
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginRight: 20,
-                }}
-              >
-                <Text>News</Text>
-                {
-                  newsannounce.length >= 6 ? (
-                    <TouchableOpacity
-                      onPress={() => goToMoreNewsAnnounce(newsannounce)}
-                    >
-                      <View
-                        style={{ alignSelf: "center", flexDirection: "row" }}
-                      >
-                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
-                          More
-                        </Text>
-                        <Icon
-                          name="arrow-right"
-                          solid
-                          size={16}
-                          color={colors.primary}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  ) : null
-                  // <Text>kurang dari 6</Text>
-                }
-              </View>
-            </View>
-            <View style={{ marginVertical: 10, marginLeft: 20 }}>
-              {loadNewsAnnounce ? (
-                <ActivityIndicator />
-              ) : (
-                <SliderNews
-                  data={newsannounceslice}
-                  local={true}
-                  // contentContainerStyle={{paddingHorizontal: 16}}
-                  // onPress={console.log('klik')}
-                />
-              )}
-            </View>
-          </View>
-
-          <View style={{ marginBottom: 20, flex: 1 }}>
-            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
-              <Text
-                style={{
-                  fontSize: 24,
-                  // color: 'white',
-                  fontFamily: "DMSerifDisplay",
-                }}
-              >
-                This Weekend
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginRight: 20,
-                }}
-              >
-                <Text>Event And Restaurant</Text>
-                {
-                  eventresto.length >= 6 ? (
-                    <TouchableOpacity
-                      onPress={() => goToEventResto(eventresto)}
-                    >
-                      <View
-                        style={{ alignSelf: "center", flexDirection: "row" }}
-                      >
-                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
-                          More
-                        </Text>
-                        <Icon
-                          name="arrow-right"
-                          solid
-                          size={16}
-                          color={colors.primary}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  ) : null
-                  // <Text>kurang dari 6</Text>
-                }
-              </View>
-            </View>
-
-            <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
-              <ScrollView horizontal>
-                <MasonryList
-                  data={imageEventResto}
-                  // data={sliceArrEvent}
-                  style={{ alignSelf: "stretch" }}
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  scrollEnabled={false}
-                  contentContainerStyle={{
-                    paddingHorizontal: 10,
-                    alignSelf: "stretch",
-                    // alignSelf: 'flex-start',
-                  }}
-                  keyExtractor={(item, index) => index}
-                  numColumns={3}
-                  renderItem={CardItem}
-                />
-              </ScrollView>
-            </View>
-          </View>
-
-          <View style={{ marginBottom: 20, flex: 1 }}>
-            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
-              <Text
-                style={{
-                  fontSize: 24,
-                  // color: 'white',
-                  fontFamily: "DMSerifDisplay",
-                }}
-              >
-                Club And Facilities
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginRight: 20,
-                }}
-              >
-                <Text>Check Our Promo Here</Text>
-                {
-                  promoclubfac.length >= 6 ? (
-                    <TouchableOpacity
-                      onPress={() => goToPromoClubFac(promoclubfac)}
-                    >
-                      <View
-                        style={{ alignSelf: "center", flexDirection: "row" }}
-                      >
-                        <Text style={{ marginHorizontal: 5, fontSize: 14 }}>
-                          More
-                        </Text>
-                        <Icon
-                          name="arrow-right"
-                          solid
-                          size={16}
-                          color={colors.primary}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  ) : null
-                  // <Text>kurang dari 6</Text>
-                }
-              </View>
-            </View>
-            <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
-              <ScrollView horizontal>
-                <FlatList
-                  pagingEnabled={true}
-                  decelerationRate="fast"
-                  bounces={false}
-                  data={imagePromoClubFac}
-                  numColumns={3}
-                  contentContainerStyle={{
-                    paddingHorizontal: 10,
-                  }}
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("PreviewImageHome", {
-                          images: item.pict,
-                        })
-                      }
-                    >
-                      <View key={item.rowID} style={{}}>
-                        {/* <Text></Text> */}
-                        <Image
-                          source={{ uri: item.pict }}
-                          style={
-                            ([styles.shadow],
-                            {
-                              height: 450,
-                              margin: 5,
-                              width: 250,
-                              borderRadius: 10,
-                            })
-                          }
-                          resizeMode={"cover"}
-                        ></Image>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                  // keyExtractor={(item, index) => item.toString() + index}
-                  keyExtractor={(item, index) => index}
-                />
-              </ScrollView>
-            </View>
-          </View>
-        </ScrollView>
       </View>
     );
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, color: "white" }}>
       <SafeAreaView
-        style={BaseStyle.safeAreaView}
+        style={[
+          BaseStyle.safeAreaView,
+          {
+            //backgroundColor: "black",
+            color: "white",
+          },
+        ]}
         edges={["right", "top", "left"]}
       >
         {renderContent()}

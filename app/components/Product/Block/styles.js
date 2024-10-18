@@ -1,14 +1,14 @@
-import * as Utils from '@utils';
-import {StyleSheet} from 'react-native';
+import * as Utils from "@utils";
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   imageBackground: {
-    height: ((Utils.getWidthDevice() - 30) * 9) / 15,
-    width: '100%',
-    position: 'relative',
+    height: 150, //((Utils.getWidthDevice() - 30) * 9) / 15,
+    width: "100%",
+    position: "relative",
   },
   salePercent: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 8,
     right: 8,
     paddingHorizontal: 8,
@@ -26,36 +26,36 @@ export default StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
   },
-  costPrice: {paddingHorizontal: 8, textDecorationLine: 'line-through'},
+  costPrice: { paddingHorizontal: 8, textDecorationLine: "line-through" },
   content: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     // justifyContent: 'center',
   },
   left: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   center: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   right: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   contentRight: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
+    justifyContent: "center",
+    alignItems: "flex-end",
   },
   viewIcon: {
     width: 40,
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
   },
 });

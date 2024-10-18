@@ -19,3 +19,5 @@ keytool -genkey -v -keystore 8July.keystore -alias asthana -keyalg RSA -keysize 
 $ npx react-native-rename "CarstenzRDemo" -b "id.co.property365.carstenzresidence"
 
 npx react-native-rename "IFCA Residence" -b "com.ifcasoftware.ifcaresidence"
+
+npx react-native-rename "Tanrise Residence" -b "com.ifcasoftware.tanriseresidence"

@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
 
-import { BaseStyle, Fonts, BaseColor } from "@config";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 import { useIsFocused } from "@react-navigation/native";
@@ -21,6 +21,7 @@ import entities from "entities";
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
 const Surrounding = (props) => {
   const { onPress, datas, icon, ...attrs } = props;
+  const { colors } = useTheme();
   const systemFonts = [
     ...defaultSystemFonts,
     "Arial Black",
@@ -89,12 +90,12 @@ const Surrounding = (props) => {
                 <Text
                   style={{
                     fontFamily: "DMSerifDisplay",
-                    color: BaseColor.corn70,
+                    color: colors.text,
                     fontSize: 16,
                     fontWeight: "bold",
                   }}
                 >
-                  Surrounding Area
+                  Surrounding Area new gak dipake
                 </Text>
               </View>
             </View>

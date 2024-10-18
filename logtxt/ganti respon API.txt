@@ -1,0 +1,251 @@
+1. .Error => .success
+kalo ada kondisi .Error == false => .success == true
+
+2. .Pesan => .message
+
+3. .Data => .data
+
+4. user selector di semua screen ditambahin userData
+
+misal const [name, setName] = usestate(user.userData.name)
+
+            description={"Semi Gross"}
+            title={build_area}
+
+//===================
+
+import { store, persist } from "../../store";
+
+  const stateStore = store.getState();
+  const token = stateStore.user.accessToken;
+
+      const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+//
+
+import { useSelector, useDispatch } from "react-redux";
+
+import httpClient from "../../controllers/HttpClient";
+
+      const stateRedux = useSelector((state) => state.user);
+            const token = stateRedux.accessToken;
+
+        const result = await httpClient.request({
+        url: "/home/news",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+        const result = await httpClient.request({
+        url: "/home/news",
+        method: "GET",
+      });
+
+//============================
+
+import { homeCommonProject } from "../FunctionAxios/home-common-project";
+
+//dropdownProject
+  const [choosedProject, setChoosedProject] = useState();
+  const [dataDD, setDataDD] = useState([]);
+
+  const handleSelect = (value) => {
+    console.log("Selected Value:", value);
+    //setState(value);
+    setChoosedProject(value);
+  };
+  const dropdownItems = [
+    // { label: "choose project", value: "" },
+    { label: "Project 1", value: "Project 1" },
+    { label: "Project 2", value: "Project 2" },
+    { label: "Project 3", value: "Project 3" },
+  ];
+
+    const data = {
+      email: email,
+    };
+
+    await homeCommonProject(token, data, setDataDD, setArrDataProject);
+
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+            value2={choosedProject}
+          />
+
+//============================
+
+  const stateReduxChoosedUnit = useSelector(
+    (state) => state.Dataproject.choosedUnit
+  );
+  const stateReduxChoosedProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+  
+  //==========================
+
+          if (
+          error.response.data.message ==
+          "Key material must be a string, resource, or OpenSSLAsymmetricKey"
+        ) {
+          console.log("Key material error detected");
+          loadData();
+        }
+//==============================
+
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
+import { useWindowDimensions } from "react-native";
+
+  const { width } = useWindowDimensions();
+
+      const tagsStyles = {
+        h1: { fontSize: 24, fontWeight: "bold", color: "blue" },
+        p: { fontSize: 17, color: colors.text, textAlign: "justify" },
+        a: { color: "purple", textDecorationLine: "underline" },
+        strong: { fontWeight: "bold" },
+      };
+
+            <RenderHtml
+              source={{ html: announce_descs }}
+              contentWidth={width}
+              tagsStyles={tagsStyles}
+            />
+
+            //////////////////
+
+                  <View key={index} style={{ flex: 1 }}>
+                    <RenderHtml
+                      key={index}
+                      contentWidth={contentWidth}
+                      source={{
+                        html: `
+                                        <div style="text-align: justify;">
+                                        ${item.overview_info}
+                                        </div>
+                                        `,
+                      }}
+                      systemFonts={systemFonts}
+                      defaultTextProps={{ allowFontScaling: false }}
+                      enableExperimentalMarginCollapsing={true}
+                      ignoredStyles={["fontSize"]}
+                      tagsStyles={{
+                        em: {
+                          color: colors.text,
+                          // fontSize: 12,
+                          fontFamily: "DMSerifDisplay",
+                          // fontFamily: Fonts.type.ComicSansMS,
+                          // textAlign: 'justify',
+                          fontStyle: "normal",
+                        },
+                        strong: {
+                          color: colors.text,
+                          // fontSize: 12,
+                          // fontFamily: "DMSerifDisplay",
+                          fontWeight: "600",
+                          ...(Platform.OS === "android" && {
+                            fontWeight: "600",
+                            fontFamily: "DMSerifDisplay",
+                          }),
+                        },
+                        b: {
+                          color: colors.text,
+                          // fontSize: 12,
+                          // fontFamily: "DMSerifDisplay",
+                          fontWeight: "600",
+                          ...(Platform.OS === "android" && {
+                            fontWeight: "600",
+                            fontFamily: "DMSerifDisplay",
+                          }),
+                        },
+
+                        p: {
+                          color: colors.text,
+                          fontSize: 13,
+                          fontFamily: "DMSerifDisplay",
+                          // fontFamily: Fonts.type.ComicSansMS,
+                          //textAlign: 'justify',
+                        },
+                        span: {
+                          color: colors.text,
+                          fontSize: 13,
+                          fontFamily: "DMSerifDisplay",
+                          // fontFamily: Fonts.type.ComicSansMS,
+                          //textAlign: 'justify',
+                        },
+                        li: {
+                          // color: isDarkMode ? 'blue' : 'red',
+                          color: colors.text,
+                          // fontSize: 12,
+                          fontFamily: "DMSerifDisplay",
+                        },
+                        div: {
+                          textAlign: "justify",
+                          color: colors.text,
+                        },
+                      }}
+                    />
+                    {/* <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "DMSerifDisplay",
+                    color: colors.corn90,
+                    marginVertical: 5,
+                  }}>
+                  {item.overview_info
+                    .replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gim, '')
+                    .replace(/(&nbsp;)/g, ' ')
+                    .replace(/(&ndash;)/g, '-')
+                    .replace(/(&amp;)/g, `&`)}
+                </Text> */}
+                    <TouchableOpacity onPress={() => showModalOverview(item)}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          marginVertical: 5,
+
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontFamily: "DMSerifDisplay",
+                            color: colors.text,
+                            marginBottom: 2,
+                            marginRight: 5,
+                            alignSelf: "center",
+                            // alignContent: 'center',
+                            // justifyContent: 'center',
+                            // alignItems: 'center',
+                            borderBottomWidth: 0.5,
+                            borderBottomColor: colors.text,
+                          }}
+                        >
+                          Show more
+                        </Text>
+                        <Icon
+                          style={
+                            {
+                              // alignSelf: 'center',
+                              // alignContent: 'center',
+                              // justifyContent: 'center',
+                              // alignItems: 'center',
+                            }
+                          }
+                          // name="angle-left"
+
+                          name="chevron-right"
+                          size={14}
+                          color={colors.primary}
+                          enableRTL={true}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  </View>

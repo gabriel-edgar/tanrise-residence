@@ -55,7 +55,7 @@ const Skip = (props) => {
     await axios
       .get(
         // `http://apps.pakubuwono-residence.com/apisysadmin/api/getProject/${data.email}`,
-        API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`,
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
         {
           config,
         }
@@ -118,7 +118,7 @@ const Skip = (props) => {
       },
     };
     await axios
-      // .get(`http://apps.pakubuwono-residence.com/apiwebpbi/api/about_mobile`) //url ini mengeluarkan semua data tanpa where entity dan project
+      // .get(`http://apps.pakubuwono-residence.com/apiwebpbi/api/setting/about-us`) //url ini mengeluarkan semua data tanpa where entity dan project
       .post(API_URL_LOKAL + `/about`, params, {
         config,
       })
@@ -140,7 +140,7 @@ const Skip = (props) => {
 
   useEffect(() => {
     axios
-      .get(API_URL_LOKAL + "/rsentryMobile")
+      .get(API_URL_LOKAL + "/modules/rs/rent-unit")
       .then(({ data }) => {
         console.log("defaultApp -> data", rent);
         setRent(data);

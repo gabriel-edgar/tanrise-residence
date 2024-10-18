@@ -1,27 +1,34 @@
-import {Button, Header, Icon, SafeAreaView, TextInput, Text} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import React, {useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import Modal from 'react-native-modal';
-import {API_URL_LOKAL} from '@env';
+import {
+  Button,
+  Header,
+  Icon,
+  SafeAreaView,
+  TextInput,
+  Text,
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import React, { useState } from "react";
+import { ScrollView, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import Modal from "react-native-modal";
+import { API_URL_LOKAL } from "@env";
 const successInit = {
   email: true,
 };
-const ResetPassword = props => {
-  const {navigation} = props;
-  const {t} = useTranslation();
-  const {colors} = useTheme();
-  const [email, setEmail] = useState('');
+const ResetPassword = (props) => {
+  const { navigation } = props;
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(successInit);
   const [requiredEmail, setRequiredEmail] = useState(true);
   const [Alert_Visibility, setAlertVisibility] = useState(false);
-  const [pesan, setPesan] = useState('');
+  const [pesan, setPesan] = useState("");
   const [error, setError] = useState();
 
   const onReset = () => {
-    if (email == '') {
+    if (email == "") {
       setSuccess({
         ...success,
         email: false,
@@ -30,7 +37,7 @@ const ResetPassword = props => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        navigation.navigate('SignIn');
+        navigation.navigate("SignIn");
       }, 500);
     }
   };
@@ -42,47 +49,47 @@ const ResetPassword = props => {
     //   email: {require: true},
     // });
     // console.log('isvalid?', isValid);
-    if (email != '') {
+    if (email != "") {
       if (reg.test(email) === true) {
         const emails = email;
-        console.log('email', emails);
-        fetch(API_URL_LOKAL + '/tenant-resetpass', {
-          method: 'POST',
+        console.log("email", emails);
+        fetch(API_URL_LOKAL + "/auth/forgot-send-email", {
+          method: "POST",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({email}),
+          body: JSON.stringify({ email }),
         })
-          .then(response => response.json())
-          .then(res => {
+          .then((response) => response.json())
+          .then((res) => {
             // const resp = JSON.parse(res.Data);
-            console.log('res forgot pass', res);
-            setError(res.Error);
-            if (!res.Error) {
+            console.log("res forgot pass", res);
+            setError(!res.success);
+            if (res.success) {
               setLoading(true);
-              const pesan = res.Pesan;
+              const pesan = res.message;
               alertFillBlank(true, pesan);
-            } else if (res.Error) {
+            } else if (!res.success) {
               setLoading(true);
-              const pesan = res.Pesan;
+              const pesan = res.message;
               alertFillBlank(true, pesan);
-              console.log('res pesan', res.Pesan);
+              console.log("res pesan", res.message);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       } else {
         setLoading(true);
         // alert('Email not valid');
-        const pesan = 'Email not valid';
+        const pesan = "Email not valid";
         alertFillBlank(true, pesan);
       }
     } else {
       setLoading(true);
       // alert('Input email');
-      const pesan = 'Input email please';
+      const pesan = "Input email please";
       alertFillBlank(true, pesan);
     }
   };
@@ -96,7 +103,7 @@ const ResetPassword = props => {
   const onCloseModal = () => {
     if (error == false) {
       setAlertVisibility(false);
-      navigation.navigate('SignIn');
+      navigation.navigate("SignIn");
     } else {
       setAlertVisibility(false);
     }
@@ -105,9 +112,10 @@ const ResetPassword = props => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('reset_password')}
+        title={t("reset_password")}
         renderLeft={() => {
           return (
             <Icon
@@ -125,13 +133,14 @@ const ResetPassword = props => {
       <ScrollView>
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             padding: 20,
-            width: '100%',
-          }}>
+            width: "100%",
+          }}
+        >
           <TextInput
-            style={[BaseStyle.textInput, {marginTop: 65}]}
-            onChangeText={text => setEmail(text)}
+            style={[BaseStyle.textInput, { marginTop: 65 }]}
+            onChangeText={(text) => setEmail(text)}
             onFocus={() => {
               setSuccess({
                 ...success,
@@ -139,23 +148,24 @@ const ResetPassword = props => {
               });
             }}
             autoCorrect={false}
-            placeholder={t('email_address')}
+            placeholder={t("email_address")}
             placeholderTextColor={
               success.email ? BaseColor.grayColor : colors.primary
             }
             value={email}
             selectionColor={colors.primary}
           />
-          <View style={{width: '100%'}}>
+          <View style={{ width: "100%" }}>
             <Button
               full
-              style={{marginTop: 20}}
+              style={{ marginTop: 20 }}
               onPress={() => {
                 // onReset();
                 btnSend();
               }}
-              loading={loading}>
-              {t('reset_password')}
+              loading={loading}
+            >
+              {t("reset_password")}
             </Button>
           </View>
         </View>
@@ -163,35 +173,39 @@ const ResetPassword = props => {
       <View>
         <Modal
           isVisible={Alert_Visibility}
-          style={{height: '100%'}}
-          onBackdropPress={() => setAlertVisibility(false)}>
+          style={{ height: "100%" }}
+          onBackdropPress={() => setAlertVisibility(false)}
+        >
           <View
             style={{
               // flex: 1,
 
               // alignContent: 'center',
               padding: 10,
-              backgroundColor: '#fff',
+              backgroundColor: "#fff",
               // height: ,
               borderRadius: 8,
-            }}>
-            <View style={{alignItems: 'center'}}>
+            }}
+          >
+            <View style={{ alignItems: "center" }}>
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 'bold',
+                  fontWeight: "bold",
                   color: colors.primary,
                   marginBottom: 10,
-                }}>
-                {'Alert'}
+                }}
+              >
+                {"Alert"}
               </Text>
               <Text>{pesan}</Text>
             </View>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-              }}>
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
               <Button
                 style={{
                   marginTop: 10,
@@ -200,8 +214,9 @@ const ResetPassword = props => {
                   width: 70,
                   height: 40,
                 }}
-                onPress={() => onCloseModal()}>
-                <Text style={{fontSize: 13}}>{t('OK')}</Text>
+                onPress={() => onCloseModal()}
+              >
+                <Text style={{ fontSize: 13 }}>{t("OK")}</Text>
               </Button>
             </View>
           </View>

@@ -10,15 +10,15 @@ import {
   Header,
   Icon,
   CategoryIconSoft,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox, Badge} from 'react-native-elements';
-import {Image} from 'react-native';
-import StarRating from 'react-native-star-rating';
-import {useNavigation} from '@react-navigation/native';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox, Badge } from "react-native-elements";
+import { Image } from "react-native";
+import StarRating from "react-native-star-rating";
+import { useNavigation } from "@react-navigation/native";
 
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   TouchableOpacity,
@@ -27,36 +27,36 @@ import {
   TouchableHighlight,
   ScrollView,
   Dimensions,
-} from 'react-native';
+} from "react-native";
 
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import client from "../../controllers/HttpClient";
+import styles from "./styles";
 
-import {RadioButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RadioButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import moment from 'moment';
+import moment from "moment";
 
-import Modal from 'react-native-modal';
-import {API_URL_LOKAL} from '@env';
-export default function ViewHistoryStatus({route}) {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+import Modal from "react-native-modal";
+import { API_URL_LOKAL } from "@env";
+export default function ViewHistoryStatus({ route }) {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [urlApi, seturlApi] = useState(client);
-  const [entity, setEntity] = useState('');
-  const [project_no, setProjectNo] = useState('');
-  const [db_profile, setDb_Profile] = useState('');
+  const [entity, setEntity] = useState("");
+  const [project_no, setProjectNo] = useState("");
+  const [db_profile, setDb_Profile] = useState("");
   const [checkedEntity, setCheckedEntity] = useState(false);
   const [spinner, setSpinner] = useState(true);
   const [dataStatus, setDataStatus] = useState([]);
@@ -65,9 +65,9 @@ export default function ViewHistoryStatus({route}) {
   const [dataHistoryStatus, setDataHistoryStatus] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [starCount, setStarCount] = useState(0);
-  const [audit_user, setAudit_User] = useState('');
-  const [selectedReportNo, setSelectedReportNo] = useState('');
-  const deviceWidth = Dimensions.get('window').width;
+  const [audit_user, setAudit_User] = useState("");
+  const [selectedReportNo, setSelectedReportNo] = useState("");
+  const deviceWidth = Dimensions.get("window").width;
   //   console.log('passprop kategori help', passProp);
   const styleItem = {
     ...styles.profileItem,
@@ -77,26 +77,29 @@ export default function ViewHistoryStatus({route}) {
   const getTower = async () => {
     const data = {
       email: email,
-      app: 'O',
+      app: "O",
     };
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
         // token: "",
       },
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`, {
-        config,
-      })
-      .then(res => {
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
+        {
+          config,
+        }
+      )
+      .then((res) => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
-        arrDataTower.map(dat => {
+        arrDataTower.map((dat) => {
           if (dat) {
             setdataTowerUser(dat);
           }
@@ -106,8 +109,8 @@ export default function ViewHistoryStatus({route}) {
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error);
+      .catch((error) => {
+        console.log("error get tower api", error);
         // alert('error get');
       });
   };
@@ -119,7 +122,7 @@ export default function ViewHistoryStatus({route}) {
 
       // getCategoryHelp;
       // setSpinner(false);
-      console.log('routeparams', route.params);
+      console.log("routeparams", route.params);
       setDataHistoryStatus(route.params);
     }, 3000);
   }, []);
@@ -134,26 +137,27 @@ export default function ViewHistoryStatus({route}) {
 
   //for modal and rating
   const _setModalVisible = (visible, report_no) => {
-    let rNo = !visible ? '' : report_no;
+    let rNo = !visible ? "" : report_no;
     setModalVisible(visible);
 
     setSelectedReportNo(rNo);
   };
 
-  const onStarRatingPress = rating => {
+  const onStarRatingPress = (rating) => {
     setStarCount(rating);
   };
 
-  const handleNavigation = data => {
-    console.log('data for history detail', data);
-    navigation.navigate('ViewHistoryDetailTRO', data);
+  const handleNavigation = (data) => {
+    console.log("data for history detail", data);
+    navigation.navigate("ViewHistoryDetailTRO", data);
   };
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('status')} //belum dibuat lang
+        title={t("status")} //belum dibuat lang
         renderLeft={() => {
           return (
             <Icon
@@ -170,7 +174,7 @@ export default function ViewHistoryStatus({route}) {
       />
       <View style={styles.wrap}>
         <Text title2>Ticket</Text>
-        <Text headline style={{fontWeight: 'normal'}}>
+        <Text headline style={{ fontWeight: "normal" }}>
           View History Ticket
         </Text>
         {/* {dataHistoryStatus ? (
@@ -181,15 +185,15 @@ export default function ViewHistoryStatus({route}) {
         {spinner ? (
           <View>
             {/* <Spinner visible={this.state.spinner} /> */}
-            <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
-              <PlaceholderLine width={100} noMargin style={{height: 40}} />
+            <Placeholder style={{ marginVertical: 4, paddingHorizontal: 10 }}>
+              <PlaceholderLine width={100} noMargin style={{ height: 40 }} />
             </Placeholder>
-            <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
-              <PlaceholderLine width={100} noMargin style={{height: 20}} />
+            <Placeholder style={{ marginVertical: 4, paddingHorizontal: 10 }}>
+              <PlaceholderLine width={100} noMargin style={{ height: 20 }} />
             </Placeholder>
           </View>
         ) : (
-          <ScrollView style={{marginTop: 20}}>
+          <ScrollView style={{ marginTop: 20 }}>
             {dataHistoryStatus != undefined ? (
               dataHistoryStatus.map((data, key) => (
                 <View key={key}>
@@ -197,7 +201,7 @@ export default function ViewHistoryStatus({route}) {
                     <View
                       style={{
                         height: null,
-                        backgroundColor: 'white',
+                        backgroundColor: "white",
                         //   shadowOffset: {width: 1, height: 1},
                         //   shadowColor: colors.bg_hijautua,
                         //   shadowOpacity: 1,
@@ -206,7 +210,7 @@ export default function ViewHistoryStatus({route}) {
                         paddingVertical: 10,
 
                         // -- create shadow
-                        shadowColor: '#000',
+                        shadowColor: "#000",
                         shadowOffset: {
                           width: 0,
                           height: 1,
@@ -216,39 +220,44 @@ export default function ViewHistoryStatus({route}) {
                         elevation: 3,
                         // -- end create shadows
                         //   borderWidth: 1,
-                      }}>
+                      }}
+                    >
                       <View>
                         <View
                           style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}>
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           <Text
                             style={{
                               fontSize: 13,
-                              fontWeight: 'bold',
-                              textAlign: 'left',
-                            }}>
+                              fontWeight: "bold",
+                              textAlign: "left",
+                            }}
+                          >
                             # {data.report_no} - {data.debtor_acct}
                           </Text>
                           <Text
                             style={{
                               fontSize: 12,
-                              fontWeight: '500',
-                              textAlign: 'right',
-                              color: '#9B9B9B',
-                            }}>
-                            Date :{' '}
-                            {moment(data.reported_date).format('DD-MM-YYYY')}
+                              fontWeight: "500",
+                              textAlign: "right",
+                              color: "#9B9B9B",
+                            }}
+                          >
+                            Date :{" "}
+                            {moment(data.reported_date).format("DD-MM-YYYY")}
                           </Text>
                         </View>
                         <View>
                           <Text
                             style={{
                               fontSize: 13,
-                              fontWeight: 'bold',
-                              textAlign: 'left',
-                            }}>
+                              fontWeight: "bold",
+                              textAlign: "left",
+                            }}
+                          >
                             Category : {data.descs}
                           </Text>
                         </View>
@@ -256,58 +265,63 @@ export default function ViewHistoryStatus({route}) {
                         <Text
                           style={{
                             fontSize: 13,
-                            fontWeight: '300',
-                            textAlign: 'left',
-                          }}>
+                            fontWeight: "300",
+                            textAlign: "left",
+                          }}
+                        >
                           {/* nama dari await name {data.name} */}
                           Request by : {users.name}
                           {/* nama dari aawait name */}
                         </Text>
                         <View
                           style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}>
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           <Text
                             style={{
                               fontSize: 13,
-                              fontWeight: '300',
+                              fontWeight: "300",
                               // marginBottom: 10,
                               color: BaseColor.hijau_pkbw,
-                            }}>
+                            }}
+                          >
                             Unit No : {data.lot_no}
                           </Text>
                           <Text
                             style={{
                               fontSize: 13,
-                              fontWeight: '300',
+                              fontWeight: "300",
                               // marginBottom: 10,
                               color: BaseColor.hijau_pkbw,
-                            }}>
-                            {data.status == 'R'
-                              ? 'Open'
-                              : data.status == 'A'
-                              ? 'Assign'
-                              : data.status == 'S'
-                              ? 'Need Confirmation'
-                              : data.status == 'P'
-                              ? 'Process'
-                              : data.status == 'F'
-                              ? 'Confirm'
-                              : data.status == 'V'
-                              ? 'Solve'
-                              : data.status == 'C'
-                              ? 'Completed'
-                              : data.status == 'D'
-                              ? 'Done'
-                              : ''}
+                            }}
+                          >
+                            {data.status == "R"
+                              ? "Open"
+                              : data.status == "A"
+                              ? "Assign"
+                              : data.status == "S"
+                              ? "Need Confirmation"
+                              : data.status == "P"
+                              ? "Process"
+                              : data.status == "F"
+                              ? "Confirm"
+                              : data.status == "V"
+                              ? "Solve"
+                              : data.status == "C"
+                              ? "Completed"
+                              : data.status == "D"
+                              ? "Done"
+                              : ""}
                           </Text>
                         </View>
                         <View
                           style={{
-                            flexDirection: 'column',
+                            flexDirection: "column",
                             // justifyContent: 'space-between',
-                          }}></View>
+                          }}
+                        ></View>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -323,7 +337,8 @@ export default function ViewHistoryStatus({route}) {
           animationType="slide"
           isVisible={modalVisible}
           deviceWidth={deviceWidth}
-          style={styles.bottomModal}>
+          style={styles.bottomModal}
+        >
           <View style={styles.modalView}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
@@ -342,23 +357,25 @@ export default function ViewHistoryStatus({route}) {
                 </View>
                 <View style={styles.starWrap}>
                   <StarRating
-                    fullStarColor={'#F9A233'}
+                    fullStarColor={"#F9A233"}
                     disabled={false}
                     maxStars={5}
                     rating={starCount}
-                    selectedStar={rating => onStarRatingPress(rating)}
+                    selectedStar={(rating) => onStarRatingPress(rating)}
                   />
                 </View>
 
                 <View style={styles.btnWrapModal}>
                   <TouchableOpacity
                     style={styles.btnNo}
-                    onPress={() => _setModalVisible(!modalVisible)}>
+                    onPress={() => _setModalVisible(!modalVisible)}
+                  >
                     <Text style={styles.textNo}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.btnYes}
-                    onPress={() => alert('submit')}>
+                    onPress={() => alert("submit")}
+                  >
                     <Text style={styles.textYes}>Submit</Text>
                   </TouchableOpacity>
                 </View>

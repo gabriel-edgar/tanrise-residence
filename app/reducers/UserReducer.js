@@ -5,6 +5,7 @@ const initialState = {
 };
 
 const userReducer = (state = initialState, action) => {
+  //console.log("8 reduser user: ", action);
   switch (action.type) {
     case actionTypes.LOGIN_REQUEST:
       return {
@@ -14,19 +15,39 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.user,
+        accessToken: action.user.Token,
+        refreshToken: action.user.refreshToken,
+      };
+    case actionTypes.REFRESH_TOKEN:
+      return {
+        ...state,
+        accessToken: action.token,
+        user: {
+          ...state.user,
+          Token: action.token,
+        },
       };
     case actionTypes.EDIT:
       return {
         ...state,
-        // ...action.edits,
-        user: action.edits,
-        // pict: action.edits,
+        user: {
+          ...state.user,
+          userData: {
+            ...state.user.userData,
+            name: action.edits.name,
+            Handphone: action.edits.handphone,
+            //gender: action.edits.gender,
+          },
+        },
       };
     case actionTypes.CHANGE_FOTO:
       return {
         ...state,
         // ...user,
-        pict: action.edits,
+        user: {
+          ...state.user,
+          userData: { ...state.user.userData, pict: action.edits },
+        },
 
         // pict: action.edits.pict,
       };

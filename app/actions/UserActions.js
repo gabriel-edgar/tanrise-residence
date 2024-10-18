@@ -23,6 +23,8 @@ export const actionTypes = {
   REMOVE_USER: "REMOVE_USER",
 
   // LOAD_LOTNO: 'LOAD_LOTNO'
+
+  REFRESH_TOKEN: "REFRESH_TOKEN",
 };
 
 const loginRequest = () => ({
@@ -37,6 +39,11 @@ const loginError = (error) => ({
 const loginSuccess = (user) => ({
   type: actionTypes.LOGIN_SUCCESS,
   user,
+});
+
+const refreshToken = (token) => ({
+  type: actionTypes.REFRESH_TOKEN,
+  token,
 });
 
 const resetPassRequest = () => ({
@@ -95,13 +102,24 @@ export const login = (email, password, token_firebase) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const user = await UserController.login(email, password, token_firebase);
-    dispatch(loginSuccess(user.Data));
-    console.log("99 userrrrr", user);
+    dispatch(loginSuccess(user.data));
+    console.log("99 UserActions:", user);
     // alert("JSON.stringify(user)");
   } catch (error) {
-    alert(error);
-    console.log("103 ini konsol eror", error);
+    //alert("102 UserActions: ", error);
+    console.log("103 UserActions: ", error);
     dispatch(loginError(error));
+  }
+};
+
+export const refreshTokenAction = (token) => async (dispatch) => {
+  try {
+    dispatch(refreshToken(token));
+    console.log("111 token:", token);
+    // alert("JSON.stringify(user)");
+  } catch (error) {
+    //alert("102 UserActions: ", error);
+    console.log("111 error: ", error);
   }
 };
 
@@ -121,27 +139,32 @@ export const reset = (newPass, conPass, email) => async (dispatch) => {
   }
 };
 
-export const logout = () => async (dispatch) => {
-  UserController.logout();
+export const logout = (email) => async (dispatch) => {
+  console.log("143 run1 logout");
+  //await UserController.logout(email);
+  console.log("143 run2 logout");
   dispatch(logoutRequest());
+  console.log("143 run3 logout");
   // dispatch(logout());
   dispatch(removeUser());
 };
 
 export const saveProfile = (data) => async (dispatch) => {
   console.log("user action save profile", data);
-  const edits = await UserController.saveProfile(data);
-  console.log("res save profil", edits);
-  alert(edits.Pesan);
-  dispatch(editRequest(edits.Data));
+  const res = await UserController.saveProfile(data);
+  console.log("res save profil", res);
+  alert(res.data.message);
+  //alert(res.data.data);
+  dispatch(editRequest(res.data.data));
 };
 
 export const saveFotoProfil = (data) => async (dispatch) => {
   console.log("image change profil action save profile", data);
-  const foto = await UserController.saveFotoProfil(data);
-  console.log("res save profil", foto);
-  alert(foto.Pesan);
-  dispatch(changeFoto(foto.Data));
+  const res = await UserController.saveFotoProfil(data);
+  //console.log("res save profil", res);
+  alert(res.data.message);
+  console.log("166 res.data.data.pict: ", res.data.data.pict);
+  dispatch(changeFoto(res.data.data.pict));
 };
 
 export const changePass = (email, pass, conpass) => async (dispatch) => {

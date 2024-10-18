@@ -1,24 +1,24 @@
-import {Header, Icon, ListThumbCircleNotif, SafeAreaView} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+import { Header, Icon, ListThumbCircleNotif, SafeAreaView } from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
 // Load sample data
-import {NotificationData} from '@data';
-import React, {useState, useEffect} from 'react';
-import {FlatList, RefreshControl, TouchableOpacity} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import {API_URL} from '@env';
-import styles from './styles';
-import {API_URL_LOKAL} from '@env';
+import { NotificationData } from "@data";
+import React, { useState, useEffect } from "react";
+import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import { API_URL } from "@env";
+import styles from "./styles";
+import { API_URL_LOKAL } from "@env";
 
-const Notificationdummy = props => {
-  const {navigation} = props;
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+const Notificationdummy = (props) => {
+  const { navigation } = props;
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(NotificationData);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [loading, setLoading] = useState(true);
   const [dataTowerUser, setdataTowerUser] = useState([]);
@@ -26,7 +26,7 @@ const Notificationdummy = props => {
   const [spinner, setSpinner] = useState(true);
   const [urlApi, seturlApi] = useState(API_URL);
   const [dataNotif, setDataNotif] = useState([]);
-  // http://apps.pakubuwono-residence.com/apiwebpbi/api/notification
+  // http://apps.pakubuwono-residence.com/apiwebpbi/api/setting/notification
 
   // POST
   // body : email, entity_cd, project_no, device (hardcode aja valuenya Mobile)
@@ -34,24 +34,26 @@ const Notificationdummy = props => {
   const getTower = async () => {
     const data = {
       email: email,
-      app: 'O',
+      app: "O",
     };
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
         // token: "",
       },
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`)
-      .then(res => {
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`
+      )
+      .then((res) => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
-        arrDataTower.map(dat => {
+        arrDataTower.map((dat) => {
           if (dat) {
             setdataTowerUser(dat);
             getNotification(dat);
@@ -62,9 +64,9 @@ const Notificationdummy = props => {
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get tower api", error);
+        alert("error get");
       });
   };
 
@@ -75,58 +77,59 @@ const Notificationdummy = props => {
     }, 3000);
   }, []);
 
-  const getNotification = async data => {
+  const getNotification = async (data) => {
     const formData = {
       email: email,
       entity_cd: data.entity_cd,
       project_no: data.project_no,
-      device: 'Mobile',
+      device: "Mobile",
     };
 
-    console.log('form data notif', formData);
+    console.log("form data notif", formData);
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
 
     console.log(
-      'http://apps.pakubuwono-residence.com/apiwebifca/api/notification',
-      formData,
+      "http://apps.pakubuwono-residence.com/apiwebifca/api/setting/notification",
+      formData
     );
 
     await axios
       .post(
-        'http://apps.pakubuwono-residence.com/apiwebifca/api/notification',
-        formData,
+        "http://apps.pakubuwono-residence.com/apiwebifca/api/setting/notification",
+        formData
       )
-      .then(res => {
+      .then((res) => {
         // console.log('res tiket multi', res.data);
         const resNotif = res.data;
 
-        console.log('resNotif', resNotif);
+        console.log("resNotif", resNotif);
         setDataNotif(resNotif);
         setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('err data notif', error);
-        alert('error nih');
+      .catch((error) => {
+        console.log("err data notif", error);
+        alert("error nih");
       });
   };
-  const goNotifDetail = item => () => {
-    navigation.navigate('NotificationDetail', {item: item});
+  const goNotifDetail = (item) => () => {
+    navigation.navigate("NotificationDetail", { item: item });
   };
 
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('notification')}
+        title={t("notification")}
         renderLeft={() => {
           return (
             <Icon
@@ -142,7 +145,7 @@ const Notificationdummy = props => {
         }}
       />
       <FlatList
-        contentContainerStyle={{paddingHorizontal: 20}}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
         refreshControl={
           <RefreshControl
             colors={[colors.primary]}
@@ -153,7 +156,7 @@ const Notificationdummy = props => {
         }
         data={dataNotif}
         keyExtractor={(item, index) => item.NotificationID}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <ListThumbCircleNotif
             // image={item.image}
             txtLeftTitle1={item.Report_no}

@@ -10,47 +10,47 @@ import {
   Header,
   Icon,
   CategoryIconSoft,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {CheckBox, Badge} from 'react-native-elements';
-import {Image} from 'react-native';
-import {parseHexTransparency} from '@utils';
-import {useNavigation} from '@react-navigation/native';
+} from "@components";
+import { BaseColor, BaseStyle, useTheme } from "@config";
+import { CheckBox, Badge } from "react-native-elements";
+import { Image } from "react-native";
+import { parseHexTransparency } from "@utils";
+import { useNavigation } from "@react-navigation/native";
 
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   TouchableOpacity,
   View,
   Platform,
   TouchableHighlight,
-} from 'react-native';
+} from "react-native";
 
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import client from "../../controllers/HttpClient";
+import styles from "./styles";
 
-import {RadioButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {API_URL_LOKAL} from '@env';
-export default function StatusHelpHouseNeo({route}) {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+import { RadioButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL_LOKAL } from "@env";
+export default function StatusHelpHouseNeo({ route }) {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [urlApi, seturlApi] = useState(client);
-  const [entity, setEntity] = useState('');
-  const [project_no, setProjectNo] = useState('');
-  const [db_profile, setDb_Profile] = useState('');
+  const [entity, setEntity] = useState("");
+  const [project_no, setProjectNo] = useState("");
+  const [db_profile, setDb_Profile] = useState("");
   const [checkedEntity, setCheckedEntity] = useState(false);
   const [spinner, setSpinner] = useState(true);
   const [dataStatus, setDataStatus] = useState([]);
@@ -69,22 +69,25 @@ export default function StatusHelpHouseNeo({route}) {
   const getTower = async () => {
     const data = {
       email: email,
-      app: 'O',
+      app: "O",
     };
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
         // token: "",
       },
     };
 
     await axios
-      .get(API_URL_LOKAL + `/getData/mysql/${data.email}/${data.app}`, {
-        config,
-      })
-      .then(res => {
+      .get(
+        API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
+        {
+          config,
+        }
+      )
+      .then((res) => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
@@ -101,12 +104,12 @@ export default function StatusHelpHouseNeo({route}) {
             project_no: arrDataTower[0].project_no,
             db_profile: arrDataTower[0].db_profile,
           };
-          console.log('params for debtor tower default', params);
+          console.log("params for debtor tower default", params);
           // getDebtor(params);
           getTicketStatus(params);
           setShow(true);
         }
-        arrDataTower.map(dat => {
+        arrDataTower.map((dat) => {
           if (dat) {
             setdataTowerUser(dat);
           }
@@ -116,8 +119,8 @@ export default function StatusHelpHouseNeo({route}) {
 
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get tower api', error);
+      .catch((error) => {
+        console.log("error get tower api", error);
         // alert('error get');
       });
   };
@@ -142,8 +145,8 @@ export default function StatusHelpHouseNeo({route}) {
     getTicketStatus(data);
   };
 
-  const getTicketStatus = async data => {
-    console.log('data for status', data);
+  const getTicketStatus = async (data) => {
+    console.log("data for status", data);
     const dT = data;
 
     const formData = {
@@ -152,26 +155,30 @@ export default function StatusHelpHouseNeo({route}) {
       email: email,
     };
 
-    console.log('formdata', formData);
+    console.log("formdata", formData);
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
 
     await axios
-      .post(API_URL_LOKAL + '/troffice/getstatus/IFCAPB', formData, {
-        config,
-      })
-      .then(res => {
+      .post(
+        API_URL_LOKAL + "/modules/troffice/ticket-status-count/IFCAPB",
+        formData,
+        {
+          config,
+        }
+      )
+      .then((res) => {
         const datas = res.data;
 
-        console.log('data kategori', datas.Error);
+        console.log("data kategori", datas.Error);
         if (datas.Error === false) {
           const datastatus = datas.Data;
-          console.log('datastatus', datastatus);
+          console.log("datastatus", datastatus);
 
           if (datastatus.length > 1) {
             setDefaultStatus(false);
@@ -188,64 +195,64 @@ export default function StatusHelpHouseNeo({route}) {
         // setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get status api', error.response);
+      .catch((error) => {
+        console.log("error get status api", error.response);
         // alert('error get');
       });
   };
 
   const handleNavigation = (data, ticketStatus) => {
-    console.log('data where tiket statuss', data);
-    console.log('tikett status', ticketStatus);
+    console.log("data where tiket statuss", data);
+    console.log("tikett status", ticketStatus);
     setDisabled(true);
     getTicketWhereStatus(data, ticketStatus);
   };
   const getTicketWhereStatus = async (data, ticketStatus) => {
-    console.log('data where', data);
-    console.log('tiket state where', ticketStatus);
+    console.log("data where", data);
+    console.log("tiket state where", ticketStatus);
 
     const formData = {
       email: email,
       status: ticketStatus,
       category_cd: "'AC01','PL07'",
     };
-    console.log('formData', formData);
+    console.log("formData", formData);
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
     console.log(
-      'test get data > ',
+      "test get data > ",
 
-      `http://apps.pakubuwono-residence.com/apiwebpbi/api/troffice/getticket/IFCAPB?email=${formData.email}&status=${formData.status}&category_cd=${formData.category_cd}`,
+      `http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/troffice/ticket-by-status/IFCAPB?email=${formData.email}&status=${formData.status}&category_cd=${formData.category_cd}`,
       //   formData,
       {
         config,
-      },
+      }
     );
     await axios
       .post(
-        API_URL_LOKAL + '/troffice/getticket/IFCAPB',
-        // `http://apps.pakubuwono-residence.com/apiwebpbi/api/troffice/getticket/IFCAPB?email=${formData.email}&status=${formData.status}&category_cd=${formData.category_cd}`,
+        API_URL_LOKAL + "/modules/troffice/ticket-by-status/IFCAPB",
+        // `http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/troffice/ticket-by-status/IFCAPB?email=${formData.email}&status=${formData.status}&category_cd=${formData.category_cd}`,
         formData,
         {
           config,
-        },
+        }
       )
-      .then(res => {
+      .then((res) => {
         const datas = res.data;
 
-        console.log('data datastatuswhere', datas);
+        console.log("data datastatuswhere", datas);
         const datastatuswhere = datas.Data;
         // navigation.navigate('ViewHistoryStatus', {datastatuswhere}); //sementara krn data 0
         if (datas.Error === false) {
           const datastatuswhere = datas.Data;
           // setDataStatus(datastatus);
-          navigation.navigate('ViewHistoryStatusTRO', datastatuswhere);
-          console.log('datastatuswhere', datastatuswhere);
+          navigation.navigate("ViewHistoryStatusTRO", datastatuswhere);
+          console.log("datastatuswhere", datastatuswhere);
         } else {
           setDisabled(false);
         }
@@ -253,9 +260,9 @@ export default function StatusHelpHouseNeo({route}) {
         // setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('error get where status api', error.response);
-        alert('error get');
+      .catch((error) => {
+        console.log("error get where status api", error.response);
+        alert("error get");
       });
   };
 
@@ -265,13 +272,14 @@ export default function StatusHelpHouseNeo({route}) {
   //        });
   //      };
   const ds = dataStatus;
-  console.log('ds', ds);
+  console.log("ds", ds);
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('status')} //belum dibuat lang
+        title={t("status")} //belum dibuat lang
         renderLeft={() => {
           return (
             <Icon
@@ -288,25 +296,34 @@ export default function StatusHelpHouseNeo({route}) {
       />
       <View style={styles.wrap}>
         <Text title2>Ticket</Text>
-        <Text headline style={{fontWeight: 'normal'}}>
+        <Text headline style={{ fontWeight: "normal" }}>
           Status Help TR Office
         </Text>
 
-        <View style={[styles.subWrap, {paddingBottom: 0, marginBottom: 10}]}>
+        <View style={[styles.subWrap, { paddingBottom: 0, marginBottom: 10 }]}>
           <View>
-            <Text style={{color: '#3f3b38', fontSize: 14}}>Choose Project</Text>
+            <Text style={{ color: "#3f3b38", fontSize: 14 }}>
+              Choose Project
+            </Text>
             {spinner ? (
               <View>
                 {/* <Spinner visible={this.state.spinner} /> */}
-                <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
-                  <PlaceholderLine width={100} noMargin style={{height: 40}} />
+                <Placeholder
+                  style={{ marginVertical: 4, paddingHorizontal: 10 }}
+                >
+                  <PlaceholderLine
+                    width={100}
+                    noMargin
+                    style={{ height: 40 }}
+                  />
                 </Placeholder>
               </View>
             ) : defaulTower ? (
               <CheckBox
                 checked={checkedEntity}
                 title={arrDataTowerUser[0].project_descs}
-                onPress={() => setCheckedEntity(!checkedEntity)}></CheckBox>
+                onPress={() => setCheckedEntity(!checkedEntity)}
+              ></CheckBox>
             ) : (
               arrDataTowerUser.map((data, index) => (
                 <CheckBox
@@ -322,25 +339,27 @@ export default function StatusHelpHouseNeo({route}) {
           </View>
 
           {show && checkedEntity === true ? (
-            <View style={{marginTop: 30, marginHorizontal: 10}}>
+            <View style={{ marginTop: 30, marginHorizontal: 10 }}>
               <TouchableOpacity
                 // onPress={() => handleNavigation(dataTowerUser, "'R'")}
-                onPress={() => handleNavigation(dataTowerUser, 'R')}
+                onPress={() => handleNavigation(dataTowerUser, "R")}
                 disabled={ds.cntopen == 0 ? true : false}
                 style={{
                   borderBottomWidth: 1,
-                  borderBottomColor: '#555',
+                  borderBottomColor: "#555",
                   //   paddingTop: 1,
-                }}>
+                }}
+              >
                 <View
                   style={{
-                    justifyContent: 'space-around',
-                    flexDirection: 'row',
-                    alignContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "space-around",
+                    flexDirection: "row",
+                    alignContent: "center",
+                    alignItems: "center",
 
                     // alignSelf: 'center',
-                  }}>
+                  }}
+                >
                   {/* <CategoryIconSoft
                       isRound
                       size={25}
@@ -355,16 +374,17 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 60,
                       height: 60,
                       // borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginBottom: 10,
                       backgroundColor: parseHexTransparency(
                         colors.primary,
-                        100,
+                        100
                       ),
-                    }}>
+                    }}
+                  >
                     <Icon
-                      name={'tasks'}
+                      name={"tasks"}
                       size={25}
                       color={BaseColor.whiteColor}
                       solid
@@ -376,11 +396,12 @@ export default function StatusHelpHouseNeo({route}) {
                       style={styles.img}></Image> */}
                   <Text
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 10,
-                    }}>
+                    }}
+                  >
                     Open
                   </Text>
 
@@ -389,45 +410,49 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 40,
                       height: 40,
                       borderRadius: 10,
-                      backgroundColor: '#42B649',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      backgroundColor: "#42B649",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 5,
                     }}
                     value={
                       <Text
                         style={{
-                          color: '#fff',
-                          textAlign: 'center',
-                          alignItems: 'center',
-                          alignSelf: 'center',
-                        }}>
+                          color: "#fff",
+                          textAlign: "center",
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
                         {ds.cntopen}
                       </Text>
-                    }></Badge>
+                    }
+                  ></Badge>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={
-                  () => handleNavigation(dataTowerUser, 'P')
+                  () => handleNavigation(dataTowerUser, "P")
                   //   handleNavigation(dataTowerUser, "'A','P','M','F','Y','Z'")
                 }
                 disabled={ds.cntprocces == 0 ? true : false}
                 style={{
                   borderBottomWidth: 1,
-                  borderBottomColor: '#555',
+                  borderBottomColor: "#555",
                   //   marginBottom: 10,
-                }}>
+                }}
+              >
                 <View
                   style={{
-                    justifyContent: 'space-around',
-                    flexDirection: 'row',
-                    alignContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "space-around",
+                    flexDirection: "row",
+                    alignContent: "center",
+                    alignItems: "center",
                     // alignSelf: 'center',
-                  }}>
+                  }}
+                >
                   {/* <CategoryIconSoft
                       isRound
                       size={25}
@@ -442,17 +467,18 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 60,
                       height: 60,
                       // borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginTop: 10,
                       marginBottom: 10,
                       backgroundColor: parseHexTransparency(
                         colors.primary,
-                        100,
+                        100
                       ),
-                    }}>
+                    }}
+                  >
                     <Icon
-                      name={'tasks'}
+                      name={"tasks"}
                       size={25}
                       color={BaseColor.whiteColor}
                       solid
@@ -463,11 +489,12 @@ export default function StatusHelpHouseNeo({route}) {
                       style={styles.img}></Image> */}
                   <Text
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 10,
-                    }}>
+                    }}
+                  >
                     Process
                   </Text>
 
@@ -476,41 +503,45 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 40,
                       height: 40,
                       borderRadius: 10,
-                      backgroundColor: '#42B649',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      backgroundColor: "#42B649",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 5,
                     }}
                     value={
                       <Text
                         style={{
-                          color: '#fff',
-                          textAlign: 'center',
-                          alignItems: 'center',
-                          alignSelf: 'center',
-                        }}>
+                          color: "#fff",
+                          textAlign: "center",
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
                         {ds.cntprocces}
                       </Text>
-                    }></Badge>
+                    }
+                  ></Badge>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, 'X')}
+                onPress={() => handleNavigation(dataTowerUser, "X")}
                 disabled={ds.cntcancel == 0 ? true : false}
                 style={{
                   borderBottomWidth: 1,
-                  borderBottomColor: '#555',
+                  borderBottomColor: "#555",
                   //   marginBottom: 10,
-                }}>
+                }}
+              >
                 <View
                   style={{
-                    justifyContent: 'space-around',
-                    flexDirection: 'row',
-                    alignContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "space-around",
+                    flexDirection: "row",
+                    alignContent: "center",
+                    alignItems: "center",
                     // alignSelf: 'center',
-                  }}>
+                  }}
+                >
                   {/* <CategoryIconSoft
                       isRound
                       size={25}
@@ -526,17 +557,18 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 60,
                       height: 60,
                       // borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginTop: 10,
                       marginBottom: 10,
                       backgroundColor: parseHexTransparency(
                         colors.primary,
-                        100,
+                        100
                       ),
-                    }}>
+                    }}
+                  >
                     <Icon
-                      name={'tasks'}
+                      name={"tasks"}
                       size={25}
                       color={BaseColor.whiteColor}
                       solid
@@ -548,11 +580,12 @@ export default function StatusHelpHouseNeo({route}) {
                       style={styles.img}></Image> */}
                   <Text
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 10,
-                    }}>
+                    }}
+                  >
                     Cancel
                   </Text>
 
@@ -561,23 +594,25 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 40,
                       height: 40,
                       borderRadius: 10,
-                      backgroundColor: '#42B649',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      backgroundColor: "#42B649",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 5,
                     }}
                     value={
                       <Text
                         style={{
-                          color: '#fff',
-                          textAlign: 'center',
-                          alignItems: 'center',
-                          alignSelf: 'center',
-                        }}>
+                          color: "#fff",
+                          textAlign: "center",
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
                         {ds.cntcancel}
                       </Text>
-                    }></Badge>
+                    }
+                  ></Badge>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -585,17 +620,19 @@ export default function StatusHelpHouseNeo({route}) {
                 disabled={ds.cntclose == 0 ? true : false}
                 style={{
                   borderBottomWidth: 1,
-                  borderBottomColor: '#555',
+                  borderBottomColor: "#555",
                   //   marginBottom: 10,
-                }}>
+                }}
+              >
                 <View
                   style={{
-                    justifyContent: 'space-around',
-                    flexDirection: 'row',
-                    alignContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "space-around",
+                    flexDirection: "row",
+                    alignContent: "center",
+                    alignItems: "center",
                     // alignSelf: 'center',
-                  }}>
+                  }}
+                >
                   {/* <CategoryIconSoft
                       isRound
                       size={25}
@@ -610,17 +647,18 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 60,
                       height: 60,
                       // borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginTop: 10,
                       marginBottom: 10,
                       backgroundColor: parseHexTransparency(
                         colors.primary,
-                        100,
+                        100
                       ),
-                    }}>
+                    }}
+                  >
                     <Icon
-                      name={'tasks'}
+                      name={"tasks"}
                       size={25}
                       color={BaseColor.whiteColor}
                       solid
@@ -631,11 +669,12 @@ export default function StatusHelpHouseNeo({route}) {
                       style={styles.img}></Image> */}
                   <Text
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 10,
-                    }}>
+                    }}
+                  >
                     Close
                   </Text>
 
@@ -644,23 +683,25 @@ export default function StatusHelpHouseNeo({route}) {
                       width: 40,
                       height: 40,
                       borderRadius: 10,
-                      backgroundColor: '#42B649',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
+                      backgroundColor: "#42B649",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
                       marginBottom: 5,
                     }}
                     value={
                       <Text
                         style={{
-                          color: '#fff',
-                          textAlign: 'center',
-                          alignItems: 'center',
-                          alignSelf: 'center',
-                        }}>
+                          color: "#fff",
+                          textAlign: "center",
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
                         {ds.cntclose}
                       </Text>
-                    }></Badge>
+                    }
+                  ></Badge>
                 </View>
               </TouchableOpacity>
             </View>

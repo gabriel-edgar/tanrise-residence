@@ -28,8 +28,12 @@ import styles from "./styles";
 
 import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
 import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import { store, persist } from "../../store";
+import { homeCommonProject } from "../FunctionAxios/home-common-project";
+import { FontWeight } from "../../config";
 
-const Friends = () => {
+const Friends = (props) => {
+  const itemData = props.route.params?.item;
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const [keyword, setKeyword] = useState("");
@@ -105,7 +109,8 @@ const Friends = () => {
   );
 };
 
-export default function Helpdesk() {
+export default function Helpdesk(props) {
+  const itemData = props.route.params?.item;
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
@@ -114,6 +119,15 @@ export default function Helpdesk() {
   const [modalVisible, setModalVisible] = useState(false);
   const [urlApi, seturlApi] = useState(client);
   const [index, setIndex] = useState(0);
+  const [arrDataProject, setArrDataProject] = useState([]);
+  const [dataDD, setDataDD] = useState([]);
+
+  const stateStore = store.getState();
+  const token = stateStore.user.accessToken;
+  const stateReduxChooseProject = useSelector(
+    (state) => state.Dataproject.chooseProject
+  );
+
   const [routes] = useState([
     { key: "newticket", title: "New Ticket" },
     { key: "status", title: "Status" },
@@ -133,6 +147,12 @@ export default function Helpdesk() {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
+
+    const data = {
+      email: stateStore.user.user.userData.email,
+    };
+
+    //homeCommonProject(token, data, setDataDD, setArrDataProject);
   }, []);
 
   //dropdownProject
@@ -151,36 +171,38 @@ export default function Helpdesk() {
 
   console.log("152 choosedProject: ", choosedProject);
 
-  if (choosedProject == null) {
-    return (
-      <SafeAreaView
-        style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
-      >
-        <Header
-          // title={t('choose_friend')}
-          title={t("helpdesk")} //belum ada lang translatenya
-          renderLeft={() => {
-            return (
-              <Icon
-                name="angle-left"
-                size={20}
-                color={colors.text}
-                enableRTL={true}
-              />
-            );
-          }}
-          onPressLeft={() => {
-            navigation.goBack();
-          }}
-        />
-        <ButtonChooseProject
-          items={dropdownItems}
-          placeholder="Select project"
-          onSelect={handleSelect}
-        />
-      </SafeAreaView>
-    );
+  if (itemData.isProject == 1) {
+    if (choosedProject == null) {
+      return (
+        <SafeAreaView
+          style={BaseStyle.safeAreaView}
+          edges={["right", "top", "left"]}
+        >
+          <Header
+            // title={t('choose_friend')}
+            title={t("helpdesk")} //belum ada lang translatenya
+            renderLeft={() => {
+              return (
+                <Icon
+                  name="angle-left"
+                  size={20}
+                  color={colors.text}
+                  enableRTL={true}
+                />
+              );
+            }}
+            onPressLeft={() => {
+              navigation.goBack();
+            }}
+          />
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+          />
+        </SafeAreaView>
+      );
+    }
   }
 
   return (
@@ -205,12 +227,16 @@ export default function Helpdesk() {
           navigation.goBack();
         }}
       />
-      <ButtonChooseProject
-        items={dropdownItems}
-        placeholder="Select project"
-        onSelect={handleSelect}
-      />
-      <Text>Choosed project: {choosedProject}</Text>
+      {itemData.isProject == 1 && (
+        <>
+          <ButtonChooseProject
+            items={dataDD}
+            placeholder="Select project"
+            onSelect={handleSelect}
+            value2={choosedProject}
+          />
+        </>
+      )}
       {/* {dataLocation.map((data, index) => (
         <ModalFilterLocation
           options={data}
@@ -223,6 +249,16 @@ export default function Helpdesk() {
           onSelectFilter={onSelectFilter}
         />
       ))} */}
+      <Text
+        style={{
+          textAlign: "center",
+          marginBottom: 10,
+          fontWeight: "bold",
+          fontSize: 15,
+        }}
+      >
+        {stateReduxChooseProject?.project_descs}
+      </Text>
       <View
         style={{
           flexDirection: "row",
@@ -239,7 +275,9 @@ export default function Helpdesk() {
           title={"Helpdesk"}
           icon={"headset"}
           color={colors.primary}
-          onPress={() => navigation.navigate("SpecHelpDesk")}
+          onPress={() =>
+            navigation.navigate("SpecHelpDesk", arrDataProject[choosedProject])
+          }
         />
         <CategoryBoxColor
           loading={loading}
@@ -252,7 +290,9 @@ export default function Helpdesk() {
           title={"Status"}
           icon={"list-alt"}
           color={colors.primary}
-          onPress={() => navigation.navigate("StatusHelp")}
+          onPress={() =>
+            navigation.navigate("StatusHelp", arrDataProject[choosedProject])
+          }
         />
       </View>
 

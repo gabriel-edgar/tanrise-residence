@@ -1,14 +1,14 @@
-import Icon from '@components/Icon';
-import Image from '@components/Image';
-import Text from '@components/Text';
-import {BaseColor, useTheme} from '@config';
-import PropTypes from 'prop-types';
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import styles from './styles';
+import Icon from "@components/Icon";
+import Image from "@components/Image";
+import Text from "@components/Text";
+import { BaseColor, useTheme } from "@config";
+import PropTypes from "prop-types";
+import React from "react";
+import { TouchableOpacity, View } from "react-native";
+import styles from "./styles";
 
 export default function ProfileDetail(props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const {
     style,
     image,
@@ -22,30 +22,31 @@ export default function ProfileDetail(props) {
     textThird,
     icon,
   } = props;
-  console.log('image di profil detil', image);
+  console.log("image di profil detil", image);
   return (
     <TouchableOpacity
       style={[styles.contain, style]}
       onPress={onPress}
-      activeOpacity={0.9}>
+      activeOpacity={0.9}
+    >
       <View style={[styles.contentLeft, styleLeft]}>
         <View>
           <Image
             source={
               image != null
-                ? {uri: image}
+                ? { uri: image }
                 : // ../ ../../assets/images/image-home/Main_Image.png
-                  require('../../../assets/images/image-home/Main_Image.png')
+                  require("../../../assets/images/image-home/Main_Image.png")
             }
             style={[styles.thumb, styleThumb]}
           />
-          <View style={[styles.point, {backgroundColor: colors.primaryLight}]}>
+          {/* <View style={[styles.point, {backgroundColor: colors.primaryLight}]}>
             <Text overline whiteColor semibold>
               {point}
             </Text>
-          </View>
+          </View> */}
         </View>
-        <View style={{alignItems: 'flex-start'}}>
+        <View style={{ alignItems: "flex-start" }}>
           <Text headline semibold numberOfLines={1}>
             {textFirst}
           </Text>
@@ -55,7 +56,8 @@ export default function ProfileDetail(props) {
               marginTop: 3,
               paddingRight: 10,
             }}
-            numberOfLines={1}>
+            numberOfLines={1}
+          >
             {textSecond}
           </Text>
           <Text footnote grayColor numberOfLines={1}>
@@ -92,11 +94,11 @@ ProfileDetail.propTypes = {
 };
 
 ProfileDetail.defaultProps = {
-  image: '',
-  textFirst: '',
-  textSecond: '',
+  image: "",
+  textFirst: "",
+  textSecond: "",
   icon: true,
-  point: '',
+  point: "",
   style: {},
   styleLeft: {},
   styleThumb: {},
