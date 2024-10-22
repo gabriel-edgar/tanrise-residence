@@ -374,7 +374,7 @@ export default function ViewHistoryStatus({ route }) {
                                 data.status +
                                 " (" +
                                 (data.status == "V"
-                                  ? "Cancel"
+                                  ? ""
                                   : data.status == "P"
                                   ? "Proses"
                                   : data.status == "M"
@@ -393,6 +393,8 @@ export default function ViewHistoryStatus({ route }) {
                                   ? "Closed"
                                   : data.status == "R"
                                   ? "Open"
+                                  : data.status == "X"
+                                  ? "Cancel"
                                   : "") +
                                 ")"}
                             </Text>
@@ -413,7 +415,7 @@ export default function ViewHistoryStatus({ route }) {
                             >
                               {data.lot_no}
                             </Text>
-                            <Text
+                            {/* <Text
                               style={{
                                 fontSize: 13,
                                 fontWeight: "300",
@@ -431,14 +433,14 @@ export default function ViewHistoryStatus({ route }) {
                                 ? "Process"
                                 : data.status == "F"
                                 ? "Confirm"
-                                : data.status == "V"
+                                : data.status == "X"
                                 ? "Cancel"
                                 : data.status == "C"
                                 ? "Close"
                                 : data.status == "D"
                                 ? "Completed"
                                 : ""}
-                            </Text>
+                            </Text> */}
                           </View>
                           <View
                             style={{

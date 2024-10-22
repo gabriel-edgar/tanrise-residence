@@ -2066,13 +2066,15 @@ export default function TableAfterSignatureWO({ route }) {
 
   const [datas, setData] = useState(route.params);
 
-  console.log("2066 datas: ", datas);
+  console.log("2066 datas: ", JSON.stringify(datas));
   const status_button = route.params.status_button;
   console.log("status button di signature", status_button);
 
   const [modalVisible, setModalVisibleCancel] = useState(false);
   const [modalVisibleAccept, setModalVisibleAccept] = useState(false);
   const [inputText, setInputText] = useState("");
+  const user = useSelector((state) => getUser(state));
+  //console.log("2077 user: ", user.email);
 
   const handleInputChange = (text) => {
     setInputText(text);
@@ -2081,60 +2083,101 @@ export default function TableAfterSignatureWO({ route }) {
   const handleSubmitCancel = async () => {
     // You can handle the text input submission here
 
-    //http
-    //const statusOpen =
-    //   await httpClient
-    // .request({
-    //   url: "/modules/cs/ticket-by-status",
-    //   method: "POST",
-    //   params: {
-    //     email: email,
-    //     status: "'R'",
-    //     date_start: "",
-    //     date_end: "",
-    //   },
-    // })
-    // .then((res) => {
-    //   const datas = res.data;
-    //   console.log("136 data Open: ", res.data.data);
-    //   const datastatuswhere = datas.data;
-    //   return datastatuswhere;
-    // })
-    // .catch((error) => {
-    //   //console.log("error get where status api", error.response.message);
-    // });
-    alert(
-      inputText == ""
-        ? "You have cancelled this expenses"
-        : "You have cancelled this expenses" //`You have cancelled this expenses with reason: ${inputText}`
-    );
-    setModalVisibleCancel(false);
-    navigation.pop(4);
+    const formBody = {
+      status: "X",
+      reason: inputText,
+      entity_cd: datas.datas.resHDR.entity_cd,
+      project_no: datas.datas.resHDR.project_no,
+      report_no: datas.datas.resTiketMulti.report_no,
+      audit_user: user.email,
+    };
+    await httpClient
+      .request({
+        url: "/modules/cs/update-report",
+        method: "POST",
+        data: formBody,
+      })
+      .then((res) => {
+        console.log("2104 data: ", res.data.success);
+        if (res.data.success) {
+          alert(
+            inputText == ""
+              ? "You have cancelled this ticket"
+              : "You have cancelled this ticket" //`You have cancelled this expenses with reason: ${inputText}`
+          );
+          setModalVisibleCancel(false);
+          navigation.pop(4);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((error) => {
+        alert(JSON.stringify(error.response.data.message));
+        console.log("2104: error: ", error.response.data.message);
+      });
+
+    // https://ifcamobileapp.tanrise.com/tanrise_api/api/modules/cs/update-report
+
+    // body:
+
+    //alert(JSON.stringify(formBody));
+    //return;
   };
 
-  const handleSubmitAccept = () => {
-    alert("You have accepted this expenses");
-    setModalVisibleAccept(false);
-    navigation.pop(4);
+  const handleSubmitAccept = async () => {
+    const formBody = {
+      status: "P",
+      reason: "",
+      entity_cd: datas.datas.resHDR.entity_cd,
+      project_no: datas.datas.resHDR.project_no,
+      report_no: datas.datas.resTiketMulti.report_no,
+      audit_user: user.email,
+    };
+    await httpClient
+      .request({
+        url: "/modules/cs/update-report",
+        method: "POST",
+        data: formBody,
+      })
+      .then((res) => {
+        console.log("2104 data: ", res.data.success);
+        if (res.data.success) {
+          alert(
+            "You have accepted this expenses, your ticket now at status process"
+          );
+          setModalVisibleAccept(false);
+          navigation.pop(4);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((error) => {
+        alert(JSON.stringify(error.response.data.message));
+        console.log("2104: error: ", error.response.data.message);
+      });
   };
 
   const handleConfirmCancel = () => {
-    Alert.alert(
-      "", // Title
-      "Are you sure you want to cancel ticket?", // Message
-      [
-        {
-          text: "No", // Cancel button
-          onPress: () => {},
-          style: "cancel",
-        },
-        {
-          text: "Yes", // OK button
-          onPress: () => handleSubmitCancel(),
-        },
-      ],
-      { cancelable: false } // Prevent dismissing by tapping outside
-    );
+    if (inputText.trim() == "") {
+      alert("Please enter a reason for cancelling this expense");
+    } else {
+      Alert.alert(
+        "", // Title
+        "Are you sure you want to cancel ticket?", // Message
+        [
+          {
+            text: "No", // Cancel button
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Yes", // OK button
+            onPress: () => handleSubmitCancel(),
+          },
+        ],
+        { cancelable: false } // Prevent dismissing by tapping outside
+      );
+    }
   };
 
   const [index, setIndex] = useState(0);
@@ -2287,6 +2330,7 @@ export default function TableAfterSignatureWO({ route }) {
                 //fontSize: 18,
                 marginBottom: 10,
                 textAlign: "center",
+                color: "black",
               }}
             >
               Please type the reason for canceling your ticket.
@@ -2386,6 +2430,7 @@ export default function TableAfterSignatureWO({ route }) {
                 //fontSize: 18,
                 marginBottom: 10,
                 textAlign: "center",
+                color: "black",
               }}
             >
               Are you sure you want to accept expenses?

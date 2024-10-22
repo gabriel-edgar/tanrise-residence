@@ -139,7 +139,7 @@ export default function CategoryHelp({ route }) {
 
   const defaultLocation = async () => {
     //getTower(users);
-    await getCategoryHelp("U");
+    //await getCategoryHelp("U");
   };
 
   // const handleSetRadio = (checked, type) => {

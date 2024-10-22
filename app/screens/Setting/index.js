@@ -207,7 +207,7 @@ export default function Setting({ navigation }) {
             />
           </View>
         </TouchableOpacity>
-        <View
+        {/* <View
           style={[
             styles.profileItem,
             {
@@ -224,7 +224,7 @@ export default function Setting({ navigation }) {
             onValueChange={toggleSwitch}
             value={reminders}
           />
-        </View>
+        </View> */}
         <View style={styles.profileItem}>
           <Text body1>{t("app_version")}</Text>
           <Text body1 grayColor>

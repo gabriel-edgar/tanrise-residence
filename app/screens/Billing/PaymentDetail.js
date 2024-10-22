@@ -17,6 +17,8 @@ import {
   View,
   StyleSheet,
   Dimensions,
+  TextInput,
+  Alert,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
@@ -49,12 +51,45 @@ const AttachmentBilling = (props) => {
   );
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
+  const [price, setPrice] = useState("");
+  console.log("54 route.params: ", route.params);
+
+  const [backgroundColor, setBackgroundColor] = useState(""); // Default background color
+
+  const changeBackgroundColor = () => {
+    setBackgroundColor("#28a745"); // Set to active color
+    setTimeout(() => {
+      setBackgroundColor("#fff"); // Revert back to default color after 1 second
+    }, 1000); // Duration in milliseconds
+  };
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const clickPayment = () => {};
+  const clickPayment = () => {
+    Alert.alert(
+      "Confirm Payment",
+      "Are you sure you want to pay?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Payment cancelled"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () =>
+            alert(
+              "Succes paid to this invoice with the price: Rp. " +
+                formatNumber(price)
+            ),
+          style: "default",
+        },
+      ],
+      { cancelable: false } // Prevent dismissing the alert by tapping outside
+    );
+  };
 
   const loadData = async () => {
     await getAttachment();
@@ -98,6 +133,41 @@ const AttachmentBilling = (props) => {
   const openAttach = (item) => {
     console.log("itm", item);
     navigation.navigate("PDFAttach", item);
+  };
+
+  function removeAfterDot(input) {
+    const index = input.indexOf(".");
+    //alert('index +',index);
+    if (index !== -1) {
+      return input.substring(0, index); // Return substring before the dot
+    }
+    return input; // Return original string if no dot is found
+  }
+
+  const handleChangePrice = (text) => {
+    // Example usage
+    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mdoc_amt);
+
+    // Remove all non-numeric characters
+    const numericValue = text.replace(/\D/g, "");
+
+    if (parseInt(valueHasilConvert) < parseInt(numericValue)) {
+      alert("Price cannot be higher than the original price");
+      return;
+    }
+
+    // Use a regular expression to allow only numbers
+    const regex = /^[0-9]*$/;
+    if (regex.test(numericValue) || numericValue === "") {
+      setPrice(numericValue);
+    } else {
+      alert("Invalid Input", "Please enter only numbers.");
+    }
+  };
+
+  // Function to format the number
+  const formatNumber = (num) => {
+    return new Intl.NumberFormat("de-DE").format(num); // Using German formatting
   };
 
   const renderItem = ({ item, index }) => {
@@ -152,6 +222,9 @@ const AttachmentBilling = (props) => {
           navigation.goBack();
         }}
       />
+      <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
+        {"Invoice " + route.params.datadetailNotDue[0].doc_no}
+      </Text>
       <View style={{ flex: 1, padding: 10 }}>
         {datadetailNotDue?.map((item, key) => (
           <View key={key}>
@@ -230,8 +303,56 @@ const AttachmentBilling = (props) => {
             {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
           </View>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 20,
+            marginHorizontal: 20,
+            alignItems: "center",
+            //backgroundColor:'blue'
+          }}
+        >
+          <Text subhead bold style={{ fontSize: 16 }}>
+            Rp.{"   "}
+          </Text>
+          <TextInput
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: "#ccc",
+              borderRadius: 10,
+              padding: 10,
+              fontSize: 18,
+              //marginRight: 10,
+              backgroundColor,
+            }}
+            //value={price}
+            value={formatNumber(price)} // Format for display
+            onChangeText={handleChangePrice}
+            placeholder="Type a price"
+            keyboardType="numeric"
+          />
+        </View>
         <Button
-          style={{ height: 35, margin: 10, marginTop: 30 }}
+          style={{
+            height: 35,
+            margin: 10,
+            marginTop: 30,
+            width: "40%",
+            alignSelf: "flex-end",
+          }}
+          onPress={() => {
+            changeBackgroundColor();
+            handleChangePrice(removeAfterDot(datadetailNotDue[0].mdoc_amt));
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 14 }}>Set to Full Price</Text>
+        </Button>
+        {/* <Text subhead bold style={{ fontSize: 16 }}>
+          {price}
+        </Text> */}
+        <Button
+          style={{ height: 45, margin: 10, marginTop: 20 }}
           onPress={() => clickPayment()}
         >
           <Text style={{ color: "#fff", fontSize: 14 }}>Pay</Text>

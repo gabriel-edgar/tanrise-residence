@@ -42,6 +42,10 @@ const ChangePassword = (props) => {
   const dispatch = useDispatch();
 
   const changePassword = () => {
+    if (password.trim() == "" || repassword.trim() == "") {
+      alert("Please input password and re-password");
+      return;
+    }
     if (password == repassword) {
       const formData = {
         email: email,

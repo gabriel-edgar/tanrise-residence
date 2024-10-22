@@ -118,6 +118,7 @@ const PDFAttach = (props) => {
 
     //const url = items.link_url;
     // Extract the filename from the URL
+    console.log("121 url: ", url);
     const filenameWithExtension = url.split("/").pop();
 
     // Remove the .pdf extension (case insensitive)
@@ -151,6 +152,8 @@ const PDFAttach = (props) => {
     }
 
     if (Platform.OS == "ios") {
+      console.log("155 run ios");
+      const url = repl;
       downloadForIOS(url);
     } else {
       await requestPermission();
@@ -209,7 +212,8 @@ const PDFAttach = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        title={t("Attachment Invoice")}
+        // title={t("Attachment Invoice") + paramsItem.doc_no}
+        title={"Invoice " + paramsItem.doc_no}
         renderLeft={() => {
           return (
             <Icon

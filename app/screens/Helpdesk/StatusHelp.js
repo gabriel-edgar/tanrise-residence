@@ -516,7 +516,7 @@ export default function StatusHelp({ route }) {
         method: "GET",
         params: {
           email: email,
-          status: "'V'",
+          status: "'X'",
           date_start: "",
           date_end: "",
         },
@@ -1328,7 +1328,7 @@ export default function StatusHelp({ route }) {
                   Change unit
                 </Text>
               </ModalSelector>
-              {dotList.length != 0 &&
+              {/* {dotList.length != 0 &&
               dotList.some((item) => item != choosedUnit.lot_no) ? (
                 //dotList.some((item) => item != project.entity_cd) ? (
                 <View
@@ -1346,11 +1346,8 @@ export default function StatusHelp({ route }) {
                     borderRadius: 10,
                   }}
                 >
-                  {/* <Text whiteColor caption2>
-            {finalCount < 0 ? 0 : finalCount}
-          </Text> */}
                 </View>
-              ) : null}
+              ) : null} */}
             </View>
           </View>
         </View>
@@ -1596,7 +1593,7 @@ export default function StatusHelp({ route }) {
                       </Text>
                     }
                   ></Badge>
-                  {dotForStatus.assign ? (
+                  {ds.cntassign != "0" && ds.cntassign != "" ? (
                     <View
                       style={{
                         borderWidth: 1,
@@ -1813,7 +1810,7 @@ export default function StatusHelp({ route }) {
                       </Text>
                     }
                   ></Badge>
-                  {dotForStatus.completed ? (
+                  {ds.cntcompleted != "0" && ds.cntcompleted != "" ? (
                     <View
                       style={{
                         borderWidth: 1,
@@ -1941,7 +1938,7 @@ export default function StatusHelp({ route }) {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'V'")}
+                onPress={() => handleNavigation(dataTowerUser, "'X'")}
                 disabled={ds.cntcancel == 0 ? true : false}
                 style={{
                   borderBottomWidth: 1,

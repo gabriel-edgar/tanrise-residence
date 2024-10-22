@@ -11,6 +11,7 @@ import {
   Tag,
   Price3Col,
   ListTransactionExpand,
+  ListTransactionExpandNotPaid,
   Button,
   ButtonChooseProject,
 } from "@components";
@@ -568,6 +569,63 @@ const Billing = (
               )}
         </View>
       </ScrollView>
+      {/* {tab.id == 1 && dataCurrent != 0 ? (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 10,
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={{
+              flex: 0.5,
+              borderWidth: 1,
+              borderColor: "#ccc",
+              borderRadius: 10,
+              padding: 10,
+              marginRight: 10,
+            }}
+            //value={message}
+            //onChangeText={setMessage}
+            //placeholder="Type a message"
+          >
+            0 selected
+          </Text>
+          <Text
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: "#ccc",
+              borderRadius: 10,
+              padding: 10,
+              marginRight: 10,
+            }}
+            //value={message}
+            //onChangeText={setMessage}
+            //placeholder="Type a message"
+          >
+            Total:
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#007bff",
+              padding: 10,
+              borderRadius: 10,
+            }}
+            //onPress={sendMessage}
+          >
+            <Text
+              style={{
+                color: "#fff",
+              }}
+            >
+              Send
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : null} */}
     </SafeAreaView>
   );
 };

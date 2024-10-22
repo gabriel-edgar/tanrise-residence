@@ -96,7 +96,7 @@ const Categories = ({ style = {}, menu = [], font }) => {
     //icon_url: require("../assets/images/icon_at_home/icon-8.jpeg"),
   };
 
-  const modMenu = [...menu, menuHelp];
+  const modMenu = [...menu];
 
   return (
     <View>

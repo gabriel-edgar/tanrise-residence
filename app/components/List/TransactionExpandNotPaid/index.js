@@ -14,10 +14,13 @@ import { ActivityIndicator } from "react-native-paper";
 import numFormattanpaRupiah from "../../numFormattanpaRupiah";
 import { API_URL_LOKAL } from "@env";
 import httpClient from "../../../controllers/HttpClient";
+import CheckBox from "@react-native-community/checkbox";
 
 const TransactionExpand = ({
   style = {
     paddingTop: 5,
+    flex: 1,
+    flexDirection: "row",
   },
   tradingPairTitle = "",
   tradingPairValue = "",
@@ -77,6 +80,7 @@ const TransactionExpand = ({
   const [datadetailNotDue, setDetailNotDue] = useState([]);
 
   const [loading, setLoading] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
 
   const detailDateDue = async () => {
     // console.log(
@@ -229,52 +233,66 @@ const TransactionExpand = ({
 
   return (
     <View style={style}>
-      <ListTransaction
-        style={StyleSheet.flatten([
-          {
-            borderBottomWidth: 1,
-            paddingBottom: 1,
-            borderBottomColor: colors.background,
-          },
-          !isExpand && {
-            borderBottomWidth: 1,
-            paddingBottom: 1,
-            borderBottomColor: colors.border,
-          },
-        ])}
-        {...ListTransactionProps}
-        onPress={() => clickExpand()}
-      />
-      <Button style={{ height: 35 }} onPress={() => clickAttachment()}>
-        <Text style={{ color: "#fff", fontSize: 14 }}>Attachment</Text>
-      </Button>
-      {isExpand && (
-        <View
+      <View
+        style={{
+          //justifyContent: "center"
+          marginTop: 20,
+        }}
+      >
+        {/* <Text>abc</Text> */}
+        <CheckBox
+          value={isChecked}
+          onValueChange={setIsChecked}
+          style={{ marginRight: 8 }}
+        />
+      </View>
+      <View style={{ flex: 1 }}>
+        <ListTransaction
           style={StyleSheet.flatten([
-            { paddingBottom: 20 },
-            isExpand && {
-              marginTop: 15,
-              padding: 10,
+            {
               borderBottomWidth: 1,
-              borderRightWidth: 1,
-              borderLeftWidth: 1,
-              borderColor: colors.border,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
+              paddingBottom: 1,
+              borderBottomColor: colors.background,
+            },
+            !isExpand && {
+              borderBottomWidth: 1,
+              paddingBottom: 1,
+              borderBottomColor: colors.border,
             },
           ])}
-        >
-          {
-            //tab_id == 1 &&
-            tab_id == 2 && loading ? (
-              <ActivityIndicator
-                color={colors.primary}
-                style={{ marginTop: 20 }}
-              />
-            ) : //tab_id == 1 &&
-            tab_id == 2 && datadetailDateDue != 0 ? (
-              <View>
-                {/* <Button
+          {...ListTransactionProps}
+          onPress={() => clickExpand()}
+        />
+        <Button style={{ height: 35 }} onPress={() => clickAttachment()}>
+          <Text style={{ color: "#fff", fontSize: 14 }}>Attachment</Text>
+        </Button>
+        {isExpand && (
+          <View
+            style={StyleSheet.flatten([
+              { paddingBottom: 20 },
+              isExpand && {
+                marginTop: 15,
+                padding: 10,
+                borderBottomWidth: 1,
+                borderRightWidth: 1,
+                borderLeftWidth: 1,
+                borderColor: colors.border,
+                borderBottomLeftRadius: 20,
+                borderBottomRightRadius: 20,
+              },
+            ])}
+          >
+            {
+              //tab_id == 1 &&
+              tab_id == 2 && loading ? (
+                <ActivityIndicator
+                  color={colors.primary}
+                  style={{ marginTop: 20 }}
+                />
+              ) : //tab_id == 1 &&
+              tab_id == 2 && datadetailDateDue != 0 ? (
+                <View>
+                  {/* <Button
                   style={{ height: 35 }}
                   onPress={() => clickAttachment()}
                 >
@@ -282,197 +300,198 @@ const TransactionExpand = ({
                     Attachment
                   </Text>
                 </Button> */}
-                {datadetailDateDue.map((item, key) => (
-                  <View key={key}>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        // paddingHorizontal: 10,
-                        paddingVertical: 5,
-                      }}
-                    >
-                      <View style={{ width: "50%", paddingLeft: 10 }}>
-                        <Text subhead>{item.descs}</Text>
-                      </View>
+                  {datadetailDateDue.map((item, key) => (
+                    <View key={key}>
                       <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
-
-                          width: "35%",
+                          width: "100%",
+                          // paddingHorizontal: 10,
+                          paddingVertical: 5,
                         }}
                       >
-                        <Text>Rp. </Text>
-                        <Text subhead>
-                          {numFormattanpaRupiah(item.mdoc_amt)}
-                          {/* //tadinya ini mbal_amt */}
-                          {/* 100.000.000.00 */}
-                        </Text>
-                        {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                        <View style={{ width: "50%", paddingLeft: 10 }}>
+                          <Text subhead>{item.descs}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+
+                            width: "35%",
+                          }}
+                        >
+                          <Text>Rp. </Text>
+                          <Text subhead>
+                            {numFormattanpaRupiah(item.mdoc_amt)}
+                            {/* //tadinya ini mbal_amt */}
+                            {/* 100.000.000.00 */}
+                          </Text>
+                          {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                ))}
-                <View
-                  style={{
-                    borderTopWidth: 0.5,
-                    borderStyle: "dashed",
-                    borderColor: colors.primary,
-                    marginLeft: 9,
-                  }}
-                ></View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    // paddingHorizontal: 10,
-                    paddingVertical: 5,
-                  }}
-                >
-                  <View style={{ width: "50%", paddingLeft: 10 }}>
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      Total
-                    </Text>
-                  </View>
+                  ))}
+                  <View
+                    style={{
+                      borderTopWidth: 0.5,
+                      borderStyle: "dashed",
+                      borderColor: colors.primary,
+                      marginLeft: 9,
+                    }}
+                  ></View>
                   <View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
-
-                      width: "35%",
+                      width: "100%",
+                      // paddingHorizontal: 10,
+                      paddingVertical: 5,
                     }}
                   >
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      Rp.{" "}
-                    </Text>
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      {replaceTotal}
-                      {/* 100.000.000.00 */}
-                    </Text>
-                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                    <View style={{ width: "50%", paddingLeft: 10 }}>
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        Total
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+
+                        width: "35%",
+                      }}
+                    >
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        Rp.{" "}
+                      </Text>
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        {replaceTotal}
+                        {/* 100.000.000.00 */}
+                      </Text>
+                      {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                    </View>
                   </View>
                 </View>
-              </View>
-            ) : (
-              //tab_id == 1 &&
-              tab_id == 2 && (
-                <View style={{ alignSelf: "center" }}>
-                  <Text>Not have data detailss </Text>
-                </View>
+              ) : (
+                //tab_id == 1 &&
+                tab_id == 2 && (
+                  <View style={{ alignSelf: "center" }}>
+                    <Text>Not have data detailss </Text>
+                  </View>
+                )
               )
-            )
-          }
-          {
-            //tab_id == 2 &&
-            tab_id == 1 && loading ? (
-              <ActivityIndicator
-                color={colors.primary}
-                style={{ marginTop: 20 }}
-              />
-            ) : //tab_id == 2 &&
-            tab_id == 1 && datadetailNotDue != 0 ? (
-              <View>
-                <Button
+            }
+            {
+              //tab_id == 2 &&
+              tab_id == 1 && loading ? (
+                <ActivityIndicator
+                  color={colors.primary}
+                  style={{ marginTop: 20 }}
+                />
+              ) : //tab_id == 2 &&
+              tab_id == 1 && datadetailNotDue != 0 ? (
+                <View>
+                  {/* <Button
                   style={{ height: 35, marginBottom: 10 }}
                   onPress={() => clickPaymentDetail()}
                 >
                   <Text style={{ color: "#fff", fontSize: 14 }}>
                     Payment Billing
                   </Text>
-                </Button>
-                {datadetailNotDue.map((item, key) => (
-                  <View key={key}>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        // paddingHorizontal: 10,
-                        paddingVertical: 5,
-                      }}
-                    >
-                      <View style={{ width: "50%", paddingLeft: 10 }}>
-                        <Text subhead>{item.descs}</Text>
-                      </View>
+                </Button> */}
+                  {datadetailNotDue.map((item, key) => (
+                    <View key={key}>
                       <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
-
-                          width: "35%",
+                          width: "100%",
+                          // paddingHorizontal: 10,
+                          paddingVertical: 5,
                         }}
                       >
-                        <Text>Rp. </Text>
-                        <Text subhead>
-                          {/* {item.mbal_amt.replace(
+                        <View style={{ width: "50%", paddingLeft: 10 }}>
+                          <Text subhead>{item.descs}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+
+                            width: "35%",
+                          }}
+                        >
+                          <Text>Rp. </Text>
+                          <Text subhead>
+                            {/* {item.mbal_amt.replace(
                           /(\d)(?=(\d{3})+(?!\d))/g,
                           '$1.',
                         )} */}
-                          {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                          {numFormattanpaRupiah(item.mdoc_amt)}
-                          {/* 100.000.000.00 */}
-                        </Text>
-                        {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                            {/* {numFormattanpaRupiah(item.mbal_amt)} */}
+                            {numFormattanpaRupiah(item.mdoc_amt)}
+                            {/* 100.000.000.00 */}
+                          </Text>
+                          {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                ))}
-                <View
-                  style={{
-                    borderTopWidth: 0.5,
-                    borderStyle: "dashed",
-                    borderColor: colors.primary,
-                    marginLeft: 9,
-                  }}
-                ></View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    // paddingHorizontal: 10,
-                    paddingVertical: 5,
-                  }}
-                >
-                  <View style={{ width: "50%", paddingLeft: 10 }}>
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      Total
-                    </Text>
-                  </View>
+                  ))}
+                  <View
+                    style={{
+                      borderTopWidth: 0.5,
+                      borderStyle: "dashed",
+                      borderColor: colors.primary,
+                      marginLeft: 9,
+                    }}
+                  ></View>
                   <View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
-
-                      width: "35%",
+                      width: "100%",
+                      // paddingHorizontal: 10,
+                      paddingVertical: 5,
                     }}
                   >
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      Rp.{" "}
-                    </Text>
-                    <Text subhead bold style={{ fontSize: 16 }}>
-                      {replaceTotal_notdue}
-                      {/* 100.000.000.00 */}
-                    </Text>
-                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                    <View style={{ width: "50%", paddingLeft: 10 }}>
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        Total
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+
+                        width: "35%",
+                      }}
+                    >
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        Rp.{" "}
+                      </Text>
+                      <Text subhead bold style={{ fontSize: 16 }}>
+                        {replaceTotal_notdue}
+                        {/* 100.000.000.00 */}
+                      </Text>
+                      {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                    </View>
                   </View>
                 </View>
-              </View>
-            ) : (
-              //tab_id == 2 &&
-              tab_id == 1 &&
-              datadetailNotDue == null && (
-                <View style={{ alignSelf: "center" }}>
-                  <Text>Not have data detail </Text>
-                </View>
+              ) : (
+                //tab_id == 2 &&
+                tab_id == 1 &&
+                datadetailNotDue == null && (
+                  <View style={{ alignSelf: "center" }}>
+                    <Text>Not have data detail </Text>
+                  </View>
+                )
               )
-            )
-          }
-        </View>
-      )}
+            }
+          </View>
+        )}
+      </View>
     </View>
   );
 };

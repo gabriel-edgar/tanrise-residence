@@ -83,6 +83,7 @@ export { default as ListThumbCircle } from "./List/ThumbCircle";
 export { default as ListTextButton } from "./List/TextButton";
 export { default as ListTransaction } from "./List/Transaction";
 export { default as ListTransactionExpand } from "./List/TransactionExpand";
+export { default as ListTransactionExpandNotPaid } from "./List/TransactionExpandNotPaid";
 export { default as TransactionExpandHistory } from "./List/TransactionExpandHistory";
 export { default as ListTextLR } from "./List/TextLR";
 export { default as ListMenuIcon } from "./List/MenuIcon";

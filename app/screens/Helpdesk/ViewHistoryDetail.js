@@ -279,6 +279,8 @@ export default function ViewHistoryDetail({ route }) {
     const formData = {
       // report_no: 'EX21090021', //hardcode dulu
       report_no: data.report_no,
+      entity_cd: data.entity_cd,
+      project_no: data.project_no,
     };
 
     // console.log('form data multi', formData);
@@ -637,7 +639,7 @@ export default function ViewHistoryDetail({ route }) {
                           ? "Process"
                           : dataTiketMulti.status == "F"
                           ? "Confirm"
-                          : dataTiketMulti.status == "V"
+                          : dataTiketMulti.status == "X"
                           ? "Cancel"
                           : dataTiketMulti.status == "C"
                           ? "Close"
@@ -698,6 +700,23 @@ export default function ViewHistoryDetail({ route }) {
                           Expenses
                         </Text>
                       </Button>
+                      {dataTiketMulti.status == "A" ? (
+                        <View
+                          style={{
+                            borderWidth: 1,
+                            borderColor: "white",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "absolute",
+                            width: 20,
+                            height: 20,
+                            backgroundColor: "red",
+                            top: 0,
+                            right: 75,
+                            borderRadius: 10,
+                          }}
+                        ></View>
+                      ) : null}
                     </View>
                   )}
 
@@ -746,7 +765,13 @@ export default function ViewHistoryDetail({ route }) {
                         activeOpacity={1}
                         onPress={() =>
                           navigation.navigate("PreviewImageHelpdesk", {
-                            images: [{ file_url: dataImageMulti[0]?.file_url }],
+                            images: [
+                              {
+                                file_url:
+                                  dataImageMulti[0]?.file_url +
+                                  `?timestamp=${new Date().getTime()}`,
+                              },
+                            ],
                           })
                         }
                       >
@@ -759,7 +784,9 @@ export default function ViewHistoryDetail({ route }) {
                             marginTop: 20,
                           }}
                           source={{
-                            uri: dataImageMulti[0]?.file_url,
+                            uri:
+                              dataImageMulti[0]?.file_url +
+                              `?timestamp=${new Date().getTime()}`,
                             //uri: "https://api.property365.co.id:4421/tanrise_api/public/storage/image/CSsignature/AD24080003/Signature_AD24080003.png",
                           }}
                         />
@@ -932,7 +959,14 @@ export default function ViewHistoryDetail({ route }) {
                 <View>
                   {
                     //dataTiketMulti.status != "R" ? ( == (normal)
-                    dataTiketMulti.status != "R" ? (
+                    dataTiketMulti.status == "R" ||
+                    dataTiketMulti.status == "A" ? (
+                      <View>
+                        <Text style={{ textAlign: "center", marginTop: 10 }}>
+                          Feedback not available at status open or status assign
+                        </Text>
+                      </View>
+                    ) : (
                       <View style={{ marginHorizontal: 10, marginTop: 10 }}>
                         <View
                           style={{
@@ -1133,12 +1167,6 @@ export default function ViewHistoryDetail({ route }) {
                         onPress={() => saveConfirm()}>
                         <Text>Confirm</Text>
                       </TouchableOpacity> */}
-                      </View>
-                    ) : (
-                      <View>
-                        <Text style={{ textAlign: "center", marginTop: 10 }}>
-                          Feedback not available at status open
-                        </Text>
                       </View>
                     )
                   }
