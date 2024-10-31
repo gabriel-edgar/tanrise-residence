@@ -1328,7 +1328,7 @@ export default function StatusHelp({ route }) {
                   Change unit
                 </Text>
               </ModalSelector>
-              {/* {dotList.length != 0 &&
+              {dotList.length != 0 &&
               dotList.some((item) => item != choosedUnit.lot_no) ? (
                 //dotList.some((item) => item != project.entity_cd) ? (
                 <View
@@ -1345,9 +1345,8 @@ export default function StatusHelp({ route }) {
                     right: 25,
                     borderRadius: 10,
                   }}
-                >
-                </View>
-              ) : null} */}
+                ></View>
+              ) : null}
             </View>
           </View>
         </View>

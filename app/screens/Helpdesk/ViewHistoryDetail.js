@@ -729,7 +729,10 @@ export default function ViewHistoryDetail({ route }) {
                           alignSelf: "center",
                         }}
                         onPress={() =>
-                          navigation.navigate("ScreenSignature", dataTiketMulti)
+                          navigation.navigate("ScreenSignature", {
+                            ...dataTiketMulti,
+                            resHDR: allDataforDetail.resHDR,
+                          })
                         }
                       >
                         <Text

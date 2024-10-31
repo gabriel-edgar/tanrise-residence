@@ -366,6 +366,22 @@ const Billing = (
         onPressLeft={() => {
           navigation.goBack();
         }}
+        renderRight={() => {
+          return (
+            <Icon
+              name="clipboard-list"
+              size={20}
+              color={colors.primary}
+              enableRTL={true}
+            />
+          );
+        }}
+        onPressRight={() => {
+          //   name="BillingHistory"
+          //   name="HistoryBilling"
+          //navigation.goBack();
+          navigation.navigate("BillingHistory");
+        }}
       />
       {itemData.isProject == 1 && (
         <>

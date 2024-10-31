@@ -70,9 +70,11 @@ export default function Setting({ navigation }) {
   const loadData = async () => {
     const fcmToken = await messaging()
       .getToken()
-      .catch(() => {
-        return "dummy token";
+      .catch((error) => {
+        return JSON.stringify(error);
       });
+
+    console.log("77 fcmToken: ", fcmToken);
 
     setToken(fcmToken);
   };
@@ -243,7 +245,7 @@ export default function Setting({ navigation }) {
             {VersionInfo.bundleIdentifier}
           </Text>
         </View> */}
-        {/*<View
+        <View
           style={[
             styles.profileItem,
             {
@@ -263,7 +265,7 @@ export default function Setting({ navigation }) {
               {API_URL_LOKAL.slice(8, 9).toUpperCase() + ""}
             </Text>
           </TouchableHighlight>
-        </View>*/}
+        </View>
       </ScrollView>
       <Modal
         transparent={true}

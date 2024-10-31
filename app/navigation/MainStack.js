@@ -20,9 +20,12 @@ import { BottomTabNavigatorMazi, tabBarIcon } from "./components";
 import Billing from "../screens/Billing";
 import AttachmentBilling from "../screens/Billing/AttachmentBilling";
 import PaymentDetail from "../screens/Billing/PaymentDetail";
+import MerchantList from "../screens/Billing/MerchantList";
+import VAScreen from "../screens/Billing/VAScreen";
 import BillingHistory from "../screens/BillingHistory";
 import HistoryBilling from "../screens/BillingHistory/HistoryBilling";
 import PDFAttach from "../screens/Billing/PDFAttach";
+import BillingList from "../screens/Billing/BillingList";
 import Facility from "../screens/Facility";
 import Announce from "../screens/Announce";
 import AnnounceDetail from "../screens/AnnouceDetail";
@@ -519,6 +522,16 @@ function MainStack() {
       <Stack.Screen
         name="PaymentDetail"
         component={PaymentDetail}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MerchantList"
+        component={MerchantList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="VAScreen"
+        component={VAScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

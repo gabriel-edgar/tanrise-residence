@@ -21,7 +21,6 @@ import {
   Alert,
   Linking,
   Modal,
-  ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
@@ -34,12 +33,24 @@ import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
 import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { FontWeight } from "../../config";
+import CheckBox from "@react-native-community/checkbox";
 
 const fileDummy = [
   {
     rowId: "1",
     descs: "descs meter",
     url_link: "",
+  },
+];
+
+const dummyPaymentMethod = [
+  {
+    descs: "Mandiri Virtual Account",
+    value: "mandiri",
+  },
+  {
+    descs: "BRI Virtual Account",
+    value: "bri",
   },
 ];
 
@@ -61,15 +72,22 @@ const AttachmentBilling = (props) => {
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");
   const [modalVisible, setModalVisible] = useState(false);
-  console.log("54 route.params: ", route.params);
+  console.log("75VAS route.params: ", route.params);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
 
-  const [textToCopy, setTextToCopy] = useState("Example VA Number");
+  const [textToCopy, setTextToCopy] = useState(
+    //"Example VA Number"
+    "123410011001001BL23090008"
+  );
 
-  const copyToClipboard = () => {
-    Clipboard.setString(textToCopy);
-    Alert.alert("Copied!", "Text has been copied to clipboard.");
+  // Sample data array
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const copyToClipboard = (text) => {
+    Clipboard.setString(text);
+    Alert.alert("Copied!", '"' + text + '" has been copied to clipboard.');
   };
 
   const changeBackgroundColor = () => {
@@ -112,6 +130,14 @@ const AttachmentBilling = (props) => {
 
   const loadData = async () => {
     await getAttachment();
+  };
+
+  // Function to toggle checkbox
+  const toggleCheckbox = (value) => {
+    // const newData = dummyPaymentMethod.map((item) =>
+    //   item.value === value ? { ...item, checked: !item.checked } : item
+    // );
+    setPaymentMethod(value);
   };
 
   const getAttachment = async () => {
@@ -165,7 +191,7 @@ const AttachmentBilling = (props) => {
 
   const handleChangePrice = (text) => {
     // Example usage
-    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mfinal_amt);
+    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mdoc_amt);
 
     // Remove all non-numeric characters
     const numericValue = text.replace(/\D/g, "");
@@ -186,7 +212,7 @@ const AttachmentBilling = (props) => {
 
   // Function to format the number
   const formatNumber = (num) => {
-    return new Intl.NumberFormat("de-DE").format(num); // Using German formatting
+    return "Rp " + new Intl.NumberFormat("de-DE").format(num); // Using German formatting
   };
 
   const renderItem = ({ item, index }) => {
@@ -219,6 +245,12 @@ const AttachmentBilling = (props) => {
       //   </View>
     );
   };
+
+  const CustomComponent = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{title}</Text>
+    </View>
+  );
 
   if (webViewPayment) {
     return (
@@ -295,7 +327,7 @@ const AttachmentBilling = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        title={"Payment Detail"}
+        title={"Payment"}
         renderLeft={() => {
           return (
             <Icon
@@ -313,150 +345,149 @@ const AttachmentBilling = (props) => {
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
         {"Invoice " + route.params.datadetailNotDue[0].doc_no}
       </Text>
-      <ScrollView>
-        <View style={{ flex: 1, padding: 10 }}>
-          {datadetailNotDue?.map((item, key) => (
-            <View key={key}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  // paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}
-              >
-                <View style={{ width: "50%", paddingLeft: 10 }}>
-                  <Text subhead>{item.descs}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+      <View
+        style={{
+          flex: 1,
+          //justifyContent: "center",
+          //alignItems: "center",
+          //backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+          margin: 20,
 
-                    width: "35%",
-                  }}
-                >
-                  <Text>Rp. </Text>
-                  <Text subhead>
-                    {/* {item.mbal_amt.replace(
-                          /(\d)(?=(\d{3})+(?!\d))/g,
-                          '$1.',
-                        )} */}
-                    {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                    {numFormattanpaRupiah(item.mfinal_amt)}
-                    {/* 100.000.000.00 */}
-                  </Text>
-                  {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
-                </View>
-              </View>
-            </View>
-          ))}
-          <View
-            style={{
-              borderTopWidth: 0.5,
-              borderStyle: "dashed",
-              borderColor: colors.primary,
-              marginLeft: 9,
-            }}
-          ></View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-              // paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
-          >
-            <View style={{ width: "50%", paddingLeft: 10 }}>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Total
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-
-                width: "35%",
-              }}
-            >
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Rp.{" "}
-              </Text>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                {replaceTotal_notdue}
-                {/* 100.000.000.00 */}
-              </Text>
-              {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
-            </View>
-          </View>
-          {/*<View
+          backgroundColor: colors.background,
+          borderRadius: 10,
+          elevation: 3, // For Android shadow
+          shadowColor: colors.text, // For iOS shadow
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.7,
+          shadowRadius: 2,
+          margin: 20,
+          padding: 15,
+        }}
+      >
+        {/* <View
           style={{
-            flexDirection: "row",
-            marginTop: 20,
-            marginHorizontal: 20,
+            width: 300,
+            padding: 20,
+            backgroundColor: "white",
+            borderRadius: 10,
             alignItems: "center",
-            //backgroundColor:'blue'
+          }}
+        > */}
+        <Text
+          style={{
+            marginBottom: 20,
+            //textAlign: "center",
+            fontWeight: "bold",
           }}
         >
-          <Text subhead bold style={{ fontSize: 16 }}>
-            Rp.{"   "}
-          </Text>
-          <TextInput
+          {route.params.paymentMethod.payment_channel}
+        </Text>
+        <Text
+          style={
+            {
+              //marginBottom: 5,
+              //textAlign: "center",
+              //fontWeight: "bold",
+            }
+          }
+        >
+          Virtual Account Number
+        </Text>
+        <View
+          style={{
+            //padding: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            //backgroundColor: "blue",
+          }}
+        >
+          <Text>{route.params.VA}</Text>
+          {/* <Button title="Copy Text" onPress={copyToClipboard} /> */}
+          <Button
             style={{
-              flex: 1,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 10,
-              padding: 10,
-              fontSize: 18,
-              //marginRight: 10,
-              backgroundColor,
-              color: colors.text,
+              height: 35,
+              //margin: 10,
+              //marginTop: 30,
+              //width: "40%",
+              alignSelf: "center",
             }}
-            //value={price}
-            value={formatNumber(price)} // Format for display
-            onChangeText={handleChangePrice}
-            placeholder="Type a price"
-            keyboardType="numeric"
-          />
+            onPress={() => copyToClipboard(route.params.VA)}
+          >
+            <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
+          </Button>
         </View>
-        <Button
+        <View
+          style={
+            {
+              //padding: 20,
+              //flexDirection: "row",
+              //alignItems: "center",
+              //justifyContent: "space-between",
+            }
+          }
+        >
+          <Text
+            style={{
+              marginTop: 10,
+              //textAlign: "center",
+              //fontWeight: "bold",
+            }}
+          >
+            Total Payment
+          </Text>
+          <View
+            style={{
+              paddingVertical: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              //backgroundColor: "blue",
+            }}
+          >
+            <Text>
+              {/* {formatNumber(route.params.datadetailNotDue[0].mfinal_amt)} */}
+              Rp {replaceTotal_notdue}
+            </Text>
+            {/* <Button title="Copy Text" onPress={copyToClipboard} /> */}
+            {/* <Button
+              style={{
+                height: 35,
+                //margin: 10,
+                //marginTop: 30,
+                //width: "40%",
+                alignSelf: "center",
+              }}
+              onPress={() => copyToClipboard("Rp " + replaceTotal_notdue)}
+            >
+              <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
+            </Button> */}
+          </View>
+        </View>
+        {/* <Button
+              title="Close Modal"
+              onPress={() => setModalVisible(false)}
+            /> */}
+        {/* <Button
           style={{
             height: 35,
             margin: 10,
-            marginTop: 30,
-            width: "40%",
-            alignSelf: "flex-end",
+            marginTop: 10,
+            //width: "40%",
+            alignSelf: "center",
           }}
-          onPress={() => {
-            changeBackgroundColor();
-            handleChangePrice(removeAfterDot(datadetailNotDue[0].mdoc_amt));
-          }}
+          onPress={() => setModalVisible(false)}
         >
-          <Text style={{ color: "#fff", fontSize: 14 }}>Set to Full Price</Text>
-        </Button>*/}
-          {/* <Text subhead bold style={{ fontSize: 16 }}>
-          {price}
-        </Text> */}
-          <Button
-            style={{ height: 45, margin: 10, marginTop: 20 }}
-            onPress={() =>
-              //clickPayment()
-              navigation.navigate("MerchantList", {
-                ...route.params,
-                replaceTotal_notdue,
-              })
-            }
-          >
-            <Text style={{ color: "#fff", fontSize: 14 }}>
-              Select Payment Method
-            </Text>
-          </Button>
-        </View>
-      </ScrollView>
+          <Text style={{ color: "#fff", fontSize: 14 }}>Close</Text>
+        </Button> */}
+        {/* </View> */}
+      </View>
+      {/* <View style={styles.container}> */}
+      {/* {dummyPaymentMethod.map((item) => (
+          <CustomComponent key={item.value} title={item.desc} />
+        ))} */}
+
+      {/* </View> */}
       <Modal
         animationType="slide" // You can use "slide", "fade", or "none"
         transparent={true} // Set to false if you want a solid background
@@ -506,7 +537,7 @@ const AttachmentBilling = (props) => {
                   //width: "40%",
                   alignSelf: "center",
                 }}
-                onPress={copyToClipboard}
+                onPress={() => copyToClipboard()}
               >
                 <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
               </Button>

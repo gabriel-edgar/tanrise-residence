@@ -256,6 +256,7 @@ export default function SubmitHelpdesk({ route, props }) {
       compressImageMaxHeight: 1280,
     })
       .then((images) => {
+        //alert(JSON.stringify(image));
         //console.log("received image", images);
         const dataImage = {
           uri: images.path,
@@ -278,7 +279,9 @@ export default function SubmitHelpdesk({ route, props }) {
         //   ],
         // }));
       })
-      .catch((e) => console.log("tag", e));
+      .catch((e) => {console.log("tag", e);
+alert(e);
+      })
   };
 
   const fromGallery = (cropping, mediaType = "photo") => {
@@ -296,6 +299,7 @@ export default function SubmitHelpdesk({ route, props }) {
       multiple: false,
     })
       .then((image) => {
+        //alert(JSON.stringify(image));
         console.log("received images", image);
         // image.map((image) => {
         imageList.push({
@@ -387,8 +391,8 @@ export default function SubmitHelpdesk({ route, props }) {
         userfile: dataPhoto,
       };
 
-      // console.log("349 data: ", data);
-      //return;
+      // console.log("349 data: ", {...data, userfile:''});
+      // return;
 
       // fetch(API_URL_LOKAL + "/modules/cs/save", {
       //   method: "post",
@@ -421,7 +425,7 @@ export default function SubmitHelpdesk({ route, props }) {
         })
         .catch((err) => {
           console.log("349 err1 submit: ", err);
-          const message = err.response.status;
+          const message = err.response.data.message;
           console.log("349 " + JSON.stringify(message));
           setError(JSON.stringify(message));
           console.log("349 err2 submit: ", err.response.data.message);
@@ -596,7 +600,8 @@ export default function SubmitHelpdesk({ route, props }) {
           }}
         ></TextInput>
       </TouchableOpacity> */}
-      <TouchableOpacity onPress={() => modalBankMaster()}>
+      
+      {/*<TouchableOpacity onPress={() => modalBankMaster()}>
         <Text
           style={{
             color: colors.text, //"#171717",
@@ -612,7 +617,7 @@ export default function SubmitHelpdesk({ route, props }) {
             ? " Choose Location"
             : textLocation}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
 
       <View style={{ marginHorizontal: 20, marginTop: 20 }}>
         <Text

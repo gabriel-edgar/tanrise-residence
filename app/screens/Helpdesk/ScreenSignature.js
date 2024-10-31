@@ -63,7 +63,7 @@ export default function ScreenSignature({ route }) {
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
   const users = useSelector((state) => getUser(state));
-  const [email, setEmail] = useState(users.user);
+  const [email, setEmail] = useState(users.email);
   const [name, setName] = useState(users.name);
   //const [urlApi, seturlApi] = useState(client);
 
@@ -93,13 +93,26 @@ export default function ScreenSignature({ route }) {
     const data = {
       dataSign: signature,
 
-      name_approval: paramsItem.name,
+      name_approval: email,
 
       report_no: paramsItem.report_no,
+      entity_cd: paramsItem.resHDR.entity_cd,
+      project_no: paramsItem.resHDR.project_no,
     };
 
-    console.log("101 data save signature: ", data);
-    //return;
+    const data2 = {
+      //dataSign: signature,
+
+      name_approval: email,
+
+      report_no: paramsItem.report_no,
+      entity_cd: paramsItem.resHDR.entity_cd,
+      project_no: paramsItem.resHDR.project_no,
+    };
+
+    // console.log("101 data save signature: ", paramsItem);
+    // alert("104 data: " + JSON.stringify(data2));
+    // return;
     // const config = {
     //   headers: {
     //     accept: "application/json",
@@ -170,13 +183,13 @@ export default function ScreenSignature({ route }) {
 
       <View style={{ flex: 1 }}>
         <View style={styles.preview}>
-          {signature ? (
+          {/* {signature ? (
             <Image
               resizeMode={"contain"}
               style={{ width: 335, height: 114 }}
               source={{ uri: signature }}
             />
-          ) : null}
+          ) : null} */}
         </View>
         <Signature
           onOK={handleOK}
@@ -224,6 +237,7 @@ export default function ScreenSignature({ route }) {
                 {/* <Text>{message}</Text> */}
                 <IconAnt
                   name="checkcircleo"
+                  //name="home"
                   size={80}
                   color={colors.primary}
                 ></IconAnt>

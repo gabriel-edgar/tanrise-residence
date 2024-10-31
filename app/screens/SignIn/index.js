@@ -166,8 +166,21 @@ const SignIn = (props) => {
   };
 
   const getFcmToken = async () => {
+    //alert("test");
+    //await messaging().deleteToken();
+    console.log("171 run ");
     // Optionally, you can get the new token
-    const fcmToken = await messaging().getToken();
+    // await messaging()
+    //   .registerDeviceForRemoteMessages()
+    //   .catch((e) => {
+    //     console.log("171 errorReg: " + e);
+    //   });
+    const fcmToken = await messaging()
+      .getToken()
+      .catch((e) => {
+        console.log("171 error: " + e);
+      });
+    console.log("171 token: ", fcmToken);
     if (fcmToken) {
       console.log(fcmToken);
       console.log("888 Your Firebase Token is:", fcmToken);

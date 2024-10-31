@@ -19,9 +19,6 @@ import {
   Dimensions,
   TextInput,
   Alert,
-  Linking,
-  Modal,
-  ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
@@ -31,9 +28,6 @@ import axios from "axios";
 //import { API_URL_LOKAL } from "@env";
 import httpClient from "../../controllers/HttpClient";
 import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
-import { WebView } from "react-native-webview";
-import Clipboard from "@react-native-clipboard/clipboard";
-import { FontWeight } from "../../config";
 
 const fileDummy = [
   {
@@ -58,19 +52,9 @@ const AttachmentBilling = (props) => {
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
   const [price, setPrice] = useState("");
-  const [webViewPayment, setWebViewPayment] = useState(false);
-  const [urlPayment, setUrlPayment] = useState("https://www.google.com");
-  const [modalVisible, setModalVisible] = useState(false);
   console.log("54 route.params: ", route.params);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
-
-  const [textToCopy, setTextToCopy] = useState("Example VA Number");
-
-  const copyToClipboard = () => {
-    Clipboard.setString(textToCopy);
-    Alert.alert("Copied!", "Text has been copied to clipboard.");
-  };
 
   const changeBackgroundColor = () => {
     setBackgroundColor("#28a745"); // Set to active color
@@ -95,14 +79,11 @@ const AttachmentBilling = (props) => {
         },
         {
           text: "OK",
-          onPress: () => {
-            // alert(
-            //   "Succes paid to this invoice with the price: Rp. " +
-            //     formatNumber(price)
-            // );
-            setWebViewPayment(true);
-            //setModalVisible(true);
-          },
+          onPress: () =>
+            alert(
+              "Succes paid to this invoice with the price: Rp. " +
+                formatNumber(price)
+            ),
           style: "default",
         },
       ],
@@ -165,7 +146,7 @@ const AttachmentBilling = (props) => {
 
   const handleChangePrice = (text) => {
     // Example usage
-    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mfinal_amt);
+    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mdoc_amt);
 
     // Remove all non-numeric characters
     const numericValue = text.replace(/\D/g, "");
@@ -220,75 +201,6 @@ const AttachmentBilling = (props) => {
     );
   };
 
-  if (webViewPayment) {
-    return (
-      <SafeAreaView
-        style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
-      >
-        <Header
-          title={"Payment Screen"}
-          renderLeft={() => {
-            return (
-              <Icon
-                name="angle-left"
-                size={20}
-                color={colors.primary}
-                enableRTL={true}
-              />
-            );
-          }}
-          onPressLeft={() => {
-            setWebViewPayment(false);
-          }}
-          renderRight={() => {
-            return (
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "lightgray",
-                  borderRadius: 10,
-                  padding: 5,
-                }}
-              >
-                <Icon
-                  name="globe"
-                  size={20}
-                  color={colors.primary}
-                  enableRTL={true}
-                />
-                <Text
-                  style={{ textAlign: "center", marginLeft: 10, fontSize: 10 }}
-                >
-                  {"Open in Browser"}
-                </Text>
-              </View>
-            );
-          }}
-          onPressRight={() => {
-            Linking.openURL(
-              urlPayment
-              // `mailto:${item.contact_no}?subject=${encodeURIComponent(
-              //   email.subject
-              // )}&body=${encodeURIComponent(email.body)}`
-            ).catch((err) => alert("Error opening payment link"));
-          }}
-        />
-        <WebView
-          source={{ uri: urlPayment }}
-          style={{ flex: 1 }}
-          // onNavigationStateChange={(navState) => {
-          //   if (!navState.url.startsWith(url)) {
-          //     // Optionally handle external links
-          //     setWebViewVisible(false);
-          //   }
-          // }}
-        />
-      </SafeAreaView>
-    );
-  }
-
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
@@ -313,86 +225,85 @@ const AttachmentBilling = (props) => {
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
         {"Invoice " + route.params.datadetailNotDue[0].doc_no}
       </Text>
-      <ScrollView>
-        <View style={{ flex: 1, padding: 10 }}>
-          {datadetailNotDue?.map((item, key) => (
-            <View key={key}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  // paddingHorizontal: 10,
-                  paddingVertical: 5,
-                }}
-              >
-                <View style={{ width: "50%", paddingLeft: 10 }}>
-                  <Text subhead>{item.descs}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-
-                    width: "35%",
-                  }}
-                >
-                  <Text>Rp. </Text>
-                  <Text subhead>
-                    {/* {item.mbal_amt.replace(
-                          /(\d)(?=(\d{3})+(?!\d))/g,
-                          '$1.',
-                        )} */}
-                    {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                    {numFormattanpaRupiah(item.mfinal_amt)}
-                    {/* 100.000.000.00 */}
-                  </Text>
-                  {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
-                </View>
-              </View>
-            </View>
-          ))}
-          <View
-            style={{
-              borderTopWidth: 0.5,
-              borderStyle: "dashed",
-              borderColor: colors.primary,
-              marginLeft: 9,
-            }}
-          ></View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-              // paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
-          >
-            <View style={{ width: "50%", paddingLeft: 10 }}>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Total
-              </Text>
-            </View>
+      <View style={{ flex: 1, padding: 10 }}>
+        {datadetailNotDue?.map((item, key) => (
+          <View key={key}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-
-                width: "35%",
+                width: "100%",
+                // paddingHorizontal: 10,
+                paddingVertical: 5,
               }}
             >
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Rp.{" "}
-              </Text>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                {replaceTotal_notdue}
-                {/* 100.000.000.00 */}
-              </Text>
-              {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+              <View style={{ width: "50%", paddingLeft: 10 }}>
+                <Text subhead>{item.descs}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+
+                  width: "35%",
+                }}
+              >
+                <Text>Rp. </Text>
+                <Text subhead>
+                  {/* {item.mbal_amt.replace(
+                          /(\d)(?=(\d{3})+(?!\d))/g,
+                          '$1.',
+                        )} */}
+                  {/* {numFormattanpaRupiah(item.mbal_amt)} */}
+                  {numFormattanpaRupiah(item.mdoc_amt)}
+                  {/* 100.000.000.00 */}
+                </Text>
+                {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+              </View>
             </View>
           </View>
-          {/*<View
+        ))}
+        <View
+          style={{
+            borderTopWidth: 0.5,
+            borderStyle: "dashed",
+            borderColor: colors.primary,
+            marginLeft: 9,
+          }}
+        ></View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            // paddingHorizontal: 10,
+            paddingVertical: 5,
+          }}
+        >
+          <View style={{ width: "50%", paddingLeft: 10 }}>
+            <Text subhead bold style={{ fontSize: 16 }}>
+              Total
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+
+              width: "35%",
+            }}
+          >
+            <Text subhead bold style={{ fontSize: 16 }}>
+              Rp.{" "}
+            </Text>
+            <Text subhead bold style={{ fontSize: 16 }}>
+              {replaceTotal_notdue}
+              {/* 100.000.000.00 */}
+            </Text>
+            {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+          </View>
+        </View>
+        <View
           style={{
             flexDirection: "row",
             marginTop: 20,
@@ -437,99 +348,17 @@ const AttachmentBilling = (props) => {
           }}
         >
           <Text style={{ color: "#fff", fontSize: 14 }}>Set to Full Price</Text>
-        </Button>*/}
-          {/* <Text subhead bold style={{ fontSize: 16 }}>
+        </Button>
+        {/* <Text subhead bold style={{ fontSize: 16 }}>
           {price}
         </Text> */}
-          <Button
-            style={{ height: 45, margin: 10, marginTop: 20 }}
-            onPress={() =>
-              //clickPayment()
-              navigation.navigate("MerchantList", {
-                ...route.params,
-                replaceTotal_notdue,
-              })
-            }
-          >
-            <Text style={{ color: "#fff", fontSize: 14 }}>
-              Select Payment Method
-            </Text>
-          </Button>
-        </View>
-      </ScrollView>
-      <Modal
-        animationType="slide" // You can use "slide", "fade", or "none"
-        transparent={true} // Set to false if you want a solid background
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)} // For Android back button
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-          }}
+        <Button
+          style={{ height: 45, margin: 10, marginTop: 20 }}
+          onPress={() => clickPayment()}
         >
-          <View
-            style={{
-              width: 300,
-              padding: 20,
-              backgroundColor: "white",
-              borderRadius: 10,
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginBottom: 5,
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              VA Number
-            </Text>
-            <View
-              style={{
-                padding: 20,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text>{textToCopy}</Text>
-              {/* <Button title="Copy Text" onPress={copyToClipboard} /> */}
-              <Button
-                style={{
-                  height: 35,
-                  margin: 10,
-                  //marginTop: 30,
-                  //width: "40%",
-                  alignSelf: "center",
-                }}
-                onPress={copyToClipboard}
-              >
-                <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
-              </Button>
-            </View>
-            {/* <Button
-              title="Close Modal"
-              onPress={() => setModalVisible(false)}
-            /> */}
-            <Button
-              style={{
-                height: 35,
-                margin: 10,
-                marginTop: 10,
-                //width: "40%",
-                alignSelf: "center",
-              }}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={{ color: "#fff", fontSize: 14 }}>Close</Text>
-            </Button>
-          </View>
-        </View>
-      </Modal>
+          <Text style={{ color: "#fff", fontSize: 14 }}>Pay</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

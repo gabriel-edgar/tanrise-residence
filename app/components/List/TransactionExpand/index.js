@@ -147,7 +147,8 @@ const TransactionExpand = ({
     datadetailDateDue != 0
       ? datadetailDateDue.reduceRight((max, bills) => {
           // return (max += parseInt(bills.mbal_amt));
-          return (max += parseInt(bills.mdoc_amt));
+          // return (max += parseInt(bills.mdoc_amt));
+          return (max += parseInt(bills.mfinal_amt));
         }, 0)
       : null;
   const math_total = Math.floor(sumTotal);
@@ -162,7 +163,8 @@ const TransactionExpand = ({
   const sumTotalNotDue =
     datadetailNotDue_null != 0
       ? datadetailNotDue.reduceRight((max, bills) => {
-          return (max += parseInt(bills.mdoc_amt));
+          // return (max += parseInt(bills.mdoc_amt));
+          return (max += parseInt(bills.mfinal_amt));
         }, 0)
       : null;
   const math_total_notdue = Math.floor(sumTotalNotDue);
@@ -306,7 +308,8 @@ const TransactionExpand = ({
                       >
                         <Text>Rp. </Text>
                         <Text subhead>
-                          {numFormattanpaRupiah(item.mdoc_amt)}
+                          {/* {numFormattanpaRupiah(item.mdoc_amt)} */}
+                          {numFormattanpaRupiah(item.mfinal_amt)}
                           {/* //tadinya ini mbal_amt */}
                           {/* 100.000.000.00 */}
                         </Text>
@@ -412,7 +415,8 @@ const TransactionExpand = ({
                           '$1.',
                         )} */}
                           {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                          {numFormattanpaRupiah(item.mdoc_amt)}
+                          {/* {numFormattanpaRupiah(item.mdoc_amt)} */}
+                          {numFormattanpaRupiah(item.mfinal_amt)}
                           {/* 100.000.000.00 */}
                         </Text>
                         {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}

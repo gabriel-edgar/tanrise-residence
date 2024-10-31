@@ -41,7 +41,7 @@ const Categories = ({ style = {}, menu = [], font }) => {
     console.log("38 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
     if (
       (item.Title == "Helpdesk" || item.Title == "Billing") &&
-      Object.keys(stateReduxChoosedUnit).length === 0
+      Object?.keys(stateReduxChoosedUnit).length === 0
     ) {
       return alert("Please choose unit first");
     }

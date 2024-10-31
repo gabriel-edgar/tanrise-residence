@@ -5,6 +5,7 @@ const initialState = {
   Dataproject: [],
   dataUnit: [],
   notificationData: [],
+  choosedUnit: {},
 };
 
 const projectReducer = (state = initialState, action) => {

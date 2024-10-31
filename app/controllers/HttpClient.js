@@ -149,12 +149,12 @@ client.interceptors.response.use(
       response: { status, config },
     } = error;
 
-    console.log(
-      "131 interceptors: ",
-      error.response.status,
-      ", token: ",
-      config.headers.Authorization
-    );
+    // console.log(
+    //   "131 interceptors: ",
+    //   error.response.status,
+    //   ", token: ",
+    //   config.headers.Authorization
+    // );
 
     if (
       error.response.data.message ==

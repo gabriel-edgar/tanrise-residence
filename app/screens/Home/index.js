@@ -581,7 +581,7 @@ const Home = (props) => {
     );
     // Filter notifications with isRead = 0
     ////console.log("436 stateReduxDataProject: ", stateReduxDataProject);
-    //console.log("435 notif dots: ", dots);
+    console.log("435 notif dots: ", dots);
     ////console.log("436 notif arrayNotification: ", arrayNotification);
     saveDataNotification(dots);
     saveDataNotificationPersist(dots);
@@ -2039,7 +2039,7 @@ const Home = (props) => {
                     backgroundColor: colors.primary, //"#315447",
                     height: 30,
                     // width: '100%',
-                    width: 150,
+                    width: 180,
                     justifyContent: "center",
                     paddingHorizontal: 10,
                     borderRadius: 10,
@@ -2088,6 +2088,7 @@ const Home = (props) => {
                           flexDirection: "row",
                           flex: 1,
                           justifyContent: "space-between",
+                          paddingRight: 10,
                         }}
                       >
                         <Text

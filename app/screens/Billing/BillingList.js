@@ -21,6 +21,7 @@ import {
   Alert,
   Linking,
   Modal,
+  ActivityIndicator,
   ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -34,12 +35,25 @@ import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
 import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { FontWeight } from "../../config";
+import CheckBox from "@react-native-community/checkbox";
+import { storeStorage, getStorage } from "../function/asyncStorage";
 
 const fileDummy = [
   {
     rowId: "1",
     descs: "descs meter",
     url_link: "",
+  },
+];
+
+const dummyPaymentMethod = [
+  {
+    descs: "Mandiri Virtual Account",
+    value: "MANDIRI",
+  },
+  {
+    descs: "BRI Virtual Account",
+    value: "BRI",
   },
 ];
 
@@ -61,11 +75,16 @@ const AttachmentBilling = (props) => {
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");
   const [modalVisible, setModalVisible] = useState(false);
-  console.log("54 route.params: ", route.params);
+  console.log("75 route.params: ", route.params);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
 
   const [textToCopy, setTextToCopy] = useState("Example VA Number");
+
+  // Sample data array
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentMethodList, setPaymentMethodList] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const copyToClipboard = () => {
     Clipboard.setString(textToCopy);
@@ -111,10 +130,18 @@ const AttachmentBilling = (props) => {
   };
 
   const loadData = async () => {
-    await getAttachment();
+    await getPaymentMethodList();
   };
 
-  const getAttachment = async () => {
+  // Function to toggle checkbox
+  const toggleCheckbox = (value) => {
+    // const newData = dummyPaymentMethod.map((item) =>
+    //   item.value === value ? { ...item, checked: !item.checked } : item
+    // );
+    setPaymentMethod(value);
+  };
+
+  const getPaymentMethodList = async () => {
     const entity_cd = route.params.entity_cd; //route.params.entity_cd;
     const project_no = route.params.project_no; //route.params.project_no;
     const debtor_acct = route.params.debtor_acct;
@@ -136,16 +163,21 @@ const AttachmentBilling = (props) => {
       // /modules/billing/attach?entity_cd=1001&project_no=1001001&debtor_acct=GSE/AA-50/1&doc_no=BL23090008
 
       const res = await httpClient.request({
-        url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
+        url: `/pg/get-payment-channel`,
         method: "GET",
+        params: {
+          entity_cd: datadetailNotDue[0].entity_cd,
+          project_no: datadetailNotDue[0].project_no,
+        },
       });
 
-      console.log("60 attachment: res: ", res.data.data);
-      setAttachment(res.data.data);
+      console.log("60 PaymentMethodList: res: ", res.data.data);
+      setPaymentMethodList(res.data.data);
     } catch (error) {
-      console.log("60 attachment: error: ", error);
-      setErrors(error.response.data.message);
-      // alert(hasError.toString());
+      setPaymentMethodList([]);
+      console.log("60 PaymentMethodList: error: ", error);
+      //setErrors(error.response.data.message);
+      //alert(error.toString());
     }
   };
 
@@ -186,7 +218,147 @@ const AttachmentBilling = (props) => {
 
   // Function to format the number
   const formatNumber = (num) => {
-    return new Intl.NumberFormat("de-DE").format(num); // Using German formatting
+    return "Rp " + new Intl.NumberFormat("de-DE").format(num); // Using German formatting
+  };
+
+  const handlePay = async () => {
+    if (paymentMethod == null) {
+      alert("Please select payment method");
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulate a data fetch
+    const fetchData = async () => {
+      // Simulating network request delay
+      setTimeout(() => {
+        //setData("Data loaded successfully!");
+        setLoading(false);
+        //navigation.navigate("VAScreen", { ...route.params, paymentMethod });
+      }, 3000); // 3 seconds delay
+    };
+
+    //await fetchData();
+
+    // const entity_cd = route.params.entity_cd; //route.params.entity_cd;
+    // const project_no = route.params.project_no; //route.params.project_no;
+    // const debtor_acct = route.params.debtor_acct;
+    // const doc_no = route.params.doc_no;
+
+    //   try {
+    //   const res = await httpClient.request({
+    //     url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
+    //     method: "GET",
+    //     data
+    //   });
+
+    //   console.log("60 Pay: res: ", res.data.data);
+    //   const dataPay = res.data.data;
+    //   navigation.navigate("VAScreen", {
+    //     ...route.params,
+    //     paymentMethod,
+    //     dataPay,
+    //   });
+    // } catch (error) {
+    //   console.log("60 Pay: error: ", error);
+    //   //setErrors(error.response.data.message);
+    //   alert(error.toString());
+    // }
+
+    //https://ifcamobileapp.tanrise.com/tanrise_api/api/modules/billing/store
+
+    const dataPostDummy = {
+      entity_cd: "1004",
+      project_no: "1004001",
+      debtor_acct: "L-TR-09-07",
+      debtor_name: "PT SARIGUNA PRIMATIRTA, Tbk",
+      doc_no: "BL23090009",
+      virtual_acct: "36040202400001234",
+      doc_amt: "205000",
+      payment_channel: "BRI",
+      type_payment: "Close",
+    };
+
+    const dataPost = {
+      entity_cd: datadetailNotDue[0].entity_cd,
+      project_no: datadetailNotDue[0].project_no,
+      debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
+      debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+      doc_no: datadetailNotDue[0].doc_no,
+      virtual_acct: "36040202400001234",
+      doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+      payment_channel: paymentMethod.payment_channel,
+      type_payment: "Close",
+    };
+
+    console.log("279 dataPost: ", dataPost);
+    // navigation.navigate("VAScreen", {
+    //   ...route.params,
+    //   paymentMethod,
+    //   VA: dataPost.virtual_acct,
+    // });
+    //return;
+
+    //navigation.navigate("VAScreen", { ...route.params, paymentMethod });
+
+    try {
+      //get
+      // const resGet = await httpClient.request({
+      //   url: `/modules/billing/store`,
+      //   method: "POST",
+      //   data: dataPostDummy,
+      // });
+
+      // if (resGet.data.success) {
+      //   console.log("60 Pay: res: ", resGet.data.data);
+      //   const dataGet = resGet.data.data;
+      // } else {
+      //   alert(res.data.message);
+      //   return;
+      //setLoading(false);
+      // }
+
+      //post
+      const res = await httpClient.request({
+        url: `/modules/billing/store`,
+        method: "POST",
+        data: dataPost,
+      });
+
+      const condition = res.data.success;
+      //const condition = true;
+
+      if (condition) {
+        //alert(JSON.stringify(res.data.message));
+        alert("You are now active in this payment");
+        console.log("60 Pay: res: ", res.data);
+        const dataPay = res.data.data;
+        navigation.navigate("VAScreen", {
+          ...route.params,
+          paymentMethod,
+          VA: dataPost.virtual_acct,
+          dataPay,
+        });
+      } else {
+        //alert(JSON.stringify(res.data));
+        const dataPay = res.data.data;
+        navigation.navigate("VAScreen", {
+          ...route.params,
+          paymentMethod,
+          VA: dataPost.virtual_acct,
+          dataPay,
+        });
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.log("60 Pay: error: ", error);
+      //setErrors(error.response.data.message);
+      alert(error.toString());
+    }
+    setLoading(false);
+
+    // navigation.navigate("VAScreen", { ...route.params, paymentMethod });
   };
 
   const renderItem = ({ item, index }) => {
@@ -219,6 +391,12 @@ const AttachmentBilling = (props) => {
       //   </View>
     );
   };
+
+  const CustomComponent = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{title}</Text>
+    </View>
+  );
 
   if (webViewPayment) {
     return (
@@ -295,7 +473,7 @@ const AttachmentBilling = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        title={"Payment Detail"}
+        title={"Payment Method"}
         renderLeft={() => {
           return (
             <Icon
@@ -314,147 +492,97 @@ const AttachmentBilling = (props) => {
         {"Invoice " + route.params.datadetailNotDue[0].doc_no}
       </Text>
       <ScrollView>
-        <View style={{ flex: 1, padding: 10 }}>
-          {datadetailNotDue?.map((item, key) => (
-            <View key={key}>
-              <View
+        <View style={{ marginHorizontal: 20 }}>
+          {/* <View style={styles.container}> */}
+          {/* {dummyPaymentMethod.map((item) => (
+          <CustomComponent key={item.value} title={item.desc} />
+        ))} */}
+          {paymentMethodList?.length == 0 ? (
+            <Text style={{ textAlign: "center" }}>
+              Payment Channel not found for{"\n"} entity code{" "}
+              {route.params.datadetailNotDue[0].entity_cd} and project number{" "}
+              {route.params.datadetailNotDue[0].project_no}
+            </Text>
+          ) : (
+            paymentMethodList?.map((item) => (
+              <TouchableOpacity
+                key={item.rowID}
+                onPress={() => toggleCheckbox(item)}
                 style={{
                   flexDirection: "row",
+                  alignItems: "center",
+                  paddingVertical: 15,
+                  marginVertical: 8,
+                  //backgroundColor: "#f9c2ff",
+                  borderRadius: 5,
                   justifyContent: "space-between",
-                  width: "100%",
-                  // paddingHorizontal: 10,
-                  paddingVertical: 5,
                 }}
               >
-                <View style={{ width: "50%", paddingLeft: 10 }}>
-                  <Text subhead>{item.descs}</Text>
-                </View>
-                <View
+                <Text
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-
-                    width: "35%",
+                    fontSize: 18,
                   }}
                 >
-                  <Text>Rp. </Text>
-                  <Text subhead>
-                    {/* {item.mbal_amt.replace(
-                          /(\d)(?=(\d{3})+(?!\d))/g,
-                          '$1.',
-                        )} */}
-                    {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                    {numFormattanpaRupiah(item.mfinal_amt)}
-                    {/* 100.000.000.00 */}
-                  </Text>
-                  {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
-                </View>
-              </View>
-            </View>
-          ))}
-          <View
+                  {item.payment_channel}
+                </Text>
+                <CheckBox
+                  value={item.payment_channel == paymentMethod?.payment_channel}
+                  //onValueChange={setIsChecked}
+                  disabled={true} // Set the disabled prop
+                  style={{ marginRight: 8 }}
+                />
+              </TouchableOpacity>
+            ))
+          )}
+          {/* </View> */}
+          {/* <View
             style={{
-              borderTopWidth: 0.5,
-              borderStyle: "dashed",
-              borderColor: colors.primary,
-              marginLeft: 9,
+              marginTop: 16,
+              borderBottomWidth: 0.5, //paddingTop: 10
             }}
-          ></View>
+          ></View> */}
           <View
             style={{
-              flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
-              // paddingHorizontal: 10,
-              paddingVertical: 5,
+              marginTop: 7,
+              paddingTop: 20,
+              borderTopWidth: 0.5,
+              borderRadius: 10,
             }}
           >
-            <View style={{ width: "50%", paddingLeft: 10 }}>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Total
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-
-                width: "35%",
-              }}
+            <Text
+              style={{ fontWeight: "bold", fontSize: 15, marginBottom: 10 }}
             >
-              <Text subhead bold style={{ fontSize: 16 }}>
-                Rp.{" "}
+              Payment Summary
+            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text>Total Payment:</Text>
+              <Text>
+                {/* {formatNumber(route.params.datadetailNotDue[0].mfinal_amt)} */}
+                Rp {replaceTotal_notdue}
               </Text>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                {replaceTotal_notdue}
-                {/* 100.000.000.00 */}
-              </Text>
-              {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
             </View>
           </View>
-          {/*<View
-          style={{
-            flexDirection: "row",
-            marginTop: 20,
-            marginHorizontal: 20,
-            alignItems: "center",
-            //backgroundColor:'blue'
-          }}
-        >
-          <Text subhead bold style={{ fontSize: 16 }}>
-            Rp.{"   "}
-          </Text>
-          <TextInput
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 10,
-              padding: 10,
-              fontSize: 18,
-              //marginRight: 10,
-              backgroundColor,
-              color: colors.text,
-            }}
-            //value={price}
-            value={formatNumber(price)} // Format for display
-            onChangeText={handleChangePrice}
-            placeholder="Type a price"
-            keyboardType="numeric"
-          />
-        </View>
-        <Button
-          style={{
-            height: 35,
-            margin: 10,
-            marginTop: 30,
-            width: "40%",
-            alignSelf: "flex-end",
-          }}
-          onPress={() => {
-            changeBackgroundColor();
-            handleChangePrice(removeAfterDot(datadetailNotDue[0].mdoc_amt));
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 14 }}>Set to Full Price</Text>
-        </Button>*/}
-          {/* <Text subhead bold style={{ fontSize: 16 }}>
-          {price}
-        </Text> */}
-          <Button
-            style={{ height: 45, margin: 10, marginTop: 20 }}
-            onPress={() =>
-              //clickPayment()
-              navigation.navigate("MerchantList", {
-                ...route.params,
-                replaceTotal_notdue,
-              })
-            }
-          >
-            <Text style={{ color: "#fff", fontSize: 14 }}>
-              Select Payment Method
-            </Text>
-          </Button>
+          <View>
+            <Button
+              style={{
+                height: 45,
+                margin: 10,
+                marginVertical: 30,
+                alignContent: "center",
+              }}
+              onPress={handlePay}
+              disable={loading}
+              loading={loading}
+            >
+              <Text style={{ color: "#fff", fontSize: 14 }}>Pay </Text>
+              {/* {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : null} */}
+            </Button>
+          </View>
         </View>
       </ScrollView>
       <Modal
