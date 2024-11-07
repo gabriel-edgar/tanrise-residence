@@ -106,7 +106,7 @@ import ProjectController from "../../controllers/ProjectController";
 import { store, persist } from "../../reducers";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 const { width } = Dimensions.get("window");
-import { useIsFocused } from "@react-navigation/native";
+// import { useIsFocused } from "@react-navigation/native";
 import { check_version } from "./functions";
 
 const wait = (timeout) => {
@@ -308,6 +308,7 @@ const Home = (props) => {
       intervalIdNotif = setInterval(() => {
         console.log("308 appState: ", appState);
         if (appState === "active") {
+          //alert("run");
           projectDot();
         }
       }, 15000); // Update every 1000 milliseconds (1 second)

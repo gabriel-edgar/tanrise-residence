@@ -37,6 +37,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { FontWeight } from "../../config";
 import CheckBox from "@react-native-community/checkbox";
 import { storeStorage, getStorage } from "../function/asyncStorage";
+import getUser from "../../selectors/UserSelectors";
 
 const fileDummy = [
   {
@@ -71,6 +72,7 @@ const AttachmentBilling = (props) => {
   );
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
+  const sumTotalNotDue = route.params.sumTotalNotDue;
   const [price, setPrice] = useState("");
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");
@@ -85,6 +87,8 @@ const AttachmentBilling = (props) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [paymentMethodList, setPaymentMethodList] = useState(null);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => getUser(state));
+  console.log("90 user: ", user);
 
   const copyToClipboard = () => {
     Clipboard.setString(textToCopy);
@@ -166,8 +170,10 @@ const AttachmentBilling = (props) => {
         url: `/pg/get-payment-channel`,
         method: "GET",
         params: {
-          entity_cd: datadetailNotDue[0].entity_cd,
-          project_no: datadetailNotDue[0].project_no,
+          // entity_cd: datadetailNotDue[0].entity_cd,
+          // project_no: datadetailNotDue[0].project_no,
+          entity_cd: "1004",
+          project_no: "1004001",
         },
       });
 
@@ -251,85 +257,191 @@ const AttachmentBilling = (props) => {
       type_payment: "Close",
     };
 
-    // alert(JSON.stringify(dataGet))
+    // alert(JSON.stringify(paymentMethod.payment_channel));
     // return;
+    if (paymentMethod.payment_channel == "BNI") {
+      try {
+        //alert("run");
+        // return;
 
-    try {
-      let dataVA;
+        const dataPost = {
+          entity_cd: "1004",
+          project_no: "1004001",
+          //entity_cd: datadetailNotDue[0].entity_cd,
+          //project_no: datadetailNotDue[0].project_no,
+          debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
+          debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+          debtor_phone: user.Handphone,
+          debtor_email: user.email,
+          doc_no: datadetailNotDue[0].doc_no,
+          virtual_acct: "",
+          //doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+          doc_amt: parseInt(sumTotalNotDue),
+          payment_channel: paymentMethod.payment_channel,
+          type_payment: "Close",
+          lot_no: datadetailNotDue[0].lot_no,
+        };
 
-      const dataGet = {
-        entity_cd: datadetailNotDue[0].entity_cd,
-        project_no: datadetailNotDue[0].project_no,
-        lot_no: datadetailNotDue[0].lot_no,
-        bank_grp: paymentMethod.payment_channel,
-      };
-
-      //get
-      const resGet = await httpClient.request({
-        url: `/modules/billing/get-virtual-acc`,
-        method: "GET",
-        params: dataGet,
-      });
-
-      if (resGet.data.success) {
-        console.log("315 Pay: res: ", resGet.data.data);
-        dataVA = resGet.data.data.virtual_acct;
-        //alert("320a" + dataVA);
-      } else {
-        console.log("315 Pay: res: ", resGet.data.data);
-        //alert("320b" + res.data.message);
-        setLoading(false);
-        return;
-      }
-
-      const dataPost = {
-        entity_cd: datadetailNotDue[0].entity_cd,
-        project_no: datadetailNotDue[0].project_no,
-        debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
-        debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
-        doc_no: datadetailNotDue[0].doc_no,
-        virtual_acct: dataVA,
-        doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
-        payment_channel: paymentMethod.payment_channel,
-        type_payment: "Close",
-      };
-
-      //post
-      const res = await httpClient.request({
-        url: `/modules/billing/store`,
-        method: "POST",
-        data: dataPost,
-      });
-
-      const condition = res.data.success;
-      //const condition = true;
-
-      if (condition) {
-        alert(JSON.stringify(res.data.message));
-        //alert("You are now active in this payment");
-        console.log("60 Pay: res: ", res.data);
-        const dataPay = res.data.data;
-        navigation.navigate("VAScreen", {
-          ...route.params,
-          paymentMethod,
-          VA: dataPost.virtual_acct,
-          dataPay,
+        //post
+        const res = await httpClient.request({
+          url: `/modules/billing/store`,
+          method: "POST",
+          data: dataPost,
+          baseURL: "https://api.property365.co.id:4421/tanrise_api/api", // Override the baseURL here
         });
-      } else {
-        //alert(JSON.stringify(res.data));
-        const dataPay = res.data.data;
-        navigation.navigate("VAScreen", {
-          ...route.params,
-          paymentMethod,
-          VA: dataPost.virtual_acct,
-          dataPay,
-        });
-        alert(res.data.message);
+
+        const condition = res.data.success;
+        //const condition = true;
+
+        if (condition) {
+          alert(JSON.stringify(res.data.message));
+          //alert("You are now active in this payment");
+          console.log("291 Pay1: res: ", res.data);
+          const dataPay = res.data.data?.response_url;
+          if (dataPay != null) {
+            navigation.navigate("WebviewScreen", {
+              title: "Payment Screen",
+              doc_no: datadetailNotDue[0].doc_no,
+              url: dataPay,
+            });
+          }
+          // return;
+          // navigation.navigate("VAScreen", {
+          //   ...route.params,
+          //   paymentMethod,
+          //   VA: dataPost.virtual_acct,
+          //   dataPay,
+          // });
+        } else {
+          //alert(JSON.stringify(res.data));
+          //const dataPay = res.data.data?.response_url;
+          console.log("291 Pay2: res: ", res.data);
+          // if (dataPay != null) {
+          //   navigation.navigate("WebviewScreen", {
+          //     title: "Payment Screen",
+          //     doc_no: datadetailNotDue[0].doc_no,
+          //     url: dataPay,
+          //   });
+          // }
+          // return;
+          // navigation.navigate("VAScreen", {
+          //   ...route.params,
+          //   paymentMethod,
+          //   VA: dataPost.virtual_acct,
+          //   dataPay,
+          // });
+          alert(res.data.message);
+        }
+      } catch (error) {
+        console.log("320 Pay: error: ", error);
+        console.log("291" + error.response.data.message);
+        //alert("320c" + error.toString());
+        alert("e291 " + JSON.stringify(error.response.data.message));
       }
-    } catch (error) {
-      console.log("320 Pay: error: ", error);
-      //setErrors(error.response.data.message);
-      alert("320c" + error.toString());
+    } else {
+      try {
+        let dataVA;
+        //alert("run");
+        const dataGet = {
+          //entity_cd: datadetailNotDue[0].entity_cd,
+          //project_no: datadetailNotDue[0].project_no,
+          entity_cd: "1004",
+          project_no: "1004001",
+          lot_no: datadetailNotDue[0].lot_no,
+          bank_grp: paymentMethod.payment_channel,
+        };
+        //alert("run");
+        //get
+        const resGet = await httpClient.request({
+          url: `/modules/billing/get-virtual-acc`,
+          method: "GET",
+          params: dataGet,
+          baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
+        });
+        //alert(JSON.stringify(resGet.data.success));
+        if (resGet.data.success == true) {
+          //alert("315 Pay: res: " + JSON.stringify(resGet.data.data));
+          dataVA = resGet.data.data?.virtual_acct;
+          //alert("320a" + dataVA);
+        } else {
+          //alert("315 Pay: res: " + JSON.stringify(resGet.data.data));
+          alert("VA " + resGet.data.message);
+          setLoading(false);
+          return;
+        }
+
+        // const dataPostOri = {
+        //   entity_cd: datadetailNotDue[0].entity_cd,
+        //   project_no: datadetailNotDue[0].project_no,
+        //   debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
+        //   debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+        //   doc_no: datadetailNotDue[0].doc_no,
+        //   virtual_acct: dataVA,
+        //   doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+        //   payment_channel: paymentMethod.payment_channel,
+        //   type_payment: "Close",
+        //   debtor_phone: "621989877678",
+        //   debtor_email: "ahmad.prasetyo@ifca.co.id",
+        // };
+
+        const dataPost = {
+          entity_cd: "1004",
+          project_no: "1004001",
+          //entity_cd: datadetailNotDue[0].entity_cd,
+          //project_no: datadetailNotDue[0].project_no,
+          debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
+          debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+          debtor_phone: user.Handphone,
+          debtor_email: user.email,
+          doc_no: datadetailNotDue[0].doc_no,
+          virtual_acct: dataVA,
+          //doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+          doc_amt: parseInt(sumTotalNotDue),
+          payment_channel: paymentMethod.payment_channel,
+          type_payment: "Close",
+          lot_no: datadetailNotDue[0].lot_no,
+        };
+
+        //post
+        const res = await httpClient.request({
+          url: `/modules/billing/store`,
+          method: "POST",
+          data: dataPost,
+          baseURL: "https://api.property365.co.id:4421/tanrise_api/api", // Override the baseURL here
+        });
+
+        const condition = res.data.success;
+        //const condition = true;
+
+        if (condition) {
+          alert(JSON.stringify(res.data.message));
+          //alert("You are now active in this payment");
+          console.log("60 Pay: res: ", res.data);
+          const dataPay = res.data.data;
+          navigation.navigate("VAScreen", {
+            ...route.params,
+            paymentMethod,
+            VA: dataPost.virtual_acct,
+            dataPay,
+          });
+        } else {
+          //alert(JSON.stringify(res.data));
+          const dataPay = res.data.data;
+          // normal = nav off
+          navigation.navigate("VAScreen", {
+            ...route.params,
+            paymentMethod,
+            VA: dataPost.virtual_acct,
+            dataPay,
+          });
+          alert(res.data.message);
+        }
+      } catch (error) {
+        console.log("320 Pay: error: ", error);
+        console.log("320" + error.response.data.message);
+        //alert("320c" + error.toString());
+        alert("320c" + error.response.data.message.toString());
+      }
     }
     setLoading(false);
 

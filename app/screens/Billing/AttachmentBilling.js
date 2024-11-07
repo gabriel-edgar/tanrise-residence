@@ -96,7 +96,10 @@ const AttachmentBilling = (props) => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <Card key={index} style={{ paddingVertical: 20 }}>
+      <Card
+        key={index}
+        style={{ paddingVertical: 20, backgroundColor: colors.background }}
+      >
         <TouchableOpacity
           onPress={() => {
             openAttach(item);

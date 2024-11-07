@@ -71,8 +71,8 @@ const Header_After = (props) => {
   const navigation = useNavigation();
   const paramsItem = route.props.datas.resTiketMulti;
   console.log("params items res tiket", paramsItem);
-  const paramsItemss = route;
-  console.log("params items signature", paramsItemss);
+  // const paramsItemss = route;
+  // console.log("params items signature", paramsItemss);
 
   const paramsItemsHdr = route.props.datas.resHDR;
   console.log("items hdr", paramsItemsHdr);
@@ -80,7 +80,7 @@ const Header_After = (props) => {
   const paramsItemsLabour = route.props.datas.resLabour;
   const paramsItemsLabour_array = route.props.datas.resLabour;
   console.log("item labour", paramsItemsLabour);
-  console.log("item labour", paramsItemsLabour_array.sum[0]);
+  console.log("item labour", paramsItemsLabour_array?.sum[0]);
 
   const paramsItemsMaterial = route.props.datas.resMaterial;
 
@@ -727,8 +727,8 @@ const Detail = (props) => {
   const navigation = useNavigation();
   const paramsItem = route.props.datas.resTiketMulti;
   console.log("params items res tiket", paramsItem);
-  const paramsItemss = route;
-  console.log("params items signature", paramsItemss);
+  // const paramsItemss = route;
+  // console.log("params items signature", paramsItemss);
 
   const paramsItemsHdr = route.props.datas.resHDR;
   console.log("items hdr", paramsItemsHdr);

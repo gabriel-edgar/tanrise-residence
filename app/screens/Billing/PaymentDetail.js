@@ -57,6 +57,8 @@ const AttachmentBilling = (props) => {
   );
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
+  const sumTotalNotDue = route.params.sumTotalNotDue;
+  console.log("61 sumTotalNotDue: ", sumTotalNotDue);
   const [price, setPrice] = useState("");
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");

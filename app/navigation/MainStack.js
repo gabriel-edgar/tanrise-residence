@@ -26,6 +26,9 @@ import BillingHistory from "../screens/BillingHistory";
 import HistoryBilling from "../screens/BillingHistory/HistoryBilling";
 import PDFAttach from "../screens/Billing/PDFAttach";
 import BillingList from "../screens/Billing/BillingList";
+import WebviewScreen from "../screens/Billing/WebviewScreen";
+import PDFShow from "../screens/Billing/PDFShow";
+
 import Facility from "../screens/Facility";
 import Announce from "../screens/Announce";
 import AnnounceDetail from "../screens/AnnouceDetail";
@@ -537,6 +540,16 @@ function MainStack() {
       <Stack.Screen
         name="PDFAttach"
         component={PDFAttach}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PDFShow"
+        component={PDFShow}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="WebviewScreen"
+        component={WebviewScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

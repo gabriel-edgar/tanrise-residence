@@ -171,7 +171,7 @@ const TransactionExpand = ({
   const replaceTotal_notdue = math_total_notdue
     .toFixed()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  console.log("sum detail mbal mont due date", math_total_notdue);
+  console.log("c", math_total_notdue);
   console.log("replace total due date", replaceTotal_notdue);
 
   // useEffect(() => {
@@ -213,6 +213,7 @@ const TransactionExpand = ({
       // doc_no: doc_no,
       datadetailNotDue,
       replaceTotal_notdue,
+      sumTotalNotDue,
     };
     //console.log("params for click attach", params);
     navigation.navigate("PaymentDetail", params);

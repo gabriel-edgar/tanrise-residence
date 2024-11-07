@@ -34,6 +34,7 @@ import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { FontWeight } from "../../config";
 import CheckBox from "@react-native-community/checkbox";
+import { pdfSourceFunc } from "./pdfSourceFunc";
 
 const fileDummy = [
   {
@@ -84,6 +85,75 @@ const AttachmentBilling = (props) => {
   // Sample data array
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+
+  // const pdfSource = {
+  //   uri: "",
+  //   //uri: "https://drive.google.com/file/d/1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ/view?usp=sharing"
+  //   //uri: "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ",
+  //   cache: true,
+  // };
+
+  // const merchant = {
+  //   permata:
+  //     "https://drive.google.com/uc?export=download&id=1YjEYQh8ibmVyYzAb1DHgfBS-1ncZFw0g",
+  //   danamon:
+  //     "https://drive.google.com/uc?export=download&id=1KwetUbAgS5LBhAS-9j2XYubWE8i_5icn",
+  //   mandiri:
+  //     "https://drive.google.com/uc?export=download&id=1_QdtrDB05BblXQzkNkZnqLVc1l_Wcn42",
+  //   maybank:
+  //     "https://drive.google.com/uc?export=download&id=1FYarm1tOD4j06X_DeEOhVvta_Xf5Rodp",
+  //   bca: "https://drive.google.com/uc?export=download&id=1WAnERWsaGGDLHf3Ipb8LJr77zopzN210",
+  //   bni: "https://drive.google.com/uc?export=download&id=1sPXmwoaZiW4j47WTRSPnWfFeY16B6g0z",
+  //   sinarmas:
+  //     "https://drive.google.com/uc?export=download&id=1UIJL7N3t0NW--imLAzq_MJNy0fv13ykb",
+  //   bnc: "https://drive.google.com/uc?export=download&id=1mczFG7UPpMowH0sRB6bM5biNEpmjKq5k",
+  //   btn: "https://drive.google.com/uc?export=download&id=106EZEk3Br_rPeWczAIujAHQpGjKRfUD7",
+  //   cs1_indomaret:
+  //     "https://drive.google.com/uc?export=download&id=1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN",
+  //   cs2_alfamart:
+  //     "https://drive.google.com/uc?export=download&id=1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk",
+  // };
+
+  // switch (route.params.paymentMethod.payment_channel) {
+  //   case "PERMATA":
+  //     pdfSource.uri = merchant.permata;
+  //     break;
+  //   case "DANAMON":
+  //     pdfSource.uri = merchant.danamon;
+  //     break;
+  //   case "MANDIRI":
+  //     pdfSource.uri = merchant.mandiri;
+  //     break;
+  //   case "MAYBANK":
+  //     pdfSource.uri = merchant.maybank;
+  //     break;
+  //   case "BCA":
+  //     pdfSource.uri = merchant.bca;
+  //     break;
+  //   case "BNI":
+  //     pdfSource.uri = merchant.bni;
+  //     break;
+  //   case "SINARMAS":
+  //     pdfSource.uri = merchant.sinarmas;
+  //     break;
+  //   case "BNC":
+  //     pdfSource.uri = merchant.bnc;
+  //     break;
+  //   case "BTN":
+  //     pdfSource.uri = merchant.btn;
+  //     break;
+  //   case "INDOMARET":
+  //     pdfSource.uri = merchant.cs1_indomaret;
+  //     break;
+  //   case "ALFAMART":
+  //     pdfSource.uri = merchant.cs2_alfamart;
+  //     break;
+  //   default:
+  //     pdfSource.uri = "";
+  //   // "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ";
+  // }
+
+  const pdfSource = pdfSourceFunc(route.params.paymentMethod.payment_channel);
 
   const copyToClipboard = (text) => {
     Clipboard.setString(text);
@@ -414,7 +484,13 @@ const AttachmentBilling = (props) => {
             }}
             onPress={() => copyToClipboard(route.params.VA)}
           >
-            <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
+            {/* <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text> */}
+            <Icon
+              name="copy"
+              size={20}
+              color={colors.background}
+              enableRTL={true}
+            />
           </Button>
         </View>
         <View
@@ -468,17 +544,43 @@ const AttachmentBilling = (props) => {
               title="Close Modal"
               onPress={() => setModalVisible(false)}
             /> */}
+        {pdfSource.uri == "" ? null : (
+          <Button
+            style={{
+              height: 35,
+              margin: 10,
+              marginTop: 30,
+              //width: "40%",
+              alignSelf: "center",
+            }}
+            onPress={() =>
+              navigation.navigate("PDFShow", {
+                title: "Cara Bayar",
+                //pdf_uri: "http://www.pdf995.com/samples/pdf.pdf",
+                pdfSource,
+                merchant: route.params.paymentMethod.payment_channel,
+              })
+            }
+          >
+            <Text style={{ color: "#fff", fontSize: 14 }}>See How to Pay</Text>
+          </Button>
+        )}
         {/* <Button
           style={{
             height: 35,
             margin: 10,
-            marginTop: 10,
+            marginTop: 30,
             //width: "40%",
             alignSelf: "center",
           }}
-          onPress={() => setModalVisible(false)}
+          onPress={() =>
+            navigation.navigate("WebviewScreen", {
+              title: "Payment Screen",
+              url: "https://www.google.com",
+            })
+          }
         >
-          <Text style={{ color: "#fff", fontSize: 14 }}>Close</Text>
+          <Text style={{ color: "#fff", fontSize: 14 }}>WebviewScreen</Text>
         </Button> */}
         {/* </View> */}
       </View>
@@ -539,7 +641,13 @@ const AttachmentBilling = (props) => {
                 }}
                 onPress={() => copyToClipboard()}
               >
-                <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
+                {/* <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text> */}
+                <Icon
+                  name="globe"
+                  size={20}
+                  color={colors.primary}
+                  enableRTL={true}
+                />
               </Button>
             </View>
             {/* <Button

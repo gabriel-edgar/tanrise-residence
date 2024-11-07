@@ -270,8 +270,8 @@ export default function ViewHistoryDetail({ route }) {
         // return res.data;
       })
       .catch((error) => {
-        console.log("err data multi2", error.response.data.message);
-        // alert('error nih');
+        //console.log("err data multi2", error.response.data.message);
+        alert(error.response.data.message);
       });
   };
 

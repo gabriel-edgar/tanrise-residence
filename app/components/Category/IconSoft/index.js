@@ -90,30 +90,31 @@ export default function CategoryIconSoft({
           color={getIconColor()}
           solid
         />
-      </View>
-      {title == "Helpdesk" ? (
-        stateReduxHelpdeskDot ? (
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: BaseColor.whiteColor,
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
-              width: 20,
-              height: 20,
-              backgroundColor: "red",
-              top: 0,
-              right: 25,
-              borderRadius: 10,
-            }}
-          >
-            {/* <Text whiteColor caption2>
+        {title == "Helpdesk" ? (
+          stateReduxHelpdeskDot ? (
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: BaseColor.whiteColor,
+                justifyContent: "center",
+                alignItems: "center",
+                position: "absolute",
+                width: 20,
+                height: 20,
+                backgroundColor: "red",
+                top: 0,
+                right: 0,
+                borderRadius: 10,
+              }}
+            >
+              {/* <Text whiteColor caption2>
             {finalCount < 0 ? 0 : finalCount}
           </Text> */}
-          </View>
-        ) : null
-      ) : null}
+            </View>
+          ) : null
+        ) : null}
+      </View>
+
       <View
         style={{
           marginTop: 15, //maxWidth: maxWidth

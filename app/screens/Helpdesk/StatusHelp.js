@@ -358,7 +358,7 @@ export default function StatusHelp({ route }) {
 
     setDotForStatus({
       open: byStatusAll.statusOpen
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -372,7 +372,7 @@ export default function StatusHelp({ route }) {
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
       assign: byStatusAll.statusAssign
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -386,7 +386,7 @@ export default function StatusHelp({ route }) {
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
       procces: byStatusAll.statusProcess
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -400,7 +400,7 @@ export default function StatusHelp({ route }) {
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
       completed: byStatusAll.statusCompleted
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -414,7 +414,7 @@ export default function StatusHelp({ route }) {
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
       cancel: byStatusAll.statusCancel
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -428,7 +428,7 @@ export default function StatusHelp({ route }) {
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0),
       close: byStatusAll.statusClose
-        .map((status) => {
+        ?.map((status) => {
           if (
             stateReduxNotificationDataPersist.some(
               (item) =>
@@ -475,8 +475,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'R'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -486,6 +486,7 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -496,8 +497,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'P'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -507,6 +508,7 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -517,8 +519,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'X'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -528,6 +530,7 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -538,8 +541,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'C'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -549,6 +552,7 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -559,8 +563,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'A'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -570,6 +574,7 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -580,8 +585,8 @@ export default function StatusHelp({ route }) {
         params: {
           email: email,
           status: "'D'",
-          date_start: "",
-          date_end: "",
+          date_start: "0",
+          date_end: "0",
         },
       })
       .then((res) => {
@@ -591,6 +596,8 @@ export default function StatusHelp({ route }) {
         return datastatuswhere;
       })
       .catch((error) => {
+        //alert(error);
+        return [];
         //console.log("error get where status api", error.response.message);
       });
 
@@ -841,8 +848,8 @@ export default function StatusHelp({ route }) {
       email: email,
       status: ticketStatus,
       //status: ["A", "P", "M", "F", "Y", "Z"], //"A,P,M,F,Y,Z",
-      date_start: "",
-      date_end: "",
+      date_start: "0",
+      date_end: "0",
     };
     console.log("171 formData: ", formData);
     // const config = {
@@ -1116,8 +1123,8 @@ export default function StatusHelp({ route }) {
         // return res.data;
       })
       .catch((error) => {
-        console.log("error get where status api", error.response.message);
-        alert(error.response.message);
+        //console.log("error get where status api", error.response.message);
+        alert("e1127 " + error.response.data.message);
       });
   };
 

@@ -46,7 +46,8 @@ import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
 import { ActivityIndicator } from "react-native-paper";
 //import { store, persist } from "../../reducers";
 import { store, persist } from "../../store";
-import { homeCommonProject } from "../FunctionAxios/home-common-project";
+// import { homeCommonProject } from "../FunctionAxios/home-common-project";
+import { useCustomTriggerOnFocus } from "./funcFocusEffect";
 
 const Billing = (
   props,
@@ -188,8 +189,7 @@ const Billing = (
   useEffect(() => {
     //getTower(user);
 
-    fetchData();
-    fetchDataCurrent();
+    onRefresh();
 
     //setLoading(false);
     // setTimeout(() => {
@@ -198,6 +198,14 @@ const Billing = (
     //   // setSpinner(false);
     // }, 3000);
   }, []);
+
+  const onRefresh = () => {
+    //alert("run onRefresh");
+    fetchData();
+    fetchDataCurrent();
+  };
+
+  useCustomTriggerOnFocus(onRefresh);
 
   // Make function to call the api
   async function fetchData() {
@@ -370,7 +378,7 @@ const Billing = (
           return (
             <Icon
               name="clipboard-list"
-              size={20}
+              size={28}
               color={colors.primary}
               enableRTL={true}
             />
