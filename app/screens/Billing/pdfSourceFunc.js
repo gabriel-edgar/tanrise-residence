@@ -1,4 +1,5 @@
 const pdfSourceFunc = (channel) => {
+  //alert(channel);
   const pdfSource = {
     uri: "",
     //uri: "https://drive.google.com/file/d/1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ/view?usp=sharing"
@@ -25,6 +26,7 @@ const pdfSourceFunc = (channel) => {
       "https://drive.google.com/uc?export=download&id=1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN",
     cs2_alfamart:
       "https://drive.google.com/uc?export=download&id=1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk",
+    bri: "https://drive.google.com/uc?export=download&id=1xpIHm276kn-SFYrEk8HakUiNZMQBiYQv",
   };
 
   switch (channel) {
@@ -60,6 +62,9 @@ const pdfSourceFunc = (channel) => {
       break;
     case "ALFAMART":
       pdfSource.uri = merchant.cs2_alfamart;
+      break;
+    case "BRI":
+      pdfSource.uri = merchant.bri;
       break;
     default:
       pdfSource.uri = "";

@@ -187,7 +187,7 @@ export const WalletTabScreens = {
   ProfileScreen: {
     component: ProfileScreen,
     options: {
-      title: "account",
+      title: "Settings",
       tabBarIcon: ({ color }) => tabBarIcon({ color, name: "cog" }),
     },
   },

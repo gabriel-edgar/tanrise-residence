@@ -285,19 +285,35 @@ const SignIn = (props) => {
             </Text>
           </TouchableOpacity> */}
           <TouchableOpacity
-          //onPress={loginklikGhalung}
+            //onPress={loginklikGhalung}
+            onPress={() => {
+              Alert.alert(
+                "How to get account:",
+                "Please contact admin to get account",
+                [
+                  // {
+                  //   text: "Cancel",
+                  //   onPress: () => console.log("Cancel Pressed"),
+                  //   style: "cancel",
+                  // },
+                  // { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]
+              );
+            }}
           >
             <Text
               body2
+              grayColor
               style={{
-                color: colors.background,
+                //color: colors.background,
+                //color: colors.text,
                 //backgroundColor: "black",
                 alignSelf: "center",
                 //fontSize: 5,
-                marginRight: 30,
+                //marginRight: 30,
               }}
             >
-              {t(".")}
+              {t("Get account")}
             </Text>
           </TouchableOpacity>
 

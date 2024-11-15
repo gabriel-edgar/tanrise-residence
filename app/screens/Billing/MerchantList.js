@@ -170,10 +170,10 @@ const AttachmentBilling = (props) => {
         url: `/pg/get-payment-channel`,
         method: "GET",
         params: {
-          // entity_cd: datadetailNotDue[0].entity_cd,
-          // project_no: datadetailNotDue[0].project_no,
-          entity_cd: "1004",
-          project_no: "1004001",
+          entity_cd: datadetailNotDue[0].entity_cd,
+          project_no: datadetailNotDue[0].project_no,
+          // entity_cd: "1004",
+          // project_no: "1004001",
         },
       });
 
@@ -183,7 +183,6 @@ const AttachmentBilling = (props) => {
       setPaymentMethodList([]);
       console.log("60 PaymentMethodList: error: ", error);
       //setErrors(error.response.data.message);
-      //alert(error.toString());
     }
   };
 
@@ -233,6 +232,15 @@ const AttachmentBilling = (props) => {
       return;
     }
 
+    if (
+      user.Handphone == null ||
+      user.Handphone == ""
+      //user.email == null
+    ) {
+      alert("Please add phone number in Edit Profile in Settings");
+      return;
+    }
+
     setLoading(true);
 
     // Simulate a data fetch
@@ -265,10 +273,10 @@ const AttachmentBilling = (props) => {
         // return;
 
         const dataPost = {
-          entity_cd: "1004",
-          project_no: "1004001",
-          //entity_cd: datadetailNotDue[0].entity_cd,
-          //project_no: datadetailNotDue[0].project_no,
+          //entity_cd: "1004",
+          //project_no: "1004001",
+          entity_cd: datadetailNotDue[0].entity_cd,
+          project_no: datadetailNotDue[0].project_no,
           debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
           debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
           debtor_phone: user.Handphone,
@@ -287,7 +295,7 @@ const AttachmentBilling = (props) => {
           url: `/modules/billing/store`,
           method: "POST",
           data: dataPost,
-          baseURL: "https://api.property365.co.id:4421/tanrise_api/api", // Override the baseURL here
+          //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
         });
 
         const condition = res.data.success;
@@ -335,7 +343,7 @@ const AttachmentBilling = (props) => {
       } catch (error) {
         console.log("320 Pay: error: ", error);
         console.log("291" + error.response.data.message);
-        //alert("320c" + error.toString());
+
         alert("e291 " + JSON.stringify(error.response.data.message));
       }
     } else {
@@ -343,10 +351,10 @@ const AttachmentBilling = (props) => {
         let dataVA;
         //alert("run");
         const dataGet = {
-          //entity_cd: datadetailNotDue[0].entity_cd,
-          //project_no: datadetailNotDue[0].project_no,
-          entity_cd: "1004",
-          project_no: "1004001",
+          entity_cd: datadetailNotDue[0].entity_cd,
+          project_no: datadetailNotDue[0].project_no,
+          // entity_cd: "1004",
+          // project_no: "1004001",
           lot_no: datadetailNotDue[0].lot_no,
           bank_grp: paymentMethod.payment_channel,
         };
@@ -356,7 +364,7 @@ const AttachmentBilling = (props) => {
           url: `/modules/billing/get-virtual-acc`,
           method: "GET",
           params: dataGet,
-          baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
+          //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
         });
         //alert(JSON.stringify(resGet.data.success));
         if (resGet.data.success == true) {
@@ -367,6 +375,7 @@ const AttachmentBilling = (props) => {
           //alert("315 Pay: res: " + JSON.stringify(resGet.data.data));
           alert("VA " + resGet.data.message);
           setLoading(false);
+          //dataVA = "88812345";
           return;
         }
 
@@ -385,10 +394,10 @@ const AttachmentBilling = (props) => {
         // };
 
         const dataPost = {
-          entity_cd: "1004",
-          project_no: "1004001",
-          //entity_cd: datadetailNotDue[0].entity_cd,
-          //project_no: datadetailNotDue[0].project_no,
+          // entity_cd: "1004",
+          // project_no: "1004001",
+          entity_cd: datadetailNotDue[0].entity_cd,
+          project_no: datadetailNotDue[0].project_no,
           debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
           debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
           debtor_phone: user.Handphone,
@@ -407,7 +416,7 @@ const AttachmentBilling = (props) => {
           url: `/modules/billing/store`,
           method: "POST",
           data: dataPost,
-          baseURL: "https://api.property365.co.id:4421/tanrise_api/api", // Override the baseURL here
+          //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
         });
 
         const condition = res.data.success;
@@ -427,20 +436,21 @@ const AttachmentBilling = (props) => {
         } else {
           //alert(JSON.stringify(res.data));
           const dataPay = res.data.data;
-          // normal = nav off
-          navigation.navigate("VAScreen", {
-            ...route.params,
-            paymentMethod,
-            VA: dataPost.virtual_acct,
-            dataPay,
-          });
+          //#normal = nav off
+          // navigation.navigate("VAScreen", {
+          //   ...route.params,
+          //   paymentMethod,
+          //   VA: dataPost.virtual_acct,
+          //   dataPay,
+          // });
           alert(res.data.message);
         }
       } catch (error) {
         console.log("320 Pay: error: ", error);
         console.log("320" + error.response.data.message);
-        //alert("320c" + error.toString());
-        alert("320c" + error.response.data.message.toString());
+
+        alert("3203 " + JSON.stringify(error.response.data.message));
+        //alert("320c" + error.response.data.message);
       }
     }
     setLoading(false);

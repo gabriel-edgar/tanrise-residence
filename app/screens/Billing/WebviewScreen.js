@@ -234,7 +234,7 @@ const WebviewScreen = (props) => {
           );
         }}
         onPressLeft={() => {
-          navigation.goBack();
+          navigation.pop(3);
         }}
         renderRight={() => {
           return (

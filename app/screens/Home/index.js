@@ -204,6 +204,8 @@ const Home = (props) => {
   //console.log("repll", repl);
   const [text_lotno, setTextLotno] = useState(stateReduxChoosedUnit);
   const [text_project, setTextProject] = useState(stateReduxChoosedProject);
+  const [isChooseProject, setIsChooseProject] = useState(false);
+
   const [default_text_lotno, setDefaultLotno] = useState(true);
   const [keyword, setKeyword] = useState("");
 
@@ -316,6 +318,10 @@ const Home = (props) => {
     // Clean up the interval on component unmount
     return () => clearInterval(intervalIdNotif);
   }, [appState]);
+
+  useEffect(() => {
+    text_project ? setIsChooseProject(false) : setIsChooseProject(true);
+  }, [text_project]);
 
   //appState
   // active
@@ -2055,6 +2061,8 @@ const Home = (props) => {
                     }}
                   >
                     <ModalSelector
+                      disabled={isChooseProject}
+                      //disabled={true}
                       style={{
                         justifyContent: "center",
                         alignSelf: "center",

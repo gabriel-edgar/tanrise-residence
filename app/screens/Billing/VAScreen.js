@@ -409,7 +409,8 @@ const AttachmentBilling = (props) => {
           );
         }}
         onPressLeft={() => {
-          navigation.goBack();
+          //navigation.goBack();
+          navigation.pop(3);
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>

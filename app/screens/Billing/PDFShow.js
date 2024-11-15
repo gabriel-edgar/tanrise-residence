@@ -337,7 +337,8 @@ const PDFShow = (props) => {
           );
         }}
         onPressLeft={() => {
-          navigation.goBack();
+          //navigation.goBack();
+          navigation.pop(3);
         }}
       />
       {/* <ScrollView style={styles.containerPdf} horizontal={true}>

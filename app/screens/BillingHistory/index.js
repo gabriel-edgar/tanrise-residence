@@ -33,6 +33,7 @@ import {
   Alert,
   Modal,
   Button,
+  Platform,
 } from "react-native";
 import HeaderHome from "./HeaderHome";
 import styles from "./styles";
@@ -146,10 +147,10 @@ const BillingHistory = ({
     // }
 
     const getParams = {
-      entity_cd: "1004",
-      //entity_cd: stateReduxChoosedUnit.entity_cd,
-      project_no: "1004001",
-      //project_no: stateReduxChoosedUnit.project_no,
+      //entity_cd: "1004",
+      entity_cd: stateReduxChoosedUnit.entity_cd,
+      //project_no: "1004001",
+      project_no: stateReduxChoosedUnit.project_no,
       //debtor_acct: "GSE/AA-50/1",
       email: user.email,
     };
@@ -161,7 +162,7 @@ const BillingHistory = ({
         url: `/modules/billing/get-data-payment`,
         method: "GET",
         params: getParams,
-        baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
+        //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
       })
       .then((res) => {
         function checkLotno(currentValue, index, arr) {
@@ -181,7 +182,7 @@ const BillingHistory = ({
       })
       .catch((error) => {
         setDataCurrent([]);
-        alert(error.response.data.message);
+        alert(JSON.stringify(error.response.data.message));
         //setDataCurrent(dummyPayment);
         setLoading(false);
       });
@@ -252,14 +253,14 @@ const BillingHistory = ({
         url: `/modules/billing/update-status-payment`,
         method: "POST",
         data: dataPost,
-        baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
+        //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
       })
       .then((res) => {
         alert(JSON.stringify(res.data.message));
         onRefresh();
       })
       .catch((e) => {
-        alert(e);
+        alert(JSON.stringify(e.response.data.message));
         setLoading(false);
         onRefresh();
       });
@@ -615,7 +616,7 @@ const BillingHistory = ({
                           //onPress={() => setModalVisible(null)} // Close modal
                           onPress={() => showAlert(item)}
                           //color={colors.text}
-                          color="white"
+                          color={Platform.OS === "ios" ? "white" : "red"}
                         />
                       </View>
                       {/* <Button

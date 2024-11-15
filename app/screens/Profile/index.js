@@ -140,7 +140,7 @@ const Profile = (props) => {
         edges={["right", "top", "left"]}
       >
         <Header
-          title={t("setting")}
+          title={t("Settings")}
           renderLeft={() => {
             return (
               <Icon

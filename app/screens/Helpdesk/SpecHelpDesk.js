@@ -71,7 +71,7 @@ export default function SpecHelpDesk(props) {
   const [dataLotno, setDataLotno] = useState([]);
   const [textLot, setLotno] = useState("");
   const [reportName, setreportName] = useState(users.name);
-  const [contactNo, setcontactNo] = useState("");
+  const [contactNo, setcontactNo] = useState(users.Handphone);
   const [requiredText, setrequiredText] = useState(false);
   const [textFloor, settextFloor] = useState("");
   const [isDisabled, setDisabled] = useState(false);

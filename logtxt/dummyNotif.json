@@ -4,7 +4,7 @@
   "data": {
     "total": 1,
     "notifications": [
-      {
+      { 
         "rowID": "3",
         "entity_cd": "1001",
         "project_no": "1001001",

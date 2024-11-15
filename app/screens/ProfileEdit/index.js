@@ -376,7 +376,7 @@ const ProfileEdit = (props) => {
           /> */}
           <View style={[styles.contentTitle, { marginTop: 15 }]}>
             <Text headline semibold>
-              {t("Handphone")}
+              {t("Phone Number")}
             </Text>
           </View>
           <TextInput

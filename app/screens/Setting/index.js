@@ -68,6 +68,7 @@ export default function Setting({ navigation }) {
   }, []);
 
   const loadData = async () => {
+    //alert(API_URL_LOKAL);
     const fcmToken = await messaging()
       .getToken()
       .catch((error) => {
@@ -257,7 +258,7 @@ export default function Setting({ navigation }) {
         >
           <Text body1>{t("App Code")}</Text>
           <TouchableHighlight
-            onPress={() => setModalVisible(true)}
+            //onPress={() => setModalVisible(true)}
             //onPress={handleTap}
             underlayColor={colors.background}
           >
