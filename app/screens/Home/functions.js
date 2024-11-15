@@ -11,7 +11,7 @@ import {
 
 const check_version = async () => {
   const iosStoreURL =
-    "https://apps.apple.com/id/app/mobile-legends-bang-bang/id1160056295";
+    "https://apps.apple.com/us/app/tanriseresidence/id6692623907";
   const androidStoreURL =
     "https://play.google.com/store/apps/details?id=com.ifcasoftware.tanriseresidence";
 
