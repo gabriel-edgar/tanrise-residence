@@ -108,7 +108,6 @@ import { SwiperFlatList } from "react-native-swiper-flatlist";
 const { width } = Dimensions.get("window");
 // import { useIsFocused } from "@react-navigation/native";
 import { check_version } from "./functions";
-import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -128,7 +127,6 @@ const Home = (props) => {
   const [popular, setPopular] = useState(HomePopularData);
   const [list, setList] = useState(HomeListData);
   const [loading, setLoading] = useState(true);
-  const [loadingImg, setLoadingImg] = useState(true);
   const [appState, setAppState] = useState(AppState.currentState);
   const user = useSelector((state) => getUser(state));
   //console.log("119 user: ", user);
@@ -250,6 +248,61 @@ const Home = (props) => {
     //   project_no: "1001001",
     // },
   ]);
+  //console.log("243 dummyArray: ", dummyArray);
+  // const fetchData = async () => {
+  //   setIsFetching(true);
+  //   try {
+  //     const response = await fetch("https://api.example.com/data"); // Replace with your API
+  //     //const json = await response.json();
+  //     setData(response.data);
+  //   } catch (response) {
+  //     console.error("232 home Error fetching data:", error);
+  //   } finally {
+  //     setIsFetching(false);
+  //   }
+  // };
+
+  // Set up the interval
+  //notification
+
+  // const [intervalIdNotif, setIntervalIdNotif] = useState(null);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
+  //     setAppState(nextAppState);
+
+  //     if (nextAppState === "active") {
+  //       // App has come to the foreground, start the interval
+  //       if (!intervalIdNotif) {
+  //         const id = setInterval(() => {
+  //           projectDot();
+  //         }, 15000);
+  //         setIntervalIdNotif(id);
+  //       }
+  //     } else {
+  //       // App is in the background, clear the interval
+  //       if (intervalIdNotif) {
+  //         clearInterval(intervalIdNotif);
+  //         setIntervalIdNotif(null);
+  //       }
+  //     }
+  //   });
+
+  //   // Start the interval if the app is already active
+  //   if (appState === "active") {
+  //     const id = setInterval(() => {
+  //       projectDot();
+  //     }, 15000);
+  //     setIntervalIdNotif(id);
+  //   }
+
+  //   // Cleanup function to clear the interval and remove the AppState listener
+  //   return () => {
+  //     if (intervalIdNotif) {
+  //       clearInterval(intervalIdNotif);
+  //     }
+  //     subscription.remove();
+  //   };
+  // }, [appState, intervalIdNotif]);
 
   useEffect(() => {
     let intervalIdNotif;
@@ -427,13 +480,12 @@ const Home = (props) => {
   );
 
   const loadData = async () => {
-    //alert("test loadData");
-    // const fcmToken = await messaging()
-    //   .getToken()
-    //   .catch((error) => {
-    //     console.log("460 error: ", error);
-    //   });
-    // console.log("460 run0 : ", fcmToken);
+    const fcmToken = await messaging()
+      .getToken()
+      .catch((error) => {
+        console.log("460 error: ", error);
+      });
+    console.log("460 run0 : ", fcmToken);
     ////console.log("galery", galery);
     //console.log("uE 1");
     await doSomething();
@@ -515,8 +567,6 @@ const Home = (props) => {
     await dataPromoClubFacilities();
     await projectDot();
   };
-
-  useCustomTriggerOnFocus(loadData, 15000);
 
   const projectDot = async () => {
     const arrayNotification = await httpClient
@@ -1749,25 +1799,16 @@ const Home = (props) => {
                 }}
               >
                 <Image
-                  onLoadStart={() => setLoadingImg(true)}
-                  onLoadEnd={() => setLoadingImg(false)}
-                  onError={() => setLoadingImg(false)} // Handle image loading errors
                   style={{
                     height: 60,
                     width: 60,
                     borderRadius: 30,
                     marginRight: 15,
                     marginTop: 10,
-                    // backgroundColor: "lightgray",
-                    backgroundColor: colors.primaryLight,
                   }}
                   // source={require('../../assets/images/image-home/Main_Image.png')}
                   source={user?.pict != null ? { uri: repl } : fotoprofil}
                 ></Image>
-                {/* {loadingImg && (
-                  <ActivityIndicator //size="large" color="#0000ff"
-                  />
-                )} */}
                 <Text
                   // adjustsFontSizeToFit={true}
                   // allowFontScaling={true}
@@ -1791,7 +1832,8 @@ const Home = (props) => {
                 />
               </View>
               {/* <Text>{lotno.length}</Text> */}
-              {project.length != 0 ? (
+              {project.length == 0 ?<Text>Please claim your unit before using this mobile app</Text>:
+              true ? (
                 <View
                   style={{
                     //backgroundColor: "blue",
@@ -1924,16 +1966,12 @@ const Home = (props) => {
                 <View
                   style={{
                     backgroundColor: colors.primary, //"#315447",
-                    height: 50,
+                    height: 30,
                     // width: '100%',
                     //width: 150,
                     //justifyContent: "center",
                     paddingHorizontal: 10,
                     borderRadius: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: 20,
-                    marginBottom: 10,
                   }}
                 >
                   <View
@@ -1941,26 +1979,21 @@ const Home = (props) => {
                       flexDirection: "row",
                       paddingLeft: 5,
                       justifyContent: "center",
-                      alignItems: "center",
                     }}
                   >
                     <Text
                       style={{
                         color: "#fff",
-                        //backgroundColor: "blue",
                         alignSelf: "center",
-                        fontSize: 16,
+                        fontSize: 14,
                         justifyContent: "center",
                         paddingRight: 5,
 
-                        fontWeight: "600",
+                        fontWeight: "800",
                         fontFamily: font, //"KaiseiHarunoUmi",
-                        textAlign: "center",
                       }}
-                      //ellipsizeMode="tail"
-                      numberOfLines={2}
                     >
-                      Please claim your unit before using this mobile app
+                      Project not found
                     </Text>
 
                     {
@@ -2008,193 +2041,83 @@ const Home = (props) => {
                     }
                   </View>
                 </View>
-              )}
-              {project.length != 0 ? (
-                stateReduxDataUnit.length != 0 ? (
+              )
+              {stateReduxDataUnit.length != 0 ? (
+                <View
+                  style={{
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    width: 180,
+                    justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    //alignSelf:'center'
+                  }}
+                >
                   <View
                     style={{
-                      backgroundColor: colors.primary, //"#315447",
-                      height: 30,
-                      // width: '100%',
-                      width: 180,
-                      justifyContent: "center",
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
-                      //alignSelf:'center'
+                      flexDirection: "row",
+                      paddingLeft: 0,
+                      //alignContent: "space-between",
                     }}
                   >
-                    <View
+                    <ModalSelector
+                      disabled={isChooseProject}
+                      //disabled={true}
                       style={{
-                        flexDirection: "row",
-                        paddingLeft: 0,
-                        //alignContent: "space-between",
-                      }}
-                    >
-                      <ModalSelector
-                        disabled={isChooseProject}
-                        //disabled={true}
-                        style={{
-                          justifyContent: "center",
-                          alignSelf: "center",
-                          flex: 1,
-                        }}
-                        childrenContainerStyle={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                          flexDirection: "row",
-                        }}
-                        data={stateReduxDataUnit}
-                        optionTextStyle={{ color: "#333" }}
-                        selectedItemTextStyle={{ color: "#3C85F1" }}
-                        accessible={true}
-                        keyExtractor={(item) => item.lot_no}
-                        // initValue={'ahlo'}
-                        labelExtractor={(item) => renderOptionUnit(item)} //khusus untuk lotno
-                        cancelButtonAccessibilityLabel={"Cancel Button"}
-                        cancelText={"Cancel"}
-                        onChange={(option) => {
-                          onChangelot(option);
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            flex: 1,
-                            justifyContent: "space-between",
-                            paddingRight: 10,
-                          }}
-                        >
-                          <Text
-                            adjustsFontSizeToFit={true}
-                            allowFontScaling={true}
-                            style={{
-                              color: "#fff",
-                              alignSelf: "center",
-                              fontSize: 14,
-                              justifyContent: "center",
-                              paddingRight: 10,
-
-                              fontWeight: "800",
-                              fontFamily: font, //"KaiseiHarunoUmi",
-                            }}
-                          >
-                            {text_lotno?.lot_no ? "Unit" : "Choose Unit"}
-                          </Text>
-                          <Text
-                            style={{
-                              color: "#CDB04A",
-                              alignSelf: "center",
-                              fontSize: 16,
-                              // top: 10,
-                              // flex: 1,
-                              justifyContent: "center",
-                              fontWeight: "800",
-                              fontFamily: font, //"KaiseiHarunoUmi",
-                            }}
-                          >
-                            {text_lotno?.lot_no}
-                          </Text>
-                          <Icon
-                            name="caret-down"
-                            solid
-                            size={26}
-                            // color={colors.primary}
-                            style={{ marginLeft: 5 }}
-                            color={"#CDB04A"}
-                          />
-                        </View>
-                      </ModalSelector>
-                      {dotChooseUnit ? (
-                        <View
-                          style={{
-                            borderWidth: 1,
-                            borderColor: BaseColor.whiteColor,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            position: "absolute",
-                            width: 20,
-                            height: 20,
-                            backgroundColor: "red",
-                            top: -10,
-                            right: -20,
-                            borderRadius: 10,
-                          }}
-                        >
-                          {/* <Text whiteColor caption2>
-            {finalCount < 0 ? 0 : finalCount}
-          </Text> */}
-                        </View>
-                      ) : null}
-                    </View>
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      backgroundColor: colors.primary, //"#315447",
-                      height: 30,
-                      // width: '100%',
-                      //width: 150,
-                      justifyContent: "center",
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        paddingLeft: 5,
                         justifyContent: "center",
+                        alignSelf: "center",
+                        flex: 1,
+                      }}
+                      childrenContainerStyle={{
+                        color: "#CDB04A",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        // top: 10,
+                        // flex: 1,
+                        justifyContent: "center",
+                        fontWeight: "800",
+                        fontFamily: "KaiseiHarunoUmi",
+                        flexDirection: "row",
+                      }}
+                      data={stateReduxDataUnit}
+                      optionTextStyle={{ color: "#333" }}
+                      selectedItemTextStyle={{ color: "#3C85F1" }}
+                      accessible={true}
+                      keyExtractor={(item) => item.lot_no}
+                      // initValue={'ahlo'}
+                      labelExtractor={(item) => renderOptionUnit(item)} //khusus untuk lotno
+                      cancelButtonAccessibilityLabel={"Cancel Button"}
+                      cancelText={"Cancel"}
+                      onChange={(option) => {
+                        onChangelot(option);
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          color: "#fff",
-                          alignSelf: "center",
-                          fontSize: 14,
-                          justifyContent: "center",
-                          paddingRight: 5,
-
-                          fontWeight: "800",
-                          fontFamily: font, //"KaiseiHarunoUmi",
+                          flexDirection: "row",
+                          flex: 1,
+                          justifyContent: "space-between",
+                          paddingRight: 10,
                         }}
                       >
-                        Unit not found
-                      </Text>
+                        <Text
+                          adjustsFontSizeToFit={true}
+                          allowFontScaling={true}
+                          style={{
+                            color: "#fff",
+                            alignSelf: "center",
+                            fontSize: 14,
+                            justifyContent: "center",
+                            paddingRight: 10,
 
-                      <ModalSelector
-                        style={{
-                          justifyContent: "center",
-                          alignSelf: "center",
-                        }}
-                        childrenContainerStyle={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                        //data={lotno}
-                        optionTextStyle={{ color: "#333" }}
-                        selectedItemTextStyle={{ color: "#3C85F1" }}
-                        accessible={true}
-                        keyExtractor={(item) => item.lot_no}
-                        // initValue={'ahlo'}
-                        labelExtractor={(item) => item.lot_no} //khusus untuk lotno
-                        cancelButtonAccessibilityLabel={"Cancel Button"}
-                        cancelText={"Cancel"}
-                        onChange={(option) => {
-                          onChangelot(option);
-                        }}
-                      >
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          {text_lotno?.lot_no ? "Unit" : "Choose Unit"}
+                        </Text>
                         <Text
                           style={{
                             color: "#CDB04A",
@@ -2204,14 +2127,119 @@ const Home = (props) => {
                             // flex: 1,
                             justifyContent: "center",
                             fontWeight: "800",
-                            fontFamily: "KaiseiHarunoUmi",
+                            fontFamily: font, //"KaiseiHarunoUmi",
                           }}
-                        ></Text>
-                      </ModalSelector>
-                    </View>
+                        >
+                          {text_lotno?.lot_no}
+                        </Text>
+                        <Icon
+                          name="caret-down"
+                          solid
+                          size={26}
+                          // color={colors.primary}
+                          style={{ marginLeft: 5 }}
+                          color={"#CDB04A"}
+                        />
+                      </View>
+                    </ModalSelector>
+                    {dotChooseUnit ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: BaseColor.whiteColor,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: -10,
+                          right: -20,
+                          borderRadius: 10,
+                        }}
+                      >
+                        {/* <Text whiteColor caption2>
+            {finalCount < 0 ? 0 : finalCount}
+          </Text> */}
+                      </View>
+                    ) : null}
                   </View>
-                )
-              ) : null}
+                </View>
+              ) : (
+                <View
+                  style={{
+                    backgroundColor: colors.primary, //"#315447",
+                    height: 30,
+                    // width: '100%',
+                    //width: 150,
+                    justifyContent: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingLeft: 5,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontSize: 14,
+                        justifyContent: "center",
+                        paddingRight: 5,
+
+                        fontWeight: "800",
+                        fontFamily: font, //"KaiseiHarunoUmi",
+                      }}
+                    >
+                      Unit not found
+                    </Text>
+
+                    <ModalSelector
+                      style={{ justifyContent: "center", alignSelf: "center" }}
+                      childrenContainerStyle={{
+                        color: "#CDB04A",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        // top: 10,
+                        // flex: 1,
+                        justifyContent: "center",
+                        fontWeight: "800",
+                        fontFamily: "KaiseiHarunoUmi",
+                      }}
+                      //data={lotno}
+                      optionTextStyle={{ color: "#333" }}
+                      selectedItemTextStyle={{ color: "#3C85F1" }}
+                      accessible={true}
+                      keyExtractor={(item) => item.lot_no}
+                      // initValue={'ahlo'}
+                      labelExtractor={(item) => item.lot_no} //khusus untuk lotno
+                      cancelButtonAccessibilityLabel={"Cancel Button"}
+                      cancelText={"Cancel"}
+                      onChange={(option) => {
+                        onChangelot(option);
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#CDB04A",
+                          alignSelf: "center",
+                          fontSize: 16,
+                          // top: 10,
+                          // flex: 1,
+                          justifyContent: "center",
+                          fontWeight: "800",
+                          fontFamily: "KaiseiHarunoUmi",
+                        }}
+                      ></Text>
+                    </ModalSelector>
+                  </View>
+                </View>
+              )}}
             </View>
           </View>
 
@@ -2224,7 +2252,6 @@ const Home = (props) => {
                 style={{ marginTop: 10, fontFamily: font }}
                 menu={homeMenu}
                 font={font}
-                isClaimUnit={project.length == 0}
               />
             ) : (
               <ActivityIndicator />

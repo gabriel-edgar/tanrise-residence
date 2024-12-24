@@ -59,6 +59,10 @@ const AttachmentBilling = (props) => {
     const project_no = route.params.project_no; //route.params.project_no;
     const debtor_acct = route.params.debtor_acct;
     const doc_no = route.params.doc_no;
+    const type = route.params.tab_id == 1 ? "INV" : "OR";
+    //type:'INV'//not Paid
+    //type:'OR'//Paid
+    //alert(type);
 
     console.log("60 attachment: ", entity_cd, project_no, debtor_acct, doc_no);
 
@@ -76,7 +80,7 @@ const AttachmentBilling = (props) => {
       // /modules/billing/attach?entity_cd=1001&project_no=1001001&debtor_acct=GSE/AA-50/1&doc_no=BL23090008
 
       const res = await httpClient.request({
-        url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
+        url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}&type=${type}`,
         method: "GET",
       });
 

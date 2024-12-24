@@ -153,11 +153,17 @@ export default function ScreenSignature({ route }) {
     console.log("Empty");
   };
 
-  const style = `.m-signature-pad--footer
+  const styleS = `.m-signature-pad--footer
     .button {
-      background-color: red;
+      background-color: ${colors.primary};
       color: #FFF;
     }`;
+
+  // const style = `.m-signature-pad--footer
+  //   .button {
+  //     background-color: 'green';
+  //     color: #FFF;
+  //   }`;
 
   return (
     <SafeAreaView
@@ -181,7 +187,13 @@ export default function ScreenSignature({ route }) {
         }}
       />
 
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          //height: 500,
+          //backgroundColor: "black",
+        }}
+      >
         <View style={styles.preview}>
           {/* {signature ? (
             <Image
@@ -197,10 +209,12 @@ export default function ScreenSignature({ route }) {
           descriptionText="Signature Approve"
           clearText="Clear"
           confirmText="Save"
-          webStyle={style}
+          webStyle={styleS}
           imageType={"image/jpeg"}
           backgroundColor={"#ffffff"}
+          //backgroundColor={"black"}
         />
+        {/* <Text>abcdddddd</Text> */}
       </View>
       <View>
         <Modal

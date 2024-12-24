@@ -7,6 +7,7 @@ import {
   Button,
   TouchableHighlight,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useTranslation } from "react-i18next";
@@ -18,7 +19,7 @@ import * as Utils from "@utils";
 import { BaseColor, BaseStyle, Images, useTheme } from "@config";
 import Helpdesk from "../Helpdesk/index copy";
 
-const Categories = ({ style = {}, menu = [], font }) => {
+const Categories = ({ style = {}, menu = [], font, isClaimUnit = false }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -74,12 +75,15 @@ const Categories = ({ style = {}, menu = [], font }) => {
     //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
     //isProject: 0,
   };
-  const menuHelp = {
+  const menuClaimUnit = {
     id: 234,
-    Title: "Help",
-    IconClass: "headset",
-    //IconClass: "phone-alt",
-    Screen: "Emergency",
+    Title: "Claim Unit",
+    IconClass: Platform.OS == "ios" ? "home" : "house-user", //"ellipsis-v",
+    //IconClass: "laptop-house",
+    //IconClass: "house-damage",
+    //IconClass: "building",
+    //IconClass: "house",
+    Screen: "ClaimUnitList",
     user_facility: "N",
     user_menu: "Y",
     //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
@@ -96,7 +100,10 @@ const Categories = ({ style = {}, menu = [], font }) => {
     //icon_url: require("../assets/images/icon_at_home/icon-8.jpeg"),
   };
 
-  const modMenu = [...menu];
+  isClaimUnit;
+
+  // const modMenu = isClaimUnit ? [...menu, menuClaimUnit] : [...menu];
+  const modMenu = true ? [...menu, menuClaimUnit] : [...menu];
 
   return (
     <View>

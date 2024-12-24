@@ -158,6 +158,10 @@ import ProjectScreen from "@screens/ProjectScreen";
 import ProjectDetails from "@screens/ProjectScreen/ProjectDetails";
 import DownloadBrochure from "@screens/ProjectScreen/DownloadBrochure";
 
+import ClaimUnitList from "@screens/ClaimUnit/list";
+import ClaimUnit from "@screens/ClaimUnit";
+import ClaimUnit2 from "@screens/ClaimUnit/step2";
+
 import SandBox from "@screens/SandBoxScreen/index";
 
 const Stack = createStackNavigator();
@@ -570,6 +574,21 @@ function MainStack() {
       <Stack.Screen
         name="ScreenSignature"
         component={ScreenSignature}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ClaimUnit"
+        component={ClaimUnit}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ClaimUnit2"
+        component={ClaimUnit2}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ClaimUnitList"
+        component={ClaimUnitList}
         options={{ headerShown: false }}
       />
       <Stack.Screen

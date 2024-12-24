@@ -25,14 +25,14 @@ const check_version = async () => {
 
     const showAlert = () => {
       Alert.alert(
-        "New App Version Available",
-        //"My Alert Msg",
+        "New Version Available",
+        "A new version is released, please update to get new features",
         [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
+          // {
+          //   text: "Later",//Close
+          //   onPress: () => console.log("Cancel Pressed"),
+          //   style: "cancel",
+          // },
           {
             text: "Update",
             onPress: () =>
@@ -43,9 +43,9 @@ const check_version = async () => {
               ),
           },
         ],
-        { cancelable: false } // Prevents dismissing by tapping outside
+        { cancelable: true } //android only
       );
-      alert("update");
+      //alert("update");
     };
 
     console.log("Home16 check: ", check);

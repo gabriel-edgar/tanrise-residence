@@ -44,6 +44,7 @@ import {
   action_data_notification,
   choosed_unit,
 } from "../../actions/ProjectActions";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function StatusHelp({ route }) {
   const { t, i18n } = useTranslation();
@@ -1273,93 +1274,96 @@ export default function StatusHelp({ route }) {
           navigation.goBack();
         }}
       />
-      <View style={styles.wrap}>
-        <View style={{ marginLeft: 10 }}>
-          <Text title2>Ticket {choosedUnit?.lot_no}</Text>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text headline style={{ fontWeight: "normal" }}>
-              Status Help{"\n"}
-              {params?.project_descs}
-            </Text>
-            <View>
-              <ModalSelector
-                style={{
-                  marginRight: 30,
-                  //backgroundColor: '#fff',
-                  borderWidth: Platform.OS == "ios" ? 0.1 : 0,
-                  padding: Platform.OS == "ios" ? 10 : 20,
-                  borderRadius: Platform.OS == "ios" ? 10 : 10,
-                  //borderRadius: 50,
-                  //shadowColor: "#000",
-                  // shadowOffset: {
-                  //   width: 0,
-                  //   height: 2,
-                  // },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 1,
-                  elevation: 5, // For Android
-                  margin: 10,
-                  overflow: "hidden",
-                }}
-                //value={choosedUnit}
-                //data={stateReduxDataUnit}
-                data={stateReduxDataUnit.map((item) => ({
-                  ...item,
-                  label: renderOption(item),
-                }))}
-                keyExtractor={(item) => item.lot_no}
-                //labelExtractor={(item) => item.lot_no}
-                optionTextStyle={{ color: "#333" }}
-                selectedItemTextStyle={{ color: "#3C85F1" }}
-                initValue="Change unit"
-                //value={viewFront}
-                //viewFront, setViewFront
-                onChange={(option) => {
-                  //alert(`${option.label} (${option.key}) nom nom nom`);
-                  //setViewFront("Change lot no");
-                  setChoosedUnit(option);
-                  saveUnit(option);
-                  // const newbyStatusAll = {
-                  // statusOpen,
-                  // statusProcess,
-                  // statusCancel,
-                  // statusClose,
-                  // };
-                  filterByUnit(option.lot_no);
-                  handleCangeDot(option.lot_no);
-                }}
-              >
-                <Text headline style={{ fontWeight: "normal" }}>
-                  Change unit
-                </Text>
-              </ModalSelector>
-              {dotList.length != 0 &&
-              dotList.some((item) => item != choosedUnit.lot_no) ? (
-                //dotList.some((item) => item != project.entity_cd) ? (
-                <View
+      <ScrollView>
+        <View style={styles.wrap}>
+          <View style={{ marginLeft: 10 }}>
+            <Text title2>Ticket {choosedUnit?.lot_no}</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text headline style={{ fontWeight: "normal" }}>
+                Status Help{"\n"}
+                {params?.project_descs}
+              </Text>
+              <View>
+                <ModalSelector
                   style={{
-                    borderWidth: 1,
-                    borderColor: "white",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position: "absolute",
-                    width: 20,
-                    height: 20,
-                    backgroundColor: "red",
-                    top: 5,
-                    right: 25,
-                    borderRadius: 10,
+                    marginRight: 30,
+                    //backgroundColor: '#fff',
+                    borderWidth: Platform.OS == "ios" ? 0.1 : 0,
+                    padding: Platform.OS == "ios" ? 10 : 20,
+                    borderRadius: Platform.OS == "ios" ? 10 : 10,
+                    //borderRadius: 50,
+                    //shadowColor: "#000",
+                    // shadowOffset: {
+                    //   width: 0,
+                    //   height: 2,
+                    // },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 1,
+                    elevation: 5, // For Android
+                    margin: 10,
+                    overflow: "hidden",
                   }}
-                ></View>
-              ) : null}
+                  //value={choosedUnit}
+                  //data={stateReduxDataUnit}
+                  data={stateReduxDataUnit.map((item) => ({
+                    ...item,
+                    label: renderOption(item),
+                  }))}
+                  keyExtractor={(item) => item.lot_no}
+                  //labelExtractor={(item) => item.lot_no}
+                  optionTextStyle={{ color: "#333" }}
+                  selectedItemTextStyle={{ color: "#3C85F1" }}
+                  initValue="Change unit"
+                  //value={viewFront}
+                  //viewFront, setViewFront
+                  onChange={(option) => {
+                    //alert(`${option.label} (${option.key}) nom nom nom`);
+                    //setViewFront("Change lot no");
+                    setChoosedUnit(option);
+                    saveUnit(option);
+                    // const newbyStatusAll = {
+                    // statusOpen,
+                    // statusProcess,
+                    // statusCancel,
+                    // statusClose,
+                    // };
+                    filterByUnit(option.lot_no);
+                    handleCangeDot(option.lot_no);
+                  }}
+                >
+                  <Text headline style={{ fontWeight: "normal" }}>
+                    Change unit
+                  </Text>
+                </ModalSelector>
+                {dotList.length != 0 &&
+                dotList.some((item) => item != choosedUnit.lot_no) ? (
+                  //dotList.some((item) => item != project.entity_cd) ? (
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "white",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      position: "absolute",
+                      width: 20,
+                      height: 20,
+                      backgroundColor: "red",
+                      top: 5,
+                      right: 25,
+                      borderRadius: 10,
+                    }}
+                  ></View>
+                ) : null}
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={[styles.subWrap, { paddingBottom: 0, marginBottom: 10 }]}>
-          {/* <View>
+          <View
+            style={[styles.subWrap, { paddingBottom: 0, marginBottom: 10 }]}
+          >
+            {/* <View>
             <Text style={{ color: "#3f3b38", fontSize: 14 }}>
               Choose Project
             </Text>
@@ -1398,666 +1402,667 @@ export default function StatusHelp({ route }) {
             )}
           </View> */}
 
-          {true === true ? (
-            <View style={{ marginTop: 30, marginHorizontal: 10 }}>
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'R'")}
-                disabled={ds.cntopen == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   paddingTop: 1,
-                  //backgroundColor: "blue",
-                }}
-              >
-                <View
+            {true === true ? (
+              <View style={{ marginTop: 30, marginHorizontal: 10 }}>
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'R'")}
+                  disabled={ds.cntopen == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-
-                    // alignSelf: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   paddingTop: 1,
+                    //backgroundColor: "blue",
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     name="angle-left"
                     // style={{marginTop: 10}}
                   /> */}
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Open
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntopen}
-                      </Text>
-                    }
-                  ></Badge>
-                  {dotForStatus.open ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'A'")}
-                disabled={ds.cntassign == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   marginBottom: 10,
-                }}
-              >
-                <View
+                    >
+                      Open
+                    </Text>
+
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntopen}
+                        </Text>
+                      }
+                    ></Badge>
+                    {dotForStatus.open ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'A'")}
+                  disabled={ds.cntassign == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-                    // alignSelf: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   marginBottom: 10,
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     icon={'hourglass-half'}
                     style={{marginTop: 10}}
                   /> */}
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Assign
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntassign}
-                      </Text>
-                    }
-                  ></Badge>
-                  {ds.cntassign != "0" && ds.cntassign != "" ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'P'")}
-                disabled={ds.cntprocces == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   marginBottom: 10,
-                }}
-              >
-                <View
+                    >
+                      Assign
+                    </Text>
+
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntassign}
+                        </Text>
+                      }
+                    ></Badge>
+                    {ds.cntassign != "0" && ds.cntassign != "" ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'P'")}
+                  disabled={ds.cntprocces == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-                    // alignSelf: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   marginBottom: 10,
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     icon={'hourglass-half'}
                     style={{marginTop: 10}}
                   /> */}
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Process
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntprocces}
-                      </Text>
-                    }
-                  ></Badge>
-                  {dotForStatus.procces ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
+                    >
+                      Process
+                    </Text>
 
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'D'")}
-                disabled={ds.cntcompleted == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   marginBottom: 10,
-                }}
-              >
-                <View
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntprocces}
+                        </Text>
+                      }
+                    ></Badge>
+                    {dotForStatus.procces ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'D'")}
+                  disabled={ds.cntcompleted == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-                    //backgroundColor: "red",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   marginBottom: 10,
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                      //backgroundColor: "red",
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     icon={'check-double'}
                     style={{marginTop: 10}}
                   /> */}
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Completed
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntcompleted}
-                      </Text>
-                    }
-                  ></Badge>
-                  {ds.cntcompleted != "0" && ds.cntcompleted != "" ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'C'")}
-                disabled={ds.cntclose == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   marginBottom: 10,
-                }}
-              >
-                <View
+                    >
+                      Completed
+                    </Text>
+
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntcompleted}
+                        </Text>
+                      }
+                    ></Badge>
+                    {ds.cntcompleted != "0" && ds.cntcompleted != "" ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'C'")}
+                  disabled={ds.cntclose == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-                    // alignSelf: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   marginBottom: 10,
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     icon={'check-double'}
                     style={{marginTop: 10}}
                   /> */}
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Closed
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntclose}
-                      </Text>
-                    }
-                  ></Badge>
-                  {dotForStatus.close ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleNavigation(dataTowerUser, "'X'")}
-                disabled={ds.cntcancel == 0 ? true : false}
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#555",
-                  //   marginBottom: 10,
-                }}
-              >
-                <View
+                    >
+                      Closed
+                    </Text>
+
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntclose}
+                        </Text>
+                      }
+                    ></Badge>
+                    {dotForStatus.close ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleNavigation(dataTowerUser, "'X'")}
+                  disabled={ds.cntcancel == 0 ? true : false}
                   style={{
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignContent: "center",
-                    alignItems: "center",
-                    // alignSelf: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#555",
+                    //   marginBottom: 10,
                   }}
                 >
-                  {/* <CategoryIconSoft
+                  <View
+                    style={{
+                      justifyContent: "space-around",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      alignItems: "center",
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <CategoryIconSoft
                     isRound
                     size={25}
                     icon={'times'}
                     style={{marginTop: 10}}
                   /> */}
 
-                  <View
-                    style={{
-                      borderRadius: 20,
-                      // width: 50,
-                      // height: 50,
-                      width: 60,
-                      height: 60,
-                      // borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      backgroundColor: parseHexTransparency(
-                        colors.primary,
-                        100
-                      ),
-                    }}
-                  >
-                    <Icon
-                      name={"tasks"}
-                      size={25}
-                      color={BaseColor.whiteColor}
-                      solid
-                    />
-                  </View>
-
-                  {/* <Image
-                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
-                    style={styles.img}></Image> */}
-                  <Text
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 10,
-                      minWidth: 80,
-                      textAlign: "center",
-                    }}
-                  >
-                    Cancel
-                  </Text>
-
-                  <Badge
-                    badgeStyle={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      backgroundColor: "#42B649",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      alignSelf: "center",
-                      marginBottom: 5,
-                    }}
-                    value={
-                      <Text
-                        style={{
-                          color: "#fff",
-                          textAlign: "center",
-                          alignItems: "center",
-                          alignSelf: "center",
-                        }}
-                      >
-                        {ds.cntcancel}
-                      </Text>
-                    }
-                  ></Badge>
-                  {dotForStatus.cancel ? (
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: "white",
+                        borderRadius: 20,
+                        // width: 50,
+                        // height: 50,
+                        width: 60,
+                        height: 60,
+                        // borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 10,
+                        marginBottom: 10,
+                        backgroundColor: parseHexTransparency(
+                          colors.primary,
+                          100
+                        ),
+                      }}
+                    >
+                      <Icon
+                        name={"tasks"}
+                        size={25}
+                        color={BaseColor.whiteColor}
+                        solid
+                      />
+                    </View>
+
+                    {/* <Image
+                    source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                    style={styles.img}></Image> */}
+                    <Text
+                      style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "absolute",
-                        width: 20,
-                        height: 20,
-                        backgroundColor: "red",
-                        top: 10,
-                        right: 20,
-                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 10,
+                        minWidth: 80,
+                        textAlign: "center",
                       }}
-                    ></View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-            </View>
-          ) : // <Text>Choose Project First</Text>
-          null}
+                    >
+                      Cancel
+                    </Text>
+
+                    <Badge
+                      badgeStyle={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 10,
+                        backgroundColor: "#42B649",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        marginBottom: 5,
+                      }}
+                      value={
+                        <Text
+                          style={{
+                            color: "#fff",
+                            textAlign: "center",
+                            alignItems: "center",
+                            alignSelf: "center",
+                          }}
+                        >
+                          {ds.cntcancel}
+                        </Text>
+                      }
+                    ></Badge>
+                    {dotForStatus.cancel ? (
+                      <View
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "white",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "absolute",
+                          width: 20,
+                          height: 20,
+                          backgroundColor: "red",
+                          top: 10,
+                          right: 20,
+                          borderRadius: 10,
+                        }}
+                      ></View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ) : // <Text>Choose Project First</Text>
+            null}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

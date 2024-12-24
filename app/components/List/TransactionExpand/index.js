@@ -193,6 +193,7 @@ const TransactionExpand = ({
       project_no: item.project_no,
       debtor_acct: debtor_acct,
       doc_no: doc_no,
+      tab_id: tab_id,
     };
     console.log("params for click attach", params);
     navigation.navigate("AttachmentBilling", params);

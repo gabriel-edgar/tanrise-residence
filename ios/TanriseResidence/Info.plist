@@ -31,7 +31,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>Text</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>For change photo profile, get a picture with gallery</string>
 	<key>UIAppFonts</key>

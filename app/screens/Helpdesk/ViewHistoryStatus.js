@@ -444,18 +444,36 @@ export default function ViewHistoryStatus({ route }) {
                           </View>
                           <View
                             style={{
-                              flexDirection: "row",
+                              //flexDirection: "row",
                               justifyContent: "space-between",
+                              marginBottom: 7,
                             }}
                           >
                             <Text
                               style={{
                                 fontSize: 13,
                                 fontWeight: "300",
-                                marginBottom: 10,
+                                //marginBottom: 10,
                               }}
                             >
                               Reported by {data.serv_req_by}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 13,
+                                fontWeight: "300",
+                                // marginBottom: 10,
+                                marginTop: 3,
+                              }}
+                            >
+                              {data.status == "D" || data.status == "C"
+                                ? [
+                                    "Completion date: ",
+                                    data.completion_date != null
+                                      ? data.completion_date?.slice(0, 16)
+                                      : "null",
+                                  ]
+                                : null}
                             </Text>
                           </View>
                         </View>

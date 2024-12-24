@@ -48,6 +48,7 @@ import { TransactionExpandHistory } from "../../components";
 import httpClient from "../../controllers/HttpClient";
 import CheckBox from "@react-native-community/checkbox";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { useCustomTriggerOnFocus } from "../Billing/funcFocusEffect";
 
 const dummyPayment = [
   {
@@ -153,6 +154,7 @@ const BillingHistory = ({
       project_no: stateReduxChoosedUnit.project_no,
       //debtor_acct: "GSE/AA-50/1",
       email: user.email,
+      lot_no: stateReduxChoosedUnit.lot_no,
     };
 
     // alert(JSON.stringify(getParams));
@@ -195,6 +197,8 @@ const BillingHistory = ({
   const onRefresh = () => {
     fetchData();
   };
+
+  useCustomTriggerOnFocus(onRefresh);
 
   const copyToClipboard = (text) => {
     Clipboard.setString(text);
@@ -373,12 +377,9 @@ const BillingHistory = ({
                     setModalVisible(index)
                   }
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
                     padding: 15,
                     marginVertical: 8,
                     borderRadius: 5,
-                    justifyContent: "space-between",
 
                     //card
                     backgroundColor: colors.background, //common
@@ -393,29 +394,37 @@ const BillingHistory = ({
                     //overflow: "hidden",
                   }}
                 >
-                  <View>
-                    <Text
-                      style={
-                        {
-                          //fontSize: 18,
+                  <View
+                    style={{
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ alignSelf: "start" }}>
+                      <Text
+                        style={
+                          {
+                            //fontSize: 18,
+                          }
                         }
-                      }
-                    >
-                      Invoice
-                    </Text>
-                    <Text
-                      style={
-                        {
-                          //fontSize: 18,
-                          //textAlign: "center",
+                      >
+                        Invoice
+                      </Text>
+                      <Text
+                        style={
+                          {
+                            //fontSize: 18,
+                            //textAlign: "center",
+                          }
                         }
-                      }
-                    >
-                      Payment Channel
-                    </Text>
-                    <Text>Amount</Text>
-                    {/* <Text>Lot No</Text> */}
-                    {/* <Text
+                      >
+                        Payment
+                      </Text>
+                      <Text>Amount</Text>
+                      <Text>Processed by</Text>
+                      {/* <Text>Lot No</Text> */}
+                      {/* <Text
                       style={
                         {
                           //fontSize: 18,
@@ -425,27 +434,32 @@ const BillingHistory = ({
                       {" "}
                       {/* {item.type == "va" ? "VA" : "Payment Link"} *
                     </Text> */}
-                  </View>
-                  {/* <CheckBox
+                    </View>
+                    {/* <CheckBox
                   value={item.isFinished == "1" ? true : false}
                   //onValueChange={setIsChecked}
                   disabled={true} // Set the disabled prop
                   style={{ marginRight: 8 }}
                 /> */}
-                  <View>
-                    <Text
-                      style={
-                        {
-                          //fontSize: 18,
+                    <View style={{ alignSelf: "start" }}>
+                      <Text
+                        style={
+                          {
+                            //fontSize: 18,
+                          }
                         }
-                      }
-                    >
-                      : {item.doc_no}
-                    </Text>
-                    <Text>: {item.payment_channel}</Text>
-                    <Text>: {removeAfterDot(item.doc_amt)}</Text>
-                    {/* <Text>: {item.lot_no}</Text> */}
-                    {/* <Text
+                      >
+                        : {item.doc_no}
+                      </Text>
+                      <Text>: {item.payment_channel}</Text>
+                      <Text>: {removeAfterDot(item.doc_amt)}</Text>
+                      {/* <Text>: {item.email}</Text> */}
+                      {item.email?.length <= 25 ? (
+                        <Text>: {item.email}</Text>
+                      ) : null}
+
+                      {/* <Text>: {item.lot_no}</Text> */}
+                      {/* <Text
                       style={
                         {
                           //fontSize: 18,
@@ -454,15 +468,21 @@ const BillingHistory = ({
                     >
                       {" "}
                     </Text> */}
+                    </View>
+                    <View>
+                      <Icon
+                        name="angle-right"
+                        size={20}
+                        color={colors.primary}
+                        enableRTL={true}
+                      />
+                    </View>
                   </View>
-                  <View>
-                    <Icon
-                      name="angle-right"
-                      size={20}
-                      color={colors.primary}
-                      enableRTL={true}
-                    />
-                  </View>
+                  {item.email?.length > 25 ? (
+                    <Text>
+                      {"       "}: {item.email}
+                    </Text>
+                  ) : null}
                 </TouchableOpacity>
                 <Modal
                   animationType="slide" // 'slide', 'fade', or 'none'

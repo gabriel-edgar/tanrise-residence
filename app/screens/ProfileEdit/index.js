@@ -46,10 +46,10 @@ const ProfileEdit = (props) => {
   console.log("46 stateRedux: ", stateRedux);
   const token = stateRedux.accessToken;
 
-  const saveProfilerResult = useCallback(
-    () => dispatch(saveProfile()),
-    [dispatch]
-  );
+  // const saveProfilerResult = useCallback(
+  //   () => dispatch(saveProfile()),
+  //   [dispatch]
+  // );
 
   useEffect(() => {
     if (user === null) {
@@ -325,7 +325,10 @@ const ProfileEdit = (props) => {
             </View>
           </TouchableOpacity>
           <View>
-            <Image source={{ uri: `${imageProfile}` }} style={styles.thumb} />
+            <Image
+              source={{ uri: `${imageProfile}` }}
+              style={[styles.thumb, { backgroundColor: "lightgray" }]}
+            />
           </View>
 
           {/* <View style={styles.contentTitle}>

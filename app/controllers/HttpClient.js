@@ -21,48 +21,48 @@ API_URL_LIVE_WEBPBI
 API_URL_LIVE_WEBIFCA
 */
 
-const myFunction = async () => {
-  //const stateRedux = useSelector((state) => state.user);
-  const stateStore = store.getState();
-  const refreshToken = stateStore.user.refreshToken;
-  console.log("2647 RT:", stateStore.user.refreshToken);
-  //console.log("2112345 stateRedux: ", stateRedux);
+// const myFunction = async () => {
+//   //const stateRedux = useSelector((state) => state.user);
+//   const stateStore = store.getState();
+//   const refreshToken = stateStore.user.refreshToken;
+//   console.log("2647 RT:", stateStore.user.refreshToken);
+//   //console.log("2112345 stateRedux: ", stateRedux);
 
-  // Unauthorized
-  //const refreshToken = stateRedux.refreshToken;
+//   // Unauthorized
+//   //const refreshToken = stateRedux.refreshToken;
 
-  if (refreshToken) {
-    try {
-      // Make a request to get a new access token
-      const { data } = await axios.post(API_URL_LOKAL + "/auth/refresh-token", {
-        token: refreshToken,
-      });
+//   if (refreshToken) {
+//     try {
+//       // Make a request to get a new access token
+//       const { data } = await axios.post(API_URL_LOKAL + "/auth/refresh-token", {
+//         token: refreshToken,
+//       });
 
-      // Save the new tokens
-      //localStorage.setItem("accessToken", data.accessToken);
-      //localStorage.setItem("refreshToken", data.refreshToken);
+//       // Save the new tokens
+//       //localStorage.setItem("accessToken", data.accessToken);
+//       //localStorage.setItem("refreshToken", data.refreshToken);
 
-      // const dispatch = useDispatch();
-      // dispatch(refreshTokenAction(data.Token));
-      await store.dispatch(refreshTokenAction(data.Token));
-      console.log("2647 data.Token: ", data.Token);
+//       // const dispatch = useDispatch();
+//       // dispatch(refreshTokenAction(data.Token));
+//       await store.dispatch(refreshTokenAction(data.Token));
+//       console.log("2647 data.Token: ", data.Token);
 
-      // Retry the original request with the new token
-      const newConfig = {
-        ...config,
-        headers: {
-          ...config.headers,
-          Authorization: `Bearer ${data.Token}`,
-        },
-      };
-      return client(newConfig);
-    } catch (refreshError) {
-      // Handle token refresh error
-      console.error("2647 Refresh token failed: ", refreshError);
-      return Promise.reject(refreshError);
-    }
-  }
-};
+//       // Retry the original request with the new token
+//       const newConfig = {
+//         ...config,
+//         headers: {
+//           ...config.headers,
+//           Authorization: `Bearer ${data.Token}`,
+//         },
+//       };
+//       return client(newConfig);
+//     } catch (refreshError) {
+//       // Handle token refresh error
+//       console.error("2647 Refresh token failed: ", refreshError);
+//       return Promise.reject(refreshError);
+//     }
+//   }
+// };
 
 console.log("17 api url lokal", API_URL_LOKAL);
 // const stateStore = store.getState();
@@ -164,13 +164,8 @@ client.interceptors.response.use(
       return client(config);
     }
 
-    if (error.response.data.message == "Token is Invalid") {
-      console.log("Token is Invalid error detected");
-      refreshToken();
-    }
-
     //if (error.response.status === 401)
-    const refreshToken = async () => {
+    const refreshTokenFunc = async () => {
       //alert("131 interceptors: ", error.response.status);
       console.log(
         "131 interceptors: ",
@@ -231,6 +226,11 @@ client.interceptors.response.use(
       // Redirect to login if refresh token is not available
       // window.location.href = '/login';
     };
+
+    if (error.response.data.message == "Token is Invalid") {
+      console.log("Token is Invalid error detected");
+      refreshTokenFunc();
+    }
 
     return Promise.reject(error);
     //return;

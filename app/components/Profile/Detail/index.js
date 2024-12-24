@@ -36,9 +36,9 @@ export default function ProfileDetail(props) {
               image != null
                 ? { uri: image }
                 : // ../ ../../assets/images/image-home/Main_Image.png
-                  require("../../../assets/images/image-home/Main_Image.png")
+                  null //require("../../../assets/images/image-home/Main_Image.png")
             }
-            style={[styles.thumb, styleThumb]}
+            style={[styles.thumb, styleThumb, { backgroundColor: "lightgray" }]}
           />
           {/* <View style={[styles.point, {backgroundColor: colors.primaryLight}]}>
             <Text overline whiteColor semibold>

@@ -6,6 +6,7 @@ import {
   Switch,
   ScrollView,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import { BaseStyle, useTheme } from "@config";
 import { BaseSetting } from "@config";
@@ -24,6 +25,7 @@ export default ImageDetail = (props) => {
 
   const [reminders, setReminders] = useState(true);
   const [fotoProfil, setFotoProfil] = useState(route.params);
+  const [loading, setLoading] = useState(true);
 
   console.log(
     "28 props,: " + JSON.stringify(props) + "\n fotoprofil: " + fotoProfil
@@ -41,6 +43,18 @@ export default ImageDetail = (props) => {
     : forceDark != null
     ? t("always_off")
     : t("dynamic_system");
+
+  const handleLoadStart = () => {
+    setLoading(true);
+  };
+
+  const handleLoadEnd = () => {
+    setLoading(false);
+  };
+
+  const handleError = () => {
+    setLoading(false); // Handle any loading errors
+  };
 
   return (
     <SafeAreaView
@@ -67,6 +81,9 @@ export default ImageDetail = (props) => {
       <ImageBackground
         // source={require('../../assets/images/image-home/Main_Image.png')}
         source={{ uri: fotoProfil }}
+        onLoadStart={handleLoadStart}
+        onLoadEnd={handleLoadEnd}
+        onError={handleError}
         style={{
           // height: '100%',
           // height: 400,
@@ -77,6 +94,7 @@ export default ImageDetail = (props) => {
           // borderBottomRightRadius: 175,
           flex: 1,
           justifyContent: "center",
+          backgroundColor: "lightgray",
         }}
         resizeMode="contain"
         imageStyle={
@@ -87,7 +105,9 @@ export default ImageDetail = (props) => {
             // borderBottomRightRadius: 175,
           }
         }
-      ></ImageBackground>
+      >
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+      </ImageBackground>
     </SafeAreaView>
   );
 };

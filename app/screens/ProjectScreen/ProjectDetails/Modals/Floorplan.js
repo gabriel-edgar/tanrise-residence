@@ -241,7 +241,7 @@ const Floorplan = (props) => {
                     fontWeight: "bold",
                   }}
                 >
-                  {t("Project Plan")}
+                  {t("Property Plan")}
                 </Text>
               </View>
             </View>

@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AllScreens, ModalScreens } from "./config";
 import Profile from "@screens/Profile";
 import SignIn from "../screens/SignIn";
+import SignUp from "../screens/SignUp";
 import Loading from "../screens/Loading";
 
 //import { Alert } from "react-native";
@@ -106,7 +107,7 @@ const Navigator = (props) => {
       //navigation.popToTop();
     };
 
-    PushNotification.onNotification(handleNotification);
+    PushNotification?.onNotification(handleNotification);
 
     // Handle background messages (for when the app is not running)
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
@@ -134,7 +135,9 @@ const Navigator = (props) => {
     });
 
     return () => {
-      PushNotification.offNotification(handleNotification);
+      if (handleNotification) {
+        PushNotification?.offNotification(handleNotification);
+      }
     };
   }, []); // Include user in the dependency array
 
@@ -184,7 +187,7 @@ const Navigator = (props) => {
             notificationConfig.channelId = "high-priority-channel-id";
           }
 
-          PushNotification.localNotification(notificationConfig);
+          PushNotification?.localNotification(notificationConfig);
         }
       );
 
@@ -399,6 +402,7 @@ const Navigator = (props) => {
           />
           <RootStack.Screen name="ResetPassword" component={ResetPassword} />
           <RootStack.Screen name="EProductDetail" component={EProductDetail} />
+          <RootStack.Screen name="SignUp" component={SignUp} />
         </RootStack.Navigator>
       </NavigationContainer>
       {/* </DarkModeProvider> */}

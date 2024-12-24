@@ -170,7 +170,7 @@ const Gallery = (props) => {
                     fontWeight: "bold",
                   }}
                 >
-                  {t("Gallery Project")}
+                  {t("Gallery Property")}
                 </Text>
               </View>
             </View>

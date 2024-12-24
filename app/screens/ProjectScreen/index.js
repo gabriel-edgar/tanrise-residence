@@ -102,7 +102,7 @@ const ProjectScreen = (props) => {
       edges={["right", "top", "left"]}
     ></SafeAreaView> */}
       <Header
-        title={t("Choose Project")}
+        title={t("List Property")}
         renderLeft={() => {
           return (
             <Icon

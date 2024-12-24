@@ -35,7 +35,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from "@react-native-firebase/messaging";
 import { API_URL_LOKAL } from "@env";
 import { useNavigation, useRoute } from "@react-navigation/core";
-import { FontWeight } from "../../config";
 
 const SignIn = (props) => {
   const { navigation } = props;
@@ -194,18 +193,6 @@ const SignIn = (props) => {
     }
   };
 
-  const handleSignUp = () => {
-    // Alert.alert("How to get account:", "Please contact admin to get account", [
-    //   {
-    //     text: "OK",
-    //     onPress: () => console.log("Cancel Pressed"),
-    //     style: "cancel",
-    //   },
-    //   //{ text: "OK", onPress: () => console.log("OK Pressed") },
-    // ]);
-    props.navigation.navigate("SignUp");
-  };
-
   const offsetKeyboard = Platform.select({
     ios: 0,
     android: 20,
@@ -224,6 +211,7 @@ const SignIn = (props) => {
         edges={["right", "top", "left"]}
       > */}
       <View style={{ marginVertical: 50 }} />
+      <View></View>
 
       <View style={styles.contain}>
         <Image
@@ -276,7 +264,6 @@ const SignIn = (props) => {
           <Button
             full
             loading={loading}
-            disabled={loading}
             style={{ marginTop: 20 }}
             // onPress={loginUser}
             onPress={loginklik}
@@ -284,63 +271,6 @@ const SignIn = (props) => {
             {t("sign_in")}
           </Button>
         </View>
-        <TouchableOpacity
-          //onPress={loginklikGhalung}
-          onPress={handleSignUp}
-          style={{
-            //flex: 0,
-            backgroundColor: colors.background,
-            color: colors.primary,
-            borderWidth: 1,
-            borderColor: colors.primary,
-            padding: 15,
-            marginBottom: 20,
-            borderRadius: 10,
-            marginHorizontal: 0,
-          }}
-        >
-          <Text
-            body2
-            grayColor
-            style={{
-              //color: colors.background,
-              color: colors.primary,
-              //backgroundColor: "black",
-              alignSelf: "center",
-              fontSize: 15,
-              //marginRight: 10,
-              //marginBottom: 10,
-              fontWeight: 600,
-            }}
-          >
-            {/* {t("Sign Up")} */}
-            {t("Register")}
-          </Text>
-        </TouchableOpacity>
-        {/* <View
-          style={{
-            alignSelf: "center",
-            width: "80%",
-            marginBottom: 10,
-            height: "5",
-          }}
-        >
-          <Button
-            full
-            loading={loading}
-            disabled={loading}
-            style={{
-              //marginTop: 20
-              // backgroundColor: colors.background,
-              backgroundColor: "blue",
-              color: "red",
-            }}
-            // onPress={loginUser}
-            onPress={loginklik}
-          >
-            {t("sign_in")}
-          </Button>
-        </View> */}
         <View style={styles.contentActionBottom}>
           <TouchableOpacity
             onPress={() => navigation.navigate("ResetPassword")}
@@ -354,6 +284,38 @@ const SignIn = (props) => {
               {t("MGR")}
             </Text>
           </TouchableOpacity> */}
+          <TouchableOpacity
+            //onPress={loginklikGhalung}
+            onPress={() => {
+              Alert.alert(
+                "How to get account:",
+                "Please contact admin to get account",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  //{ text: "OK", onPress: () => console.log("OK Pressed") },
+                ]
+              );
+            }}
+          >
+            <Text
+              body2
+              grayColor
+              style={{
+                //color: colors.background,
+                //color: colors.text,
+                //backgroundColor: "black",
+                alignSelf: "center",
+                //fontSize: 5,
+                //marginRight: 30,
+              }}
+            >
+              {t("Get account")}
+            </Text>
+          </TouchableOpacity>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate("AboutUs")}>
             <Text body2 primaryColor>

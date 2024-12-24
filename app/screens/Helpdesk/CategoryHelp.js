@@ -285,23 +285,47 @@ export default function CategoryHelp({ route }) {
             </Text>
           </View> */}
           <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <RadioButton
-              color={BaseColor.hijau_pkbw}
-              value="U"
-              status={typeLocation == "U" ? "checked" : "unchecked"}
-              //status={"checked"}
+            <View
+              style={{
+                borderWidth: Platform.OS == "ios" ? 2 : null,
+                borderColor: Platform.OS == "ios" ? colors.primary : null,
+                borderRadius: Platform.OS == "ios" ? 50 : null,
+              }}
+            >
+              <RadioButton
+                //color={BaseColor.hijau_pkbw}
+                color={colors.primary}
+                value="U"
+                status={typeLocation == "U" ? "checked" : "unchecked"}
+                //status={"checked"}
+                onPress={() => {
+                  setTypeLocation("U");
+                  //handleSetRadio(true, "U");
+                }}
+              />
+            </View>
+            <TouchableOpacity
+              style={{ justifyContent: "center" }}
               onPress={() => {
                 setTypeLocation("U");
-                //handleSetRadio(true, "U");
               }}
-            />
-            <Text
-              headline
-              style={{ alignSelf: "center", fontWeight: "normal" }}
             >
-              Unit
-            </Text>
-            <View style={{ marginLeft: 60 }}>
+              <Text
+                headline
+                style={{ alignSelf: "center", fontWeight: "normal" }}
+              >
+                {"  "}
+                Unit
+              </Text>
+            </TouchableOpacity>
+            <View
+              style={{
+                marginLeft: 60,
+                borderWidth: Platform.OS == "ios" ? 2 : null,
+                borderColor: Platform.OS == "ios" ? colors.primary : null,
+                borderRadius: Platform.OS == "ios" ? 50 : null,
+              }}
+            >
               <RadioButton
                 color={BaseColor.hijau_pkbw}
                 value="P"
@@ -314,12 +338,19 @@ export default function CategoryHelp({ route }) {
                 style={{ marginLeft: 100 }}
               />
             </View>
-            <Text
-              headline
-              style={{ alignSelf: "center", fontWeight: "normal" }}
+            <TouchableOpacity
+              style={{ justifyContent: "center" }}
+              onPress={() => {
+                setTypeLocation("P");
+              }}
             >
-              Public
-            </Text>
+              <Text
+                headline
+                style={{ alignSelf: "center", fontWeight: "normal" }}
+              >
+                {"  "}Public
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={{ marginTop: 20 }}>
