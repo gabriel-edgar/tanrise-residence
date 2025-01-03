@@ -28,6 +28,7 @@ import { BaseStyle, useTheme, BaseColor } from "@config";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
+// react native select dropdown
 import getUser from "../../selectors/UserSelectors";
 import getProject from "../../selectors/ProjectSelector";
 import React, {
@@ -41,6 +42,7 @@ const { height: deviceHeight, width: deviceWidth } = Dimensions.get("window");
 import moment from "moment";
 import Style from "./styles";
 import { API_URL_LOKAL } from "@env";
+import httpClient from "../../controllers/HttpClient";
 
 const MeterInfoX = (params) => {
   const [dataMember, setDataMember] = useState(params.params);
@@ -49,7 +51,8 @@ const MeterInfoX = (params) => {
   const navigation = useNavigation();
   const [projectDesc, setProjectDesc] = useState("");
   const [chooseMonths, setChooseMonths] = useState("");
-  const [getYears, setGetYears] = useState("");
+  const toYears = moment(new Date()).format("YYYY");
+  const [getYears, setGetYears] = useState(toYears);
   const projectSelector = useSelector((state) => getProject(state));
   const user = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(user != null ? user.user : "");
@@ -57,19 +60,23 @@ const MeterInfoX = (params) => {
   const [dataMeter, setDataMeter] = useState([]);
   const [message, setMessage] = useState("");
   const [errorMsg, setError] = useState("");
-  const [spinner, setSpinner] = useState(true);
+  const [spinner, setSpinner] = useState(false);
+
+  const stateReduxChoosedUnit = useSelector(
+    (state) => state.Dataproject.choosedUnit
+  );
 
   console.log("params >", dataMember);
   console.log("email >", email);
   console.log("user >", user);
-  // console.log('projectSelector >', projectSelector);
-  console.log("projectSelector >", projectSelector.Data[0].entity_cd);
+  console.log("65 projectSelector >", projectSelector);
+  //console.log("projectSelector >", projectSelector.Data[0].entity_cd);
   console.log("getMeterLoad", dataMeter);
   console.log("dataProject", dataProject);
   console.log("chooseMonths", chooseMonths);
 
   const toMonth = moment(new Date()).format("MM");
-  const toYears = moment(new Date()).format("YYYY");
+
   const toMonthName = moment(new Date()).format("MMMM");
 
   const customStyleIndex = 0;
@@ -106,6 +113,7 @@ const MeterInfoX = (params) => {
         "/" +
         `${getEmail}`
     );
+
     fetch(API_URL_LOKAL + "/getProject" + "/" + `${getEmail}`, {
       method: "GET",
       headers: {
@@ -117,7 +125,8 @@ const MeterInfoX = (params) => {
         let resData = res.Data;
         console.log("resData", res.Data);
         console.log("resData1", res.Data);
-        setDataProject(resData);
+        // setDataProject(resData);
+        setDataProject([]);
         // getMeterLoad(resData);
         // onRetrieve(resData);
         setSpinner(false);
@@ -193,14 +202,17 @@ const MeterInfoX = (params) => {
   // };
 
   const onRetrieve = () => {
-    if (!getYears && !chooseMonths && !toMonth) {
+    //alert(getYears);
+    if (!getYears || !chooseMonths || !toMonth) {
       alert("Please fill in Years");
     } else {
       setSpinner(true);
 
       const toEmail = email;
-      const Entitycdz = projectSelector.Data[0].entity_cd;
-      const Projectnoz = projectSelector.Data[0].project_no;
+      const Entitycdz = stateReduxChoosedUnit.entity_cd;
+      const Projectnoz = stateReduxChoosedUnit.project_no;
+      // const Entitycdz = projectSelector.Data[0].entity_cd;
+      // const Projectnoz = projectSelector.Data[0].project_no;
       const Monthz = chooseMonths || toMonth;
       const Yearz = getYears;
 
@@ -222,52 +234,59 @@ const MeterInfoX = (params) => {
           "/" +
           Yearz
       );
-      fetch(
-        API_URL_LOKAL +
-          "/modules/meter/data-filter/IFCAPB/" +
-          Entitycdz +
-          "/" +
-          Projectnoz +
-          "/" +
-          toEmail +
-          "/" +
-          Monthz +
-          "/" +
-          Yearz,
-        {
+      // fetch(
+      //   API_URL_LOKAL +
+      //     "/modules/meter/data-filter/IFCAPB/" +
+      //     Entitycdz +
+      //     "/" +
+      //     Projectnoz +
+      //     "/" +
+      //     toEmail +
+      //     "/" +
+      //     Monthz +
+      //     "/" +
+      //     Yearz,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // )
+      httpClient
+        .request({
+          url: `/modules/meter/data-filter/${user.email}`,
           method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      )
-        .then((response) => response.json())
+        })
+        //.then((response) => response.json())
         .then((res) => {
-          console.log("cek isi RES", res);
-          if (!res.Error) {
-            let resData = res.Data;
-            let resPesan = res.Pesan;
-            let resError = res.Error;
+          //console.log("cek isi RES", res);
+          if (res.data.success) {
+            let resData = res.data;
+            let resMessage = res.message;
+            let resError = res.data.success;
             setDataMeter(resData);
-            setMessage(resPesan);
-            setError(resError);
+            setMessage(resMessage);
+            setError(!resError);
 
             setSpinner(false);
             // console.log('getMeterLoad', this);
           } else {
-            alert(res.Pesan);
+            alert(res.data.message);
             setSpinner(false);
           }
         })
         .catch((error) => {
+          alert(error);
           console.log(error);
+          setSpinner(false);
         });
     }
   };
 
   useEffect(() => {
     setTimeout(() => {
-      getProjects();
+      //getProjects();
     }, 1000);
   }, []);
 
@@ -302,7 +321,7 @@ const MeterInfoX = (params) => {
           height: "100%",
         }}
       >
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "flex-start",
@@ -331,8 +350,8 @@ const MeterInfoX = (params) => {
             selectedValue={projectDesc}
             onValueChange={(val) => setProjectDesc(val)}
           >
-            {/* <Picker.Item label="Java" value="java" /> */}
-            {dataProject.map((data, key) => {
+            {/* <Picker.Item label="Java" value="java" /> 
+            {dataProject?.map((data, key) => {
               return (
                 <Picker.Item
                   key={key}
@@ -342,78 +361,93 @@ const MeterInfoX = (params) => {
               );
             })}
           </Picker>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-          }}
-        >
-          <Text
+        </View> */}
+        <View style={{ alignItems: "center" }}>
+          <View
             style={{
-              fontSize: 16,
-              fontFamily: "Montserrat-SemiBold",
-              color: colors.background == "white" ? "#4E4E4E" : "white",
-              marginTop: 15,
+              flexDirection: "row",
+              justifyContent: "flex-start",
             }}
           >
-            Month
-          </Text>
-          <Picker
-            style={[
-              styles.Dropdown2,
-              {
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Montserrat-SemiBold",
+                color: colors.background == "white" ? "#4E4E4E" : "white",
+                marginTop: 15,
+                //alignSelf: "center",
+              }}
+            >
+              Month
+            </Text>
+            <Picker
+              style={[
+                styles.Dropdown2,
+                {
+                  backgroundColor:
+                    colors.background == "white" ? "#f0f0f0" : "#323232",
+                  //color: colors.background == "white" ? "#777777" : "white",
+                  //color: "white",
+                  //height: 100,
+                },
+              ]}
+              itemStyle={{ color: colors.text }}
+              mode={"dropdown"}
+              selectedValue={chooseMonths || toMonth}
+              onValueChange={(val) => setChooseMonths(val)}
+            >
+              {defaultMonths.map((data, key) => (
+                <Picker.Item
+                  //style={{ color: "white" }}
+                  key={key}
+                  label={data.descs}
+                  value={data.value}
+                />
+              ))}
+            </Picker>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              //justifyContent: "flex-start",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Montserrat-SemiBold",
+                color: colors.background == "white" ? "#4E4E4E" : "white",
+                marginTop: 15,
+                //alignSelf: "baseline",
+                //backgroundColor: "blue",
+              }}
+            >
+              Years
+            </Text>
+            <TextInput
+              style={{
+                height: 55,
                 backgroundColor:
-                  colors.background == "white" ? "#f0f0f0" : "#323232",
-                color: colors.background == "white" ? "#777777" : "white",
-              },
-            ]}
-            mode={"dropdown"}
-            selectedValue={chooseMonths || toMonth}
-            onValueChange={(val) => setChooseMonths(val)}
-          >
-            {defaultMonths.map((data, key) => (
-              <Picker.Item key={key} label={data.descs} value={data.value} />
-            ))}
-          </Picker>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              fontFamily: "Montserrat-SemiBold",
-              color: colors.background == "white" ? "#4E4E4E" : "white",
-              marginTop: 10,
-            }}
-          >
-            Years
-          </Text>
-          <TextInput
-            style={{
-              height: 55,
-              backgroundColor:
-                colors.background == "white" ? "#f5f5f5" : "#323232",
-              color: colors.background == "white" ? "black" : "white",
-              paddingHorizontal: 10,
-              marginBottom: 10,
-              marginLeft: 20,
-              width: 250,
-              // borderRadius: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            // placeholder={defaultYears}
-            placeholder="YYYY"
-            placeholderTextColor="#a9a9a9"
-            // defaultValue={this.state.defaultYears}
-            value={getYears}
-            onChangeText={(val) => setGetYears(val)}
-          />
+                  colors.background == "white" ? "#f5f5f5" : "#323232",
+                color: colors.background == "white" ? "black" : "white",
+                paddingHorizontal: 10,
+                marginBottom: 10,
+                marginLeft: 20,
+                width: 250,
+                // borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                paddingLeft: 20,
+              }}
+              // placeholder={defaultYears}
+              placeholder="YYYY"
+              placeholderTextColor="#a9a9a9"
+              // defaultValue={this.state.defaultYears}
+              value={getYears}
+              onChangeText={(val) => setGetYears(val)}
+            />
+          </View>
         </View>
         <View
           style={{
@@ -433,12 +467,15 @@ const MeterInfoX = (params) => {
               justifyContent: "center",
               alignItems: "center",
               fontSize: 30,
+              borderRadius: 10,
+              marginRight: 20,
             }}
             onPress={() => onRetrieve()}
           >
             <Text
               style={{
                 fontSize: 18,
+                color: "black",
               }}
             >
               Retrieve
@@ -448,58 +485,31 @@ const MeterInfoX = (params) => {
 
         {customStyleIndex === 0 && (
           <ScrollView style={styles.listview}>
-            {spinner ? (
-              <ActivityIndicator size="large" color="#37BEB7" />
-            ) : errorMsg == true ? (
-              <Text>{message}</Text>
-            ) : dataMeter != null ? (
-              dataMeter.map((data, key) => {
-                return (
-                  <View key={key} style={styles.card}>
-                    <View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Text
+            {
+              spinner ? (
+                <ActivityIndicator size="large" color="#37BEB7" />
+              ) : errorMsg == true ? (
+                <Text>{message}</Text>
+              ) : dataMeter != null ? (
+                dataMeter.map((data, key) => {
+                  return (
+                    <View key={key} style={styles.card}>
+                      <View>
+                        <View
                           style={{
-                            fontSize: 18,
-                            fontWeight: "500",
-                            textAlign: "left",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
                           }}
                         >
-                          {data.lot_no}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                            textAlign: "right",
-                            color: "#9B9B9B",
-                          }}
-                        >
-                          {data.descs}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: "500",
-                            textAlign: "left",
-                            color: "#F99B23",
-                          }}
-                        >
-                          {data.name}
-                        </Text>
-                        <View>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              fontWeight: "500",
+                              textAlign: "left",
+                            }}
+                          >
+                            {data.lot_no}
+                          </Text>
                           <Text
                             style={{
                               fontSize: 12,
@@ -508,144 +518,172 @@ const MeterInfoX = (params) => {
                               color: "#9B9B9B",
                             }}
                           >
-                            {data.meter_id}
-                          </Text>
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          borderBottomWidth: 1,
-                          borderBottomColor: "#F3F3F3",
-                          marginTop: 5,
-                        }}
-                      />
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginTop: 5,
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          {/* <Icon name="event" size={13} color="#9B9B9B"/> */}
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                              textAlign: "left",
-                              color: "#9B9B9B",
-                            }}
-                          >
-                            {moment(data.doc_date).format("DD MMM YYYY")}
+                            {data.descs}
                           </Text>
                         </View>
                         <View
                           style={{
                             flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontWeight: "500",
+                              textAlign: "left",
+                              color: "#F99B23",
+                            }}
+                          >
+                            {data.name}
+                          </Text>
+                          <View>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: "500",
+                                textAlign: "right",
+                                color: "#9B9B9B",
+                              }}
+                            >
+                              {data.meter_id}
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#F3F3F3",
+                            marginTop: 5,
+                          }}
+                        />
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 5,
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            {/* <Icon name="event" size={13} color="#9B9B9B"/> */}
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: "500",
+                                textAlign: "left",
+                                color: "#9B9B9B",
+                              }}
+                            >
+                              {moment(data.doc_date).format("DD MMM YYYY")}
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            {/* <Icon name="attach-money" size={13} color="#F99B23"/> */}
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: "500",
+                                textAlign: "left",
+                                color: "#333",
+                              }}
+                            >
+                              {/* {numFormat(data.trx_amt)} */}
+                              {data.trx_amt}
+                            </Text>
+                          </View>
+                        </View>
+
+                        {/* Title */}
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginTop: 8,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "500",
+                            }}
+                          >
+                            Current
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "500",
+                            }}
+                          >
+                            Last
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "500",
+                            }}
+                          >
+                            Total x {parseInt(data.multiplier)}
+                          </Text>
+                        </View>
+
+                        {/* Value */}
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
                             alignItems: "center",
                           }}
                         >
-                          {/* <Icon name="attach-money" size={13} color="#F99B23"/> */}
                           <Text
                             style={{
                               fontSize: 12,
                               fontWeight: "500",
                               textAlign: "left",
-                              color: "#333",
                             }}
                           >
-                            {/* {numFormat(data.trx_amt)} */}
-                            {data.trx_amt}
+                            {data.curr_read + meterType(data.meter_type)}
+                          </Text>
+                          <Text>|</Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "500",
+                              textAlign: "left",
+                            }}
+                          >
+                            {data.last_read + meterType(data.meter_type)}
+                          </Text>
+                          <Text>|</Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "500",
+                              textAlign: "left",
+                            }}
+                          >
+                            {data.usage + meterType(data.meter_type)}
                           </Text>
                         </View>
-                      </View>
-
-                      {/* Title */}
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          marginTop: 8,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                          }}
-                        >
-                          Current
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                          }}
-                        >
-                          Last
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                          }}
-                        >
-                          Total x {parseInt(data.multiplier)}
-                        </Text>
-                      </View>
-
-                      {/* Value */}
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                            textAlign: "left",
-                          }}
-                        >
-                          {data.curr_read + meterType(data.meter_type)}
-                        </Text>
-                        <Text>|</Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                            textAlign: "left",
-                          }}
-                        >
-                          {data.last_read + meterType(data.meter_type)}
-                        </Text>
-                        <Text>|</Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "500",
-                            textAlign: "left",
-                          }}
-                        >
-                          {data.usage + meterType(data.meter_type)}
-                        </Text>
                       </View>
                     </View>
-                  </View>
-                );
-              })
-            ) : (
-              alert("Data not found")
-            )}
+                  );
+                })
+              ) : null
+              //(alert("Data not found"))
+            }
           </ScrollView>
         )}
       </ScrollView>
@@ -756,15 +794,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderColor: "#DDD",
     backgroundColor: "#f0f0f0",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    //paddingHorizontal: 20,
+    //paddingVertical: 15,
     fontSize: 18,
     width: 250,
     marginBottom: 10,
     marginLeft: 15,
-    borderRadius: 5,
-    textAlignVertical: "top",
-    color: "#777777",
+    borderRadius: 10,
+    //textAlignVertical: "top",
+    //color: "#777777",
     // paddingLeft: Fonts.moderateScale(10),
   },
   container: {

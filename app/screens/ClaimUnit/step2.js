@@ -240,6 +240,7 @@ const ClaimUnit2 = (props) => {
           lot_no: itemParam.lot_no,
           entity_cd: itemParam.entity_cd,
           project_no: itemParam.project_no,
+          project_descs: itemParam.projectDescs,
           dataPhoto:
             itemParam?.photo == null ? itemParam.pdf.b64 : itemParam.photo.b64,
           // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
@@ -249,6 +250,7 @@ const ClaimUnit2 = (props) => {
           lot_no: itemParam.lot_no,
           entity_cd: itemParam.entity_cd,
           project_no: itemParam.project_no,
+          project_descs: itemParam.projectDescs,
           dataPhoto:
             itemParam?.photo == null
               ? itemParam.pdf.b64.slice(0, 50)
@@ -889,8 +891,13 @@ const ClaimUnit2 = (props) => {
                   ) : item?.photo != null ? (
                     <View style={{ marginBottom: 10 }}>
                       <TouchableOpacity
+                        activeOpacity={1}
                         style={styles.avatarContainer}
-                        onPress={() => console.log("Photo Tapped")}
+                        onPress={() =>
+                          navigation.navigate("PreviewImageHome", {
+                            images: item.photo.uri, // uri
+                          })
+                        }
                       >
                         <View>
                           <Image style={styles.avatar} source={item.photo} />
@@ -910,6 +917,7 @@ const ClaimUnit2 = (props) => {
                   ) : item?.pdf != null ? (
                     <TouchableOpacity
                       //key={key}
+                      activeOpacity={1}
                       style={[
                         styles.avatarContainer,
                         {

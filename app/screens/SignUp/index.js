@@ -24,15 +24,9 @@ const successInit = {
   address: true,
 };
 
-const dataDummy = [
-  { label: "Project 1", value: "1" },
-  { label: "Project 2", value: "2" },
-  { label: "Project 3", value: "3" },
-  { label: "Project 4", value: "4" },
-  { label: "Project 5", value: "5" },
-  { label: "Project 6", value: "6" },
-  { label: "Project 7", value: "7" },
-  { label: "Project 8", value: "8" },
+const genderList = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
 ];
 
 const SignUp = (props) => {
@@ -44,6 +38,7 @@ const SignUp = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [address, setAddress] = useState("");
+  const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(successInit);
   const [projectList, setProjectList] = useState([]);
@@ -54,7 +49,7 @@ const SignUp = (props) => {
   const [hidePass, setHidePass] = useState(true);
 
   useEffect(() => {
-    setProjectList(dataDummy);
+    //setProjectList(dataDummy);
     onRefresh();
     //console.log("54 colors: ", colors);
   }, []);
@@ -158,30 +153,31 @@ const SignUp = (props) => {
     if (
       name == "" ||
       email == "" ||
-      password == "" ||
-      confirmPassword == "" ||
+      //password == "" ||
+      //confirmPassword == "" ||
       address == ""
     ) {
       alert(
         "Please complete form: \n" +
           [name == "" ? " name," : null] +
           [email == "" ? " email," : null] +
-          [password == "" ? " password," : null] +
-          [confirmPassword == "" ? " confirm password," : null] +
-          [address == "" ? " phone number." : null]
+          //[password == "" ? " password," : null] +
+          //[confirmPassword == "" ? " confirm password," : null] +
+          [address == "" ? " phone number," : null] +
+          [gender == "" ? " gender." : null]
       );
     } else {
       if (!validateEmail(email)) {
         return;
       }
-      if (password != confirmPassword) {
-        alert("Passwords do not match");
-        return;
-      }
-      if (password.length <= 4) {
-        alert("Password must be at least 5 characters long");
-        return;
-      }
+      // if (password != confirmPassword) {
+      //   alert("Passwords do not match");
+      //   return;
+      // }
+      // if (password.length <= 4) {
+      //   alert("Password must be at least 5 characters long");
+      //   return;
+      // }
       setLoading(true);
       // const dataPost = { name, email, address };
       const dataPost = {
@@ -190,10 +186,13 @@ const SignUp = (props) => {
         name: name,
         email: email,
         handphone: address,
-        password: password,
-        confirm_password: confirmPassword,
+        //password: password,
+        //confirm_password: confirmPassword,
+        gender: gender.value,
         platform: Platform.OS,
       };
+      alert(JSON.stringify(dataPost));
+      return;
       // setTimeout(() => {
       //   setLoading(false);
       //   //navigation.navigate("SignIn");
@@ -215,7 +214,9 @@ const SignUp = (props) => {
             return;
           }
           if (res.data.message == "User has been registered successfully") {
-            alert("User has been registered successfully");
+            alert(
+              "Account has been requested, please wait for email for password"
+            );
             setLoading(false);
             navigation.goBack();
             return;
@@ -289,7 +290,8 @@ const SignUp = (props) => {
             }
             value={email}
           />
-          {renderLabel2("Password")}
+
+          {/* {renderLabel2("Password")}
           <TextInput
             style={[BaseStyle.textInput]}
             onChangeText={(text) => setPassword(text)}
@@ -332,10 +334,10 @@ const SignUp = (props) => {
                 color={colors.text}
               />
             }
-          />
+          /> */}
           {renderLabel2("Phone Number")}
           <TextInput
-            style={[BaseStyle.textInput, { marginBottom: 10 }]}
+            style={[BaseStyle.textInput, { marginBottom: 0 }]}
             onChangeText={(text) => setAddress(text)}
             autoCorrect={false}
             placeholder={t("")}
@@ -344,6 +346,54 @@ const SignUp = (props) => {
               success.address ? BaseColor.grayColor : colors.primary
             }
             value={address}
+          />
+          {renderLabel2("Gender")}
+          <Dropdown
+            style={[
+              styles.dropdown,
+              {
+                // color: colors.text,
+                color: "blue",
+                backgroundColor:
+                  colors.background == "#010101" ? "#222222" : "#eeeeee",
+                marginBottom: 20,
+              },
+              isFocus && { borderColor: "blue" },
+            ]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={[
+              styles.selectedTextStyle,
+              { color: colors.text },
+            ]}
+            inputSearchStyle={[styles.inputSearchStyle, { color: colors.text }]}
+            iconStyle={styles.iconStyle}
+            data={genderList}
+            //search
+            itemTextStyle={{
+              //backgroundColor: colors.background,
+              color: colors.text, // Set the label color here
+              //fontSize: 16,
+            }}
+            maxHeight={300}
+            labelField="label"
+            valueField="label"
+            activeColor={colors.background}
+            containerStyle={{
+              backgroundColor: colors.background,
+            }}
+            placeholder={
+              genderList.length != 0 ? "Choose Gender" : "No Data Gender"
+            }
+            disable={genderList.length == 0}
+            //searchPlaceholder="Search..."
+            value={gender}
+            //onFocus={() => setIsFocus(true)}
+            //onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setGender(item);
+              //setProject(item);
+              //setIsFocus(false);
+            }}
           />
           <View style={{ width: "100%" }}>
             <Button

@@ -19,7 +19,13 @@ import * as Utils from "@utils";
 import { BaseColor, BaseStyle, Images, useTheme } from "@config";
 import Helpdesk from "../Helpdesk/index copy";
 
-const Categories = ({ style = {}, menu = [], font, isClaimUnit = false }) => {
+const Categories = ({
+  style = {},
+  menu = [],
+  font,
+  isClaimUnit = false,
+  isOtherMenu = false,
+}) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -90,6 +96,22 @@ const Categories = ({ style = {}, menu = [], font, isClaimUnit = false }) => {
     //isProject: 0,
   };
 
+  const menuMeterInfo = {
+    id: 233,
+    Title: "Meter Info",
+    //IconClass: Platform.OS == "ios" ? "home" : "house-user", //"ellipsis-v",
+    //IconClass: "laptop-house",
+    //IconClass: "house-damage",
+    //IconClass: "building",
+    IconClass: "bolt",
+    Screen: "MeterInfoX",
+    //Screen: "MeterInfo",
+    user_facility: "N",
+    user_menu: "Y",
+    //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
+    //isProject: 0,
+  };
+
   const menuOther = {
     id: 88,
     Title: "Others",
@@ -100,10 +122,13 @@ const Categories = ({ style = {}, menu = [], font, isClaimUnit = false }) => {
     //icon_url: require("../assets/images/icon_at_home/icon-8.jpeg"),
   };
 
-  isClaimUnit;
+  const otherMenu = isOtherMenu ? menu : [];
 
-  // const modMenu = isClaimUnit ? [...menu, menuClaimUnit] : [...menu];
-  const modMenu = true ? [...menu, menuClaimUnit] : [...menu];
+  const modMenu = isClaimUnit ? [...otherMenu, menuClaimUnit] : [...otherMenu];
+
+  //for choosedUnit Check
+  //isClaimUnit.length != 0 ? [...menu, menuClaimUnit] : [...menu];
+  //const modMenu = true ? [...menu, menuClaimUnit] : [...menu];
 
   return (
     <View>

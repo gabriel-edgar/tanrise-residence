@@ -180,8 +180,8 @@ const ClaimUnit = (props) => {
 
   const loadData = async () => {
     //loadDataEntityList();
-    //loadDataProjectList();
-    setProjectList(dataDummyProject);
+    loadDataProjectList();
+    //setProjectList(dataDummyProject);
   };
 
   const loadDataEntityList = async () => {
@@ -208,15 +208,16 @@ const ClaimUnit = (props) => {
   };
 
   const loadDataProjectList = async () => {
-    console.log("96 p entity: ", entity.value.entity_cd);
+    //console.log("96 p entity: ", entity.value.entity_cd);
     await httpClient
       .request({
-        url: "/auth/get-project",
+        url: "/auth/get-entity",
         method: "GET",
         //data,
-        params: { entity_cd: entity.value.entity_cd },
+        //params: { entity_cd: entity.value.entity_cd },
       })
       .then((res) => {
+        //alert(res.data.data);
         //console.log("96 project res: ", res.data.data);
         setProjectList(res.data.data);
         //loadDataUnit(res.data.project);
@@ -619,6 +620,7 @@ const ClaimUnit = (props) => {
               data={projectList.map((item, index) => ({
                 ...item,
                 label: `${[index + 1] + ". " + item.descs} (${
+                  // item.entity_cd + "/" + item.project_no
                   item.project_no
                 })`, // Combine firstName and lastName as the label
               }))}

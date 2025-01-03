@@ -233,6 +233,8 @@ const Home = (props) => {
   const [dotList, setDotList] = useState([]);
   const [dotChooseUnit, setDotChooseUnit] = useState(false);
 
+  const [claimUnit, setClaimUnit] = useState(false);
+
   const [dataNotif, setDataNotif] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -407,6 +409,7 @@ const Home = (props) => {
 
   useEffect(() => {
     onChangelot(stateReduxChoosedUnit, true);
+    console.log("410 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
   }, [stateReduxChoosedUnit]);
 
   //UE4
@@ -436,6 +439,7 @@ const Home = (props) => {
     // console.log("460 run0 : ", fcmToken);
     ////console.log("galery", galery);
     //console.log("uE 1");
+    await loadDataClaimUnit();
     await doSomething();
     //dataImage();
     //console.log("uE 2");
@@ -500,6 +504,7 @@ const Home = (props) => {
         ////console.log("333 loadFinish: ");
       })
       .catch((error) => {
+        alert(error);
         //console.log("333 error: " + error.response.data.message);
       });
 
@@ -595,6 +600,26 @@ const Home = (props) => {
       });
 
     //ChangePassword;
+  };
+
+  const loadDataClaimUnit = async () => {
+    const dataParams = {
+      email: user.email,
+      //email: "m.hafid@ifca.co.id",
+    };
+    await httpClient
+      .request({
+        url: "auth/get-approval",
+        method: "GET",
+        params: dataParams,
+      })
+      .then((res) => {
+        setClaimUnit(true);
+      })
+      .catch((e) => {
+        //alert(e.response.data.message);
+        setClaimUnit(false);
+      });
   };
 
   //untuk load data get chairman message
@@ -2224,7 +2249,10 @@ const Home = (props) => {
                 style={{ marginTop: 10, fontFamily: font }}
                 menu={homeMenu}
                 font={font}
-                isClaimUnit={project.length == 0}
+                //isClaimUnit={project.length == 0}
+                //isClaimUnit={stateReduxChoosedUnit}
+                isClaimUnit={claimUnit}
+                isOtherMenu={project.length != 0}
               />
             ) : (
               <ActivityIndicator />

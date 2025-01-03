@@ -23,9 +23,17 @@ const useCustomTriggerOnFocus = (triggerFunction = () => {}, time = 10000) => {
   //   // Your custom logic here...
   // };
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     onRefresh();
+  //   }, [])
+  //   //onRefresh
+  // );
+
   useFocusEffect(
     //   React.useCallback(() => {
     useCallback(() => {
+      triggerFunction();
       // This will run when ScreenA is focused
       //console.log("ScreenA is focused!");
 

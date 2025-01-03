@@ -7,7 +7,7 @@ import {
   Text,
 } from "@components";
 import { BaseColor, BaseStyle, useTheme } from "@config";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ScrollView,
   View,
@@ -31,6 +31,7 @@ import ReactNativeBlobUtil from "react-native-blob-util";
 import { useSelector, useDispatch } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import { ListItem2 } from "../../components";
+import { useFocusEffect } from "@react-navigation/native";
 
 // individual, child, pembantu
 
@@ -39,6 +40,10 @@ const successInit = {
   email: true,
   address: true,
 };
+
+// R = Register; process
+// A = Approved; A
+// C = Cancel; R
 
 const dummySelectedUnits = [
   {
@@ -56,10 +61,17 @@ const dummySelectedUnits = [
     start_dt: "2023-01-01 00:00:00.000",
     _index: 7,
     projectDescs: "Voza Tower",
-    photo: {},
-    pdf: {},
+    photo: { uri: "https://dev.ifca.co.id:4414/no-image.png" },
+    pdf: null,
     statusUpload: false,
     date: new Date(),
+    status: "A",
+    response: {
+      success: true,
+      message: "Rejected reason for 08/H",
+      data: null,
+    },
+    resubmitButton: false,
   },
   {
     entity_cd: "1003",
@@ -76,10 +88,22 @@ const dummySelectedUnits = [
     start_dt: "2023-01-01 00:00:00.000",
     _index: 4,
     projectDescs: "Voza Tower",
-    photo: {},
-    pdf: {},
+    photo: null,
+    pdf: {
+      name: "some pdf.pdf",
+      uri: "https://api.property365.co.id:4421/tanrise_api/public/storage/photo_users/register/TR-08-02/m.hafid@ifca.co.id.pdf",
+    },
     statusUpload: false,
     date: new Date(),
+    //status: "R",
+    status: "C",
+    response: {
+      success: false,
+      message:
+        "Rejected reason for 08/E abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd",
+      data: null,
+    },
+    resubmitButton: false,
   },
   {
     entity_cd: "1003",
@@ -96,10 +120,17 @@ const dummySelectedUnits = [
     start_dt: "2023-01-01 00:00:00.000",
     _index: 6,
     projectDescs: "Voza Tower",
-    photo: {},
-    pdf: {},
+    photo: { uri: "https://dev.ifca.co.id:4414/no-image.png" },
+    pdf: null,
     statusUpload: false,
     date: new Date(),
+    status: "R", //"P",
+    response: {
+      success: false,
+      message: "Rejected reason for 08/G",
+      data: null,
+    },
+    resubmitButton: false,
   },
 ];
 
@@ -151,8 +182,8 @@ const ClaimUnitList = (props) => {
   const [project, setProject] = useState(null);
   const [unit, setUnit] = useState("");
   //const params = props.route.params;
-  const [selectedUnits, setSelectedUnits] = useState(dummySelectedUnits);
-  const [responseUnits, setResponseUnits] = useState(dummyResponseUnits);
+  const [selectedUnits, setSelectedUnits] = useState([]);
+  const [responseUnits, setResponseUnits] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [open, setOpen] = useState(false);
   //console.log("68 params: ", params);
@@ -160,6 +191,8 @@ const ClaimUnitList = (props) => {
   const [fileUri, setFileUri] = useState(null);
   const [arrayFile, setArrayFile] = useState([]);
   const user = useSelector((state) => getUser(state));
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     onRefresh();
@@ -170,8 +203,8 @@ const ClaimUnitList = (props) => {
     const smallarrayB64Image = selectedUnits.map((item) => {
       return {
         ...item,
-        photo: { ...item.photo, b64: item.photo?.b64?.slice(-50) },
-        pdf: { ...item.pdf, b64: item.pdf?.b64?.slice(-50) },
+        photo: { ...item.photo, b64: item.photo?.b64?.slice(0, 50) },
+        pdf: { ...item.pdf, b64: item.pdf?.b64?.slice(0, 50) },
       };
     });
     console.log("231 smallarrayB64Image: ", JSON.stringify(smallarrayB64Image));
@@ -179,10 +212,53 @@ const ClaimUnitList = (props) => {
 
   const onRefresh = () => {
     //alert("run onRefresh");
-    //loadData();
+    loadData();
   };
 
-  const loadData = async () => {};
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     onRefresh();
+  //   }, [])
+  //   //onRefresh
+  // );
+
+  useCustomTriggerOnFocus(onRefresh, 7500);
+
+  const loadData = async () => {
+    const dataParams = {
+      email: user.email,
+    };
+    await httpClient
+      .request({
+        url: "auth/get-approval",
+        method: "GET",
+        params: dataParams,
+        // params,
+      })
+      .then((res) => {
+        const data = res.data.data;
+        const updatedData = data.map((item) => {
+          const isPNG = item.link_url?.slice(-3) == "png" ? true : false;
+
+          return {
+            ...item, // Spread the original properties of the item
+            resubmitButton: false,
+            pdf: isPNG
+              ? null
+              : {
+                  name: item.audit_date.slice(0, 16) + ".pdf",
+                  uri: item.link_url,
+                },
+            photo: isPNG ? { uri: item.link_url } : null,
+          };
+        });
+        //const modData = data.map;
+        setSelectedUnits(updatedData);
+      })
+      .catch((e) => {
+        //alert(e);
+      });
+  };
 
   const renderLabel1 = (text) => {
     // if (project || isFocus) {
@@ -490,6 +566,7 @@ const ClaimUnitList = (props) => {
       //cropping: true,
       compressImageMaxWidth: 960,
       compressImageMaxHeight: 1280,
+      includeBase64: true,
     })
       .then((img) => {
         //alert(JSON.stringify(image));
@@ -509,6 +586,7 @@ const ClaimUnitList = (props) => {
           height: img.height,
           mime: img.mime,
           size: img.size,
+          b64: "data:image/png;base64," + img.data,
         };
 
         const updatedData = selectedUnits.map((item) =>
@@ -551,11 +629,12 @@ const ClaimUnitList = (props) => {
       //multiple: true,
       compressImageMaxWidth: 960,
       compressImageMaxHeight: 1280,
+      includeBase64: true,
       //multiple: true,
     })
       .then((img) => {
         //alert(JSON.stringify(image));
-        console.log("received images", img);
+        //console.log("received images", img);
 
         // image.map((img) => {
         const imgObj = {
@@ -564,6 +643,7 @@ const ClaimUnitList = (props) => {
           height: img.height,
           mime: img.mime,
           size: img.size,
+          b64: "data:image/png;base64," + img.data,
         };
         // });
 
@@ -581,7 +661,7 @@ const ClaimUnitList = (props) => {
         );
         setSelectedUnits(updatedData);
 
-        console.log("354 updatedData: ", updatedData);
+        //console.log("354 updatedData: ", updatedData);
         // for (var i = 0; i < image.length; i++) {
         //   setImages({
         //     images: [
@@ -621,7 +701,7 @@ const ClaimUnitList = (props) => {
       item.lot_no === itemParam.lot_no &&
       item.entity_cd === itemParam.entity_cd &&
       item.project_no === itemParam.project_no
-        ? { ...item, photo: null }
+        ? { ...item, photo: null, resubmitButton: true }
         : item
     );
     setSelectedUnits(updatedData);
@@ -647,7 +727,7 @@ const ClaimUnitList = (props) => {
       item.lot_no === itemParam.lot_no &&
       item.entity_cd === itemParam.entity_cd &&
       item.project_no === itemParam.project_no
-        ? { ...item, pdf: null }
+        ? { ...item, pdf: null, resubmitButton: true }
         : item
     );
     setSelectedUnits(updatedData);
@@ -746,13 +826,120 @@ const ClaimUnitList = (props) => {
     }
   };
 
+  const handleResubmit = async (itemParam) => {
+    //alert("test");
+    //console.log("751 itemParam: ", itemParam);
+    const dataPost = {
+      email: user.email,
+      lot_no: itemParam.lot_no,
+      entity_cd: itemParam.entity_cd,
+      project_no: itemParam.project_no,
+      dataPhoto:
+        itemParam?.photo == null ? itemParam.pdf?.b64 : itemParam.photo?.b64,
+      // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+    };
+    const dataPost2 = {
+      email: user.email,
+      lot_no: itemParam.lot_no,
+      entity_cd: itemParam.entity_cd,
+      project_no: itemParam.project_no,
+      dataPhoto:
+        itemParam?.photo == null
+          ? itemParam.pdf?.b64.slice(0, 50)
+          : itemParam.photo?.b64.slice(0, 50),
+      // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+    };
+    console.log("247 dataPost2: ", dataPost2);
+
+    //return;
+    //console.log("216 dataPost: ", dataPost);
+    //setLoading(false);
+    //return;
+    try {
+      const response = await httpClient.request({
+        url: "/auth/upload-lot-no",
+        method: "POST",
+        data: dataPost,
+        // params,
+      });
+      // const message = response.data.message;
+      console.log("246 response: ", response.data);
+      // const updatedData = selectedUnits.map((item) =>
+      //   item.lot_no === itemParam.lot_no &&
+      //   item.entity_cd === itemParam.entity_cd &&
+      //   item.project_no === itemParam.project_no
+      //     ? { ...item, response: response.data }
+      //     : item
+      // );
+      // letResponseUnits.push({
+      //   lot_no: itemParam.lot_no,
+      //   entity_cd: itemParam.entity_cd,
+      //   project_no: itemParam.project_no,
+      //   response: response.data,
+      // });
+      //setSelectedUnits(updatedData);
+      alert(response.data.message);
+    } catch (error) {
+      alert(error.response.data.message);
+      // const updatedData = selectedUnits.map((item) =>
+      //   item.lot_no === itemParam.lot_no &&
+      //   item.entity_cd === itemParam.entity_cd &&
+      //   item.project_no === itemParam.project_no
+      //     ? {
+      //         ...item,
+      //         response: { success: false, message: error, data: null },
+      //       }
+      //     : item
+      // );
+      // letResponseUnits.push({
+      //   lot_no: itemParam.lot_no,
+      //   entity_cd: itemParam.entity_cd,
+      //   project_no: itemParam.project_no,
+      //   response: {
+      //     success: false,
+      //     message: JSON.stringify(error.response.data.message),
+      //     data: null,
+      //   },
+      // });
+      //setSelectedUnits(updatedData);
+
+      //console.error("Error fetching data from", url, error);
+    }
+  };
+
+  // Categories for dropdown filter
+  const categories = [
+    { label: "All", value: "All" },
+    { label: "Approved", value: "A" },
+    { label: "Rejected", value: "C" },
+    { label: "Process", value: "R" },
+  ];
+
+  //Filter the list based on the search query
+  const filterTextInput = selectedUnits.filter(
+    (item, index) =>
+      item.lot_no.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.audit_date
+        .slice(0, 16)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    // item.projectDescs.toLowerCase().includes(searchQuery.toLowerCase())
+    // (index + 1 + "").toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredSelectedUnits = selectedItem
+    ? filterTextInput.filter(
+        (item) => item?.status === selectedItem || selectedItem === "All"
+      )
+    : filterTextInput;
+
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
       edges={["right", "top", "left"]}
     >
       <Header
-        title={t("Claim Unit Report")}
+        title={t("Claim Unit History")}
         renderLeft={() => {
           return (
             <Icon
@@ -812,91 +999,391 @@ const ClaimUnitList = (props) => {
             ? "Selected Units:"
             : "Selected Unit:"} */}
         </Text>
-        {selectedUnits.map((item, index) => {
-          const itemFound = responseUnits.find(
-            (itm) =>
-              itm.lot_no === item.lot_no &&
-              itm.entity_cd === item.entity_cd &&
-              itm.project_no === item.project_no
-          );
-          //console.log("654 itemFound: ", itemFound);
-          return (
-            <View
-              key={index}
-              // style={{
-              //   flex: 1, // This makes the container take up the full screen
-              //   justifyContent: "center", // Centers children vertically
-              //   alignItems: "center", // Centers children horizontally
-              // }}
-            >
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+          <TextInput
+            style={{
+              height: 40,
+              borderColor: "#ddd",
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingLeft: 10,
+              marginBottom: 20,
+              //marginHorizontal: 20,
+              //marginRight: 20,
+              width: "40%",
+              //alignSelf: "center",
+            }}
+            placeholder="Search unit..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+          <Dropdown
+            data={categories}
+            labelField="label"
+            valueField="value"
+            placeholder="Filter by status"
+            placeholderStyle={{ color: colors.text }}
+            selectedTextStyle={{ color: colors.text }}
+            value={selectedItem}
+            onChange={(item) => setSelectedItem(item.value)}
+            style={{
+              height: 40,
+              borderColor: "#ddd",
+              borderWidth: 1,
+              borderRadius: 8,
+              marginBottom: 20,
+              paddingHorizontal: 10,
+              width: "40%",
+            }}
+          />
+        </View>
+        {filteredSelectedUnits.length != 0 ? (
+          filteredSelectedUnits.map((item, index) => {
+            // const itemFound = responseUnits.find(
+            //   (itm) =>
+            //     itm.lot_no === item.lot_no &&
+            //     itm.entity_cd === item.entity_cd &&
+            //     itm.project_no === item.project_no
+            // );
+            //console.log("654 itemFound: ", itemFound);
+            return (
               <View
-                style={{
-                  marginHorizontal: 40,
-                  //width: 250, // Fixed width
-                  //textAlign: "center",
-                  fontSize: 20,
-                  //paddingHorizontal: 40,
-
-                  borderRadius: 5,
-                  marginVertical: 3,
-                  //borderWidth: 1,
-                  padding: 5,
-                  borderColor: colors.primary,
-                  //width: "50%",
-                  backgroundColor: colors.background, // Card's background color
-                  //borderRadius: 10, // Rounded corners
-                  //margin: 10, // Margin around the card
-                  //padding: 15, // Padding inside the card
-                  shadowColor: "#000", // Shadow color for iOS and Android
-                  shadowOffset: { width: 0, height: 2 }, // Shadow offset
-                  shadowOpacity: 0.2, // Shadow opacity (iOS)
-                  shadowRadius: 5, // Shadow blur (iOS)
-                  elevation: 3,
-                }}
+                key={index}
+                // style={{
+                //   flex: 1, // This makes the container take up the full screen
+                //   justifyContent: "center", // Centers children vertically
+                //   alignItems: "center", // Centers children horizontally
+                // }}
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginRight: 10,
+                    marginHorizontal: 40,
+                    marginBottom: 20,
+                    //width: 250, // Fixed width
+                    //textAlign: "center",
+                    fontSize: 20,
+                    //paddingHorizontal: 40,
+
+                    borderRadius: 10,
+                    marginVertical: 3,
+                    //borderWidth: 1,
+                    padding: 5,
+                    borderColor: colors.primary,
+                    //width: "50%",
+                    backgroundColor: colors.background, // Card's background color
+                    //borderRadius: 10, // Rounded corners
+                    //margin: 10, // Margin around the card
+                    //padding: 15, // Padding inside the card
+                    shadowColor: "#000", // Shadow color for iOS and Android
+                    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                    shadowOpacity: 0.2, // Shadow opacity (iOS)
+                    shadowRadius: 5, // Shadow blur (iOS)
+                    elevation: 3,
+                    borderWidth: colors.background == "#010101" ? 1 : 0,
                   }}
                 >
-                  <View>
-                    <Text
-                      style={{ borderWidth: 0, width: 200, fontWeight: 600 }}
-                    >
-                      {/* {[index + 1] + ". " + item.label} */}
-                      {index + 1}.{" "}
-                      {
-                        item.lot_no + "\n    " + item.projectDescs
-                        //+ "\n    " //+
-                        //"Submit date: \n    " +
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      //alignItems: "center",
+                      marginRight: 10,
+                    }}
+                  >
+                    <View>
+                      <Text
+                        style={{ borderWidth: 0, width: 200, fontWeight: 600 }}
+                      >
+                        {/* {[index + 1] + ". " + item.label} */}
+                        {/*index + 1.*/}
+                        {"   "}
+                        {
+                          item.lot_no +
+                            "\n   " +
+                            item.audit_date.slice(0, 16) +
+                            "\n   Claim ID: " +
+                            item.registerdtlID
+                          //+ "\n    " //+
+                          //"Submit date: \n    " +
 
-                        //item?.date
-                        // "\n    entity/project code: (" +
-                        // item.entity_cd +
-                        // "/" +
-                        // item.project_no +
-                        // ") "
-                      }
-                    </Text>
-                    {itemFound ? (
-                      itemFound?.response.success == true ? null : (
+                          //item?.date
+                          // "\n    entity/project code: (" +
+                          // item.entity_cd +
+                          // "/" +
+                          // item.project_no +
+                          // ") "
+                        }
+                      </Text>
+                      {item ? (
+                        item?.status != "C" ? null : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              //alert(item?.reason);
+                            }}
+                            style={{
+                              //color: "red",
+                              //borderColor: "red",
+                              borderRadius: 10,
+                              //borderWidth: 1,
+                              padding: 7,
+                              //textAlign: "center",
+                              marginLeft: 10,
+                              width: 200,
+                              marginTop: 10,
+                              backgroundColor: colors.background, // Card's background color
+                              //borderRadius: 10, // Rounded corners
+                              //margin: 10, // Margin around the card
+                              //padding: 15, // Padding inside the card
+                              shadowColor: "#000", // Shadow color for iOS and Android
+                              shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                              shadowOpacity: 0.2, // Shadow opacity (iOS)
+                              shadowRadius: 5, // Shadow blur (iOS)
+                              elevation: 3,
+                            }}
+                          >
+                            <Text style={{ fontWeight: 600 }}>
+                              Rejected reason:
+                            </Text>
+                            <Text>{item.reason}</Text>
+                          </TouchableOpacity>
+                        )
+                      ) : null}
+                    </View>
+                    {item ? (
+                      item?.status != "C" ? (
+                        item?.status == "A" ? (
+                          <Text
+                            style={{
+                              color: "green",
+                              borderColor: "green",
+                              borderRadius: 5,
+                              borderWidth: 1,
+                              padding: 3,
+                              marginTop: 10,
+                              marginBottom: 15,
+                            }}
+                          >
+                            Approved
+                          </Text>
+                        ) : (
+                          <Text
+                            style={{
+                              color: "black",
+                              borderColor: "black",
+                              borderRadius: 5,
+                              borderWidth: 1,
+                              padding: 3,
+                              marginTop: 10,
+                              paddingBottom: 0,
+                              marginBottom: 15,
+                            }}
+                          >
+                            Process
+                          </Text>
+                        )
+                      ) : (
                         <TouchableOpacity
                           onPress={() => {
-                            alert(itemFound.response?.message);
+                            //alert(item.response?.message);
                           }}
+                          style={{ marginTop: 10 }}
+                        >
+                          <Text
+                            style={{
+                              color: "red",
+                              borderColor: "red",
+                              borderRadius: 5,
+                              borderWidth: 1,
+                              padding: 3,
+                            }}
+                          >
+                            Rejected
+                          </Text>
+                        </TouchableOpacity>
+                      )
+                    ) : null}
+                  </View>
+                  {/* <Text style={{ fontSize: 13 }}>
+                {
+                  "    " + item.projectDescs
+                  // "\n    entity/project code: (" +
+                  // item.entity_cd +
+                  // "/" +
+                  // item.project_no +
+                  // ") "
+                }
+              </Text> */}
+                  <View style={{ alignSelf: "center" }}>
+                    {/* {item?.photo == null && item?.pdf == null ? ( */}
+                    {false ? (
+                      arrayFile.length > 0 ? null : (
+                        // <View style={{ height: 100, justifyContent: "center" }}>
+                        //   {/* <Text>image</Text> */}
+                        // </View>
+                        <View
                           style={{
+                            height: 230,
+                            justifyContent: "center",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => handlePhotoPick(item)}
+                            style={[
+                              {
+                                width: "40%",
+                                marginVertical: 10,
+                                padding: 10,
+                                borderColor: "#9B9B9B",
+                                borderWidth: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 5,
+                                marginRight: 20,
+                              },
+                              { marginBottom: 20, alignSelf: "center" },
+                            ]}
+                          >
+                            <Text style={{ color: colors.text }}>
+                              Add Photo
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => pickDocument(item)}
+                            style={[
+                              {
+                                width: "40%",
+                                marginVertical: 10,
+                                paddingVertical: 10,
+                                borderColor: "#9B9B9B",
+                                borderWidth: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 5,
+                                height: null,
+                              },
+                              { marginBottom: 20, alignSelf: "center" },
+                            ]}
+                          >
+                            <Text style={{ color: colors.text }}>Add PDF</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )
+                    ) : item?.photo != null ? (
+                      <View style={{ marginBottom: 10 }}>
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          style={styles.avatarContainer}
+                          //onPress={() => console.log("Photo Tapped")}
+                          onPress={() =>
+                            navigation.navigate("PreviewImageHome", {
+                              images: item.photo.uri, // uri
+                              //title: "Photo", // off now
+                            })
+                          }
+                        >
+                          <View>
+                            <Image style={styles.avatar} source={item.photo} />
+                            {/* {item.status == "A" || item.status == "R" ? null : ( */}
+                            {true ? null : (
+                              <Icon
+                                onPress={() => removePhoto(item)}
+                                name="times"
+                                size={18}
+                                // color="#5A110D"
+                                color={colors.primary}
+                                style={[styles.iconRemove, { marginLeft: 5 }]}
+                                enableRTL={true}
+                              />
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    ) : item?.pdf != null ? (
+                      <TouchableOpacity
+                        //key={key}
+                        activeOpacity={1}
+                        style={[
+                          styles.avatarContainer,
+                          {
+                            //height: null,
+                            //padding: 10,
+                            backgroundColor: colors.background,
+                            marginBottom: 20,
+                            borderWidth: 0,
+                          },
+                        ]}
+                        //onPress={() => console.log("Photo Tapped")}
+                      >
+                        <View
+                          style={[
+                            styles.avatarContainer,
+                            {
+                              height: null,
+                              padding: 10,
+                              backgroundColor: colors.background,
+                              marginBottom: 20,
+                            },
+                          ]}
+                        >
+                          {/* <Image style={styles.avatar} source={images[key]} /> */}
+                          <Text>{item.pdf?.name}</Text>
+                          {/* {item.status == "A" || item.status == "R" ? null : ( */}
+                          {true ? null : (
+                            <Icon
+                              onPress={() => removeArrayFile(item)}
+                              name="times"
+                              size={18}
+                              // color="#5A110D"
+                              color={colors.primary}
+                              style={[
+                                styles.iconRemove,
+                                {
+                                  //marginLeft: 5,
+                                  position: "absolute",
+                                  right: -5,
+                                  top: -10,
+                                  //backgroundColor: "red",
+                                  borderRadius: 100,
+                                },
+                              ]}
+                              enableRTL={true}
+                            />
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    ) : null}
+                    {item ? (
+                      // item.status == "A" || item.status == "R" ? null : (
+                      true ? null : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            //alert("Resubmit");
+                            handleResubmit(item);
+                          }}
+                          disabled={
+                            (item.photo == null && item.pdf == null) ||
+                            !item.resubmitButton
+                          }
+                          style={{
+                            alignSelf: "center",
                             //color: "red",
-                            //borderColor: "red",
+                            borderColor: "white",
                             borderRadius: 10,
-                            //borderWidth: 1,
+                            borderWidth: colors.background == "#010101" ? 1 : 0,
                             padding: 7,
                             //textAlign: "center",
-                            marginLeft: 10,
+                            margin: 10,
                             width: 200,
-                            marginTop: 10,
+                            marginTop: 0,
+                            marginBottom: 15,
+                            //marginTop: 10,
+                            opacity:
+                              (item.photo == null && item.pdf == null) ||
+                              !item.resubmitButton
+                                ? 0.5
+                                : 1,
+
                             backgroundColor: colors.background, // Card's background color
                             //borderRadius: 10, // Rounded corners
                             //margin: 10, // Margin around the card
@@ -908,225 +1395,22 @@ const ClaimUnitList = (props) => {
                             elevation: 3,
                           }}
                         >
-                          <Text style={{ fontWeight: 600 }}>
-                            Rejected reason:
+                          <Text
+                            style={{ fontWeight: 600, textAlign: "center" }}
+                          >
+                            Resubmit
                           </Text>
-                          <Text>{itemFound.response?.message}</Text>
                         </TouchableOpacity>
                       )
                     ) : null}
                   </View>
-                  {itemFound ? (
-                    itemFound?.response.success == true ? (
-                      <Text
-                        style={{
-                          color: "green",
-                          borderColor: "green",
-                          borderRadius: 3,
-                          borderWidth: 1,
-                          padding: 3,
-                        }}
-                      >
-                        Approved
-                      </Text>
-                    ) : (
-                      <TouchableOpacity
-                        onPress={() => {
-                          alert(itemFound.response?.message);
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: "red",
-                            borderColor: "red",
-                            borderRadius: 3,
-                            borderWidth: 1,
-                            padding: 3,
-                          }}
-                        >
-                          Rejected
-                        </Text>
-                      </TouchableOpacity>
-                    )
-                  ) : null}
-                </View>
-                {/* <Text style={{ fontSize: 13 }}>
-                {
-                  "    " + item.projectDescs
-                  // "\n    entity/project code: (" +
-                  // item.entity_cd +
-                  // "/" +
-                  // item.project_no +
-                  // ") "
-                }
-              </Text> */}
-                <View style={{ alignSelf: "center" }}>
-                  {item?.photo == null && item?.pdf == null ? (
-                    arrayFile.length > 0 ? null : (
-                      // <View style={{ height: 100, justifyContent: "center" }}>
-                      //   {/* <Text>image</Text> */}
-                      // </View>
-                      <View
-                        style={{
-                          height: 230,
-                          justifyContent: "center",
-                          flexDirection: "row",
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={() => handlePhotoPick(item)}
-                          style={[
-                            {
-                              width: "40%",
-                              marginVertical: 10,
-                              padding: 10,
-                              borderColor: "#9B9B9B",
-                              borderWidth: 1,
-                              justifyContent: "center",
-                              alignItems: "center",
-                              borderRadius: 5,
-                              marginRight: 20,
-                            },
-                            { marginBottom: 20, alignSelf: "center" },
-                          ]}
-                        >
-                          <Text style={{ color: colors.text }}>Add Photo</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => pickDocument(item)}
-                          style={[
-                            {
-                              width: "40%",
-                              marginVertical: 10,
-                              paddingVertical: 10,
-                              borderColor: "#9B9B9B",
-                              borderWidth: 1,
-                              justifyContent: "center",
-                              alignItems: "center",
-                              borderRadius: 5,
-                              height: null,
-                            },
-                            { marginBottom: 20, alignSelf: "center" },
-                          ]}
-                        >
-                          <Text style={{ color: colors.text }}>Add PDF</Text>
-                        </TouchableOpacity>
-                      </View>
-                    )
-                  ) : item?.photo != null ? (
-                    <View style={{ marginBottom: 10 }}>
-                      <TouchableOpacity
-                        style={styles.avatarContainer}
-                        onPress={() => console.log("Photo Tapped")}
-                      >
-                        <View>
-                          <Image style={styles.avatar} source={item.photo} />
-
-                          <Icon
-                            onPress={() => removePhoto(item)}
-                            name="times"
-                            size={18}
-                            // color="#5A110D"
-                            color={colors.primary}
-                            style={[styles.iconRemove, { marginLeft: 5 }]}
-                            enableRTL={true}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ) : item?.pdf != null ? (
-                    <TouchableOpacity
-                      //key={key}
-                      style={[
-                        styles.avatarContainer,
-                        {
-                          //height: null,
-                          //padding: 10,
-                          //backgroundColor: colors.background,
-                          marginBottom: 20,
-                          borderWidth: 0,
-                        },
-                      ]}
-                      //onPress={() => console.log("Photo Tapped")}
-                    >
-                      <View
-                        style={[
-                          styles.avatarContainer,
-                          {
-                            height: null,
-                            padding: 10,
-                            backgroundColor: colors.background,
-                            marginBottom: 20,
-                          },
-                        ]}
-                      >
-                        {/* <Image style={styles.avatar} source={images[key]} /> */}
-                        <Text>{item.pdf?.name}</Text>
-                        <Icon
-                          onPress={() => removeArrayFile(item)}
-                          name="times"
-                          size={18}
-                          // color="#5A110D"
-                          color={colors.primary}
-                          style={[
-                            styles.iconRemove,
-                            {
-                              //marginLeft: 5,
-                              position: "absolute",
-                              right: -5,
-                              top: -10,
-                              //backgroundColor: "red",
-                              borderRadius: 100,
-                            },
-                          ]}
-                          enableRTL={true}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  ) : null}
-                  {itemFound ? (
-                    itemFound?.response.success == true ? null : (
-                      <TouchableOpacity
-                        onPress={() => {
-                          //alert(itemFound.response?.message);
-                          alert("Resubmit");
-                        }}
-                        style={{
-                          alignSelf: "center",
-                          //color: "red",
-                          //borderColor: "red",
-                          borderRadius: 10,
-                          //borderWidth: 1,
-                          padding: 7,
-                          //textAlign: "center",
-                          margin: 10,
-                          width: 200,
-                          marginTop: 0,
-                          marginBottom: 15,
-                          //marginTop: 10,
-                          backgroundColor: colors.background, // Card's background color
-                          //borderRadius: 10, // Rounded corners
-                          //margin: 10, // Margin around the card
-                          //padding: 15, // Padding inside the card
-                          shadowColor: "#000", // Shadow color for iOS and Android
-                          shadowOffset: { width: 0, height: 2 }, // Shadow offset
-                          shadowOpacity: 0.2, // Shadow opacity (iOS)
-                          shadowRadius: 5, // Shadow blur (iOS)
-                          elevation: 3,
-                        }}
-                      >
-                        <Text style={{ fontWeight: 600, textAlign: "center" }}>
-                          Resubmit
-                        </Text>
-                        {/* <Text>{itemFound.response?.message}</Text> */}
-                      </TouchableOpacity>
-                    )
-                  ) : null}
                 </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })
+        ) : (
+          <Text style={{ textAlign: "center" }}>No Data</Text>
+        )}
       </ScrollView>
 
       <View

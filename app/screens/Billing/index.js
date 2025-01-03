@@ -84,8 +84,8 @@ const Billing = (
   const [spinner, setSpinner] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  const stateRedux = useSelector((state) => state.user);
-  console.log("81 accessTokenStateRedux: ", stateRedux.accessToken);
+  // const stateRedux = useSelector((state) => state.user);
+  // console.log("81 accessTokenStateRedux: ", stateRedux.accessToken);
 
   const stateStore = store.getState();
   const token = stateStore.user.accessToken;

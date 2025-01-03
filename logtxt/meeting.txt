@@ -6,3 +6,4 @@ v summary add uploaded
 residence 
 v button register
 just project
+meter info

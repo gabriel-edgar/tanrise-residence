@@ -69,9 +69,9 @@ class UserController {
       if (error.response) {
         // Request made and server responded with a status code
         // that falls out of the range of 2xx
-        console.log("64 Error Status:", error.response.status); // 404
-        console.log("64 Error Data:", error.response.data); // Response data if available
-        console.log("64 Error Headers:", error.response.headers); // Response headers if available
+        console.log("25 Error Status:", error.response.status); // 404
+        console.log("25 Error Data:", error.response.data); // Response data if available
+        console.log("25 Error Headers:", error.response.headers); // Response headers if available
       }
     }
   };

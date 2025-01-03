@@ -143,10 +143,16 @@ client.interceptors.response.use(
   // }
 
   async (error) => {
+    //alert(error);
     //console.log("134 client.interceptors.response.use");
+    console.log("148 error: ", error);
+    if (error.message === "Network Error") {
+      //alert("ne detected");
+      return Promise.reject(error);
+    }
 
     const {
-      response: { status, config },
+      response: { config },
     } = error;
 
     // console.log(
