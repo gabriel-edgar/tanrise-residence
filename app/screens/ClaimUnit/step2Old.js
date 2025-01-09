@@ -121,7 +121,7 @@ const ClaimUnit2 = (props) => {
     return (
       <Text
         style={[
-          { marginTop: 10, alignSelf: "left", marginLeft: 10 },
+          { marginTop: 10, alignSelf: "flex-start", marginLeft: 10 },
           customStyle,
         ]}
       >

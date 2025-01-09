@@ -121,7 +121,7 @@ const SignUp = (props) => {
         style={[
           {
             marginTop: 10,
-            alignSelf: "left",
+            alignSelf: "flex-start",
             marginLeft: 10,
             //JustifySelf: "left",
             //textAlign: "left",
@@ -153,16 +153,16 @@ const SignUp = (props) => {
     if (
       name == "" ||
       email == "" ||
-      //password == "" ||
-      //confirmPassword == "" ||
+      password == "" ||
+      confirmPassword == "" ||
       address == ""
     ) {
       alert(
         "Please complete form: \n" +
           [name == "" ? " name," : null] +
           [email == "" ? " email," : null] +
-          //[password == "" ? " password," : null] +
-          //[confirmPassword == "" ? " confirm password," : null] +
+          [password == "" ? " password," : null] +
+          [confirmPassword == "" ? " confirm password," : null] +
           [address == "" ? " phone number," : null] +
           [gender == "" ? " gender." : null]
       );
@@ -170,14 +170,14 @@ const SignUp = (props) => {
       if (!validateEmail(email)) {
         return;
       }
-      // if (password != confirmPassword) {
-      //   alert("Passwords do not match");
-      //   return;
-      // }
-      // if (password.length <= 4) {
-      //   alert("Password must be at least 5 characters long");
-      //   return;
-      // }
+      if (password != confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+      if (password.length <= 4) {
+        alert("Password must be at least 5 characters long");
+        return;
+      }
       setLoading(true);
       // const dataPost = { name, email, address };
       const dataPost = {
@@ -186,13 +186,13 @@ const SignUp = (props) => {
         name: name,
         email: email,
         handphone: address,
-        //password: password,
-        //confirm_password: confirmPassword,
+        password: password,
+        confirm_password: password,
         gender: gender.value,
         platform: Platform.OS,
       };
-      alert(JSON.stringify(dataPost));
-      return;
+      //alert(JSON.stringify(dataPost));
+      //return;
       // setTimeout(() => {
       //   setLoading(false);
       //   //navigation.navigate("SignIn");
@@ -215,7 +215,7 @@ const SignUp = (props) => {
           }
           if (res.data.message == "User has been registered successfully") {
             alert(
-              "Account has been requested, please wait for email for password"
+              "Account has been requested, please wait for email to get account and password"
             );
             setLoading(false);
             navigation.goBack();
@@ -226,7 +226,7 @@ const SignUp = (props) => {
         })
         .catch((err) => {
           setLoading(false);
-          alert(err);
+          alert(JSON.stringify(err.response.data.message));
         });
     }
   };
@@ -291,7 +291,7 @@ const SignUp = (props) => {
             value={email}
           />
 
-          {/* {renderLabel2("Password")}
+          {renderLabel2("Password")}
           <TextInput
             style={[BaseStyle.textInput]}
             onChangeText={(text) => setPassword(text)}
@@ -334,7 +334,7 @@ const SignUp = (props) => {
                 color={colors.text}
               />
             }
-          /> */}
+          />
           {renderLabel2("Phone Number")}
           <TextInput
             style={[BaseStyle.textInput, { marginBottom: 0 }]}

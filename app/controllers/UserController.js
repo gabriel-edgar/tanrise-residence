@@ -59,6 +59,7 @@ class UserController {
         return result.data;
       }
     } catch (error) {
+      alert(error);
       console.log("25 if errorz: ", error.response.data.message);
       //Alert(error.response.data.message);
       Platform.OS == "android"

@@ -32,6 +32,8 @@ export default function Setting({ navigation }) {
   const [tapCount, setTapCount] = useState(0);
   const [token, setToken] = useState("");
 
+  const testUrl = "https://api.property365.co.id:4421/tanrise_api/api";
+
   // Function to handle the tap
   const handleTap = () => {
     setTapCount((prevCount) => {
@@ -258,12 +260,13 @@ export default function Setting({ navigation }) {
         >
           <Text body1>{t("App Code")}</Text>
           <TouchableHighlight
+            // app code: / dev , D dbtrain, A dblive
             //onPress={() => setModalVisible(true)}
             //onPress={handleTap}
             underlayColor={colors.background}
           >
             <Text body1 grayColor>
-              {API_URL_LOKAL.slice(8, 9).toUpperCase() + ""}
+              {API_URL_LOKAL.slice(46, 47).toUpperCase() + ""}
             </Text>
           </TouchableHighlight>
         </View>

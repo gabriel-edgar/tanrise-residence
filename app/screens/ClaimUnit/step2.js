@@ -16,6 +16,8 @@ import {
   Alert,
   Image,
   TouchableWithoutFeedback,
+  Platform,
+  PermissionsAndroid,
 } from "react-native";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
@@ -138,7 +140,7 @@ const ClaimUnit2 = (props) => {
     return (
       <Text
         style={[
-          { marginTop: 10, alignSelf: "left", marginLeft: 10 },
+          { marginTop: 10, alignSelf: "flex-start", marginLeft: 10 },
           customStyle,
         ]}
       >
@@ -241,6 +243,7 @@ const ClaimUnit2 = (props) => {
           entity_cd: itemParam.entity_cd,
           project_no: itemParam.project_no,
           project_descs: itemParam.projectDescs,
+          platform: Platform.OS,
           dataPhoto:
             itemParam?.photo == null ? itemParam.pdf.b64 : itemParam.photo.b64,
           // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
@@ -251,6 +254,7 @@ const ClaimUnit2 = (props) => {
           entity_cd: itemParam.entity_cd,
           project_no: itemParam.project_no,
           project_descs: itemParam.projectDescs,
+          platform: Platform.OS,
           dataPhoto:
             itemParam?.photo == null
               ? itemParam.pdf.b64.slice(0, 50)
@@ -450,7 +454,7 @@ const ClaimUnit2 = (props) => {
       })
       .catch((e) => {
         //console.log("tag", e);
-        alert("353 e: ", e);
+        alert("353 e: " + e);
       });
   };
 
@@ -584,6 +588,16 @@ const ClaimUnit2 = (props) => {
       //   "434 DocumentPicker: ",
       //   JSON.stringify(typeof DocumentPicker)
       // );
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Storage Permission",
+          message: "We need access to your storage to pick pdf",
+          //buttonNeutral: "Ask Me Later",
+          //buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
         //type: [DocumentPicker.types.images],

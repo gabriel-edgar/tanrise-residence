@@ -72,7 +72,7 @@ const ChangePassword = (props) => {
             console.log("72 error: ", error.response);
             // setModalAlert(true);
             // setMessageAlert(res.data.message);
-            alert(error.response.data.message);
+            alert(JSON.stringify(error.response.data.message));
           });
       } else {
         // navigation.goBack();

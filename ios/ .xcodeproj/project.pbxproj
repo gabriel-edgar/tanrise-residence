@@ -14,6 +14,7 @@
 		1964A5809B69736E21D00366 /* Pods_TanriseResidence.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F03B1DD02B46836928474BD /* Pods_TanriseResidence.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8643E2642C5C9C3F00763A43 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8643540A2C105D3300C69F68 /* GoogleService-Info.plist */; };
+		86708B5E2D27EE4800F9DB6C /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86708B5C2D27EE4800F9DB6C /* test.cpp */; };
 		867AA72E2C5C769D0002425D /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 867AA72D2C5C769D0002425D /* fonts */; };
 		86A697DA2CCF34BF00E1AF29 /* Raleway-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86A697982CCF348B00E1AF29 /* Raleway-BlackItalic.ttf */; };
 		86A697DB2CCF34BF00E1AF29 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86A697992CCF348C00E1AF29 /* Entypo.ttf */; };
@@ -114,6 +115,8 @@
 		8660DDD92C17E77600D24D4A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		8660DDDD2C17E7AA00D24D4A /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		8660DDDE2C17E7AA00D24D4A /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
+		86708B5C2D27EE4800F9DB6C /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
+		86708B5D2D27EE4800F9DB6C /* test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test.hpp; sourceTree = "<group>"; };
 		867AA72D2C5C769D0002425D /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../app/assets/fonts; sourceTree = "<group>"; };
 		86A697982CCF348B00E1AF29 /* Raleway-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Raleway-BlackItalic.ttf"; path = "../app/assets/fonts/Raleway-BlackItalic.ttf"; sourceTree = "<group>"; };
 		86A697992CCF348C00E1AF29 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Entypo.ttf; path = ../app/assets/fonts/Entypo.ttf; sourceTree = "<group>"; };
@@ -237,6 +240,8 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				86D6E7332B0E11360031C35D /* Assets.xcassets */,
+				86708B5C2D27EE4800F9DB6C /* test.cpp */,
+				86708B5D2D27EE4800F9DB6C /* test.hpp */,
 			);
 			name = TanriseResidence;
 			sourceTree = "<group>";
@@ -742,6 +747,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				86708B5E2D27EE4800F9DB6C /* test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -967,10 +973,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -1049,10 +1052,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

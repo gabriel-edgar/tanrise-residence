@@ -279,9 +279,10 @@ export default function SubmitHelpdesk({ route, props }) {
         //   ],
         // }));
       })
-      .catch((e) => {console.log("tag", e);
-alert(e);
-      })
+      .catch((e) => {
+        console.log("tag", e);
+        alert(e);
+      });
   };
 
   const fromGallery = (cropping, mediaType = "photo") => {
@@ -336,6 +337,10 @@ alert(e);
     if (images == 0 || images == "" || images == null) {
       alert("Please Select Photo");
     } else {
+      if (textDescs == "") {
+        alert("Please fill in the Special Notes");
+        return;
+      }
       console.log("getdata storage,", passPropStorage);
       //const passProps = passProp;
       //console.log("passprops", passProps);
@@ -600,7 +605,7 @@ alert(e);
           }}
         ></TextInput>
       </TouchableOpacity> */}
-      
+
       {/*<TouchableOpacity onPress={() => modalBankMaster()}>
         <Text
           style={{
