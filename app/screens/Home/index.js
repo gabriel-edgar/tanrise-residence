@@ -316,13 +316,13 @@ const Home = (props) => {
     },
   };
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
     //user;
     loadData();
     check_version();
     wait(2000).then(() => setRefreshing(false));
-  }, []);
+  };
 
   // useEffect List
   //UE1
@@ -521,7 +521,7 @@ const Home = (props) => {
     await projectDot();
   };
 
-  useCustomTriggerOnFocus(loadData, 15000);
+  useCustomTriggerOnFocus(loadData, 45000);
 
   const projectDot = async () => {
     const arrayNotification = await httpClient
@@ -957,52 +957,35 @@ const Home = (props) => {
     }
   }
 
-  const dataNewsAnnounce = async () => {
-    // //console.log('kok ini gada');
-    // await axios
-    //   .get(API_URL_LOKAL + `/home/news`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     //console.log("420 res news", res.data.data);
-    //     const datanews = res.data.data;
-    //     const slicedatanews = datanews.slice(0, 6);
-    //     //console.log("slice data", slicedatanews);
-    //     setNewsAnnounceSlice(slicedatanews);
-    //     setNewsAnnounce(datanews);
-    //     setLoadNews(false);
-    //     // return res.data;
-    //   })
-    //   .catch((error) => {
-    //     //console.log("420 error get news announce home", error);
-    //     // alert('error get');
-    //   });
-
+  const dataNewsAnnounce = async (project = null) => {
+    let params;
+    if (project == null) {
+      params = {
+        entity_cd: text_project.entity_cd,
+        project_no: text_project.project_no,
+        descs: text_project.descs,
+      };
+    } else {
+      params = {
+        entity_cd: project.entity_cd,
+        project_no: project.project_no,
+      };
+    }
+    //alert(JSON.stringify(params));
     try {
       const result = await httpClient.request({
         url: "/home/news",
         method: "GET",
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
-        params: {
-          entity_cd: stateReduxChoosedProject?.entity_cd,
-          project_no: stateReduxChoosedProject?.project_no,
-        },
+        params: params,
       });
-
-      //console.log("420 news res news", result.data.data);
       const datanews = result.data.data;
       const slicedatanews = datanews.slice(0, 6);
-      //console.log("slice data", slicedatanews);
       setNewsAnnounceSlice(slicedatanews);
       setNewsAnnounce(datanews);
       setLoadNews(false);
     } catch (error) {
-      //console.log("420 news error: ", error);
-      //console.log("420 news error: ", error.response.data.message);
+      //console.log("445 error get news announce home", error);
+      // alert('error get');
     }
   };
 
@@ -1310,7 +1293,7 @@ const Home = (props) => {
     saveUnit({});
 
     //news and promo
-    dataNewsAnnounce();
+    dataNewsAnnounce(project);
     dataPromoClubFacilities();
 
     //dot management
@@ -1821,7 +1804,7 @@ const Home = (props) => {
                   style={{
                     //backgroundColor: "blue",
                     backgroundColor: colors.primary, //"#315447",
-                    height: 30,
+                    height: 35,
                     // width: '100%',
                     width: 350,
                     //justifyContent: "center",
@@ -1930,7 +1913,7 @@ const Home = (props) => {
                           justifyContent: "center",
                           alignItems: "center",
                           width: 20,
-                          height: 20,
+                          height: 35,
                           backgroundColor: "red",
                           position: "absolute",
                           top: -10,
@@ -2039,7 +2022,7 @@ const Home = (props) => {
                   <View
                     style={{
                       backgroundColor: colors.primary, //"#315447",
-                      height: 30,
+                      height: 35,
                       // width: '100%',
                       width: 180,
                       justifyContent: "center",
@@ -2144,7 +2127,7 @@ const Home = (props) => {
                             alignItems: "center",
                             position: "absolute",
                             width: 20,
-                            height: 20,
+                            height: 35,
                             backgroundColor: "red",
                             top: -10,
                             right: -20,
@@ -2162,7 +2145,7 @@ const Home = (props) => {
                   <View
                     style={{
                       backgroundColor: colors.primary, //"#315447",
-                      height: 30,
+                      height: 35,
                       // width: '100%',
                       //width: 150,
                       justifyContent: "center",
@@ -2259,17 +2242,63 @@ const Home = (props) => {
             )}
           </View>
           {/**errot */}
-          <View style={{ marginBottom: 10, flex: 1, fontFamily: font }}>
-            <View style={{ marginLeft: 30, marginTop: 20, marginBottom: 10 }}>
-              <Text
+          <View
+            style={{
+              marginBottom: 10,
+              flex: 1,
+              fontFamily: font,
+              //backgroundColor: "blue",
+            }}
+          >
+            <View
+              style={{
+                //backgroundColor: "red",
+                marginHorizontal: 30,
+                marginTop: 20,
+                //marginBottom: 10,
+                //backgroundColor: colors.primary,
+                //padding: 5,
+                // borderTopLeftRadius: 20,
+                // borderBottomLeftRadius: 7,
+                // borderBottomRightRadius: 20,
+                // borderTopRightRadius: 7,
+                //borderRadius: 20,
+              }}
+            >
+              <View
                 style={{
-                  fontSize: 24,
-                  // color: 'white',
-                  fontFamily: font, //"DMSerifDisplay",
+                  borderRadius: 15,
+                  // borderTopLeftRadius: 15,
+                  // borderBottomRightRadius: 15,
+                  //alignItems: "center",
+                  borderColor: colors.primary,
+                  //borderWidth: 2,
+                  borderLeftWidth: 0,
+                  borderRightWidth: 0,
+                  borderBottomWidth: 0,
+                  //backgroundColor: colors.primary,
                 }}
               >
-                Our Bulletin
-              </Text>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    color: colors.text,
+                    fontFamily: font, //"DMSerifDisplay",
+                    //padding: 3,
+                    //borderTopLeftRadius: 20,
+                  }}
+                >
+                  Our Bulletin
+                </Text>
+                <Text
+                  style={{
+                    //padding: 3,
+                    color: colors.text,
+                  }}
+                >
+                  News
+                </Text>
+              </View>
               <View
                 style={{
                   flexDirection: "row",
@@ -2277,9 +2306,9 @@ const Home = (props) => {
                   marginRight: 20,
                 }}
               >
-                <Text>News</Text>
                 {
-                  newsannounce.length >= 6 ? (
+                  // newsannounce.length >= 6 ? (
+                  false ? (
                     <TouchableOpacity
                       onPress={() => goToMoreNewsAnnounce(newsannounce)}
                     >
@@ -2302,7 +2331,15 @@ const Home = (props) => {
                 }
               </View>
             </View>
-            <View style={{ marginVertical: 10, marginLeft: 20 }}>
+            <View
+              style={
+                {
+                  //marginVertical: 10,
+                  //marginLeft: 20,
+                  //backgroundColor: "blue",
+                }
+              }
+            >
               {loading ? (
                 <ActivityIndicator />
               ) : newsannounceslice.length != 0 ? (
@@ -2316,9 +2353,10 @@ const Home = (props) => {
                 <>
                   <Text
                     style={{
-                      marginLeft: 20,
+                      marginLeft: 30,
                       //backgroundColor: "blue"
-                      color: "grey",
+                      color: "gray",
+                      marginTop: 20,
                     }}
                   >
                     No news right now
@@ -2348,7 +2386,8 @@ const Home = (props) => {
               >
                 <Text>Event and Restaurant</Text>
                 {
-                  eventresto.length >= 6 ? (
+                  // eventresto.length >= 6 ? (
+                  false ? (
                     <TouchableOpacity
                       onPress={() => goToEventResto(eventresto)}
                     >
@@ -2436,7 +2475,8 @@ const Home = (props) => {
               >
                 <Text>Check Our Promo Here</Text>
                 {
-                  promoclubfac.length >= 6 ? (
+                  // promoclubfac.length >= 6 ? (
+                  false ? (
                     <TouchableOpacity
                       onPress={() => goToPromoClubFac(promoclubfac)}
                     >
@@ -2483,53 +2523,6 @@ const Home = (props) => {
                           })
                         }
                       >
-                        {/* <View
-                          key={item.rowID}
-                          style={{
-                            // //width: Dimensions.get("window").width,
-                            // //height: 300, // Adjust height as needed
-                            // overflow: "hidden",
-                            // margin: 5,
-                            // width: 250,
-                            // height: 450,
-                            // //position: "relative",
-                            width: 250, //Dimensions.get("window").width, // Width of the cropped area
-                            height: 450, // Height of the cropped area
-                            overflow: "hidden", // Crops the image to the container
-                            position: "relative",
-                          }}
-                        >
-                          
-                          <Image
-                            source={{ uri: item?.pict }}
-                            style={
-                              ([styles.shadow],
-                              {
-                                // height: 450,
-                                // //margin: 5,
-                                // width: 250,
-                                // borderRadius: 10,
-                                // //paddingLeft: 50,
-                                // //resizeMode: "cover",
-                                // //position: "absolute",
-                                // //position: "relative",
-                                // left: 0,
-                                width: "100%",
-                                height: "100%", // Height of the image
-                                position: "absolute",
-                                right: -20, // Start cropping from the left
-                              })
-                            }
-                            //resizeMode={"cover"}
-                          ></Image>
-                        </View> */}
-                        {/* <View
-                          style={{
-                            flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        > */}
                         <View
                           style={[
                             {

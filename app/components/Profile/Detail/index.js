@@ -25,12 +25,22 @@ export default function ProfileDetail(props) {
   console.log("image di profil detil", image);
   return (
     <TouchableOpacity
-      style={[styles.contain, style]}
-      onPress={onPress}
-      activeOpacity={0.9}
+      style={[
+        styles.contain,
+        {
+          backgroundColor: colors.primary,
+          padding: 10,
+          borderRadius: 40,
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
+          alignContent: "center",
+        },
+        style,
+      ]}
+      activeOpacity={1}
     >
       <View style={[styles.contentLeft, styleLeft]}>
-        <View>
+        <TouchableOpacity onPress={onPress}>
           <Image
             source={
               image != null
@@ -45,9 +55,9 @@ export default function ProfileDetail(props) {
               {point}
             </Text>
           </View> */}
-        </View>
-        <View style={{ alignItems: "flex-start" }}>
-          <Text headline semibold numberOfLines={1}>
+        </TouchableOpacity>
+        <View style={{ alignItems: "flex-start", marginLeft: 5 }}>
+          <Text style={{ color: "white" }} headline semibold numberOfLines={1}>
             {textFirst}
           </Text>
           <Text
@@ -55,12 +65,13 @@ export default function ProfileDetail(props) {
             style={{
               marginTop: 3,
               paddingRight: 10,
+              color: "white",
             }}
             numberOfLines={1}
           >
             {textSecond}
           </Text>
-          <Text footnote grayColor numberOfLines={1}>
+          <Text style={{ color: "white" }} footnote grayColor numberOfLines={1}>
             {textThird}
           </Text>
         </View>

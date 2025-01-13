@@ -374,22 +374,54 @@ const Billing = (
         onPressLeft={() => {
           navigation.goBack();
         }}
-        renderRight={() => {
-          return (
-            <Icon
-              name="clipboard-list"
-              size={28}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        onPressRight={() => {
-          //   name="BillingHistory"
-          //   name="HistoryBilling"
-          //navigation.goBack();
-          navigation.navigate("BillingHistory");
-        }}
+        // renderRight={() => {
+        //   return (
+        //     <View
+        //       style={{
+        //         flexDirection: "row",
+        //         alignItems: "center",
+        //         backgroundColor: "lightgray",
+        //         borderRadius: 10,
+        //         padding: 5,
+        //       }}
+        //     >
+        //       <Icon
+        //         name="clipboard-list"
+        //         size={20}
+        //         color={colors.primary}
+        //         enableRTL={true}
+        //       />
+        //       <Text
+        //         style={{
+        //           textAlign: "center",
+        //           marginLeft: 10,
+        //           fontSize: 12,
+        //           color: "black",
+        //         }}
+        //       >
+        //         {"Payment Active"}
+        //       </Text>
+        //     </View>
+        //   );
+        // }}
+        // renderRight={() => {
+        //   return (
+        //     <>
+        //       <Icon
+        //         name="clipboard-list"
+        //         size={28}
+        //         color={colors.primary}
+        //         enableRTL={true}
+        //       />
+        //     </>
+        //   );
+        // }}
+        // onPressRight={() => {
+        //   //   name="BillingHistory"
+        //   //   name="HistoryBilling"
+        //   //navigation.goBack();
+        //   navigation.navigate("BillingHistory");
+        // }}
       />
       {itemData.isProject == 1 && (
         <>
@@ -429,6 +461,46 @@ const Billing = (
           Lot No {"            "}: {stateReduxChoosedUnit.lot_no}
         </Text>
       </View> */}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("BillingHistory");
+        }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "lightgray",
+          borderRadius: 10,
+          padding: 10,
+          margin: 20,
+          marginTop: 10,
+          width: "50%",
+          alignSelf: "center",
+
+          shadowColor: colors.text, // Shadow color for iOS and Android
+          shadowOffset: { width: 0, height: 2 }, // Shadow offset
+          shadowOpacity: 0.2, // Shadow opacity (iOS)
+          shadowRadius: 5, // Shadow blur (iOS)
+          elevation: 3,
+        }}
+      >
+        <Icon
+          name="clipboard-list"
+          size={20}
+          color={colors.primary}
+          enableRTL={true}
+        />
+        <Text
+          style={{
+            textAlign: "center",
+            marginLeft: 10,
+            fontSize: 16,
+            color: "black",
+          }}
+        >
+          {"Payment Active"}
+        </Text>
+      </TouchableOpacity>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -442,6 +514,11 @@ const Billing = (
                 style={{
                   backgroundColor:
                     tab.id == item.id ? colors.primary : colors.background,
+                  shadowColor: colors.text, // Shadow color for iOS and Android
+                  shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                  shadowOpacity: 0.2, // Shadow opacity (iOS)
+                  shadowRadius: 5, // Shadow blur (iOS)
+                  elevation: 3,
                 }}
                 onPress={() => {
                   enableExperimental();
@@ -452,6 +529,7 @@ const Billing = (
                   body1={tab.id != item.id}
                   light={tab.id != item.id}
                   whiteColor={tab.id == item.id}
+                  style={{ fontSize: 16 }}
                 >
                   {item.title}
                 </Text>
@@ -487,6 +565,17 @@ const Billing = (
                     item={item}
                     scrollToBottom={scrollToBottom}
                     isLast={dataCurrent.length == key + 1}
+                    style={{
+                      borderRadius: 10,
+                      marginTop: 20,
+                      padding: 10,
+                      backgroundColor: colors.background,
+                      shadowColor: colors.text, // Shadow color for iOS and Android
+                      shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                      shadowOpacity: 0.2, // Shadow opacity (iOS)
+                      shadowRadius: 5, // Shadow blur (iOS)
+                      elevation: 3,
+                    }}
                   />
                 ))
               : tab.id == 1 &&
@@ -554,6 +643,17 @@ const Billing = (
                   item={item}
                   scrollToBottom={scrollToBottom}
                   isLast={data.length == key + 1}
+                  style={{
+                    borderRadius: 10,
+                    marginTop: 20,
+                    padding: 10,
+                    backgroundColor: colors.background,
+                    shadowColor: colors.text, // Shadow color for iOS and Android
+                    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                    shadowOpacity: 0.2, // Shadow opacity (iOS)
+                    shadowRadius: 5, // Shadow blur (iOS)
+                    elevation: 3,
+                  }}
                 />
               ))
             : tab.id == 2 && (

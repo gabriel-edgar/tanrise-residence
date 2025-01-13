@@ -314,21 +314,27 @@ const ProfileEdit = (props) => {
       />
       <ScrollView>
         <View style={styles.contain}>
-          <TouchableOpacity onPress={() => handlePhotoPick()}>
-            <View>
-              <Icon
-                name="camera"
-                size={33}
-                color={colors.primary}
-                enableRTL={true}
-              />
-            </View>
-          </TouchableOpacity>
-          <View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "baseline",
+              marginLeft: 30,
+            }}
+          >
             <Image
               source={{ uri: `${imageProfile}` }}
               style={[styles.thumb, { backgroundColor: "lightgray" }]}
             />
+            <TouchableOpacity onPress={() => handlePhotoPick()}>
+              <View>
+                <Icon
+                  name="camera"
+                  size={33}
+                  color={colors.primary}
+                  enableRTL={true}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
 
           {/* <View style={styles.contentTitle}>

@@ -250,7 +250,7 @@ const SignIn = (props) => {
           style={[BaseStyle.textInput]}
           onChangeText={emailChanged}
           autoCorrect={false}
-          placeholder={t("input_id")}
+          placeholder={"Input email"}
           value={email}
           selectionColor={colors.primary}
         />

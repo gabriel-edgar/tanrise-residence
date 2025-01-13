@@ -141,7 +141,8 @@ const Gallery = (props) => {
               backgroundColor: colors.background,
               borderTopRightRadius: 25,
               borderTopLeftRadius: 25,
-              paddingBottom: 40,
+              //paddingBottom: 40,
+              //backgroundColor: "red",
             },
           ]}
         >
@@ -150,7 +151,8 @@ const Gallery = (props) => {
               style={{
                 flexDirection: "row",
                 marginHorizontal: 20,
-                marginVertical: 20,
+                marginTop: 20,
+                //backgroundColor: "blue",
               }}
             >
               {icon}
@@ -182,14 +184,22 @@ const Gallery = (props) => {
                 borderStyle: "solid",
               }}
             ></View> */}
-            <ScrollView>
+            <ScrollView
+              style={
+                {
+                  //backgroundColor: "pink"
+                }
+              }
+            >
               <View
                 style={[
-                  styles.centeredView,
+                  //styles.centeredView,
                   {
                     backgroundColor: colors.background,
                     borderTopRightRadius: 25,
                     borderTopLeftRadius: 25,
+                    //backgroundColor: "green",
+                    marginTop: 10,
                   },
                 ]}
               >

@@ -32,8 +32,6 @@ export default function Setting({ navigation }) {
   const [tapCount, setTapCount] = useState(0);
   const [token, setToken] = useState("");
 
-  const testUrl = "https://api.property365.co.id:4421/tanrise_api/api";
-
   // Function to handle the tap
   const handleTap = () => {
     setTapCount((prevCount) => {
@@ -60,9 +58,9 @@ export default function Setting({ navigation }) {
   console.log("26 darkOption: ", forceDark);
 
   const darkOption = forceDark
-    ? t("always_on")
+    ? "ON"
     : forceDark != null
-    ? t("always_off")
+    ? "OFF"
     : t("dynamic_system");
 
   useEffect(() => {
@@ -260,7 +258,6 @@ export default function Setting({ navigation }) {
         >
           <Text body1>{t("App Code")}</Text>
           <TouchableHighlight
-            // app code: / dev , D dbtrain, A dblive
             //onPress={() => setModalVisible(true)}
             //onPress={handleTap}
             underlayColor={colors.background}

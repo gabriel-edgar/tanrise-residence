@@ -147,7 +147,7 @@ client.interceptors.response.use(
     //console.log("134 client.interceptors.response.use");
     console.log("148 error: ", error);
     if (error.message === "Network Error") {
-      //alert("ne detected");
+      //alert("Network Error");
       return Promise.reject(error);
     }
 

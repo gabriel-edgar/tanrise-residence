@@ -121,7 +121,9 @@ const Profile = (props) => {
 
   const styleItem = {
     ...styles.profileItem,
-    borderBottomColor: colors.border,
+    // borderBottomColor: colors.border,
+    borderBottomColor: "lightgray",
+    borderBottomWidth: 1,
   };
 
   return (
@@ -139,94 +141,116 @@ const Profile = (props) => {
         style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
         edges={["right", "top", "left"]}
       >
-        <Header
-          title={t("Settings")}
-          renderLeft={() => {
-            return (
-              <Icon
-                name="angle-left"
-                size={20}
-                color={colors.primary}
-                enableRTL={true}
-              />
-            );
-          }}
-          onPressLeft={() => {
-            navigation.goBack();
-          }}
-        />
-
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            contentContainerStyle={styles.contain}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          >
-            {user && (
-              <ProfileDetail
-                // image={user.pict}
-                image={fotoprofil}
-                // image={{uri: `${user.pict}`}}
-                textFirst={user.name}
-                textSecond={user.email}
-                onPress={() => {
-                  navigation.navigate("ImageDetail", fotoprofil);
-                }}
-              />
-            )}
-
-            <View style={{ width: "100%" }}>
-              <TouchableOpacity
-                style={styleItem}
-                onPress={() => {
-                  navigation.navigate("Setting");
-                }}
-              >
-                <Text body1>{t("setting")}</Text>
+        <View style={{ backgroundColor: colors.primary }}>
+          <Header
+            title={t("Settings")}
+            renderLeft={() => {
+              return (
                 <Icon
-                  name="angle-right"
-                  size={18}
+                  name="angle-left"
+                  size={20}
                   color={colors.primary}
-                  style={{ marginLeft: 5 }}
                   enableRTL={true}
                 />
-              </TouchableOpacity>
-              {login && (
-                <TouchableOpacity
-                  style={styleItem}
-                  onPress={() => {
-                    navigation.navigate("ProfileEdit");
-                  }}
-                >
-                  <Text body1>{t("edit_profile")}</Text>
-                  <Icon
-                    name="angle-right"
-                    size={18}
-                    color={colors.primary}
-                    style={{ marginLeft: 5 }}
-                    enableRTL={true}
-                  />
-                </TouchableOpacity>
-              )}
-              {login && (
-                <TouchableOpacity
-                  style={styleItem}
-                  onPress={() => {
-                    navigation.navigate("ChangePassword");
-                  }}
-                >
-                  <Text body1>{t("change_password")}</Text>
-                  <Icon
-                    name="angle-right"
-                    size={18}
-                    color={colors.primary}
-                    style={{ marginLeft: 5 }}
-                    enableRTL={true}
-                  />
-                </TouchableOpacity>
-              )}
+              );
+            }}
+            onPressLeft={() => {
+              navigation.goBack();
+            }}
+            style={{
+              backgroundColor: colors.background,
+              //borderBottomRightRadius: 20,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            //backgroundColor: "red"
+          }}
+        >
+          {user && (
+            <ProfileDetail
+              // image={user.pict}
+              image={fotoprofil}
+              // image={{uri: `${user.pict}`}}
+              textFirst={user.name}
+              textSecond={user.email}
+              onPress={() => {
+                navigation.navigate("ImageDetail", fotoprofil);
+              }}
+              style={{ marginLeft: 20 }}
+            />
+          )}
+          <View style={{ backgroundColor: colors.primary }}>
+            <ScrollView
+              contentContainerStyle={[
+                styles.contain,
+                {
+                  backgroundColor: colors.background,
 
-              {/* {login && (
+                  borderTopRightRadius: 40,
+                },
+              ]}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+            >
+              <View
+                style={{
+                  width: "100%", //backgroundColor: "white"
+                }}
+              >
+                <TouchableOpacity
+                  style={styleItem}
+                  onPress={() => {
+                    navigation.navigate("Setting");
+                  }}
+                >
+                  <Text body1>{t("setting")}</Text>
+                  <Icon
+                    name="angle-right"
+                    size={18}
+                    color={colors.primary}
+                    style={{ marginLeft: 5 }}
+                    enableRTL={true}
+                  />
+                </TouchableOpacity>
+                {login && (
+                  <TouchableOpacity
+                    style={styleItem}
+                    onPress={() => {
+                      navigation.navigate("ProfileEdit");
+                    }}
+                  >
+                    <Text body1>{t("edit_profile")}</Text>
+                    <Icon
+                      name="angle-right"
+                      size={18}
+                      color={colors.primary}
+                      style={{ marginLeft: 5 }}
+                      enableRTL={true}
+                    />
+                  </TouchableOpacity>
+                )}
+                {login && (
+                  <TouchableOpacity
+                    style={styleItem}
+                    onPress={() => {
+                      navigation.navigate("ChangePassword");
+                    }}
+                  >
+                    <Text body1>{t("change_password")}</Text>
+                    <Icon
+                      name="angle-right"
+                      size={18}
+                      color={colors.primary}
+                      style={{ marginLeft: 5 }}
+                      enableRTL={true}
+                    />
+                  </TouchableOpacity>
+                )}
+
+                {/* {login && (
               <TouchableOpacity
                 style={styleItem}
                 onPress={() => {
@@ -243,7 +267,7 @@ const Profile = (props) => {
               </TouchableOpacity>
             )} */}
 
-              {/* {login && (
+                {/* {login && (
               <TouchableOpacity
                 style={styleItem}
                 onPress={() => {
@@ -260,7 +284,7 @@ const Profile = (props) => {
               </TouchableOpacity>
             )} */}
 
-              {/* {login && (
+                {/* {login && (
               <TouchableOpacity
                 style={styleItem}
                 onPress={() => {
@@ -277,7 +301,7 @@ const Profile = (props) => {
               </TouchableOpacity>
             )} */}
 
-              {/* <TouchableOpacity
+                {/* <TouchableOpacity
               style={styleItem}
               onPress={() => {
                 navigation.navigate('PreviewComponent');
@@ -291,7 +315,7 @@ const Profile = (props) => {
                 enableRTL={true}
               />
             </TouchableOpacity> */}
-              {/* <TouchableOpacity
+                {/* <TouchableOpacity
               style={styleItem}
               onPress={() => {
                 navigation.navigate('ContactUs');
@@ -305,40 +329,41 @@ const Profile = (props) => {
                 enableRTL={true}
               />
             </TouchableOpacity> */}
-              <TouchableOpacity
-                style={styleItem}
-                onPress={() => {
-                  navigation.navigate("AboutUs");
-                }}
-              >
-                <Text body1>{t("about_us")}</Text>
-                <Icon
-                  name="angle-right"
-                  size={18}
-                  color={colors.primary}
-                  style={{ marginLeft: 5 }}
-                  enableRTL={true}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styleItem}
-                onPress={() => {
-                  navigation.navigate("Privacy");
-                }}
-              >
-                <Text body1>{t("Privacy Policy")}</Text>
-                <Icon
-                  name="angle-right"
-                  size={18}
-                  color={colors.primary}
-                  style={{ marginLeft: 5 }}
-                  enableRTL={true}
-                />
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+                <TouchableOpacity
+                  style={styleItem}
+                  onPress={() => {
+                    navigation.navigate("AboutUs");
+                  }}
+                >
+                  <Text body1>{t("about_us")}</Text>
+                  <Icon
+                    name="angle-right"
+                    size={18}
+                    color={colors.primary}
+                    style={{ marginLeft: 5 }}
+                    enableRTL={true}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styleItem}
+                  onPress={() => {
+                    navigation.navigate("Privacy");
+                  }}
+                >
+                  <Text body1>{t("Privacy Policy")}</Text>
+                  <Icon
+                    name="angle-right"
+                    size={18}
+                    color={colors.primary}
+                    style={{ marginLeft: 5 }}
+                    enableRTL={true}
+                  />
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
         </View>
-        <View style={{ padding: 10 }}>
+        <View style={{ padding: 10, marginBottom: 20, marginHorizontal: 50 }}>
           <Button full loading={loading} onPress={() => onLogOut()}>
             {t("sign_out")}
           </Button>

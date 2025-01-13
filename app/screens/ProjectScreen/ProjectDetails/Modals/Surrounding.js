@@ -138,7 +138,7 @@ const Surrounding = (props) => {
                       <View
                         style={{
                           borderBottomColor: colors.text,
-                          borderBottomWidth: 1,
+                          //borderBottomWidth: 1,
                           borderStyle: "solid",
                         }}
                       >
@@ -156,7 +156,21 @@ const Surrounding = (props) => {
                       </View>
                     </View>
                     {datas.map((item, index) => (
-                      <View style={{ marginTop: 0 }} key={index}>
+                      <View
+                        style={{
+                          marginTop: 1,
+                          paddingLeft: 15,
+                          borderRadius: 10,
+                          backgroundColor: colors.background,
+                          marginRight: 15,
+                          shadowColor: colors.text, // Shadow color for iOS and Android
+                          shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                          shadowOpacity: 0.2, // Shadow opacity (iOS)
+                          shadowRadius: 5, // Shadow blur (iOS)
+                          elevation: 3, // specifically for Android.
+                        }}
+                        key={index}
+                      >
                         {itemType === item.amenities_type ? (
                           <RenderHtml
                             contentWidth={widthRender}

@@ -256,11 +256,12 @@ const Floorplan = (props) => {
             <ScrollView>
               <View
                 style={[
-                  styles.centeredView,
+                  //styles.centeredView,
                   {
                     backgroundColor: colors.background,
                     borderTopRightRadius: 25,
                     borderTopLeftRadius: 25,
+                    marginTop: 0,
                   },
                 ]}
               >

@@ -59,8 +59,9 @@ class UserController {
         return result.data;
       }
     } catch (error) {
-      alert(error);
-      console.log("25 if errorz: ", error.response.data.message);
+      error?.message == "Network Error" ? alert("Network Error") : null;
+
+      console.log("25 if errorz: ", error);
       //Alert(error.response.data.message);
       Platform.OS == "android"
         ? Alert.alert("Sorry! ", JSON.stringify(error.response.data.message))

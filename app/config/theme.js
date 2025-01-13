@@ -116,6 +116,35 @@ export const ThemeSupport = [
     },
   },
   {
+    theme: "blueEmerald",
+    light: {
+      dark: false,
+      colors: {
+        primary: "#38A89B",
+        primaryDark: "#298179",
+        primaryLight: "#7ACBC6",
+        accent: "#FF8A65",
+        background: "white",
+        card: "#F5F5F5",
+        text: "#212121",
+        border: "#c7c7cc",
+      },
+    },
+    dark: {
+      dark: true,
+      colors: {
+        primary: "#38A89B",
+        primaryDark: "#298179",
+        primaryLight: "#7ACBC6",
+        accent: "#FF8A65",
+        background: "#010101",
+        card: "#121212",
+        text: "#e5e5e7",
+        border: "#272729",
+      },
+    },
+  },
+  {
     theme: "green",
     light: {
       dark: false,

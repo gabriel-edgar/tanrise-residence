@@ -37,7 +37,7 @@ export default function SelectDarkOption({ navigation }) {
       <View style={styles.contain}>
         <View style={[styles.contentModal, { backgroundColor: colors.card }]}>
           <View style={{ padding: 8 }}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.item,
                 {
@@ -60,7 +60,7 @@ export default function SelectDarkOption({ navigation }) {
               {forceDarkMode == null && (
                 <Icon name="check" size={18} color={colors.primary} />
               )}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={[
                 styles.item,
@@ -78,7 +78,7 @@ export default function SelectDarkOption({ navigation }) {
                 }}
               >
                 <Text body1 style={{ marginHorizontal: 8 }}>
-                  {t("always_on")}
+                  {"ON"}
                 </Text>
               </View>
               {forceDarkMode == true && (
@@ -96,7 +96,7 @@ export default function SelectDarkOption({ navigation }) {
                 }}
               >
                 <Text body1 style={{ marginHorizontal: 8 }}>
-                  {t("always_off")}
+                  {"OFF"}
                 </Text>
               </View>
               {forceDarkMode == false && (
