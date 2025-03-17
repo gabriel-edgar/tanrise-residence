@@ -238,7 +238,13 @@ const ClaimUnitList = (props) => {
       .then((res) => {
         const data = res.data.data;
         const updatedData = data.map((item) => {
-          const isPNG = item.link_url?.slice(-3) == "png" ? true : false;
+          const isPNG =
+            item.link_url?.slice(-3) == "png" ||
+            item.link_url?.slice(-4) == "jpeg" ||
+            item.link_url?.slice(-3) == "jpg" ||
+            item.link_url?.slice(-3) == "gif"
+              ? true
+              : false;
 
           return {
             ...item, // Spread the original properties of the item

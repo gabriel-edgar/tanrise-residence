@@ -295,7 +295,7 @@ const BillingHistory = ({
     >
       <Header
         //title={t("Invoice History")}
-        title={t("Payment Process")}
+        title={t("Payment Active")}
         renderLeft={() => {
           return (
             <Icon

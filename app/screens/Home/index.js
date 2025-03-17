@@ -160,7 +160,7 @@ const Home = (props) => {
   ////console.log("108 stateReduxOri: ", stateReduxOri);
   // //console.log("123 stateReduxDataUnit: ", stateReduxDataUnit);
   ////console.log("131 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
-  console.log("159 project: ", stateReduxChoosedProject);
+  //console.log("159 project: ", stateReduxChoosedProject);
   // //console.log("109 stateRedux.accessToken: ", stateRedux.accessToken);
   const [token, setToken] = useState(stateRedux.accessToken);
   const notif = useSelector((state) => getNotifRed(state));
@@ -514,14 +514,14 @@ const Home = (props) => {
     // setProjectNo(project[0].project_no);
     ////console.log("272 entity: ", project[0].entity_cd, project[0].project_no);
 
-    //await loadUnit();
+    //news and promo
     await dataNewsAnnounce();
-    //console.log("uE 3");
     await dataPromoClubFacilities();
+
     await projectDot();
   };
 
-  useCustomTriggerOnFocus(loadData, 45000);
+  //useCustomTriggerOnFocus(loadData, 120000);
 
   const projectDot = async () => {
     const arrayNotification = await httpClient
@@ -963,7 +963,7 @@ const Home = (props) => {
       params = {
         entity_cd: text_project.entity_cd,
         project_no: text_project.project_no,
-        descs: text_project.descs,
+        //descs: text_project.descs,
       };
     } else {
       params = {
@@ -989,21 +989,33 @@ const Home = (props) => {
     }
   };
 
-  const dataPromoClubFacilities = async () => {
+  const dataPromoClubFacilities = async (project = null) => {
     // await axios
     //   .get(API_URL_LOKAL + `/home/promo`, {
     //     headers: {
     //       Authorization: `Bearer ${token}`,
     //     },
     //   })
+
+    let params;
+    if (project == null) {
+      params = {
+        entity_cd: text_project.entity_cd,
+        project_no: text_project.project_no,
+        //descs: text_project.descs,
+      };
+    } else {
+      params = {
+        entity_cd: project.entity_cd,
+        project_no: project.project_no,
+      };
+    }
+
     await httpClient
       .request({
         url: "/home/promo",
         method: "GET",
-        params: {
-          entity_cd: stateReduxChoosedProject?.entity_cd,
-          project_no: stateReduxChoosedProject?.project_no,
-        },
+        params: params,
       })
       .then((res) => {
         //console.log("445 res promoclubfacilities", res.data.data);
@@ -1294,7 +1306,7 @@ const Home = (props) => {
 
     //news and promo
     dataNewsAnnounce(project);
-    dataPromoClubFacilities();
+    dataPromoClubFacilities(project);
 
     //dot management
     console.log(
@@ -2342,9 +2354,9 @@ const Home = (props) => {
             >
               {loading ? (
                 <ActivityIndicator />
-              ) : newsannounceslice.length != 0 ? (
+              ) : newsannounce.length != 0 ? (
                 <SliderNews
-                  data={newsannounceslice}
+                  data={newsannounce}
                   local={true}
                   // contentContainerStyle={{paddingHorizontal: 16}}
                   // onPress={//console.log('klik')}

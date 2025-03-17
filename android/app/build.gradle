@@ -89,8 +89,8 @@ android {
         applicationId "com.ifcasoftware.tanriseresidence"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 38
-        versionName "1.0.38"//now
+        versionCode 47
+        versionName "1.0.47"//now
          vectorDrawables.useSupportLibrary = true
          targetSdkVersion rootProject.ext.compileSdkVersion
          multiDexEnabled true //Add this line

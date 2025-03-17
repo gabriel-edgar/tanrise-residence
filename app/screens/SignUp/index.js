@@ -214,9 +214,7 @@ const SignUp = (props) => {
             return;
           }
           if (res.data.message == "User has been registered successfully") {
-            alert(
-              "Account has been requested, please wait for email to get account and password"
-            );
+            alert(res.data.message);
             setLoading(false);
             navigation.goBack();
             return;

@@ -505,8 +505,19 @@ const Billing = (
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         ref={scrollViewRef}
+        style={{
+          //backgroundColor: 'blue',
+          paddingBottom: 20,
+        }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            //backgroundColor: "blue",
+            paddingTop: 5,
+          }}
+        >
           {TABS.map((item, index) => (
             <View key={index} style={{ flex: 1, paddingHorizontal: 20 }}>
               <Tag
@@ -540,7 +551,14 @@ const Billing = (
         {loading ? (
           <ActivityIndicator />
         ) : (
-          <View style={{ flex: 1, paddingHorizontal: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 20,
+              //backgroundColor: "blue",
+              paddingBottom: 5,
+            }}
+          >
             {tab.id == 1 && dataCurrent != 0
               ? dataCurrent.map((item, key) => (
                   <ListTransactionExpand
@@ -618,7 +636,14 @@ const Billing = (
           </View>
         )}
 
-        <View style={{ flex: 1, paddingHorizontal: 20 }}>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 20,
+            paddingBottom: 5,
+            //backgroundColor: "blue",
+          }}
+        >
           {tab.id == 2 && data.length != 0
             ? data.map((item, key) => (
                 <ListTransactionExpand

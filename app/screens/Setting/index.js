@@ -57,11 +57,7 @@ export default function Setting({ navigation }) {
 
   console.log("26 darkOption: ", forceDark);
 
-  const darkOption = forceDark
-    ? "ON"
-    : forceDark != null
-    ? "OFF"
-    : t("dynamic_system");
+  const darkOption = forceDark ? "ON" : forceDark != null ? "OFF" : "OFF"; //t("dynamic_system");
 
   useEffect(() => {
     loadData();

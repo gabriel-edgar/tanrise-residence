@@ -55,8 +55,37 @@ class UserController {
           ? Alert.alert("Sorry! ", JSON.stringify(result.data.message))
           : alert(JSON.stringify(result.data.message)); //Alert.prompt("Sorry!", msgPesan);
       } else {
-        //Alert("55 success", result.message);
+        //alert("55 success", result.message);
         return result.data;
+        // const dummyData = {
+        //   success: true,
+        //   message: "success",
+        //   data: {
+        //     Token:
+        //       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVkZW50aWFscyI6eyJlbWFpbCI6Im0uaGFmaWRAaWZjYS5jby5pZCIsInBhc3N3b3JkIjoicGFzczEyMzQifX0.FqNcCroF5bpDPcjcStwGbYyV__kfbzg1DGJI4_yMX6s",
+        //     refreshToken:
+        //       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVkZW50aWFscyI6eyJlbWFpbCI6Im0uaGFmaWRAaWZjYS5jby5pZCIsInBhc3N3b3JkIjoicGFzczEyMzQifX0.FqNcCroF5bpDPcjcStwGbYyV__kfbzg1DGJI4_yMX6s",
+        //     userData: {
+        //       rowID: "13",
+        //       email: "suen_ie@yahoo.com",
+        //       password: "4B455C53E01C17FDEDBB716DFF8A7B72",
+        //       name: "suen_ie",
+        //       userID: "HAFID",
+        //       Group_Cd: "ENG",
+        //       gender: "Male",
+        //       pict: "https://dev.ifca.co.id:4414/no-image.png",
+        //       Handphone: "0857732872",
+        //       Status: "Y",
+        //       isResetLogin: "0",
+        //       web_admin: "N",
+        //       resident_apps: "Y",
+        //       audit_user: "MGR",
+        //       audit_date: "2025-02-11 15:32:08.000",
+        //       engineer_apps: "Y",
+        //     },
+        //   },
+        // };
+        // return dummyData;
       }
     } catch (error) {
       error?.message == "Network Error" ? alert("Network Error") : null;

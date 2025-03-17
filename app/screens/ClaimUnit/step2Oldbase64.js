@@ -23,7 +23,7 @@ import styles from "./styles";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "react-native-element-dropdown";
 import DropDownPicker from "react-native-dropdown-picker";
-import httpClient, { baseURL } from "../../controllers/HttpClient";
+import httpClient from "../../controllers/HttpClient";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 import { widthPixel } from "../Home/normalize";
 import ImagePicker from "react-native-image-crop-picker";
@@ -33,7 +33,6 @@ import ReactNativeBlobUtil from "react-native-blob-util";
 import { useSelector, useDispatch } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import { ListItem2 } from "../../components";
-import axios from "axios";
 
 // individual, child, pembantu
 
@@ -93,9 +92,79 @@ const ClaimUnit2 = (props) => {
     console.log("231 smallarrayB64Image: ", JSON.stringify(smallarrayB64Image));
   }, [selectedUnits]);
 
-  const onRefresh = () => {};
+  const onRefresh = () => {
+    //alert("run onRefresh");
+    //loadData();
+  };
+
+  const loadData = async () => {};
+
+  const renderLabel1 = (text) => {
+    // if (project || isFocus) {
+    //   return (
+    //     <Text style={[styles.label, isFocus && { color: "black" }]}>
+    //       Choose project
+    //     </Text>
+    //   );
+    // }
+    // return null;
+    return (
+      <View
+        style={[
+          styles.label,
+          {
+            //backgroundColor: "lightblue",
+            //paddingHorizontal: 20,
+            //paddingVertical: 10,
+            backgroundColor: colors.background,
+            borderRadius: 15,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            {
+              color: colors.text,
+              //backgroundColor: colors.background,
+              borderRadius: 50,
+            },
+          ]}
+        >
+          {text}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderLabel2 = (text, customStyle) => {
+    return (
+      <Text
+        style={[
+          { marginTop: 10, alignSelf: "flex-start", marginLeft: 10 },
+          customStyle,
+        ]}
+      >
+        {text}
+      </Text>
+    );
+  };
+
+  const validateEmail = (input) => {
+    // Regular expression for basic email validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    //setEmail(input);
+    //emailRegex.test(input) ? null : alert("Please enter a valid email address");
+    if (emailRegex.test(input)) {
+      return true;
+    } else {
+      alert("Please enter a valid email address");
+      return false;
+    }
+  };
 
   const onSubmit = async () => {
+    //alert("onSubmit");
+    //return;
     try {
       setLoading(true);
       const arrayB64Image = await Promise.all(
@@ -103,10 +172,63 @@ const ClaimUnit2 = (props) => {
           if (item.photo == null) {
             return item;
           }
+          // let fileImg = ReactNativeBlobUtil.wrap(
+          //   images[0].uri.replace("file://", "")
+          // );
+          // Read the file as Base64
+          //   const base64Encoded = await RNFS.readFile(res.uri, 'base64');
+          // const b64 = await ReactNativeBlobUtil.fs
+          //   .readFile(item.photo.uri.replace("file://", ""), "base64")
+          //   .catch((error) => {
+          //     alert([index + 1] + "readPhoto error 495: " + error);
+          //   });
+          // //const dataPhoto = "data:image/png;base64," + b64;
+          // const dataJPEGBase64 = "data:image/png;base64," + b64;
+
+          // console.log(
+          //   "431 " + index + " Base64 Encoded Data:",
+          //   dataImageBase64.slice(0, 50)
+          // );
+          // return {
+          //   height: item.height,
+          //   mime: item.mime,
+          //   uri: item.uri,
+          //   width: item.width,
+          //   b64: dataJPEGBase64,
+          // };
           return { ...item, photo: { ...item.photo } };
+
+          // const updatedData = selectedUnits.map((item) =>
+          //   item.lot_no === itemParam.lot_no &&
+          //   item.entity_cd === itemParam.entity_cd &&
+          //   item.project_no === itemParam.project_no
+          //     ? { ...item, photo: null }
+          //     : item
+          // );
+          // setSelectedUnits(updatedData);
         })
       );
 
+      //console.log("230 smallarrayB64Image: ", smallarrayB64Image);
+      // if (!validateEmail(email)) {
+      //   return;
+      // }
+      // setLoading(true);
+      // const dataPost = { name, email, address, project, unit };
+      // setTimeout(() => {
+      //   setLoading(false);
+      //   //navigation.navigate("SignIn");
+      //   alert(JSON.stringify(dataPost));
+      //   alert(
+      //     "You will receive an email if your account request is successful."
+      //   );
+      //   navigation.goBack();
+      // }, 500);
+
+      //for url of urls code
+      // for (const [index, value] of arr.entries()) {
+      //   console.log(index, value);
+      // }
       let letResponseUnits = [];
       for (const [index, itemParam] of arrayB64Image.entries()) {
         // Create FormData
@@ -117,25 +239,43 @@ const ClaimUnit2 = (props) => {
         formData.append("entity_cd", itemParam.entity_cd);
         formData.append("project_no", itemParam.project_no);
         // formData.append('project_descs', itemParam.projectDescs,
-        formData.append("platform", Platform.OS);
-        formData.append("dataPhoto", {
+        formData.append("platform:", Platform.OS);
+        formData.append("dataPhoto:", {
           uri:
             itemParam?.photo == null ? itemParam.pdf.uri : itemParam.photo.uri,
-          type:
-            itemParam?.photo == null
-              ? itemParam.pdf.type
-              : itemParam.photo.mime, // 'image/jpeg', 'image/png', etc.
+          // type: image.type, // 'image/jpeg', 'image/png', etc.
           name:
             itemParam?.photo == null
               ? itemParam.pdf.name
-              : user.email +
-                "-" +
-                itemParam.lot_no +
-                "." +
-                itemParam.photo.mime.split("/")[1], // You can assign a custom filename
+              : user.email + "-" + itemParam.lot_no, // You can assign a custom filename
         });
 
-        console.log("133 formData: ", JSON.stringify(formData));
+        // const dataPost = {
+        //   email: user.email,
+        //   lot_no: itemParam.lot_no,
+        //   entity_cd: itemParam.entity_cd,
+        //   project_no: itemParam.project_no,
+        //   project_descs: itemParam.projectDescs,
+        //   platform: Platform.OS,
+        //   dataPhoto:
+        //     itemParam?.photo == null ? itemParam.pdf.uri : itemParam.photo.uri,
+        //   // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+        // };
+        // const dataPost2 = {
+        //   email: user.email,
+        //   lot_no: itemParam.lot_no,
+        //   entity_cd: itemParam.entity_cd,
+        //   project_no: itemParam.project_no,
+        //   project_descs: itemParam.projectDescs,
+        //   platform: Platform.OS,
+        //   dataPhoto:
+        //     itemParam?.photo == null
+        //       ? itemParam.pdf.uri.slice(0, 50)
+        //       : itemParam.photo.uri.slice(0, 50),
+        //   // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+        // };
+        // console.log("247 dataPost2: ", dataPost2);
+
         try {
           const response = await httpClient.request({
             url: "/auth/upload-lot-no",
@@ -146,15 +286,6 @@ const ClaimUnit2 = (props) => {
             },
             // params,
           });
-          // const response = await axios.post(
-          //   `${baseURL}/auth/upload-lot-no`,
-          //   formData,
-          //   {
-          //     headers: {
-          //       "Content-Type": "multipart/form-data", // Important for multipart data
-          //     },
-          //   }
-          // );
           // const message = response.data.message;
           console.log("246 response: ", response?.data);
 
@@ -164,6 +295,7 @@ const ClaimUnit2 = (props) => {
             project_no: itemParam.project_no,
             response: response?.data,
           });
+          //setSelectedUnits(updatedData);
         } catch (error) {
           console.log("error3411: ", error);
           letResponseUnits.push({
@@ -182,7 +314,7 @@ const ClaimUnit2 = (props) => {
                 ? error?.response
                 : error
                 ? error
-                : "unknown error",
+                : message,
               data: null,
             },
           });
@@ -193,6 +325,8 @@ const ClaimUnit2 = (props) => {
           setLoading(false);
           if (error.response?.status == 413) {
             alert(message);
+
+            // (pdf limit 8 mb)
           } else {
             alert(
               ["error unit no " + (index + 1) + ": "] +
@@ -201,6 +335,10 @@ const ClaimUnit2 = (props) => {
                 error
             );
           }
+
+          //setSelectedUnits(updatedData);
+
+          //console.error("Error fetching data from", url, error);
         }
       }
       console.log("286 letResponseUnits: ", JSON.stringify(letResponseUnits));
@@ -211,8 +349,9 @@ const ClaimUnit2 = (props) => {
       );
       const message = "File too large" + ", please reduce the size of the file";
       if (!allSuccess) {
-        throw letResponseUnits[0]?.response?.message ?? "unknown error";
+        throw letResponseUnits[0]?.response?.message ?? message;
       }
+      //console.log(allSuccess); // true (since every item.message is 'success message')
 
       alert("Submit success");
       setLoading(false);
@@ -267,10 +406,27 @@ const ClaimUnit2 = (props) => {
 
   const fromCamera = (itemParam) => {
     ImagePicker.openCamera({
+      // width: 500,
+      // height: 500,
+      // maxHeight: 50,
+      // maxWidth: 50,
+      //cropping: false,
+      //cropping: true,
       compressImageMaxWidth: 960,
       compressImageMaxHeight: 1280,
     })
       .then((img) => {
+        //alert(JSON.stringify(image));
+        //console.log("received image", images);
+        // const dataImage = {
+        //   uri: img.path,
+        //   width: img.width,
+        //   height: img.height,
+        //   mime: img.mime,
+        // };
+        //{"height": 1280, "width": 960} image resolution emulator
+        //console.log("264 dataImage: ", dataImage);
+
         const imgObj = {
           uri: img.path,
           width: img.width,
@@ -287,6 +443,19 @@ const ClaimUnit2 = (props) => {
             : item
         );
         setSelectedUnits(updatedData);
+
+        //setImages([...images, dataImage]);
+        // setImages(prevState => ({
+        //   image: [
+        //     ...prevState.image,
+        //     {
+        //       uri: image.path,
+        //       width: image.width,
+        //       height: image.height,
+        //       mime: image.mime,
+        //     },
+        //   ],
+        // }));
       })
       .catch((e) => {
         //console.log("tag", e);
@@ -298,13 +467,21 @@ const ClaimUnit2 = (props) => {
     let imageList = [];
 
     ImagePicker.openPicker({
+      // width: 500,
+      // height: 500,
+      // maxHeight: 50,
+      // maxWidth: 50,
+
+      //multiple: true,
       compressImageMaxWidth: 960,
       compressImageMaxHeight: 1280,
       //multiple: true,
     })
       .then((img) => {
+        //alert(JSON.stringify(image));
         console.log("received images", img);
 
+        // image.map((img) => {
         const imgObj = {
           uri: img.path,
           width: img.width,
@@ -312,6 +489,11 @@ const ClaimUnit2 = (props) => {
           mime: img.mime,
           size: img.size,
         };
+        // });
+
+        //console.log("received images", image);
+        //console.log("366 received images : ", imageList);
+        //setImages([...images, imageList]);
 
         // Use map to create a new array with the updated photo for lot_no 2
         const updatedData = selectedUnits.map((item) =>
@@ -324,6 +506,18 @@ const ClaimUnit2 = (props) => {
         setSelectedUnits(updatedData);
 
         console.log("354 updatedData: ", updatedData);
+        // for (var i = 0; i < image.length; i++) {
+        //   setImages({
+        //     images: [
+        //       {
+        //         uri: image[i].path,
+        //         width: image[i].width,
+        //         height: image[i].height,
+        //         mime: image[i].mime,
+        //       },
+        //     ],
+        //   });
+        // }
       })
       .catch((e) => console.log("tag", e));
   };
@@ -355,6 +549,21 @@ const ClaimUnit2 = (props) => {
         : item
     );
     setSelectedUnits(updatedData);
+    // console.log("411 images: ", images);
+    // const dummyImages = [
+    //   {
+    //     height: 637,
+    //     mime: "image/jpeg",
+    //     uri: "/Users/haniyya/Library/Developer/CoreSimulator/Devices/7D859DB8-4FBC-464E-BF5D-F051B441FFF4/data/Containers/Data/Application/BEB42D1E-D837-4069-AC71-014CA5A1A20F/tmp/react-native-image-crop-picker/EA48A5E2-C0D6-42AB-9124-0C45F9DC2AA1.jpg",
+    //     width: 960,
+    //   },
+    // ];
+    // let imageArray = [...images];
+    // imageArray.splice(key, 1);
+    // setImages(imageArray);
+    //    let imageArray = [...this.state.image];
+    //    imageArray.splice(key, 1);
+    //    this.setState({image: imageArray});
   };
 
   const removeArrayFile = async (itemParam) => {
@@ -366,11 +575,24 @@ const ClaimUnit2 = (props) => {
         : item
     );
     setSelectedUnits(updatedData);
+    // console.log("key remove", key);
+    // let letArrayFile = [...arrayFile];
+    // letArrayFile.splice(key, 1);
+    // setArrayFile(letArrayFile);
+    //    let imageArray = [...this.state.image];
+    //    imageArray.splice(key, 1);
+    //    this.setState({image: imageArray});
   };
 
   // Function to handle file pick
   const pickDocument = async (itemParam) => {
     try {
+      // Allow user to pick a document
+      //DocumentPicker.pick
+      // console.log(
+      //   "434 DocumentPicker: ",
+      //   JSON.stringify(typeof DocumentPicker)
+      // );
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         {
@@ -385,9 +607,9 @@ const ClaimUnit2 = (props) => {
         type: [DocumentPicker.types.pdf],
         //type: [DocumentPicker.types.images],
       });
-      if (res[0].size > 10000000) {
-        return alert("Can not exceed more than 10 MB");
-      }
+      // if (res[0].size > 10000000) {
+      //   return alert("Can not exceed more than 10 MB");
+      // }
       const dummyRes = [
         {
           fileCopyUri: null,
@@ -399,13 +621,45 @@ const ClaimUnit2 = (props) => {
       ];
       //return;
 
+      //setFileUri(res.uri);
       console.log("431 URI of picked file:", res);
 
+      // const arrayB64 = await Promise.all(
+      //   res.map(async (item, index) => {
+      //     // let fileImg = ReactNativeBlobUtil.wrap(
+      //     //   images[0].uri.replace("file://", "")
+      //     // );
+      //     // Read the file as Base64
+      //     //   const base64Encoded = await RNFS.readFile(res.uri, 'base64');
+      //     const b64 = await ReactNativeBlobUtil.fs.readFile(
+      //       item.uri.replace("file://", ""),
+      //       "base64"
+      //     );
+      //     const dataPdfBase64 = "data:application/pdf;base64," + b64;
+
+      //     console.log(
+      //       "431 " + index + " Base64 Encoded Data:",
+      //       dataPdfBase64.slice(0, 50)
+      //     );
+      //     return {
+      //       // lot_no: itemParam.lot_no,
+      //       // project_no: itemParam.project_no,
+      //       // entity_cd: itemParam.entity_cd,
+      //       pdf: {
+      //         name: item.name,
+      //         size: item.size,
+      //         type: item.type,
+      //         uri: item.uri,
+      //       },
+      //     };
+      //   })
+      // );
+      // //setArrayFile([...arrayFile, ...arrayB64]);
       const updatedData = selectedUnits.map((item) =>
         item.lot_no === itemParam.lot_no &&
         item.entity_cd === itemParam.entity_cd &&
         item.project_no === itemParam.project_no
-          ? { ...item, pdf: res[0] }
+          ? { ...item, pdf: null }
           : item
       );
       console.log("665 updatedData: ", updatedData);
@@ -462,6 +716,11 @@ const ClaimUnit2 = (props) => {
             //paddingHorizontal: 40,
           }}
         >
+          {/* You have selected
+          {params.selectedUnits.length == 1
+            ? " 1 unit"
+            : " " + params.selectedUnits.length + " units"}
+          ,  */}
           Make sure you send document containing proof of ownership of the{" "}
           {params.selectedUnits.length == 1
             ? "unit"
@@ -470,10 +729,11 @@ const ClaimUnit2 = (props) => {
         <Text
           style={{
             marginTop: 25,
-
+            //marginLeft: 100,
             marginBottom: 3,
             textAlign: "center",
             fontSize: 16,
+            //paddingHorizontal: 40,
           }}
         >
           {params.selectedUnits.length > 1
@@ -487,23 +747,34 @@ const ClaimUnit2 = (props) => {
               itm.entity_cd === item.entity_cd &&
               itm.project_no === item.project_no
           );
-
+          //console.log("654 itemFound: ", itemFound);
           return (
-            <View key={index}>
+            <View
+              key={index}
+              // style={{
+              //   flex: 1, // This makes the container take up the full screen
+              //   justifyContent: "center", // Centers children vertically
+              //   alignItems: "center", // Centers children horizontally
+              // }}
+            >
               <View
                 style={{
                   marginHorizontal: 40,
-
+                  //width: 250, // Fixed width
+                  //textAlign: "center",
                   fontSize: 20,
+                  //paddingHorizontal: 40,
 
                   borderRadius: 5,
                   marginVertical: 3,
-
+                  //borderWidth: 1,
                   padding: 5,
                   borderColor: colors.primary,
-
+                  //width: "50%",
                   backgroundColor: colors.background, // Card's background color
-
+                  //borderRadius: 10, // Rounded corners
+                  //margin: 10, // Margin around the card
+                  //padding: 15, // Padding inside the card
                   shadowColor: "#000", // Shadow color for iOS and Android
                   shadowOffset: { width: 0, height: 2 }, // Shadow offset
                   shadowOpacity: 0.1, // Shadow opacity (iOS)
@@ -580,6 +851,9 @@ const ClaimUnit2 = (props) => {
                 <View style={{ alignSelf: "center" }}>
                   {item?.photo == null && item?.pdf == null ? (
                     arrayFile.length > 0 ? null : (
+                      // <View style={{ height: 100, justifyContent: "center" }}>
+                      //   {/* <Text>image</Text> */}
+                      // </View>
                       <View
                         style={{
                           height: 230,
@@ -639,7 +913,7 @@ const ClaimUnit2 = (props) => {
                         <Text
                           style={{ color: colors.text, textAlign: "center" }}
                         >
-                          (max file size 10 MB)
+                          (max file size 10mb)
                         </Text>
                       </View>
                     )
@@ -676,10 +950,14 @@ const ClaimUnit2 = (props) => {
                       style={[
                         styles.avatarContainer,
                         {
+                          //height: null,
+                          //padding: 10,
+                          //backgroundColor: colors.background,
                           marginBottom: 20,
                           borderWidth: 0,
                         },
                       ]}
+                      //onPress={() => console.log("Photo Tapped")}
                     >
                       <View
                         style={[
@@ -703,10 +981,11 @@ const ClaimUnit2 = (props) => {
                           style={[
                             styles.iconRemove,
                             {
+                              //marginLeft: 5,
                               position: "absolute",
                               right: -5,
                               top: -10,
-
+                              //backgroundColor: "red",
                               borderRadius: 100,
                             },
                           ]}
@@ -725,10 +1004,17 @@ const ClaimUnit2 = (props) => {
       <View
         style={{
           width: "100%",
-
+          //justifyContent: "center"
+          //backgroundColor: "lightgray",
+          //borderTopLeftRadius: 30,
+          //borderTopRightRadius: 30,
+          //borderWidth: 3,
+          //backgroundColor: "black",
           borderColor: colors.primary,
           backgroundColor: colors.background, // Card's background color
-
+          //borderRadius: 10, // Rounded corners
+          //margin: 10, // Margin around the card
+          //padding: 15, // Padding inside the card
           shadowColor: "#000", // Shadow color for iOS and Android
           shadowOffset: { width: 0, height: 2 }, // Shadow offset
           shadowOpacity: 0.2, // Shadow opacity (iOS)
@@ -741,9 +1027,11 @@ const ClaimUnit2 = (props) => {
           style={{
             margin: 30,
             marginTop: 20,
+            //marginLeft: 20,
           }}
           disable={loading}
           loading={loading}
+          //onPress={() => onSubmit()}
           onPress={() => {
             const isNullExist = selectedUnits.some(
               (item) => item.photo == null && item.pdf == null
@@ -752,6 +1040,10 @@ const ClaimUnit2 = (props) => {
               selectedUnits.length > 1
                 ? alert("Please add document for all unit")
                 : alert("Please add document");
+              //return;
+              //     }
+              // if (images.length + arrayFile.length == 0) {
+              //   alert("Please add document");
             } else {
               Alert.alert("Confirm", "Are you sure you want to submit?", [
                 {

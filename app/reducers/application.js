@@ -2,7 +2,7 @@ import * as actionTypes from "@actions/actionTypes";
 const initialState = {
   theme: null,
   font: null,
-  force_dark: null,
+  force_dark: false,
   language: null,
   menu: "eCommerce",
 };

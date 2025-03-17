@@ -263,8 +263,9 @@ const TransactionExpand = ({
               borderRightWidth: 1,
               borderLeftWidth: 1,
               borderColor: colors.border,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              //borderColor: "lightgray",
             },
           ])}
         >
