@@ -147,7 +147,7 @@ const PDFAttach = (props) => {
 
   const downloadFile = async () => {
     if (!repl) {
-      alert("url is empty");
+      alert("PDF URL is not found");
       return;
     }
 
@@ -242,45 +242,27 @@ const PDFAttach = (props) => {
         }}
       />
       <View style={stylesCurrent.container}>
-        {/* <Pdf
-          source={{
-            uri: paramsItem.link_url,
-            cache: true,
-          }}
-          // source={require('@assets/termsconditions/Facility_Booking_System_Regulation.pdf')}
-          onLoadComplete={(numberOfPages, filePath) => {
-            console.log(`Number of pages: ${numberOfPages}`);
-          }}
-          onPageChanged={(page, numberOfPages) => {
-            console.log(`Current page: ${page}`);
-          }}
-          onError={error => {
-            console.log(error);
-          }}
-          onPressLink={uri => {
-            console.log(`Link pressed: ${uri}`);
-          }}
-          password={'220359'}
-          style={stylesCurrent.pdf}
-          fitWidth={true}
-        /> */}
-        <Pdf
-          source={source}
-          onLoadComplete={(numberOfPages, filePath) => {
-            console.log(`Number of pages: ${numberOfPages}`);
-          }}
-          onPageChanged={(page, numberOfPages) => {
-            console.log(`Current page: ${page}`);
-          }}
-          onError={(error) => {
-            console.log(error);
-          }}
-          onPressLink={(uri) => {
-            console.log(`Link pressed: ${uri}`);
-          }}
-          password={"220359"}
-          style={stylesCurrent.pdf}
-        />
+        {!repl ? (
+          <Text style={{ textAlign: "center" }}>PDF URL is not found</Text>
+        ) : (
+          <Pdf
+            source={source}
+            onLoadComplete={(numberOfPages, filePath) => {
+              console.log(`Number of pages: ${numberOfPages}`);
+            }}
+            onPageChanged={(page, numberOfPages) => {
+              console.log(`Current page: ${page}`);
+            }}
+            onError={(error) => {
+              console.log(error);
+            }}
+            onPressLink={(uri) => {
+              console.log(`Link pressed: ${uri}`);
+            }}
+            password={"220359"}
+            style={stylesCurrent.pdf}
+          />
+        )}
         {/* <Text>{paramsItem.link_url}</Text> */}
       </View>
     </SafeAreaView>
