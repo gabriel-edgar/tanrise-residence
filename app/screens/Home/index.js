@@ -154,26 +154,13 @@ const Home = (props) => {
   const stateReduxNotificationData = useSelector(
     (state) => state.Dataproject.notificationData
   );
-  //console.log("142 stateReduxNotificationData: ", stateReduxNotificationData);
-  ////console.log("142 stateReduxHelpdeskDot: ", stateReduxHelpdeskDot);
-  ////console.log("142 stateReduxProjectDot: ", stateReduxProjectDot);
-  ////console.log("108 stateReduxOri: ", stateReduxOri);
-  // //console.log("123 stateReduxDataUnit: ", stateReduxDataUnit);
-  ////console.log("131 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
-  //console.log("159 project: ", stateReduxChoosedProject);
-  // //console.log("109 stateRedux.accessToken: ", stateRedux.accessToken);
+
   const [token, setToken] = useState(stateRedux.accessToken);
   const notif = useSelector((state) => getNotifRed(state));
   const project = useSelector((state) => getProject(state));
-  //console.log("122 project selector: ", project);
-  //console.log("cobanotif di home", notif);
-  // //console.log(
-  //   "99 state",
-  //   useSelector((state) => state)
-  // );
-  // const email = user.user;
+
   const [email, setEmail] = useState(user != null ? user?.email : "");
-  //console.log("user di home", user);
+
   const [fotoprofil, setFotoProfil] = useState(
     user?.pict != null
       ? { uri: user?.pict }
@@ -194,8 +181,8 @@ const Home = (props) => {
   const [spinner, setSpinner] = useState(true);
   const [entity_cd, setEntity] = useState("01");
   const [project_no, setProjectNo] = useState("01");
-  //const [entity_cd, setEntity] = useState(project.Data[0].entity_cd);
-  //const [project_no, setProjectNo] = useState(project.Data[0].project_no);
+  const [projectListUseState, setProjectListUseState] = useState([]);
+
   //const [lotno, setLotno] = useState([]);
   //console.log("lotno array 0", lotno.lot_no);
   //console.log("fotoprofil >", fotoprofil);
@@ -391,17 +378,6 @@ const Home = (props) => {
     }
   }, [stateReduxNotificationData]); // Dependency array includes stateReduxChoosedUnit
 
-  //UE2
-  //untuk load badge notif
-  // useEffect(() => {
-  //   dispatch(
-  //     apiCall(
-  //       API_URL_LOKAL +
-  //         `/setting/notification?email=${email}&entity_cd=01&project_no=01`
-  //     )
-  //   );
-  // }, []);
-
   useEffect(() => {
     //console.log("119_1 user?.pict: ", user?.pict);
     setFotoProfil({ uri: user?.pict });
@@ -470,7 +446,6 @@ const Home = (props) => {
     // try {
     //   //console.log("15c start try " + token);
     //   const result = await httpClient({
-    //     url: API_URL_LOKAL + "/home/common-project",
     //     method: "GET",
     //     params: { email: email },
     //     headers: {
@@ -499,6 +474,7 @@ const Home = (props) => {
       .then((res) => {
         //setHomeMenu(res.data.data);
         //console.log("333 res: ", res.data.data);
+        setProjectListUseState(res.data.data);
         dispatch(data_project(res.data.data));
         //loadProject(dataproject);
         ////console.log("333 loadFinish: ");
@@ -509,10 +485,6 @@ const Home = (props) => {
       });
 
     //loadProject(dataproject);
-
-    // setEntity(project[0].entity_cd);
-    // setProjectNo(project[0].project_no);
-    ////console.log("272 entity: ", project[0].entity_cd, project[0].project_no);
 
     //news and promo
     await dataNewsAnnounce();
@@ -632,12 +604,6 @@ const Home = (props) => {
     //,[email, dispatch]
   );
 
-  // const loadUnit = useCallback(
-  //   () =>
-  //     dispatch(data_unit(project[0].entity_cd, project[0].project_no, email)),
-  //   [entity_cd, project_no, email, dispatch]
-  // );
-
   const saveUnit = useCallback((unit) => dispatch(choosed_unit(unit)));
   const saveProject = useCallback((project) =>
     dispatch(choosed_project(project))
@@ -668,34 +634,13 @@ const Home = (props) => {
         params: { group_cd: user.Group_Cd },
       })
       .then((res) => {
+        // alert(user.Group_Cd);
         setHomeMenu(res.data.data);
         //console.log("249 res: ", res.data.data);
       })
       .catch((error) => {
         //console.log("249 error: " + error.response.data.message);
       });
-
-    // await axios
-    //   .get(API_URL_LOKAL + `/home/greetings-change-status_Get/` + email)
-    //   .then((res) => {
-    //     //console.log("res greetings", res.data.data);
-    //     const status_user = res.data.data[0].status;
-    //     // //console.log('status user new old', status_user);
-    //     setStatusUser(status_user);
-
-    //     if (status_user == "N") {
-    //       setModalImage(true); // sementara di jadiin false dulu, untuk hide modal.
-    //       getImageGreetings();
-    //     } else {
-    //       setModalImage(false);
-    //     }
-    //     setLoadNews(false);
-    //     // return res.data;
-    //   })
-    //   .catch((error) => {
-    //     //console.log("error res greeting", error);
-    //     // alert('error get');
-    //   });
   };
 
   const getImageGreetings = async () => {
@@ -746,203 +691,6 @@ const Home = (props) => {
     setUrlGreetingsImage(item);
     setmodalShowImage(true);
   };
-
-  //https://dev.ifca.co.id/apiifcares/api/home/common-unit?entity=01&project=01&email=martin7id@yahoo.com
-  // https://dev.ifca.co.id/apicarstensz/api/home/common-unit?entity=01&project=01&email=martin7id@yahoo.com
-
-  //console.log("361 lotno: ", lotno, "&&", dataDD);
-
-  const getLotNo2 = async () => {
-    // const params = {
-    //   entity_cd: "1001",
-    //   project_no: "1001001",
-    //   email: "ahmad.ariffandy@ifca.co.id",
-    // }; // hardcode
-    const params = {
-      entity_cd: "1001",
-      project_no: "1001001",
-      email: "ahmad.ariffandy@ifca.co.id",
-    };
-
-    await httpClient
-      .request({
-        url: "/home/common-unit",
-        method: "GET",
-        params: params,
-      })
-      .then((res) => {
-        //console.log("380 res: ", res.data.data);
-
-        //setLotno(res.data.data);
-
-        const arrDataTower = res.data.data;
-        //console.log("380 res: ", arrDataTower);
-
-        const arrayDropDown = arrDataTower.map((item, index) => {
-          return { label: item.descs, value: index };
-        });
-
-        //console.log("380 arrayDropDown: ", arrayDropDown);
-        //setDataDD(arrayDropDown);
-
-        //setArrDataTowerUser(arrDataTower);
-
-        //setSpinner(false);
-        return "finish";
-      })
-      .catch((error) => {
-        //console.log("380 error: ", error.response.data.message);
-        //alert("125 error get: ", error);
-        return "error";
-      });
-
-    return;
-
-    //console.log("125 run getLotNo2");
-    const data = {
-      email: email,
-    };
-    //console.log("125 run 2");
-    const sync = await homeCommonProject(token, data, () => {}, setDataDD);
-    ////console.log('');
-    //setLotno(dataDD);
-
-    const arrayDropDown = dataDD.map((item, index) => {
-      return { lot_no: item.descs };
-    });
-
-    //console.log("125 arrayDropDown: ", arrayDropDown);
-
-    //setLotno(arrayDropDown);
-
-    //console.log("125 ", sync);
-
-    return sync;
-
-    // try {
-    //   await axios
-    //     .get(
-    //       API_URL_LOKAL +
-    //         `/home/common-unit?entity=` +
-    //         entity_cd +
-    //         "&" +
-    //         "project=" +
-    //         project_no +
-    //         "&" +
-    //         "email=" +
-    //         email
-    //     )
-    //     .then((res) => {
-    //       const resLotno = res.data.data;
-    //       //console.log("reslotno", resLotno);
-    //       //console.log("reslotno", res);
-
-    //       setLotno(resLotno);
-
-    //       if (default_text_lotno == true) {
-    //         setTextLotno(resLotno[0]);
-    //       }
-
-    //       setSpinner(false);
-    //     })
-    //     .catch((error) => {
-    //       //console.log("error reslotno", error);
-    //       // alert('error get');
-    //     });
-    // } catch (error) {
-    //   setErrors(error);
-    //   // alert(hasError.toString());
-    // }
-  };
-
-  // async function getLotNo() {
-  //   console.log(
-  //     "302 url api '/home/common-unit': ",
-  //     //"http://apps.pakubuwono-residence.com/apiwebpbi/api/home/common-unit?entity=" +
-  //     entity_cd + "&" + "project=" + project_no + "&" + "email=" + email
-  //   );
-  //   try {
-  //     await axios
-  //       .get(
-  //         API_URL_LOKAL +
-  //           `/home/common-unit?entity=` +
-  //           entity_cd +
-  //           "&" +
-  //           "project=" +
-  //           project_no +
-  //           "&" +
-  //           "email=" +
-  //           email
-  //       )
-  //       .then((res) => {
-  //         const resLotno = res.data.data;
-  //         //console.log("reslotno", resLotno);
-  //         //console.log("reslotno", res);
-
-  //         setLotno(resLotno);
-
-  //         if (default_text_lotno == true) {
-  //           setTextLotno(resLotno[0]);
-  //         }
-
-  //         setSpinner(false);
-  //       })
-  //       .catch((error) => {
-  //         //console.log("error reslotno", error);
-  //         // alert('error get');
-  //       });
-  //   } catch (error) {
-  //     setErrors(error);
-  //     // alert(hasError.toString());
-  //   }
-  // }
-
-  const notifUser = useCallback(
-    (entity_cd, project_no) =>
-      dispatch(notifikasi_nbadge(email, entity_cd, project_no)),
-    [email, entity_cd, project_no, dispatch]
-  );
-
-  const dataImage = async () => {
-    await axios
-      .get(API_URL_LOKAL + `/about/image`)
-      .then((res) => {
-        //console.log("res image", res.data.data);
-        // //console.log('data images', res.data[0].images);
-        setData(res.data.data);
-        // return res.data;
-      })
-      .catch((error) => {
-        //console.log("error get about us image", error);
-        // alert('error get');
-      });
-  };
-
-  async function fetchDataDue() {
-    try {
-      const res = await axios.get(
-        API_URL_LOKAL + `/modules/billing/due-summary/IFCAPB/${user?.email}`
-      );
-      setDataDue(res.data.Data);
-      //console.log("data get data due", res.data.Data);
-    } catch (error) {
-      setErrors(error);
-      // alert(hasError.toString());
-    }
-  }
-
-  async function fetchDataNotDue() {
-    try {
-      const res = await axios.get(
-        API_URL_LOKAL + `/modules/billing/current-summary/IFCAPB/${user?.email}`
-      );
-      setDataNotDue(res.data.Data);
-      //console.log("data get data not due", res.data.Data);
-    } catch (error) {
-      setErrors(error);
-      // alert(hasError.toString());
-    }
-  }
 
   async function fetchDataHistory() {
     try {
@@ -1283,25 +1031,14 @@ const Home = (props) => {
     }
   };
 
-  // const getHelpdeskNotification = (project) => {
-  //   //fetch notification by project maybe
-  //   // get dot status
-  //   saveProjectDotNotification(true);
-  //   saveHelpdeskDotNotification(true);
-  // };
-
   const onChangeProject = (project) => {
-    //setDefaultLotno(false);
-    //choosed_project;
     saveProject(project);
-    //getHelpdeskNotification(project); //if by notification
-    //console.log("861 project: ", project);
+
     setTextProject(project);
 
     loadUnitReact(project);
     setTextLotno("");
-    //console.log("861 stateReduxDataUnit: ", stateReduxDataUnit);
-    //setLotno(stateReduxDataUnit);
+
     saveUnit({});
 
     //news and promo
@@ -1322,11 +1059,6 @@ const Home = (props) => {
       saveProjectDotNotification(false);
     }
     saveHelpdeskDotNotification(false);
-    // if (dotList.some((obj) => obj.entity_cd === project.entity_cd)) {
-    //   saveHelpdeskDotNotification(true);
-    // } else {
-    //   saveHelpdeskDotNotification(false);
-    // }
   };
 
   const goToMoreNewsAnnounce = (item) => {
@@ -1811,7 +1543,7 @@ const Home = (props) => {
                 />
               </View>
               {/* <Text>{lotno.length}</Text> */}
-              {project.length != 0 ? (
+              {projectListUseState.length != 0 ? (
                 <View
                   style={{
                     //backgroundColor: "blue",
@@ -1851,8 +1583,7 @@ const Home = (props) => {
                         fontFamily: "KaiseiHarunoUmi",
                         flexDirection: "row",
                       }}
-                      //data={project}
-                      data={project.map((item) => ({
+                      data={projectListUseState.map((item) => ({
                         ...item,
                         label: renderOption(item),
                       }))}
@@ -1860,9 +1591,6 @@ const Home = (props) => {
                       selectedItemTextStyle={{ color: "#3C85F1" }}
                       accessible={true}
                       keyExtractor={(item) => item}
-                      //initValue={stateReduxChoosedProject.descs}
-                      //initValue={project[0].descs}
-                      //labelExtractor={(item) => item.descs}
                       cancelButtonAccessibilityLabel={"Cancel Button"}
                       cancelText={"Cancel"}
                       onChange={(option) => {
@@ -2029,7 +1757,7 @@ const Home = (props) => {
                   </View>
                 </View>
               )}
-              {project.length != 0 ? (
+              {projectListUseState.length != 0 ? (
                 stateReduxDataUnit.length != 0 ? (
                   <View
                     style={{
@@ -2244,10 +1972,8 @@ const Home = (props) => {
                 style={{ marginTop: 10, fontFamily: font }}
                 menu={homeMenu}
                 font={font}
-                //isClaimUnit={project.length == 0}
-                //isClaimUnit={stateReduxChoosedUnit}
                 isClaimUnit={claimUnit}
-                isOtherMenu={project.length != 0}
+                isOtherMenu={projectListUseState.length != 0}
               />
             ) : (
               <ActivityIndicator />

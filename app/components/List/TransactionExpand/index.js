@@ -54,6 +54,7 @@ const TransactionExpand = ({
     tower: tower,
     descs: descs,
     due_date: due_date,
+    doc_date: doc_date,
     doc_no: doc_no,
     mbal_amt: mbal_amt,
     disabled: true,

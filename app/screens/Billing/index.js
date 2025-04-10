@@ -286,14 +286,12 @@ const Billing = (
         return Object.keys(obj).length === 0 && obj.constructor === Object;
       }
 
-      console.log("251 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
-
       if (isEmptyObject(stateReduxChoosedUnit)) {
         setData(res.data.data);
       } else {
         setData(filter);
       }
-      console.log("data current", res.data);
+      console.log("billing/current-summary: ", res.data);
       setLoading(false);
     } catch (error) {
       setErrors(error.response.data);

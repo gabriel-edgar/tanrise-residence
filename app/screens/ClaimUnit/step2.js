@@ -290,7 +290,7 @@ const ClaimUnit2 = (props) => {
       })
       .catch((e) => {
         //console.log("tag", e);
-        alert("353 e: " + e);
+        // alert("353 e: " + e);
       });
   };
 
