@@ -1,46 +1,7 @@
-import {
-  CardChannelGrid,
-  CardSlide,
-  CategoryList,
-  CardReport06,
-  News43,
-  Price2Col,
-  Icon,
-  PlaceholderLine,
-  Placeholder,
-  NewsList,
-  SafeAreaView,
-  Text,
-  //Button,
-  Transaction2Col,
-  SearchInput,
-  TextInput,
-  Preview,
-  FlatListSlider,
-  FlexWrapLayout,
-} from "@components";
-import {
-  BaseColor,
-  BaseStyle,
-  useTheme,
-  Typography,
-  FontWeight,
-  useFont,
-} from "@config";
-import {
-  HomeChannelData,
-  HomeListData,
-  HomePopularData,
-  HomeTopicData,
-  PostListData,
-} from "@data";
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import { Icon, SafeAreaView, Text } from "@components";
+import { BaseColor, BaseStyle, useTheme, useFont } from "@config";
+import { PostListData } from "@data";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FlatList,
@@ -52,27 +13,18 @@ import {
   RefreshControl,
   Dimensions,
   Pressable,
-  PixelRatio,
-  Button,
   AppState,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ImageZoom from "react-native-image-pan-zoom";
 import { useSelector, useDispatch } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
-import HeaderCard from "./HeaderCard";
-import HeaderHome from "./HeaderHome";
 import styles from "./styles";
-import Swiper from "react-native-swiper";
 import Categories from "./Categories";
 import SliderNews from "./SliderNews";
 import axios from "axios";
 import * as Utils from "@utils";
-import numFormat from "../../components/numFormat";
 
-import { notifikasi_nbadge, actionTypes } from "../../actions/NotifActions";
-import getNotifRed from "../../selectors/NotifSelectors";
-import getProject from "../../selectors/ProjectSelector";
 import {
   data_project,
   data_unit,
@@ -83,20 +35,14 @@ import {
   action_data_notification,
   action_data_notification_persist,
 } from "../../actions/ProjectActions";
-import messaging from "@react-native-firebase/messaging";
-import apiCall from "../../config/ApiActionCreator";
-// import {TextInput} from '../../components';
 
 import LinearGradient from "react-native-linear-gradient";
 import ModalSelector from "react-native-modal-selector";
 
 import MasonryList from "@react-native-seoul/masonry-list";
 import { ActivityIndicator } from "react-native-paper";
-//import { Platform } from "react-native";
 
 import Modal from "react-native-modal";
-//import { color } from "react-native-reanimated";
-//import { useFocusEffect } from "@react-navigation/native";
 
 import { fontPixel, pixelSizeVertical } from "./normalize";
 
@@ -106,7 +52,6 @@ import ProjectController from "../../controllers/ProjectController";
 import { store, persist } from "../../reducers";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 const { width } = Dimensions.get("window");
-// import { useIsFocused } from "@react-navigation/native";
 import { check_version } from "./functions";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 
@@ -116,22 +61,15 @@ const wait = (timeout) => {
 
 const Home = (props) => {
   const stateStore = store.getState();
-  //console.log("100 RT:", stateStore.user.refreshToken);
   const { navigation, route } = props;
   const { t } = useTranslation();
   const { colors } = useTheme();
   const font = useFont();
-  //console.log("106 font: ", font);
   const [homeMenu, setHomeMenu] = useState([]);
-  const [topics, setTopics] = useState(HomeTopicData);
-  const [channels, setChannels] = useState(HomeChannelData);
-  const [popular, setPopular] = useState(HomePopularData);
-  const [list, setList] = useState(HomeListData);
   const [loading, setLoading] = useState(true);
   const [loadingImg, setLoadingImg] = useState(true);
   const [appState, setAppState] = useState(AppState.currentState);
   const user = useSelector((state) => getUser(state));
-  //console.log("119 user: ", user);
   const stateRedux = useSelector((state) => state.user);
   const stateReduxDataProject = useSelector(
     (state) => state.Dataproject.Dataproject
@@ -156,8 +94,6 @@ const Home = (props) => {
   );
 
   const [token, setToken] = useState(stateRedux.accessToken);
-  const notif = useSelector((state) => getNotifRed(state));
-  const project = useSelector((state) => getProject(state));
 
   const [email, setEmail] = useState(user != null ? user?.email : "");
 
@@ -166,37 +102,19 @@ const Home = (props) => {
       ? { uri: user?.pict }
       : require("../../assets/images/image-home/Main_Image.png")
   );
-  const [name, setName] = useState(user != null ? user?.name : "");
-  const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
   const scrollY = useRef(new Animated.Value(0)).current;
   const [getDataDue, setDataDue] = useState([]);
   const [getDataNotDue, setDataNotDue] = useState([]);
-  const [hasError, setErrors] = useState(false);
-  const [data, setData] = useState([]);
-
-  const [getDataHistory, setDataHistory] = useState([]);
-
-  const [dataTowerUser, setdataTowerUser] = useState([]);
-  const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const [spinner, setSpinner] = useState(true);
-  const [entity_cd, setEntity] = useState("01");
-  const [project_no, setProjectNo] = useState("01");
   const [projectListUseState, setProjectListUseState] = useState([]);
 
-  //const [lotno, setLotno] = useState([]);
-  //console.log("lotno array 0", lotno.lot_no);
-  //console.log("fotoprofil >", fotoprofil);
   const repl =
     user?.pict != null
       ? fotoprofil.uri //.replace("https", "http")
       : require("../../assets/images/image-home/Main_Image.png");
-  //console.log("repll", repl);
+
   const [text_lotno, setTextLotno] = useState(stateReduxChoosedUnit);
   const [text_project, setTextProject] = useState(stateReduxChoosedProject);
   const [isChooseProject, setIsChooseProject] = useState(false);
-
-  const [default_text_lotno, setDefaultLotno] = useState(true);
-  const [keyword, setKeyword] = useState("");
 
   const [newsannounce, setNewsAnnounce] = useState([]);
   const [newsannounceslice, setNewsAnnounceSlice] = useState([]);
@@ -204,41 +122,19 @@ const Home = (props) => {
 
   const [promoclubfac, setPromoClubFac] = useState([]);
   const [promoclubfacslice, setPromoClubFacSlice] = useState([]);
-  const [loadpromoclubAnnounce, setLoadPromoClub] = useState(true);
   const [imagePromoClubFac, setImagePromoClubFac] = useState([]);
 
   const [eventresto, setEventRestaurant] = useState([]);
   const [eventrestoslice, setEventRestaurantSlice] = useState([]);
-  const [loadeventresto, setLoadEventResto] = useState(true);
   const [imageEventResto, setImageEventResto] = useState([]);
 
-  const [statusUser, setStatusUser] = useState("");
   const [modalImage, setModalImage] = useState(false);
   const [imageGreetings, setImageGreetings] = useState([]);
   const [modalShowImage, setmodalShowImage] = useState(false);
   const [urlImageGreetings, setUrlGreetingsImage] = useState("");
   const [dotList, setDotList] = useState([]);
   const [dotChooseUnit, setDotChooseUnit] = useState(false);
-
   const [claimUnit, setClaimUnit] = useState(false);
-
-  const [dataNotif, setDataNotif] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-
-  const [dummyArray, setDummyArray] = useState([
-    {
-      cluster_cd: "GSE",
-      entity_cd: "1001",
-      lot_no: "AA-23",
-      project_no: "1001001",
-    },
-    // {
-    //   cluster_cd: "GSE",
-    //   entity_cd: "1001",
-    //   lot_no: "AA-25",
-    //   project_no: "1001001",
-    // },
-  ]);
 
   useEffect(() => {
     let intervalIdNotif;
@@ -246,8 +142,8 @@ const Home = (props) => {
       intervalIdNotif = setInterval(() => {
         console.log("308 appState: ", appState);
         if (appState === "active") {
-          //alert("run");
           projectDot();
+          getProjectList();
         }
       }, 15000); // Update every 1000 milliseconds (1 second)
     }
@@ -270,19 +166,6 @@ const Home = (props) => {
     onChangelot(stateReduxChoosedUnit);
   }, [dotList]);
 
-  const dataImageHeader = [
-    {
-      img_url:
-        "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/featuredimage-apartment.jpg",
-    },
-    {
-      img_url:
-        "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/featuredimage-apartment.jpg",
-    },
-  ];
-
-  // const [urlImageHeader, setUrlImageHeader] = useState(dataImageHeader);
-
   const [urlImageHeader, setUrlImageHeader] = useState([
     {
       img_url: "null",
@@ -292,10 +175,7 @@ const Home = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [dataDD, setDataDD] = useState([]);
 
-  // const isFocused = useFocusEffect();
   const dispatch = useDispatch();
-
-  //const isFocused = useIsFocused();
 
   const headerAuth = {
     headers: {
@@ -311,39 +191,10 @@ const Home = (props) => {
     wait(2000).then(() => setRefreshing(false));
   };
 
-  // useEffect List
-  //UE1
-  // useEffect(() => {
-  //   messaging().onNotificationOpenedApp((remoteMessage) => {
-  //     console.log(
-  //       "Notification caused app to open from background state:",
-  //       remoteMessage.notification
-  //     );
-  //     navigation.navigate("Notification", remoteMessage);
-  //   });
-
-  //   // Check whether an initial notification is available
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then((remoteMessage) => {
-  //       if (remoteMessage) {
-  //         console.log(
-  //           "Notification caused app to open from quit state:",
-  //           remoteMessage.notification
-  //         );
-  //         navigation.navigate("Notification", remoteMessage);
-  //       }
-  //       //setLoading(false);
-  //     });
-  // }, []);
-
   useEffect(() => {
-    //console.log("332_home useeffect");
-    // This effect will run whenever stateReduxChoosedUnit changes
     if (stateReduxNotificationData) {
-      //console.log("332_home useeffect true");
       setDotList(stateReduxNotificationData);
-      //console.log("332_home notifRedux: ", stateReduxNotificationData);
+
       if (
         stateReduxNotificationData.some(
           (obj) =>
@@ -352,10 +203,7 @@ const Home = (props) => {
             obj?.lot_no === stateReduxChoosedUnit?.lot_no
         )
       ) {
-        //masih ada
       } else {
-        //setDotChooseUnit(false);
-        //onChangelot(stateReduxChoosedUnit);
         saveHelpdeskDotNotification(false);
       }
 
@@ -364,22 +212,15 @@ const Home = (props) => {
           (obj) =>
             obj?.entity_cd === text_project?.entity_cd &&
             obj?.project_no === text_project?.project_no
-          //obj.lot_no === stateReduxChoosedUnit.lot_no
         )
       ) {
-        //masih ada
       } else {
         setDotChooseUnit(false);
-        //onChangelot(stateReduxChoosedUnit);
-        //saveHelpdeskDotNotification(false);
       }
-      // Perform any actions based on the new state
-      // For example, fetching data or updating local state
     }
-  }, [stateReduxNotificationData]); // Dependency array includes stateReduxChoosedUnit
+  }, [stateReduxNotificationData]);
 
   useEffect(() => {
-    //console.log("119_1 user?.pict: ", user?.pict);
     setFotoProfil({ uri: user?.pict });
   }, [user]);
 
@@ -392,12 +233,11 @@ const Home = (props) => {
   useEffect(() => {
     setLoading(true);
 
-    //console.log("uE 0: ", user?.pict);
     setFotoProfil({ uri: user?.pict });
 
     loadData();
     check_version();
-    //alert("276 test");
+
     setLoading(false);
   }, []);
 
@@ -406,19 +246,8 @@ const Home = (props) => {
   );
 
   const loadData = async () => {
-    //alert("test loadData");
-    // const fcmToken = await messaging()
-    //   .getToken()
-    //   .catch((error) => {
-    //     console.log("460 error: ", error);
-    //   });
-    // console.log("460 run0 : ", fcmToken);
-    ////console.log("galery", galery);
-    //console.log("uE 1");
     await loadDataClaimUnit();
     await doSomething();
-    //dataImage();
-    //console.log("uE 2");
 
     console.log("460 run1 :", text_project);
     if (text_project) {
@@ -426,63 +255,11 @@ const Home = (props) => {
       loadUnitReact(text_project);
     }
 
-    //console.log("uE 4");
     await dataMobileHeader();
-    // carouselRef.current.snapToItem(0);
-    ////console.log("about", data);
-    //fetchDataDue();
-    //fetchDataNotDue();
-    //fetchDataHistory();
 
-    //getLotNo();
-    //getLotNo2();
-    //console.log("uE 5");
-    //await getHelpdeskNotification();
-    await firstLogin();
-    //await notifUser();
-    //console.log("uE 6");
+    // await firstLogin();
 
-    //const dataproject = await ProjectController.data_project(email);
-    // try {
-    //   //console.log("15c start try " + token);
-    //   const result = await httpClient({
-    //     method: "GET",
-    //     params: { email: email },
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   //console.log("15c res: ", result);
-    //   // if (!result.data.success) {
-    //   //   return Promise.reject(result.data.message);
-    //   // } else {
-    //   //return result.data.data;
-    //   // }
-    //   loadProject(result.data.data);
-    // } catch (error) {
-    //   //console.log("15c error: ", error.response.data.message);
-    //   alert(error.response.data.message);
-    //   //return Promise.reject(error);
-    // }
-
-    await httpClient
-      .request({
-        url: "/home/common-project",
-        method: "GET",
-        params: { email: email },
-      })
-      .then((res) => {
-        //setHomeMenu(res.data.data);
-        //console.log("333 res: ", res.data.data);
-        setProjectListUseState(res.data.data);
-        dispatch(data_project(res.data.data));
-        //loadProject(dataproject);
-        ////console.log("333 loadFinish: ");
-      })
-      .catch((error) => {
-        alert(error);
-        //console.log("333 error: " + error.response.data.message);
-      });
+    await getProjectList();
 
     //loadProject(dataproject);
 
@@ -491,6 +268,22 @@ const Home = (props) => {
     await dataPromoClubFacilities();
 
     await projectDot();
+  };
+
+  const getProjectList = async () => {
+    await httpClient
+      .request({
+        url: "/home/common-project",
+        method: "GET",
+        params: { email: email },
+      })
+      .then((res) => {
+        setProjectListUseState(res.data.data);
+        dispatch(data_project(res.data.data));
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   //useCustomTriggerOnFocus(loadData, 120000);
@@ -503,34 +296,21 @@ const Home = (props) => {
         params: { email: user.email },
       })
       .then((res) => {
-        //console.log("435 res: ", res.data.data);
         return res.data.data;
       })
       .catch((error) => {
-        //console.log("435 error: " + error.response.data.message);
         return [];
       });
 
     const dots = arrayNotification.notifications.filter(
       (item) => item.isRead === "0"
     );
-    // Filter notifications with isRead = 0
-    ////console.log("436 stateReduxDataProject: ", stateReduxDataProject);
     console.log("435 notif dots: ", dots);
-    ////console.log("436 notif arrayNotification: ", arrayNotification);
     saveDataNotification(dots);
     saveDataNotificationPersist(dots);
     await setDotList(dots);
     if (text_project) {
-      // //console.log(
-      //   "436 condition: ",
-      //   dots.some((obj) => obj.entity_cd != text_project.entity_cd),
-      //   text_project.entity_cd
-      // );
-      if (
-        dots.some((obj) => obj.entity_cd != text_project.entity_cd)
-        //|| dots?.length > 1
-      ) {
+      if (dots.some((obj) => obj.entity_cd != text_project.entity_cd)) {
         saveProjectDotNotification(true);
       } else {
         saveProjectDotNotification(false);
@@ -550,34 +330,31 @@ const Home = (props) => {
     }
   };
 
-  const firstLogin = async () => {
-    //fetch api
+  // const firstLogin = async () => {
+  //   await httpClient
+  //     .request({
+  //       // url: "/home/menu",
+  //       method: "GET",
+  //       params: { group_cd: user.Group_Cd },
+  //     })
+  //     .then((res) => {
+  //       //console.log("249 res: ", res.data.data);
 
-    await httpClient
-      .request({
-        // url: "/home/menu",
-        method: "GET",
-        params: { group_cd: user.Group_Cd },
-      })
-      .then((res) => {
-        //console.log("249 res: ", res.data.data);
+  //       const firstLogin = res.data.data;
+  //       if (firstLogin) {
+  //         navigation.navigate("ChangePassword", null);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       //console.log("249 error: " + error.response.data.message);
+  //     });
 
-        const firstLogin = res.data.data;
-        if (firstLogin) {
-          navigation.navigate("ChangePassword", null);
-        }
-      })
-      .catch((error) => {
-        //console.log("249 error: " + error.response.data.message);
-      });
-
-    //ChangePassword;
-  };
+  //   //ChangePassword;
+  // };
 
   const loadDataClaimUnit = async () => {
     const dataParams = {
       email: user.email,
-      //email: "m.hafid@ifca.co.id",
     };
     await httpClient
       .request({
@@ -589,19 +366,12 @@ const Home = (props) => {
         setClaimUnit(true);
       })
       .catch((e) => {
-        //alert(e.response.data.message);
         setClaimUnit(false);
       });
   };
 
-  //untuk load data get chairman message
-  // (sebenernya terpakai hanya sekali, saat open screen pertama kali.
-  // jika tidak dibatasi dengan akhir[] maka akan menimbulkan load limit.
-  // tidak error parah, cuma mengganggu saja)
-
-  const loadProject = useCallback(
-    (dataproject) => dispatch(data_project(dataproject))
-    //,[email, dispatch]
+  const loadProject = useCallback((dataproject) =>
+    dispatch(data_project(dataproject))
   );
 
   const saveUnit = useCallback((unit) => dispatch(choosed_unit(unit)));
@@ -622,11 +392,6 @@ const Home = (props) => {
   );
 
   const doSomething = async () => {
-    // //console.log(
-    //   'url greetings chairman',
-    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/home/greetings-change-status_Get/` + email,
-    // );
-
     await httpClient
       .request({
         url: "/home/menu",
@@ -634,34 +399,9 @@ const Home = (props) => {
         params: { group_cd: user.Group_Cd },
       })
       .then((res) => {
-        // alert(user.Group_Cd);
         setHomeMenu(res.data.data);
-        //console.log("249 res: ", res.data.data);
       })
-      .catch((error) => {
-        //console.log("249 error: " + error.response.data.message);
-      });
-  };
-
-  const getImageGreetings = async () => {
-    // //console.log(
-    //   'url greetings chairman',
-    //   `http://apps.pakubuwono-residence.com/apiwebpbi/api/home/greetings-change-status_Get/` + email,
-    // );
-    await axios
-      .get(API_URL_LOKAL + `/home/greetings`)
-      .then((res) => {
-        // //console.log('res greetings', res.data.data);
-        const image_greetings = res.data.data;
-        //console.log("image_greetings", image_greetings);
-        setImageGreetings(image_greetings);
-        setLoadNews(false);
-        // return res.data;
-      })
-      .catch((error) => {
-        //console.log("error res image greeting", error);
-        // alert('error get');
-      });
+      .catch((error) => {});
   };
 
   const pressChairmanMessage = async () => {
@@ -691,19 +431,6 @@ const Home = (props) => {
     setUrlGreetingsImage(item);
     setmodalShowImage(true);
   };
-
-  async function fetchDataHistory() {
-    try {
-      const res = await axios.get(
-        API_URL_LOKAL + `/modules/billing/summary-history/IFCAPB/${user?.email}`
-      );
-      setDataHistory(res.data.Data);
-      // //console.log('data get history', res.data.Data);
-    } catch (error) {
-      setErrors(error);
-      // alert(hasError.toString());
-    }
-  }
 
   const dataNewsAnnounce = async (project = null) => {
     let params;
@@ -893,8 +620,6 @@ const Home = (props) => {
       });
   };
 
-  //const galery = [...data];
-
   //TOTAL DATE DUE
   const sum =
     getDataDue == 0
@@ -902,8 +627,6 @@ const Home = (props) => {
       : getDataDue.reduceRight((max, bills) => {
           return (max += parseInt(bills.mbal_amt));
         }, 0);
-
-  //console.log("sum", sum);
 
   //TOTAL DATE NOT DUE
   const sumNotDue =
@@ -913,92 +636,28 @@ const Home = (props) => {
           return (max += parseInt(bills.mbal_amt));
         }, 0);
 
-  //console.log("sumNotDue", sumNotDue);
-
   const math_total = Math.floor(sumNotDue) + Math.floor(sum);
-  //console.log("math total", math_total);
-
-  // const sumHistory =
-  //   getDataHistory == null
-  //     ? 0
-  //     : getDataHistory.reduceRight((max, bills) => {
-  //         return (max += parseInt(bills.mdoc_amt));
-  //       }, 0);
-
-  // //console.log('sumHistory', sumHistory);
 
   //LENGTH
   const onSelect = (indexSelected) => {};
 
   const unique =
     getDataDue == 0 ? 0 : [...new Set(getDataDue.map((item) => item.doc_no))];
-  //console.log("unique", unique);
 
   const uniqueNotDue =
     getDataNotDue == 0 || getDataNotDue == null
       ? 0
       : [...new Set(getDataNotDue.map((item) => item.doc_no))];
-  //console.log("uniqueNotDue", uniqueNotDue);
 
   const invoice = unique == 0 ? 0 : unique.length;
-  //console.log("invoice", invoice);
 
   const invoiceNotDue = uniqueNotDue == 0 ? 0 : uniqueNotDue.length;
-  //console.log("invoiceNotDue", invoiceNotDue);
-
-  const total_outstanding = Math.floor(invoice) + Math.floor(invoiceNotDue);
-  //console.log("total_outstanding", total_outstanding);
-
-  // const uniqueHistory =
-  //   getDataHistory == null
-  //     ? setDataHistory([])
-  //     : [...new Set(getDataHistory.map(item => item.doc_no))];
-  // //console.log('uniqueHistory', uniqueHistory);
-
-  // const invoiceHistory = uniqueHistory.length;
-  // //console.log('invoiceHistory', invoiceHistory);
-
-  const headerBackgroundColor = scrollY.interpolate({
-    inputRange: [0, 140],
-    outputRange: [BaseColor.whiteColor, colors.text],
-    extrapolate: "clamp",
-    useNativeDriver: true,
-  });
-
-  //For header image opacity
-  const headerImageOpacity = scrollY.interpolate({
-    inputRange: [0, 250 - heightHeader - 20],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-    useNativeDriver: true,
-  });
-
-  //artist profile image position from top
-  const heightViewImg = scrollY.interpolate({
-    inputRange: [0, 250 - heightHeader],
-    outputRange: [250, heightHeader],
-    useNativeDriver: true,
-  });
-
-  const goPostDetail = (item) => () => {
-    navigation.navigate("PostDetail", { item: item });
-  };
-
-  const onChangeText = (text) => {
-    setKeyword(text);
-    // setCategory(
-    //   text
-    //     ? category.filter(item => item.title.includes(text))
-    //     : CategoryData,
-    // );
-  };
 
   const onChangelot = (lot, fromUseEffectState = false) => {
     //setDefaultLotno(false);
-    //choosed_unit;
+
     fromUseEffectState ? null : saveUnit(lot);
 
-    //console.log("861 lot: ", lot);
     setTextLotno(lot);
 
     //dot choose unit
@@ -1010,7 +669,6 @@ const Home = (props) => {
             item?.project_no === stateReduxChoosedProject?.project_no
         )
         .some((obj) => obj?.lot_no != lot?.lot_no)
-      //|| dotList?.length > 1
     ) {
       setDotChooseUnit(true);
     } else {
@@ -1062,17 +720,14 @@ const Home = (props) => {
   };
 
   const goToMoreNewsAnnounce = (item) => {
-    //console.log("item go to", item.length);
     navigation.navigate("NewsAnnounce", { items: item });
   };
 
   const goToEventResto = (item) => {
-    // //console.log('item go to', item.length);
     navigation.navigate("EventResto", { items: item });
   };
 
   const goToPromoClubFac = (item) => {
-    //console.log("item go to", item.length);
     navigation.navigate("ClubFacilities", { items: item });
   };
 
@@ -1082,47 +737,28 @@ const Home = (props) => {
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        //justifyContent: "center",
-        //backgroundColor: "blue",
-        //alignSelf: "center",
-        //textAlign: "center",
-        //marginLeft: "90%",
-        //width: "135%",
-        //marginVertical: 0,
       }}
     >
       <Text
         style={{
-          // color: "#333",
-          // flexDirection: "row",
-          // alignItems: "center",
-          //marginLeft: 20,
-          //backgroundColor: "pink",
-          //marginLeft: "60%",
-          //paddingLeft: "60%",
           color: "black",
         }}
       >
         {item.descs}
       </Text>
-      {
-        //dotList.includes(item.entity_cd) && (
-        dotList.some((obj) => obj.entity_cd === item.entity_cd) && (
-          // true ? (
-          <View
-            style={{
-              width: 10,
-              height: 10,
-              backgroundColor: "red",
-              borderRadius: 5,
-              marginLeft: 10,
-              position: "absolute",
-              //top: 0,
-              right: -20,
-            }}
-          />
-        )
-      }
+      {dotList.some((obj) => obj.entity_cd === item.entity_cd) && (
+        <View
+          style={{
+            width: 10,
+            height: 10,
+            backgroundColor: "red",
+            borderRadius: 5,
+            marginLeft: 10,
+            position: "absolute",
+            right: -20,
+          }}
+        />
+      )}
     </View>
   );
 
@@ -1136,78 +772,43 @@ const Home = (props) => {
     >
       <Text
         style={{
-          //marginLeft: 125,
           color: "black",
         }}
       >
         {item.lot_no}
       </Text>
-      {
-        //dotList.includes(item.entity_cd) && (
-        dotList.some(
-          (obj) =>
-            obj.lot_no === item.lot_no &&
-            obj.entity_cd === stateReduxChoosedProject.entity_cd &&
-            obj.project_no === stateReduxChoosedProject.project_no
-        ) && (
-          // true ? (
-          <View
-            style={{
-              width: 10,
-              height: 10,
-              backgroundColor: "red",
-              borderRadius: 5,
-              marginLeft: 10,
-              position: "absolute",
-              //top: 0,
-              right: -20,
-            }}
-          />
-        )
-      }
+      {dotList.some(
+        (obj) =>
+          obj.lot_no === item.lot_no &&
+          obj.entity_cd === stateReduxChoosedProject.entity_cd &&
+          obj.project_no === stateReduxChoosedProject.project_no
+      ) && (
+        <View
+          style={{
+            width: 10,
+            height: 10,
+            backgroundColor: "red",
+            borderRadius: 5,
+            marginLeft: 10,
+            position: "absolute",
+            right: -20,
+          }}
+        />
+      )}
     </View>
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // //console.log("1042 stateScreen: ", urlImageHeader);
-
   const renderItemCarousel_ = ({ item }) => {
-    //console.log("1061 item.img_url: " + item.img_url);
-    // <View
-    //   style={{
-    //     width: width,
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <Image
-    //     source={{ uri: item.img_url }}
-    //     style={{
-    //       width: "100%",
-    //       height: 200,
-    //       resizeMode: "cover",
-    //     }}
-    //   />
-    // </View>
     return (
       <View style={[{ width, justifyContent: "center" }]}>
         <ImageBackground
-          //source={require("../../assets/images/image-home/Main_Image.png")}
-          //source={require("../../assets/images/image-home/carstensz.webp")}
           source={{ uri: item.img_url }}
-          // source={{
-          //   uri: "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/Bangunan-apartemen-di-Jakarta.jpg",
-          // }}
-          //source={{ uri: "https://via.placeholder.com/600x400?text=Image+2" }}
           style={{
-            // height: '100%',
             height: 400,
             width: "100%",
             flex: 1,
-            // resizeMode: 'cover',
-            // borderBottomLeftRadius: 500,
-            // borderBottomRightRadius: 175,
             backgroundColor: "lightgray",
           }}
           imageStyle={
@@ -1222,23 +823,8 @@ const Home = (props) => {
       </View>
     );
   };
-  const renderItemCarousel = ({ item }) => {
-    // Pastikan item berisi URL gambar yang valid atau data lain yang diperlukan
-    return (
-      <View style={{ flex: 1 }}>
-        <Text>ini image</Text>
-        {/* <Image
-          source={{ uri: item }}
-          style={{ width: '100%', height: 200 }} // Sesuaikan style sesuai kebutuhan
-          resizeMode="cover"
-        /> */}
-      </View>
-    );
-  };
 
   const CardItem = ({ i, item }) => {
-    //console.log("key card item", i);
-    //console.log("item card", item);
     return (
       <TouchableOpacity
         onPress={() =>
@@ -1249,7 +835,6 @@ const Home = (props) => {
         }
       >
         <View key={i} style={([styles.shadow], {})}>
-          {/* <Text style={{ alignSelf: "center" }}>{item?.title}</Text> */}
           <Image
             source={{ uri: item?.pict }}
             style={
@@ -1270,55 +855,6 @@ const Home = (props) => {
     );
   };
 
-  // return (
-  //   <View style={{ flex: 1, backgroundColor: "white" }}>
-  //     <SwiperFlatList
-  //       autoplay
-  //       autoplayDelay={2}
-  //       autoplayLoop
-  //       index={0}
-  //       showPagination
-  //       data={urlImageHeader}
-  //       renderItem={({ item }) => (
-  //         <View
-  //           style={[
-  //             { width, justifyContent: "center" },
-  //             { backgroundColor: item },
-  //           ]}
-  //         >
-  //           {/* <Text style={{ fontSize: width * 0.5, textAlign: "center" }}>
-  //             {item}
-  //           </Text> */}
-  //           <ImageBackground
-  //             //source={require("../../assets/images/image-home/Main_Image.png")}
-  //             //source={require("../../assets/images/image-home/carstensz.webp")}
-  //             source={{ uri: item.img_url }}
-  //             // source={{
-  //             //   uri: "https://api.property365.co.id:4421/tanrise_admin/assets/images/slides/Bangunan-apartemen-di-Jakarta.jpg",
-  //             // }}
-  //             //source={{ uri: "https://via.placeholder.com/600x400?text=Image+2" }}
-  //             style={{
-  //               // height: '100%',
-  //               height: 400,
-  //               width: "100%",
-  //               flex: 1,
-  //               // resizeMode: 'cover',
-  //               // borderBottomLeftRadius: 500,
-  //               // borderBottomRightRadius: 175,
-  //             }}
-  //             imageStyle={{
-  //               height: 400,
-  //               width: "100%",
-  //               // borderBottomLeftRadius: 175,
-  //               // borderBottomRightRadius: 175,
-  //             }}
-  //           ></ImageBackground>
-  //         </View>
-  //       )}
-  //     />
-  //   </View>
-  // );
-
   const renderContent = () => {
     const mainNews = PostListData[0];
 
@@ -1327,13 +863,9 @@ const Home = (props) => {
         style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
         edges={["right", "top", "left"]}
       >
-        {user == null || user == "" ? (
-          <Text>data user dihome null</Text>
-        ) : // <HeaderHome />
-        null}
+        {user == null || user == "" ? <Text>data user dihome null</Text> : null}
 
         <ScrollView
-          // contentContainerStyle={styles.paddingSrollView}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -1348,25 +880,15 @@ const Home = (props) => {
               showPagination
               autoplayLoopKeepAnimation
               data={urlImageHeader}
-              //data={dataImageHeader}
               renderItem={renderItemCarousel_}
             />
             <LinearGradient
-              //colors={["rgba(73, 73, 73, 0)", "rgba(73, 73, 73, 1)"]}
               colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.3)"]}
-              // colors={['#4c669f', '#3b5998', '#192f6a']}
-              // {...otherGradientProps}
               style={{
                 height: 400,
-                // height: '85%',
                 width: "100%",
-
                 flexDirection: "column",
-                // flex: 1,
                 justifyContent: "center",
-                // top: 30,
-                // borderBottomLeftRadius: 175,
-                // borderBottomRightRadius: 175,
                 position: "absolute",
               }}
             >
@@ -1384,24 +906,18 @@ const Home = (props) => {
                     style={{
                       height: 140,
                       width: "80%",
-                      //padding: 100,
                       resizeMode: "contain",
                     }}
-                    //source={require("../../assets/images/image-home/vector-logo-carstensz.webp")}
                     source={require("../../assets/images/image-home/logo-tanrise-white.png")}
                   ></Image>
                 </View>
                 <View
                   style={{
-                    // flex: 1,
                     alignItems: "center",
                     alignSelf: "center",
-                    //left: 47,
                     justifyContent: "center",
-
                     width: "80%",
                     marginTop: 50,
-                    //backgroundColor: "blue",
                   }}
                 >
                   <Text
@@ -1418,47 +934,6 @@ const Home = (props) => {
                     {user?.name}
                   </Text>
                 </View>
-                {/* ------- CLOSE TEXT WELCOME HOME ------- */}
-
-                {/* ----- SEARCH INPUT ----- */}
-                {/* <View
-                    style={{
-                      // flex: 1,
-                      alignItems: 'center',
-                      left: 47,
-                      justifyContent: 'center',
-                      width: '80%',
-                    }}>
-                    <SearchInput
-                      style={[BaseStyle.textInput, Typography.body1]}
-                      onChangeText={onChangeText}
-                      autoCorrect={false}
-                      placeholder={t('Explore your luxury lifestyle')}
-                      placeholderTextColor={BaseColor.grayColor}
-                      value={keyword}
-                      selectionColor={colors.primary}
-                      onSubmitEditing={() => {}}
-                      icon={
-                        <Icon
-                          name="search"
-                          solid
-                          size={24}
-                          color={colors.primary}
-                        />
-                      }
-                    />
-                  </View> */}
-                {/* <View style={{ alignItems: "center", top: 20 }}>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontFamily: "DMSerifDisplay",
-                      fontSize: 10,
-                    }}
-                  >
-                    Once Upon Your Lifetime
-                  </Text>
-                </View> */}
               </View>
             </LinearGradient>
           </View>
@@ -1466,32 +941,14 @@ const Home = (props) => {
           <View
             style={{
               flexDirection: "row",
-              //marginLeft: 35,
               marginTop: 10,
               marginBottom: 10,
-              //backgroundColor: "red",
-              //alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {/* <Image
-              style={{
-                height: 60,
-                width: 60,
-                borderRadius: 30,
-                marginRight: 15,
-                marginTop: 10,
-              }}
-              // source={require('../../assets/images/image-home/Main_Image.png')}
-              source={user?.pict != null ? { uri: repl } : fotoprofil}
-            ></Image> */}
             <View
               style={{
-                //alignSelf: "center",
-                //justifyContent: "center",
                 alignItems: "center",
-                //backgroundColor: "blue",
-                //marginLeft: 10
               }}
             >
               <View
@@ -1510,24 +967,14 @@ const Home = (props) => {
                     borderRadius: 30,
                     marginRight: 15,
                     marginTop: 10,
-                    // backgroundColor: "lightgray",
                     backgroundColor: colors.primaryLight,
                   }}
-                  // source={require('../../assets/images/image-home/Main_Image.png')}
                   source={user?.pict != null ? { uri: repl } : fotoprofil}
                 ></Image>
-                {/* {loadingImg && (
-                  <ActivityIndicator //size="large" color="#0000ff"
-                  />
-                )} */}
                 <Text
-                  // adjustsFontSizeToFit={true}
-                  // allowFontScaling={true}
                   style={{
-                    // fontSize: 18,s
                     fontSize: fontPixel(18),
                     paddingVertical: pixelSizeVertical(10),
-                    // marginVertical: 3,
                     fontFamily: font, //"DMSerifDisplay",
                   }}
                 >
@@ -1542,16 +989,12 @@ const Home = (props) => {
                   style={{ marginHorizontal: 5 }}
                 />
               </View>
-              {/* <Text>{lotno.length}</Text> */}
               {projectListUseState.length != 0 ? (
                 <View
                   style={{
-                    //backgroundColor: "blue",
                     backgroundColor: colors.primary, //"#315447",
                     height: 35,
-                    // width: '100%',
                     width: 350,
-                    //justifyContent: "center",
                     paddingHorizontal: 10,
                     borderRadius: 10,
                     alignContent: "center",
@@ -1562,8 +1005,6 @@ const Home = (props) => {
                   <View
                     style={{
                       flexDirection: "row",
-                      //paddingLeft: 0,
-                      //alignContent: "space-between",
                     }}
                   >
                     <ModalSelector
@@ -1576,8 +1017,6 @@ const Home = (props) => {
                         color: "#CDB04A",
                         alignSelf: "center",
                         fontSize: 16,
-                        // top: 10,
-                        // flex: 1,
                         justifyContent: "center",
                         fontWeight: "800",
                         fontFamily: "KaiseiHarunoUmi",
@@ -1602,7 +1041,6 @@ const Home = (props) => {
                           flexDirection: "row",
                           flex: 1,
                           justifyContent: "space-between",
-                          //paddingRight: 15,
                         }}
                       >
                         <Text
@@ -1613,8 +1051,6 @@ const Home = (props) => {
                             alignSelf: "center",
                             fontSize: 14,
                             justifyContent: "center",
-                            //paddingRight: 10,
-
                             fontWeight: "800",
                             fontFamily: font, //"KaiseiHarunoUmi",
                           }}
@@ -1626,8 +1062,6 @@ const Home = (props) => {
                             color: "#CDB04A",
                             alignSelf: "center",
                             fontSize: 16,
-                            // top: 10,
-                            // flex: 1,
                             justifyContent: "center",
                             fontWeight: "800",
                             fontFamily: font, //"KaiseiHarunoUmi",
@@ -1639,7 +1073,6 @@ const Home = (props) => {
                           name="caret-down"
                           solid
                           size={26}
-                          // color={colors.primary}
                           style={{ marginLeft: 5 }}
                           color={"#CDB04A"}
                         />
@@ -1660,11 +1093,7 @@ const Home = (props) => {
                           right: -15,
                           borderRadius: 10,
                         }}
-                      >
-                        {/* <Text whiteColor caption2>
-            {finalCount < 0 ? 0 : finalCount}
-          </Text> */}
-                      </View>
+                      ></View>
                     ) : null}
                   </View>
                 </View>
@@ -1695,7 +1124,6 @@ const Home = (props) => {
                     <Text
                       style={{
                         color: "#fff",
-                        //backgroundColor: "blue",
                         alignSelf: "center",
                         fontSize: 16,
                         justifyContent: "center",
@@ -1705,13 +1133,12 @@ const Home = (props) => {
                         fontFamily: font, //"KaiseiHarunoUmi",
                         textAlign: "center",
                       }}
-                      //ellipsizeMode="tail"
                       numberOfLines={2}
                     >
                       Please claim your unit before using this mobile app
                     </Text>
 
-                    {
+                    {/* {
                       <ModalSelector
                         style={{
                           justifyContent: "center",
@@ -1721,8 +1148,6 @@ const Home = (props) => {
                           color: "#CDB04A",
                           alignSelf: "center",
                           fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
                           justifyContent: "center",
                           fontWeight: "800",
                           fontFamily: "KaiseiHarunoUmi",
@@ -1732,7 +1157,6 @@ const Home = (props) => {
                         selectedItemTextStyle={{ color: "#3C85F1" }}
                         accessible={true}
                         keyExtractor={(item) => item.lot_no}
-                        // initValue={'ahlo'}
                         labelExtractor={(item) => item.lot_no} //khusus untuk lotno
                         cancelButtonAccessibilityLabel={"Cancel Button"}
                         cancelText={"Cancel"}
@@ -1745,15 +1169,14 @@ const Home = (props) => {
                             color: "#CDB04A",
                             alignSelf: "center",
                             fontSize: 16,
-                            // top: 10,
-                            // flex: 1,
+
                             justifyContent: "center",
                             fontWeight: "800",
                             fontFamily: "KaiseiHarunoUmi",
                           }}
                         ></Text>
                       </ModalSelector>
-                    }
+                    } */}
                   </View>
                 </View>
               )}
@@ -1763,24 +1186,20 @@ const Home = (props) => {
                     style={{
                       backgroundColor: colors.primary, //"#315447",
                       height: 35,
-                      // width: '100%',
                       width: 180,
                       justifyContent: "center",
                       paddingHorizontal: 10,
                       borderRadius: 10,
-                      //alignSelf:'center'
                     }}
                   >
                     <View
                       style={{
                         flexDirection: "row",
                         paddingLeft: 0,
-                        //alignContent: "space-between",
                       }}
                     >
                       <ModalSelector
                         disabled={isChooseProject}
-                        //disabled={true}
                         style={{
                           justifyContent: "center",
                           alignSelf: "center",
@@ -1790,8 +1209,6 @@ const Home = (props) => {
                           color: "#CDB04A",
                           alignSelf: "center",
                           fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
                           justifyContent: "center",
                           fontWeight: "800",
                           fontFamily: "KaiseiHarunoUmi",
@@ -1802,7 +1219,6 @@ const Home = (props) => {
                         selectedItemTextStyle={{ color: "#3C85F1" }}
                         accessible={true}
                         keyExtractor={(item) => item.lot_no}
-                        // initValue={'ahlo'}
                         labelExtractor={(item) => renderOptionUnit(item)} //khusus untuk lotno
                         cancelButtonAccessibilityLabel={"Cancel Button"}
                         cancelText={"Cancel"}
@@ -1839,8 +1255,6 @@ const Home = (props) => {
                               color: "#CDB04A",
                               alignSelf: "center",
                               fontSize: 16,
-                              // top: 10,
-                              // flex: 1,
                               justifyContent: "center",
                               fontWeight: "800",
                               fontFamily: font, //"KaiseiHarunoUmi",
@@ -1852,7 +1266,6 @@ const Home = (props) => {
                             name="caret-down"
                             solid
                             size={26}
-                            // color={colors.primary}
                             style={{ marginLeft: 5 }}
                             color={"#CDB04A"}
                           />
@@ -1873,11 +1286,7 @@ const Home = (props) => {
                             right: -20,
                             borderRadius: 10,
                           }}
-                        >
-                          {/* <Text whiteColor caption2>
-            {finalCount < 0 ? 0 : finalCount}
-          </Text> */}
-                        </View>
+                        ></View>
                       ) : null}
                     </View>
                   </View>
@@ -1886,8 +1295,6 @@ const Home = (props) => {
                     style={{
                       backgroundColor: colors.primary, //"#315447",
                       height: 35,
-                      // width: '100%',
-                      //width: 150,
                       justifyContent: "center",
                       paddingHorizontal: 10,
                       borderRadius: 10,
@@ -1924,8 +1331,6 @@ const Home = (props) => {
                           color: "#CDB04A",
                           alignSelf: "center",
                           fontSize: 16,
-                          // top: 10,
-                          // flex: 1,
                           justifyContent: "center",
                           fontWeight: "800",
                           fontFamily: "KaiseiHarunoUmi",
@@ -1935,7 +1340,6 @@ const Home = (props) => {
                         selectedItemTextStyle={{ color: "#3C85F1" }}
                         accessible={true}
                         keyExtractor={(item) => item.lot_no}
-                        // initValue={'ahlo'}
                         labelExtractor={(item) => item.lot_no} //khusus untuk lotno
                         cancelButtonAccessibilityLabel={"Cancel Button"}
                         cancelText={"Cancel"}
@@ -1948,8 +1352,6 @@ const Home = (props) => {
                             color: "#CDB04A",
                             alignSelf: "center",
                             fontSize: 16,
-                            // top: 10,
-                            // flex: 1,
                             justifyContent: "center",
                             fontWeight: "800",
                             fontFamily: "KaiseiHarunoUmi",
@@ -1964,7 +1366,6 @@ const Home = (props) => {
           </View>
 
           <View style={styles.paddingContent}>
-            {/* {loading && <ActivityIndicator />} */}
             {user == null || user == "" ? (
               <Text>user not available</Text>
             ) : !loading ? (
@@ -1979,42 +1380,26 @@ const Home = (props) => {
               <ActivityIndicator />
             )}
           </View>
-          {/**errot */}
           <View
             style={{
               marginBottom: 10,
               flex: 1,
               fontFamily: font,
-              //backgroundColor: "blue",
             }}
           >
             <View
               style={{
-                //backgroundColor: "red",
                 marginHorizontal: 30,
                 marginTop: 20,
-                //marginBottom: 10,
-                //backgroundColor: colors.primary,
-                //padding: 5,
-                // borderTopLeftRadius: 20,
-                // borderBottomLeftRadius: 7,
-                // borderBottomRightRadius: 20,
-                // borderTopRightRadius: 7,
-                //borderRadius: 20,
               }}
             >
               <View
                 style={{
                   borderRadius: 15,
-                  // borderTopLeftRadius: 15,
-                  // borderBottomRightRadius: 15,
-                  //alignItems: "center",
                   borderColor: colors.primary,
-                  //borderWidth: 2,
                   borderLeftWidth: 0,
                   borderRightWidth: 0,
                   borderBottomWidth: 0,
-                  //backgroundColor: colors.primary,
                 }}
               >
                 <Text
@@ -2022,15 +1407,12 @@ const Home = (props) => {
                     fontSize: 24,
                     color: colors.text,
                     fontFamily: font, //"DMSerifDisplay",
-                    //padding: 3,
-                    //borderTopLeftRadius: 20,
                   }}
                 >
                   Our Bulletin
                 </Text>
                 <Text
                   style={{
-                    //padding: 3,
                     color: colors.text,
                   }}
                 >
@@ -2065,34 +1447,19 @@ const Home = (props) => {
                       </View>
                     </TouchableOpacity>
                   ) : null
-                  // <Text>kurang dari 6</Text>
                 }
               </View>
             </View>
-            <View
-              style={
-                {
-                  //marginVertical: 10,
-                  //marginLeft: 20,
-                  //backgroundColor: "blue",
-                }
-              }
-            >
+            <View style={{}}>
               {loading ? (
                 <ActivityIndicator />
               ) : newsannounce.length != 0 ? (
-                <SliderNews
-                  data={newsannounce}
-                  local={true}
-                  // contentContainerStyle={{paddingHorizontal: 16}}
-                  // onPress={//console.log('klik')}
-                />
+                <SliderNews data={newsannounce} local={true} />
               ) : (
                 <>
                   <Text
                     style={{
                       marginLeft: 30,
-                      //backgroundColor: "blue"
                       color: "gray",
                       marginTop: 20,
                     }}
@@ -2109,8 +1476,6 @@ const Home = (props) => {
               <Text
                 style={{
                   fontSize: 24,
-                  // color: 'white',
-                  //fontFamily: "DMSerifDisplay",
                 }}
               >
                 This Weekend
@@ -2162,7 +1527,6 @@ const Home = (props) => {
                 <ScrollView horizontal>
                   <MasonryList
                     data={imageEventResto}
-                    // data={sliceArrEvent}
                     style={{ alignSelf: "stretch" }}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
@@ -2170,7 +1534,6 @@ const Home = (props) => {
                     contentContainerStyle={{
                       paddingHorizontal: 10,
                       alignSelf: "stretch",
-                      // alignSelf: 'flex-start',
                     }}
                     keyExtractor={(item, index) => index}
                     numColumns={3}
@@ -2182,7 +1545,6 @@ const Home = (props) => {
                   <Text
                     style={{
                       marginLeft: 20,
-                      //backgroundColor: "blue"
                       color: "grey",
                     }}
                   >
@@ -2198,8 +1560,6 @@ const Home = (props) => {
               <Text
                 style={{
                   fontSize: 24,
-                  // color: 'white',
-                  //fontFamily: "DMSerifDisplay",
                 }}
               >
                 Club And Facilities
@@ -2288,10 +1648,8 @@ const Home = (props) => {
                             resizeMode="cover"
                           />
                         </View>
-                        {/* </View> */}
                       </TouchableOpacity>
                     )}
-                    // keyExtractor={(item, index) => item.toString() + index}
                     keyExtractor={(item, index) => index}
                   />
                 </ScrollView>
@@ -2300,7 +1658,6 @@ const Home = (props) => {
                   <Text
                     style={{
                       marginLeft: 20,
-                      //backgroundColor: "blue"
                       color: "grey",
                     }}
                   >
@@ -2310,58 +1667,6 @@ const Home = (props) => {
               )}
             </View>
           </View>
-          {/*           <Button
-            title={
-              "simulasi notifikasi " +
-              JSON.stringify(dummyArray.length) +
-              " unit"
-            }
-            onPress={
-              () => {
-                if (dummyArray.length == 2) {
-                  const newArray = [
-                    {
-                      cluster_cd: "GSE",
-                      entity_cd: "1001",
-                      lot_no: "AA-23",
-                      project_no: "1001001",
-                    },
-                  ];
-                  setDummyArray(newArray);
-                  saveDataNotification(newArray);
-                  setDotList(newArray);
-                  //await onChangelot(stateReduxChoosedUnit);
-                } else {
-                  const newArray = [
-                    {
-                      cluster_cd: "GSE",
-                      entity_cd: "1001",
-                      lot_no: "AA-23",
-                      project_no: "1001001",
-                    },
-                    {
-                      cluster_cd: "GSE",
-                      entity_cd: "1001",
-                      lot_no: "AA-25",
-                      project_no: "1001001",
-                    },
-                  ];
-                  setDummyArray(newArray);
-                  saveDataNotification(newArray);
-                  setDotList(newArray);
-                  //await onChangelot(stateReduxChoosedUnit);
-                }
-              }
-              // setDummyArray([
-              //   {
-              //     cluster_cd: "GSE",
-              //     entity_cd: "1001",
-              //     lot_no: "AA-23",
-              //     project_no: "1001001",
-              //   },
-              // ])
-            }
-          /> */}
         </ScrollView>
         {/* Close Modal Greeting Chairman  */}
         <View>
@@ -2373,13 +1678,8 @@ const Home = (props) => {
           >
             <View
               style={{
-                // flex: 1,
-                // backgroundColor: BaseColor.whiteColor,
                 height: "90%",
-                // backgroundColor: BaseColor.whiteColor,
-                // borderRadius: 30,
                 marginTop: "10%",
-                // justifyContent: 'center',
               }}
             >
               {/* Button close X  */}
@@ -2393,26 +1693,10 @@ const Home = (props) => {
                     flex: 1,
                   }}
                 ></View>
-                {/* <View
-                  style={{
-                    marginTop: 20,
-                    justifyContent: 'space-between',
-                    marginRight: 10,
-                  }}>
-                  <Pressable onPress={() => pressChairmanMessage()}>
-                    <View style={{width: 30, height: 20}}>
-                      <Icon name={'times'} size={20}></Icon>
-                    </View>
-                  </Pressable>
-                </View>
-              */}
               </View>
               {imageGreetings.map((item, index) => (
                 <View
                   style={{
-                    // flex: 1,
-                    // position: 'absolute',
-                    // top: 0,
                     height: "70%",
                     width: "100%",
                     backgroundColor: BaseColor.whiteColor,
@@ -2424,105 +1708,17 @@ const Home = (props) => {
                     source={{
                       uri: item.greetings_file.replace("https", "http"),
                     }}
-                    // resizeMode="stretch"
-                    // resizeMode="stretch"
-                    // resizeMode="cover"
                     resizeMode="contain"
-                    // source={require('@assets/images/ChairmanMessage.jpeg')}
                     style={{
-                      // width: Dimensions.get('window').width,
                       marginLeft: "5%",
                       width: "95%",
                       flexDirection: "column",
                       alignContent: "center",
                       alignItems: "center",
                       height: "100%",
-                      // marginTop: 20,
-                      // height: Dimensions.get('window').height,
-                      // resizeMode: 'cover',
-                      // justifyContent: 'center',
-                      // paddingVertical: 10,
                     }}
                   ></ImageBackground>
                 </View>
-                // {/* Button Next Here  */}
-                // <View
-                //   style={{
-                //     flex: 1,
-                //     justifyContent: 'flex-end',
-                //     marginBottom: 36,
-                //   }}>
-                //   <View style={{flexDirection: 'row', width: '100%'}}>
-                //     <View
-                //       style={{
-                //         marginTop: 10,
-                //         justifyContent: 'space-between',
-                //         flex: 1,
-                //         // backgroundColor: 'red',
-                //         // width: '50%',
-                //       }}>
-                //       {/* <Text>halo</Text> */}
-                //       <Pressable
-                //         onPress={() =>
-                //           previewZoomGreeting(item.greetings_file)
-                //         }>
-                //         <View
-                //           style={{
-                //             alignItems: 'center',
-                //             flexDirection: 'row',
-                //           }}>
-                //           <Text
-                //             style={{
-                //               paddingHorizontal: 10,
-                //               fontSize: 16,
-                //               color: colors.primary,
-                //             }}>
-                //             Preview Zoom
-                //           </Text>
-                //           <Icon
-                //             name="search"
-                //             solid
-                //             size={16}
-                //             color={colors.primary}
-                //           />
-                //         </View>
-                //       </Pressable>
-                //     </View>
-                //     <View
-                //       style={{
-                //         marginTop: 10,
-                //         justifyContent: 'space-between',
-                //         // marginRight: 10,
-                //         // flex: 1,
-                //         // backgroundColor: 'blue',
-                //         // width: '50%',
-                //       }}>
-                //       <Pressable onPress={() => pressChairmanMessage()}>
-                //         <View
-                //           style={{
-                //             alignItems: 'center',
-                //             marginRight: 20,
-                //             flexDirection: 'row',
-                //           }}>
-                //           <Text
-                //             style={{
-                //               paddingHorizontal: 10,
-                //               fontSize: 16,
-                //               color: colors.primary,
-                //             }}>
-                //             Next
-                //           </Text>
-                //           <Icon
-                //             name="arrow-right"
-                //             solid
-                //             size={16}
-                //             color={colors.primary}
-                //           />
-                //         </View>
-                //       </Pressable>
-                //     </View>
-                //   </View>
-                // </View>
               ))}
             </View>
             <View
@@ -2530,13 +1726,8 @@ const Home = (props) => {
                 marginBottom: "10%",
                 backgroundColor: BaseColor.whiteColor,
                 paddingVertical: 20,
-                // flex: 1,
-                //     justifyContent: 'flex-end',
-                //     marginBottom: 36,
               }}
             >
-              {/* <Button style={{backgroundColor: colors.primary}}>
-              </Button> */}
               {imageGreetings.map((item, index) => (
                 <View style={{ flexDirection: "row", width: "100%" }}>
                   <View
@@ -2544,11 +1735,8 @@ const Home = (props) => {
                       marginTop: 10,
                       justifyContent: "space-between",
                       flex: 1,
-                      // backgroundColor: 'red',
-                      // width: '50%',
                     }}
                   >
-                    {/* <Text>halo</Text> */}
                     <Pressable
                       onPress={() =>
                         previewZoomGreeting(
@@ -2584,10 +1772,6 @@ const Home = (props) => {
                     style={{
                       marginTop: 10,
                       justifyContent: "space-between",
-                      // marginRight: 10,
-                      // flex: 1,
-                      // backgroundColor: 'blue',
-                      // width: '50%',
                     }}
                   >
                     <Pressable onPress={() => pressChairmanMessage()}>
@@ -2626,7 +1810,6 @@ const Home = (props) => {
         {/* Modal Show Image Greeting Chairman  */}
         <View>
           <Modal
-            // style={{margin: 10, padding: 10}}
             isVisible={modalShowImage}
             onBackdropPress={() => setmodalShowImage(false)}
           >
@@ -2641,16 +1824,13 @@ const Home = (props) => {
               >
                 <View
                   style={{
-                    // marginTop: 10,
                     justifyContent: "space-between",
                     flex: 1,
                   }}
                 ></View>
                 <View
                   style={{
-                    // marginTop: 10,
                     justifyContent: "space-between",
-                    // marginRight: 10,
                   }}
                 >
                   <Pressable onPress={() => setmodalShowImage(false)}>
@@ -2662,11 +1842,7 @@ const Home = (props) => {
               </View>
               <View
                 style={{
-                  // flex: 1,
-                  // position: 'absolute',
-                  // left: 0,
                   height: "90%",
-                  // width: Dimensions.get('window').width,
                   width: "100%",
                   backgroundColor: BaseColor.whiteColor,
                   borderRadius: 30,
@@ -2675,24 +1851,16 @@ const Home = (props) => {
                 <ImageZoom
                   cropWidth={320}
                   cropHeight={570}
-                  // cropWidth={100}
-                  // cropHeight={100}
-                  // imageWidth={325.5}
-                  // imageHeight={360}
                   imageWidth={360}
                   imageHeight={360}
                 >
                   <Image
-                    // key={key}
                     style={{
                       width: "100%",
                       height: "100%",
                       marginLeft: 5,
                     }}
                     resizeMode="contain"
-                    // resizeMode="stretch"
-                    // resizeMode="cover"
-                    // resizeMode="center"
                     source={{ uri: urlImageGreetings }}
                   />
                 </ImageZoom>
@@ -2711,7 +1879,6 @@ const Home = (props) => {
         style={[
           BaseStyle.safeAreaView,
           {
-            //backgroundColor: "black",
             color: "white",
           },
         ]}

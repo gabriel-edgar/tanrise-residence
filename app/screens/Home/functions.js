@@ -26,7 +26,7 @@ const check_version = async () => {
     const showAlert = () => {
       Alert.alert(
         "New Version Available",
-        "A new version is released, please update to get new features",
+        "A new version is released, please update the app to fix bug",
         [
           // {
           //   text: "Later",//Close
@@ -42,8 +42,8 @@ const check_version = async () => {
                 console.error("Home16 Failed to open URL: ", err)
               ),
           },
-        ],
-        { cancelable: true } //android only
+        ]
+        // { cancelable: true } //android only
       );
       //alert("update");
     };
