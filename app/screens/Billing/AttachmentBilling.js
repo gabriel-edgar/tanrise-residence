@@ -81,6 +81,7 @@ const AttachmentBilling = (props) => {
 
       const res = await httpClient.request({
         url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}&type=${type}`,
+        //"INV" : "OR";
         method: "GET",
       });
 

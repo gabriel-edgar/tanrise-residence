@@ -173,9 +173,7 @@ const ClaimUnit2 = (props) => {
             response: {
               success: false,
               message: error.response?.data?.message
-                ? ["error unit no " + (index + 1) + ": "] +
-                  JSON.stringify(error?.response?.data?.message) +
-                  error
+                ? JSON.stringify(error?.response?.data?.message)
                 : error.response?.data
                 ? JSON.stringify(error.response?.data)
                 : error?.response
@@ -194,12 +192,7 @@ const ClaimUnit2 = (props) => {
           if (error.response?.status == 413) {
             alert(message);
           } else {
-            alert(
-              ["error unit no " + (index + 1) + ": "] +
-                JSON.stringify(error?.response?.data?.message) +
-                "\n" +
-                error
-            );
+            alert(JSON.stringify(error?.response?.data?.message));
           }
         }
       }
@@ -219,7 +212,7 @@ const ClaimUnit2 = (props) => {
       navigation.pop(2);
     } catch (e) {
       console.log("error3412: ", e);
-      alert("error: " + JSON.stringify(e));
+      alert(JSON.stringify(e));
       setLoading(false);
     }
   };

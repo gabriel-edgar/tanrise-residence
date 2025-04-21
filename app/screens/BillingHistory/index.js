@@ -134,25 +134,9 @@ const BillingHistory = ({
 
   // Make function to call the api
   async function fetchData() {
-    // try {
-    //   const res = await axios.get(
-    //     API_URL_LOKAL + `/modules/billing/summary-history/IFCAPB/${user.user}`
-    //   );
-    //   // console.log('res datacurrent', res.data.Data);
-    //   setDataCurrent(res.data.Data);
-    //   setLoading(false);
-    //   // console.log('DATA DUE DATE -->', dataCurrent);
-    // } catch (error) {
-    //   setErrors(error);
-    //   // alert(hasError.toString());
-    // }
-
     const getParams = {
-      //entity_cd: "1004",
       entity_cd: stateReduxChoosedUnit.entity_cd,
-      //project_no: "1004001",
       project_no: stateReduxChoosedUnit.project_no,
-      //debtor_acct: "GSE/AA-50/1",
       email: user.email,
       lot_no: stateReduxChoosedUnit.lot_no,
     };
@@ -164,7 +148,6 @@ const BillingHistory = ({
         url: `/modules/billing/get-data-payment`,
         method: "GET",
         params: getParams,
-        //baseURL: "https://api.property365.co.id:4421/tanrise_api/api",
       })
       .then((res) => {
         function checkLotno(currentValue, index, arr) {

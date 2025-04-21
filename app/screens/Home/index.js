@@ -54,6 +54,7 @@ import { SwiperFlatList } from "react-native-swiper-flatlist";
 const { width } = Dimensions.get("window");
 import { check_version } from "./functions";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
+import { useFocusEffect } from "@react-navigation/native";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -136,20 +137,20 @@ const Home = (props) => {
   const [dotChooseUnit, setDotChooseUnit] = useState(false);
   const [claimUnit, setClaimUnit] = useState(false);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     let intervalIdNotif;
-    if (appState === "active") {
-      intervalIdNotif = setInterval(() => {
-        console.log("308 appState: ", appState);
-        if (appState === "active") {
-          projectDot();
-          getProjectList();
+    intervalIdNotif = setInterval(() => {
+      projectDot();
+      getProjectList();
+      if (text_project) {
+        if (Object.keys(text_project).length !== 0) {
+          loadUnitReact(text_project);
         }
-      }, 15000); // Update every 1000 milliseconds (1 second)
-    }
-    // Clean up the interval on component unmount
+      }
+    }, 15000); // Update every 1000 milliseconds (1 second)
+
     return () => clearInterval(intervalIdNotif);
-  }, [appState]);
+  }, [text_project]);
 
   useEffect(() => {
     text_project ? setIsChooseProject(false) : setIsChooseProject(true);
@@ -241,9 +242,11 @@ const Home = (props) => {
     setLoading(false);
   }, []);
 
-  const loadUnitReact = useCallback((item) =>
-    dispatch(data_unit(item.entity_cd, item.project_no, email))
-  );
+  const loadUnitReact = (item) => {
+    dispatch(data_unit(item.entity_cd, item.project_no, email)).then(() => {
+      // alert("load unit react");
+    });
+  };
 
   const loadData = async () => {
     await loadDataClaimUnit();

@@ -250,8 +250,11 @@ const TransactionExpand = ({
         {...ListTransactionProps}
         onPress={() => clickExpand()}
       />
-      <Button style={{ height: 35 }} onPress={() => clickAttachment()}>
-        <Text style={{ color: "#fff", fontSize: 14 }}>Attachment</Text>
+      <Button
+        style={{ height: 35, backgroundColor: "lightgray" }}
+        onPress={() => clickAttachment()}
+      >
+        <Text style={{ color: "black", fontSize: 14 }}>Attachment</Text>
       </Button>
       {isExpand && (
         <View

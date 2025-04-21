@@ -18,20 +18,7 @@ import React, { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 const useCustomTriggerOnFocus = (triggerFunction = () => {}, time = 10000) => {
-  // const triggerFunction = () => {
-  //   //console.log("ScreenA has been focused, function triggered!");
-  //   // Your custom logic here...
-  // };
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     onRefresh();
-  //   }, [])
-  //   //onRefresh
-  // );
-
   useFocusEffect(
-    //   React.useCallback(() => {
     useCallback(() => {
       triggerFunction();
       // This will run when ScreenA is focused

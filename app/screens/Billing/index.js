@@ -83,6 +83,7 @@ const Billing = (
   const [db_profile, setDb_Profile] = useState("");
   const [spinner, setSpinner] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [paymentActive, setPaymentActive] = useState([]);
 
   // const stateRedux = useSelector((state) => state.user);
   // console.log("81 accessTokenStateRedux: ", stateRedux.accessToken);
@@ -203,6 +204,38 @@ const Billing = (
     //alert("run onRefresh");
     fetchData();
     fetchDataCurrent();
+    fetchDataPaymentActive();
+  };
+
+  fetchDataPaymentActive = async () => {
+    const getParams = {
+      entity_cd: stateReduxChoosedUnit.entity_cd,
+      project_no: stateReduxChoosedUnit.project_no,
+      email: user.email,
+      lot_no: stateReduxChoosedUnit.lot_no,
+    };
+
+    await httpClient
+      .request({
+        url: `/modules/billing/get-data-payment`,
+        method: "GET",
+        params: getParams,
+      })
+      .then((res) => {
+        function checkLotno(currentValue, index, arr) {
+          return (
+            currentValue.lot_no == stateReduxChoosedUnit.lot_no
+            //&&
+            // currentValue.entity_cd == stateReduxChoosedUnit.entity_cd &&
+            // currentValue.project_no == stateReduxChoosedUnit.project_no
+          );
+        }
+
+        const filter = res.data.data.filter(checkLotno);
+
+        setPaymentActive(filter);
+      })
+      .catch((error) => {});
   };
 
   useCustomTriggerOnFocus(onRefresh);
@@ -467,12 +500,12 @@ const Billing = (
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "lightgray",
+          backgroundColor: colors.primary,
           borderRadius: 10,
           padding: 10,
           margin: 20,
           marginTop: 10,
-          width: "50%",
+          width: "60%",
           alignSelf: "center",
 
           shadowColor: colors.text, // Shadow color for iOS and Android
@@ -482,21 +515,21 @@ const Billing = (
           elevation: 3,
         }}
       >
-        <Icon
-          name="clipboard-list"
-          size={20}
-          color={colors.primary}
-          enableRTL={true}
-        />
+        <Icon name="clipboard-list" size={20} color="white" enableRTL={true} />
         <Text
           style={{
             textAlign: "center",
             marginLeft: 10,
             fontSize: 16,
-            color: "black",
+            color: "white",
           }}
         >
-          {"Payment Active"}
+          {"Payment Active ( "}
+          <Text style={{ color: paymentActive.length > 0 ? "red" : "white" }}>
+            {paymentActive.length}
+          </Text>
+          {" ) "}
+          {/* {paymentActive.length > 0 ? "🔴" : ""} */}
         </Text>
       </TouchableOpacity>
       <ScrollView
