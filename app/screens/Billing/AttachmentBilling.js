@@ -66,19 +66,7 @@ const AttachmentBilling = (props) => {
 
     console.log("60 attachment: ", entity_cd, project_no, debtor_acct, doc_no);
 
-    // console.log(
-    //   'params api attach',
-    //   API_URL_LOKAL +
-    //     `/getDataAttach/IFCAPB/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`,
-    // );
     try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     ` /getDataAttach/IFCAPB/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`,
-      // );
-
-      // /modules/billing/attach?entity_cd=1001&project_no=1001001&debtor_acct=GSE/AA-50/1&doc_no=BL23090008
-
       const res = await httpClient.request({
         url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}&type=${type}`,
         //"INV" : "OR";

@@ -1632,6 +1632,7 @@ const Home = (props) => {
                               overflow: "hidden", // Crops the image to the container
                               position: "relative",
                               borderRadius: 10,
+                              marginRight: 18,
                             },
                             styles.shadow,
                           ]}

@@ -405,56 +405,8 @@ const Billing = (
         onPressLeft={() => {
           navigation.goBack();
         }}
-        // renderRight={() => {
-        //   return (
-        //     <View
-        //       style={{
-        //         flexDirection: "row",
-        //         alignItems: "center",
-        //         backgroundColor: "lightgray",
-        //         borderRadius: 10,
-        //         padding: 5,
-        //       }}
-        //     >
-        //       <Icon
-        //         name="clipboard-list"
-        //         size={20}
-        //         color={colors.primary}
-        //         enableRTL={true}
-        //       />
-        //       <Text
-        //         style={{
-        //           textAlign: "center",
-        //           marginLeft: 10,
-        //           fontSize: 12,
-        //           color: "black",
-        //         }}
-        //       >
-        //         {"Payment Active"}
-        //       </Text>
-        //     </View>
-        //   );
-        // }}
-        // renderRight={() => {
-        //   return (
-        //     <>
-        //       <Icon
-        //         name="clipboard-list"
-        //         size={28}
-        //         color={colors.primary}
-        //         enableRTL={true}
-        //       />
-        //     </>
-        //   );
-        // }}
-        // onPressRight={() => {
-        //   //   name="BillingHistory"
-        //   //   name="HistoryBilling"
-        //   //navigation.goBack();
-        //   navigation.navigate("BillingHistory");
-        // }}
       />
-      {itemData.isProject == 1 && (
+      {/* {itemData.isProject == 1 && (
         <>
           <ButtonChooseProject
             items={dataDD}
@@ -464,34 +416,8 @@ const Billing = (
           />
           <Text>Choosed Project: {choosedProject}</Text>
         </>
-      )}
-      {/* <View
-        style={{
-          //borderWidth: 1,
-          padding: 10,
-          margin: 10,
-          backgroundColor: "white",
-          borderRadius: 8,
-          padding: 16,
-          margin: 16,
-          shadowColor: "#000", // Shadow color for iOS
-          shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
-          shadowOpacity: 0.25, // Shadow opacity for iOS
-          shadowRadius: 4, // Shadow radius for iOS
-          elevation: 5, // Elevation for Android
-        }}
-      >
-        <Text>
-          Entity Code {"   "}: {stateReduxChoosedUnit.entity_cd}
-        </Text>
-        <Text>
-          Project No {"     "}: {stateReduxChoosedUnit.project_no}
-        </Text>
-        <Text>Cluster Code : {stateReduxChoosedUnit.cluster_cd}</Text>
-        <Text>
-          Lot No {"            "}: {stateReduxChoosedUnit.lot_no}
-        </Text>
-      </View> */}
+      )} */}
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("BillingHistory");
@@ -537,8 +463,10 @@ const Billing = (
         showsVerticalScrollIndicator={false}
         ref={scrollViewRef}
         style={{
-          //backgroundColor: 'blue',
+          // backgroundColor: "blue",
           paddingBottom: 20,
+          // paddingTop: 5,
+          // borderTopWidth: 0.5,
         }}
       >
         <View
@@ -596,6 +524,7 @@ const Billing = (
                     onPress={() => navigation.navigate("FHistoryDetail")}
                     // key={item.id}
                     key={key}
+                    number={key}
                     tower={item.tower}
                     name={item.name}
                     trx_type={item.trx_type}
@@ -681,6 +610,7 @@ const Billing = (
                   onPress={() => navigation.navigate("FHistoryDetail")}
                   // key={item.id}
                   key={key}
+                  number={key}
                   tower={item.tower}
                   name={item.name}
                   trx_type={item.trx_type}
