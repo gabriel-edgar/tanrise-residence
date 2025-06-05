@@ -46,9 +46,10 @@ const TransactionExpand = ({
   project_no = "",
   email = "",
   tab_id = "",
-  item = "",
+  item = {},
   scrollToBottom = () => {},
   isLast = false,
+  isPaymentActive = 0,
   ListTransactionProps = {
     icon: "exchange-alt",
     name: name,
@@ -69,7 +70,6 @@ const TransactionExpand = ({
   isExpandInit = false,
 }) => {
   const { colors } = useTheme();
-  console.log("72 key", number);
   const [isExpand, setIsExpand] = useState(false); //number == 0 ? true :
   const navigation = useNavigation();
   const [modalSuccessVisible, showModalSuccess] = useState(false);
@@ -92,19 +92,13 @@ const TransactionExpand = ({
       `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
     );
     try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     `/home/common-projectDue/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
-
-      // /modules/billing/detail-history/mgr@ifca.co.id/01/02/C10/D121
-
+      // Paid
       const res = await httpClient.request({
         url: `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
         method: "GET",
       });
 
-      console.log("84 resssssss: ", res.data);
+      console.log("84 res detail-history: ", res.data);
       setDetailDateDue(res.data.data);
       //console.log("84 detail date due -->", res);
       setLoading(false);
@@ -116,27 +110,84 @@ const TransactionExpand = ({
     }
   };
 
+  const dummyDataDueSummary = {
+    entity_cd: "1006",
+    project_no: "1006001",
+    tower: "TAMAN DAYU",
+    name: "R TEGUH SUKARDIANA",
+    doc_no: "BC25050270",
+    doc_date: "2025-05-01 00:00:00.000",
+    due_date: "2025-05-20 00:00:00.000",
+    lot_no: "D05/007",
+    debtor_acct: "N001/D05/007",
+    mbal_amt: "724426.00",
+    mtax_deduct_amt: ".00",
+    mfinal_amt: "724426.00",
+  };
+
+  const dummyDataSummaryHistory = [
+    {
+      entity_cd: "1006",
+      project_no: "1006001",
+      tower: "TAMAN DAYU",
+      name: "R TEGUH SUKARDIANA",
+      doc_no: "BC25050270",
+      doc_date: "2025-05-01 00:00:00.000",
+      descs:
+        "Iuran Pengelolan lingkungan Lot : D05/007 From 01 Apr 2025 - 30 Apr 2025",
+      due_date: "2025-05-20 00:00:00.000",
+      lot_no: "D05/007",
+      debtor_acct: "N001/D05/007",
+      mdoc_amt: "507994.00",
+      mtax_deduct_amt: ".00",
+      mfinal_amt: "507994.00",
+    },
+    {
+      entity_cd: "1006",
+      project_no: "1006001",
+      tower: "TAMAN DAYU",
+      name: "R TEGUH SUKARDIANA",
+      doc_no: "BC25050270",
+      doc_date: "2025-05-01 00:00:00.000",
+      descs: "Water : 01/04/2025 - 30/04/2025",
+      due_date: "2025-05-20 00:00:00.000",
+      lot_no: "D05/007",
+      debtor_acct: "N001/D05/007",
+      mdoc_amt: "216432.00",
+      mtax_deduct_amt: ".00",
+      mfinal_amt: "216432.00",
+    },
+    {
+      entity_cd: "1006",
+      project_no: "1006001",
+      tower: "TAMAN DAYU",
+      name: "R TEGUH SUKARDIANA",
+      doc_no: "BC25050270",
+      doc_date: "2025-05-01 00:00:00.000",
+      descs: "Diskon",
+      due_date: "2025-05-20 00:00:00.000",
+      lot_no: "D05/007",
+      debtor_acct: "N001/D05/007",
+      mdoc_amt: "-216432.00",
+      mtax_deduct_amt: ".00",
+      mfinal_amt: "-216432.00",
+    },
+  ];
+
   const detailNotDue = async () => {
     console.log(
       "84111 ",
       `/modules/billing/summary-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
     );
     try {
-      // console.log(
-      //   "api not due detail",
-      //   API_URL_LOKAL +
-      //     `/home/common-projectCurrent/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     `/home/common-projectCurrent/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
+      //not Paid
       const res = await httpClient.request({
         url: `/modules/billing/summary-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
         method: "GET",
       });
-      //console.log("resCobasss", res);
+      console.log("84 res summary-history", res);
       setDetailNotDue(res.data.data);
+      //setDetailNotDue(dummyDataSummaryHistory);
       console.log("84111 detail not due -->", res.data);
       setLoading(false);
     } catch (error) {
@@ -210,24 +261,27 @@ const TransactionExpand = ({
   };
 
   const clickPaymentDetail = () => {
+    if (isPaymentActive != 0) {
+      alert(
+        'There is an active payment,\nPlease "pay and wait" or "cancel" payment'
+      );
+      return;
+    }
+    if (number != 0) {
+      alert("Please pay the previous invoice first");
+      return;
+    }
     const params = {
       // entity_cd: item.entity_cd,
       // project_no: item.project_no,
       // debtor_acct: debtor_acct,
       // doc_no: doc_no,
+      item: item,
       datadetailNotDue,
       replaceTotal_notdue,
       sumTotalNotDue,
     };
-    //console.log("params for click attach", params);
     navigation.navigate("PaymentDetail", params);
-    // if (data.debtor_acct == '') {
-    //   // alert('Please Choose Debtor First');
-    //   setMessage('Please choose debtor first');
-    //   showModalSuccess(true);
-    // } else {
-
-    // }
   };
 
   const onCloseModal = () => {
@@ -372,9 +426,7 @@ const TransactionExpand = ({
                     </Text>
                     <Text subhead bold style={{ fontSize: 16 }}>
                       {replaceTotal}
-                      {/* 100.000.000.00 */}
                     </Text>
-                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
                   </View>
                 </View>
               </View>
@@ -478,9 +530,7 @@ const TransactionExpand = ({
                     </Text>
                     <Text subhead bold style={{ fontSize: 16 }}>
                       {replaceTotal_notdue}
-                      {/* 100.000.000.00 */}
                     </Text>
-                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
                   </View>
                 </View>
               </View>

@@ -91,7 +91,11 @@ const AttachmentBilling = (props) => {
     return (
       <Card
         key={index}
-        style={{ paddingVertical: 20, backgroundColor: colors.background }}
+        style={{
+          paddingVertical: 20,
+          backgroundColor: colors.background,
+          margin: 3,
+        }}
       >
         <TouchableOpacity
           onPress={() => {
@@ -127,7 +131,7 @@ const AttachmentBilling = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        title={t("Attachment Invoice")}
+        title={t("Attachment")}
         renderLeft={() => {
           return (
             <Icon
@@ -160,7 +164,7 @@ const AttachmentBilling = (props) => {
               marginTop: 10,
             }}
           >
-            Not Available Attachment Invoice
+            Not Available Attachment
           </Text>
         </View>
       ) : (

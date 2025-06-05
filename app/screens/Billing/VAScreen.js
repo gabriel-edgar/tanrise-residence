@@ -449,6 +449,7 @@ const AttachmentBilling = (props) => {
             marginBottom: 20,
             //textAlign: "center",
             fontWeight: "bold",
+            fontSize: 16,
           }}
         >
           {route.params.paymentMethod.payment_channel}

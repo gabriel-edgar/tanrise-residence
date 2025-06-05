@@ -212,7 +212,6 @@ const PDFAttach = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        // title={t("Attachment Invoice") + paramsItem.doc_no}
         title={"Invoice " + paramsItem.doc_no}
         renderLeft={() => {
           return (

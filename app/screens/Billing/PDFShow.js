@@ -6,8 +6,6 @@ import {
   Text,
 } from "@components";
 import { BaseColor, BaseStyle, useTheme } from "@config";
-// Load sample data
-// import {NotificationData} from '@data';
 import React, { useState, useEffect, useRef } from "react";
 import {
   FlatList,
@@ -22,10 +20,8 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-// import getUser from '../../selectors/UserSelectors';
 import Pdf from "react-native-pdf";
 import ReactNativeBlobUtil from "react-native-blob-util";
-// import RNFetchBlob from 'rn-fetch-blob';
 
 const PDFShow = (props) => {
   const { navigation, route } = props;
@@ -36,115 +32,8 @@ const PDFShow = (props) => {
   const { colors } = useTheme();
   const repl = paramsItem.link_url?.replace("https", "https");
   console.log("repl", repl);
-  // const pdfSource = {
-  //   //uri: "https://drive.google.com/file/d/1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ/view?usp=sharing"
-  //   //uri: "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ",
-  //   cache: true,
-  // };
-  // 1permata:https://drive.google.com/file/d/1YjEYQh8ibmVyYzAb1DHgfBS-1ncZFw0g/view?usp=sharing
-  // 2danamon:https://drive.google.com/file/d/1KwetUbAgS5LBhAS-9j2XYubWE8i_5icn/view?usp=sharing
-  // 3mandiri: https://drive.google.com/file/d/1_QdtrDB05BblXQzkNkZnqLVc1l_Wcn42/view?usp=sharing
-  // 4maybank: https://drive.google.com/file/d/1FYarm1tOD4j06X_DeEOhVvta_Xf5Rodp/view?usp=sharing
-  // 5bca: https://drive.google.com/file/d/1WAnERWsaGGDLHf3Ipb8LJr77zopzN210/view?usp=sharing
-  // 6bni: https://drive.google.com/file/d/1sPXmwoaZiW4j47WTRSPnWfFeY16B6g0z/view?usp=sharing
-  // 7sinarmas: https://drive.google.com/file/d/1UIJL7N3t0NW--imLAzq_MJNy0fv13ykb/view?usp=sharing
-  // 8bnc:https://drive.google.com/file/d/1mczFG7UPpMowH0sRB6bM5biNEpmjKq5k/view?usp=sharing
-  // 9btn: https://drive.google.com/file/d/106EZEk3Br_rPeWczAIujAHQpGjKRfUD7/view?usp=sharing
-  // cs1-indomaret: https://drive.google.com/file/d/1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN/view?usp=sharing
-  // cs2-alfamart: https://drive.google.com/file/d/1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk/view?usp=sharing
-
-  // const merchant = {
-  //   permata:
-  //     "https://drive.google.com/uc?export=download&id=1YjEYQh8ibmVyYzAb1DHgfBS-1ncZFw0g",
-  //   danamon:
-  //     "https://drive.google.com/uc?export=download&id=1KwetUbAgS5LBhAS-9j2XYubWE8i_5icn",
-  //   mandiri:
-  //     "https://drive.google.com/uc?export=download&id=1_QdtrDB05BblXQzkNkZnqLVc1l_Wcn42",
-  //   maybank:
-  //     "https://drive.google.com/uc?export=download&id=1FYarm1tOD4j06X_DeEOhVvta_Xf5Rodp",
-  //   bca: "https://drive.google.com/uc?export=download&id=1WAnERWsaGGDLHf3Ipb8LJr77zopzN210",
-  //   bni: "https://drive.google.com/uc?export=download&id=1sPXmwoaZiW4j47WTRSPnWfFeY16B6g0z",
-  //   sinarmas:
-  //     "https://drive.google.com/uc?export=download&id=1UIJL7N3t0NW--imLAzq_MJNy0fv13ykb",
-  //   bnc: "https://drive.google.com/uc?export=download&id=1mczFG7UPpMowH0sRB6bM5biNEpmjKq5k",
-  //   btn: "https://drive.google.com/uc?export=download&id=106EZEk3Br_rPeWczAIujAHQpGjKRfUD7",
-  //   cs1_indomaret:
-  //     "https://drive.google.com/uc?export=download&id=1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN",
-  //   cs2_alfamart:
-  //     "https://drive.google.com/uc?export=download&id=1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk",
-  // };
-
-  // switch (paramsItem.merchant) {
-  //   case "PERMATA":
-  //     pdfSource.uri = merchant.permata;
-  //     break;
-  //   case "DANAMON":
-  //     pdfSource.uri = merchant.danamon;
-  //     break;
-  //   case "MANDIRI":
-  //     pdfSource.uri = merchant.mandiri;
-  //     break;
-  //   case "MAYBANK":
-  //     pdfSource.uri = merchant.maybank;
-  //     break;
-  //   case "BCA":
-  //     pdfSource.uri = merchant.bca;
-  //     break;
-  //   case "BNI":
-  //     pdfSource.uri = merchant.bni;
-  //     break;
-  //   case "SINARMAS":
-  //     pdfSource.uri = merchant.sinarmas;
-  //     break;
-  //   case "BNC":
-  //     pdfSource.uri = merchant.bnc;
-  //     break;
-  //   case "BTN":
-  //     pdfSource.uri = merchant.btn;
-  //     break;
-  //   case "INDOMARET":
-  //     pdfSource.uri = merchant.cs1_indomaret;
-  //     break;
-  //   case "ALFAMART":
-  //     pdfSource.uri = merchant.cs2_alfamart;
-  //     break;
-  //   default:
-  //     pdfSource.uri = "";
-  //   // "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ";
-  // }
 
   const pagesToShow = [3, 4, 5, 6, 7]; // Array of page numbers to display
-
-  // const pdfRef = useRef(null);
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const handlePageChange = (pageNumber) => {
-  //   //setCurrentPage(pageNumber);
-  //   //alert(pageNumber);
-  //   if (pageNumber <= 3) {
-  //     pdfRef.current.setPage(3);
-  //   } else if (pageNumber >= 6) {
-  //     pdfRef.current.setPage(5);
-  //     //pdfRef.current.setPage(pageNumber);
-  //   }
-  // };
-
-  // return (
-  //   <div>
-  //     <Pdf
-  //       ref={pdfRef}
-  //       source="your_pdf_source.pdf"
-  //       onPageChange={handlePageChange}
-  //     />
-  //     <button onClick={() => handlePageChange(currentPage + 1)}>
-  //       Next Page
-  //     </button>
-  //     <button onClick={() => handlePageChange(currentPage - 1)}>
-  //       Previous Page
-  //     </button>
-  //     <p>Current Page: {currentPage}</p>
-  //   </div>
-  // );
 
   const source = {
     uri: repl,
@@ -153,15 +42,6 @@ const PDFShow = (props) => {
     //uri: "https://www.sharedfilespro.com/shared-files/38/?sample.pdf",
     cache: true,
   };
-  //   const [refreshing, setRefreshing] = useState(false);
-  //   const [notification, setNotification] = useState(NotificationData);
-  //   const users = useSelector(state => getUser(state));
-  //   const [email, setEmail] = useState(users.user);
-  //   const [loading, setLoading] = useState(true);
-  //   const [dataTowerUser, setdataTowerUser] = useState([]);
-  //   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  //   const [spinner, setSpinner] = useState(true);
-  //   const [dataNotif, setDataNotif] = useState([]);
 
   const downloadFile__ = () => {
     const url = repl;
@@ -324,7 +204,6 @@ const PDFShow = (props) => {
       edges={["right", "top", "left"]}
     >
       <Header
-        // title={t("Attachment Invoice") + paramsItem.doc_no}
         title={paramsItem.title}
         renderLeft={() => {
           return (
@@ -341,33 +220,13 @@ const PDFShow = (props) => {
           //navigation.pop(3);
         }}
       />
-      {/* <ScrollView style={styles.containerPdf} horizontal={true}>
-        {pagesToShow.map((pageNumber) => (
-          <View key={pageNumber} style={styles.pageContainer}>
-            <Text>{pageNumber}</Text> */}
       <Pdf
         source={paramsItem.pdfSource}
         //source={{ uri: "https://www.pdf995.com/samples/pdf.pdf" }}
         //page={6}
         // page={3}
         style={styles.pdf}
-        // scale={1.3}
-        //onPageChanged={(page, numberOfPages) => {}}
-        // minScale={1.0}
-        // maxScale={3.0}
-        // ref={(pdf) => {
-        //   //alert(JSON.stringify(pdf));
-        //   //this.pdf = pdf;
-        //   //this.pdf.setPage(42);
-        // }}
-        // horizontal={false}
-        // ref={pdfRef}
-        //source="your_pdf_source.pdf"
-        // onPageChanged={handlePageChange}
       />
-      {/* </View>
-        ))}
-      </ScrollView> */}
     </SafeAreaView>
   );
 };

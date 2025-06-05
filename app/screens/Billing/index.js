@@ -201,7 +201,7 @@ const Billing = (
   }, []);
 
   const onRefresh = () => {
-    //alert("run onRefresh");
+    // alert("run onRefresh");
     fetchData();
     fetchDataCurrent();
     fetchDataPaymentActive();
@@ -238,7 +238,7 @@ const Billing = (
       .catch((error) => {});
   };
 
-  useCustomTriggerOnFocus(onRefresh);
+  useCustomTriggerOnFocus(onRefresh, 5000);
 
   // Make function to call the api
   async function fetchData() {
@@ -543,6 +543,7 @@ const Billing = (
                     item={item}
                     scrollToBottom={scrollToBottom}
                     isLast={dataCurrent.length == key + 1}
+                    isPaymentActive={paymentActive.length}
                     style={{
                       borderRadius: 10,
                       marginTop: 20,
@@ -629,6 +630,7 @@ const Billing = (
                   item={item}
                   scrollToBottom={scrollToBottom}
                   isLast={data.length == key + 1}
+                  isPaymentActive={paymentActive.length}
                   style={{
                     borderRadius: 10,
                     marginTop: 20,

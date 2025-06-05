@@ -14,9 +14,9 @@ import { ActivityIndicator } from "react-native-paper";
 import numFormattanpaRupiah from "../../numFormattanpaRupiah";
 import { API_URL_LOKAL } from "@env";
 import httpClient from "../../../controllers/HttpClient";
-import Icon from "react-native-vector-icons/FontAwesome5";
 
 const TransactionExpand = ({
+  number,
   style = {
     paddingTop: 5,
   },
@@ -69,7 +69,8 @@ const TransactionExpand = ({
   isExpandInit = false,
 }) => {
   const { colors } = useTheme();
-  const [isExpand, setIsExpand] = useState(isExpandInit);
+  console.log("72 key", number);
+  const [isExpand, setIsExpand] = useState(false); //number == 0 ? true :
   const navigation = useNavigation();
   const [modalSuccessVisible, showModalSuccess] = useState(false);
   const [message, setMessage] = useState("");
@@ -108,7 +109,6 @@ const TransactionExpand = ({
       //console.log("84 detail date due -->", res);
       setLoading(false);
     } catch (error) {
-      // setLoading(false);
       setErrors(error);
       console.log("84 error detail date due -->", error);
 
@@ -141,7 +141,6 @@ const TransactionExpand = ({
       setLoading(false);
     } catch (error) {
       setErrors(error);
-      // setLoading(false);
       console.log("84111 error detail not due -->", error);
       // alert(hasError.toString());
     }
@@ -182,18 +181,12 @@ const TransactionExpand = ({
   //   detailDateDue();
   // }, []);
 
-  const getData = async () => {
-    await detailDateDue();
-    await detailNotDue();
-  };
-
   const clickExpand = async () => {
     console.log("177 item: ", item);
     console.log("177 email: ", email);
     await setIsExpand(!isExpand);
-    getData();
-    // await detailDateDue();
-    // await detailNotDue();
+    await detailDateDue();
+    await detailNotDue();
     (await isLast) ? scrollToBottom() : null;
   };
 
@@ -257,41 +250,24 @@ const TransactionExpand = ({
           },
         ])}
         {...ListTransactionProps}
-        // onPress={() => clickExpand()}
+        onPress={() => clickExpand()}
       />
-      {tab_id == 1 ? (
-        <View>
-          <Button
-            style={{ height: 35, marginBottom: 10 }}
-            onPress={() => clickPaymentDetail()}
-          >
-            <Text style={{ color: "#fff", fontSize: 14 }}>Payment Billing</Text>
-          </Button>
-        </View>
-      ) : null}
-
       <Button
-        style={{ height: 35, marginBottom: 10 }}
+        style={{ height: 35, backgroundColor: "lightgray", marginBottom: 10 }}
         onPress={() => clickAttachment()}
       >
-        <Text style={{ color: "#fff", fontSize: 14 }}>Attachment</Text>
+        <Text style={{ color: "black", fontSize: 14 }}>Attachment</Text>
       </Button>
       <Button
-        style={{
-          height: 35,
-          marginBottom: 10,
-          backgroundColor: "#fff",
-          borderColor: colors.primary,
-          borderWidth: 1,
-        }}
+        style={{ height: 35, backgroundColor: "lightgray" }}
         onPress={() => clickExpand()}
       >
-        {isExpand ? (
-          <Icon name="arrow-up" size={15} color={colors.primary} solid />
-        ) : (
-          <Icon name="arrow-down" size={15} color={colors.primary} solid />
-        )}
+        <Text style={{ color: "black", fontSize: 14 }}>Show Detail</Text>
       </Button>
+      {/* 
+      <Button style={{ height: 35 }} onPress={() => clickExpand()}>
+        <Text style={{ color: "#fff", fontSize: 14 }}>Show Detail</Text>
+      </Button> */}
       {isExpand && (
         <View
           style={StyleSheet.flatten([
@@ -406,7 +382,7 @@ const TransactionExpand = ({
               //tab_id == 1 &&
               tab_id == 2 && (
                 <View style={{ alignSelf: "center" }}>
-                  <Text>Not have data details </Text>
+                  <Text>Not have data detailss </Text>
                 </View>
               )
             )
@@ -421,6 +397,14 @@ const TransactionExpand = ({
             ) : //tab_id == 2 &&
             tab_id == 1 && datadetailNotDue != 0 ? (
               <View>
+                <Button
+                  style={{ height: 35, marginBottom: 10 }}
+                  onPress={() => clickPaymentDetail()}
+                >
+                  <Text style={{ color: "#fff", fontSize: 14 }}>
+                    Payment Billing
+                  </Text>
+                </Button>
                 {datadetailNotDue.map((item, key) => (
                   <View key={key}>
                     <View

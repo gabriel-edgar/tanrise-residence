@@ -124,6 +124,7 @@ const BillingHistory = ({
   const [dataCurrent, setDataCurrent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(null);
+  const [error, setError] = useState("");
 
   const stateReduxChoosedUnit = useSelector(
     (state) => state.Dataproject.choosedUnit
@@ -161,14 +162,12 @@ const BillingHistory = ({
 
         const filter = res.data.data.filter(checkLotno);
         setDataCurrent(filter);
-        //setDataCurrent(dummyPayment);
         setLoading(false);
         console.log("133 dataCurrent: ", dataCurrent);
       })
       .catch((error) => {
         setDataCurrent([]);
-        alert(JSON.stringify(error.response.data.message));
-        //setDataCurrent(dummyPayment);
+        //alert(JSON.stringify(error.response.data.message));
         setLoading(false);
       });
   }

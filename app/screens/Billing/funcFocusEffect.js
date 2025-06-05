@@ -5,7 +5,7 @@
 import React, { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-const useCustomTriggerOnFocus = (triggerFunction) => {
+const useCustomTriggerOnFocus = (triggerFunction, interval = 10000) => {
   useFocusEffect(
     useCallback(() => {
       // Run immediately
@@ -14,7 +14,7 @@ const useCustomTriggerOnFocus = (triggerFunction) => {
       // Set an interval to call the function periodically
       const intervalId = setInterval(() => {
         triggerFunction();
-      }, 10000); // 2000 milliseconds = 2 seconds
+      }, interval); // 2000 milliseconds = 2 seconds
 
       // Clean up the interval when the screen loses focus
       return () => {

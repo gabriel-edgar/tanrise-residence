@@ -70,6 +70,7 @@ const AttachmentBilling = (props) => {
   const stateReduxChoosedProject = useSelector(
     (state) => state.Dataproject.chooseProject
   );
+  const item = route.params.item;
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
   const sumTotalNotDue = route.params.sumTotalNotDue;
@@ -135,6 +136,7 @@ const AttachmentBilling = (props) => {
 
   const loadData = async () => {
     await getPaymentMethodList();
+    //alert(JSON.stringify(item));
   };
 
   // Function to toggle checkbox
@@ -170,8 +172,8 @@ const AttachmentBilling = (props) => {
         url: `/pg/get-payment-channel`,
         method: "GET",
         params: {
-          entity_cd: datadetailNotDue[0].entity_cd,
-          project_no: datadetailNotDue[0].project_no,
+          entity_cd: item.entity_cd,
+          project_no: item.project_no,
           // entity_cd: "1004",
           // project_no: "1004001",
         },
@@ -186,11 +188,6 @@ const AttachmentBilling = (props) => {
     }
   };
 
-  const openAttach = (item) => {
-    console.log("itm", item);
-    navigation.navigate("PDFAttach", item);
-  };
-
   function removeAfterDot(input) {
     const index = input.indexOf(".");
     //alert('index +',index);
@@ -202,7 +199,7 @@ const AttachmentBilling = (props) => {
 
   const handleChangePrice = (text) => {
     // Example usage
-    const valueHasilConvert = removeAfterDot(datadetailNotDue[0].mfinal_amt);
+    const valueHasilConvert = removeAfterDot(item.mfinal_amt);
 
     // Remove all non-numeric characters
     const numericValue = text.replace(/\D/g, "");
@@ -241,6 +238,8 @@ const AttachmentBilling = (props) => {
       return;
     }
 
+    // alert("data ke api: " + parseInt(sumTotalNotDue));
+    // return;
     setLoading(true);
 
     // Simulate a data fetch
@@ -275,20 +274,21 @@ const AttachmentBilling = (props) => {
         const dataPost = {
           //entity_cd: "1004",
           //project_no: "1004001",
-          entity_cd: datadetailNotDue[0].entity_cd,
-          project_no: datadetailNotDue[0].project_no,
-          debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
-          debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+          entity_cd: item.entity_cd,
+          project_no: item.project_no,
+          debtor_acct: item.debtor_acct, //"L-TR-09-07",
+          debtor_name: item.name, //"PT SARIGUNA PRIMATIRTA, Tbk",
           debtor_phone: user.Handphone,
           debtor_email: user.email,
-          doc_no: datadetailNotDue[0].doc_no,
+          doc_no: item.doc_no,
           virtual_acct: "",
-          //doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+          //doc_amt: removeAfterDot(item.mfinal_amt), //"205000",
           doc_amt: parseInt(sumTotalNotDue),
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
-          lot_no: datadetailNotDue[0].lot_no,
+          lot_no: item.lot_no,
         };
+        console.log("289 " + JSON.stringify(dataPost));
 
         //post
         const res = await httpClient.request({
@@ -309,7 +309,7 @@ const AttachmentBilling = (props) => {
           if (dataPay != null) {
             navigation.navigate("WebviewScreen", {
               title: "Payment Screen",
-              doc_no: datadetailNotDue[0].doc_no,
+              doc_no: item.doc_no,
               url: dataPay,
             });
           }
@@ -327,7 +327,7 @@ const AttachmentBilling = (props) => {
           // if (dataPay != null) {
           //   navigation.navigate("WebviewScreen", {
           //     title: "Payment Screen",
-          //     doc_no: datadetailNotDue[0].doc_no,
+          //     doc_no: item.doc_no,
           //     url: dataPay,
           //   });
           // }
@@ -338,24 +338,31 @@ const AttachmentBilling = (props) => {
           //   VA: dataPost.virtual_acct,
           //   dataPay,
           // });
-          alert(res.data.message);
+          alert("291 Pay: res: " + JSON.stringify(res.data));
+          //alert(res.data.message);
         }
       } catch (error) {
         console.log("320 Pay: error: ", error);
         console.log("291" + error.response.data.message);
 
-        alert("e291 " + JSON.stringify(error.response.data.message));
+        //alert("2912 " + JSON.stringify(error.response.status));
+        const status = error.response.status
+          ? "Status: " + error.response.status
+          : "";
+        alert(
+          "." + JSON.stringify(error.response.data.message) + "\n" + status
+        );
       }
     } else {
       try {
         let dataVA;
         //alert("run");
         const dataGet = {
-          entity_cd: datadetailNotDue[0].entity_cd,
-          project_no: datadetailNotDue[0].project_no,
+          entity_cd: item.entity_cd,
+          project_no: item.project_no,
           // entity_cd: "1004",
           // project_no: "1004001",
-          lot_no: datadetailNotDue[0].lot_no,
+          lot_no: item.lot_no,
           bank_grp: paymentMethod.payment_channel,
         };
         //alert("run");
@@ -380,13 +387,13 @@ const AttachmentBilling = (props) => {
         }
 
         // const dataPostOri = {
-        //   entity_cd: datadetailNotDue[0].entity_cd,
-        //   project_no: datadetailNotDue[0].project_no,
-        //   debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
-        //   debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
-        //   doc_no: datadetailNotDue[0].doc_no,
+        //   entity_cd: item.entity_cd,
+        //   project_no: item.project_no,
+        //   debtor_acct: item.debtor_acct, //"L-TR-09-07",
+        //   debtor_name: item.name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+        //   doc_no: item.doc_no,
         //   virtual_acct: dataVA,
-        //   doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+        //   doc_amt: removeAfterDot(item.mfinal_amt), //"205000",
         //   payment_channel: paymentMethod.payment_channel,
         //   type_payment: "Close",
         //   debtor_phone: "621989877678",
@@ -396,19 +403,19 @@ const AttachmentBilling = (props) => {
         const dataPost = {
           // entity_cd: "1004",
           // project_no: "1004001",
-          entity_cd: datadetailNotDue[0].entity_cd,
-          project_no: datadetailNotDue[0].project_no,
-          debtor_acct: datadetailNotDue[0].debtor_acct, //"L-TR-09-07",
-          debtor_name: datadetailNotDue[0].name, //"PT SARIGUNA PRIMATIRTA, Tbk",
+          entity_cd: item.entity_cd,
+          project_no: item.project_no,
+          debtor_acct: item.debtor_acct, //"L-TR-09-07",
+          debtor_name: item.name, //"PT SARIGUNA PRIMATIRTA, Tbk",
           debtor_phone: user.Handphone,
           debtor_email: user.email,
-          doc_no: datadetailNotDue[0].doc_no,
+          doc_no: item.doc_no,
           virtual_acct: dataVA,
-          //doc_amt: removeAfterDot(datadetailNotDue[0].mfinal_amt), //"205000",
+          //doc_amt: removeAfterDot(item.mfinal_amt), //"205000",
           doc_amt: parseInt(sumTotalNotDue),
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
-          lot_no: datadetailNotDue[0].lot_no,
+          lot_no: item.lot_no,
         };
 
         //post
@@ -449,44 +456,18 @@ const AttachmentBilling = (props) => {
         console.log("320 Pay: error: ", error);
         console.log("320" + error.response.data.message);
 
-        alert("3203 " + JSON.stringify(error.response.data.message));
+        const status = error.response.status
+          ? "Status: " + error.response.status
+          : "";
+        alert(
+          ".." + JSON.stringify(error.response.data.message) + "\n" + status
+        );
         //alert("320c" + error.response.data.message);
       }
     }
     setLoading(false);
 
     // navigation.navigate("VAScreen", { ...route.params, paymentMethod });
-  };
-
-  const renderItem = ({ item, index }) => {
-    return (
-      <Card key={index} style={{ paddingVertical: 20 }}>
-        <TouchableOpacity
-          onPress={() => {
-            openAttach(item);
-          }}
-        >
-          <View style={{ flexDirection: "row", flex: 1, marginHorizontal: 10 }}>
-            <View style={{ justifyContent: "space-between", flex: 1 }}>
-              <Text style={{ fontSize: 18, marginRight: 5 }} bold>
-                {item.descs + " " + item.debtor_acct}
-              </Text>
-            </View>
-            <Icon
-              name="file-pdf"
-              size={34}
-              color={BaseColor.grayColor}
-              enableRTL={true}
-            />
-          </View>
-        </TouchableOpacity>
-      </Card>
-      //   <View key={index} style={{}}>
-      //     <Text>{item.descs}</Text>
-      //     <Text>{item.remark}</Text>
-      //     <Text>{item.link_url}</Text>
-      //   </View>
-    );
   };
 
   const CustomComponent = ({ title }) => (
@@ -586,7 +567,7 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-        {"Invoice " + route.params.datadetailNotDue[0].doc_no}
+        {"Invoice " + item.doc_no}
       </Text>
       <ScrollView>
         <View style={{ marginHorizontal: 20 }}>
@@ -596,9 +577,8 @@ const AttachmentBilling = (props) => {
         ))} */}
           {paymentMethodList?.length == 0 ? (
             <Text style={{ textAlign: "center" }}>
-              Payment Channel not found for{"\n"} entity code{" "}
-              {route.params.datadetailNotDue[0].entity_cd} and project number{" "}
-              {route.params.datadetailNotDue[0].project_no}
+              Payment Channel not found for{"\n"} entity code {item.entity_cd}{" "}
+              and project number {item.project_no}
             </Text>
           ) : (
             paymentMethodList?.map((item) => (
@@ -656,10 +636,7 @@ const AttachmentBilling = (props) => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <Text>Total Payment:</Text>
-              <Text>
-                {/* {formatNumber(route.params.datadetailNotDue[0].mfinal_amt)} */}
-                Rp {replaceTotal_notdue}
-              </Text>
+              <Text>Rp {replaceTotal_notdue}</Text>
             </View>
           </View>
           <View>
