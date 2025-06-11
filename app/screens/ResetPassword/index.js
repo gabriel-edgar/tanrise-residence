@@ -8,7 +8,7 @@ import {
 } from "@components";
 import { BaseColor, BaseStyle, useTheme } from "@config";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import Modal from "react-native-modal";
 import { API_URL_LOKAL } from "@env";
@@ -53,6 +53,7 @@ const ResetPassword = (props) => {
       if (reg.test(email) === true) {
         const emails = email;
         console.log("email", emails);
+        setLoading(true);
         fetch(API_URL_LOKAL + "/auth/forgot-send-email", {
           method: "POST",
           headers: {
@@ -67,27 +68,28 @@ const ResetPassword = (props) => {
             console.log("res forgot pass", res);
             setError(!res.success);
             if (res.success) {
-              setLoading(true);
+              setLoading(false);
               const pesan = res.message;
               alertFillBlank(true, pesan);
             } else if (!res.success) {
-              setLoading(true);
+              setLoading(false);
               const pesan = res.message;
               alertFillBlank(true, pesan);
               console.log("res pesan", res.message);
             }
           })
           .catch((error) => {
+            setLoading(false);
             console.log(error);
           });
       } else {
-        setLoading(true);
+        setLoading(false);
         // alert('Email not valid');
         const pesan = "Email not valid";
         alertFillBlank(true, pesan);
       }
     } else {
-      setLoading(true);
+      setLoading(false);
       // alert('Input email');
       const pesan = "Input email please";
       alertFillBlank(true, pesan);
@@ -156,17 +158,21 @@ const ResetPassword = (props) => {
             selectionColor={colors.primary}
           />
           <View style={{ width: "100%" }}>
-            <Button
-              full
-              style={{ marginTop: 20 }}
-              onPress={() => {
-                // onReset();
-                btnSend();
-              }}
-              loading={loading}
-            >
-              {t("reset_password")}
-            </Button>
+            {loading ? (
+              <ActivityIndicator style={{ marginTop: 20 }} size="large" />
+            ) : (
+              <Button
+                full
+                style={{ marginTop: 20 }}
+                onPress={() => {
+                  // onReset();
+                  btnSend();
+                }}
+                loading={loading}
+              >
+                {t("reset_password")}
+              </Button>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -216,7 +222,7 @@ const ResetPassword = (props) => {
                 }}
                 onPress={() => onCloseModal()}
               >
-                <Text style={{ fontSize: 13 }}>{t("OK")}</Text>
+                <Text style={{ fontSize: 13, color: "white" }}>{t("OK")}</Text>
               </Button>
             </View>
           </View>
