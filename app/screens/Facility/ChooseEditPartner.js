@@ -6,11 +6,11 @@ import {
   ProfileGridSmall,
   FilterESort,
   Header,
-} from "@components";
-import Icon from "@components/Icon";
-import LabelUpper2Row from "@components/Label/Upper2Row";
-import { BaseColor, Images, useTheme } from "@config";
-import { FLinks } from "@data";
+} from "@/components";
+import Icon from "@/components/Icon";
+import LabelUpper2Row from "@/components/Label/Upper2Row";
+import { BaseColor, Images, useTheme } from "@/config";
+import { FLinks } from "@/data";
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ import {
 import CheckBox from "@react-native-community/checkbox";
 import { Button, ProfileGroup } from "../../components";
 import axios from "axios";
-import { EFilterColors, EFilterSizes, FRecentTransactions } from "@data";
+import { EFilterColors, EFilterSizes, FRecentTransactions } from "@/data";
 import ModalProduct from "./ModalProduct";
 
 // or any pure javascript modules available in npm
@@ -39,8 +39,8 @@ import Modal from "react-native-modal";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
-import { EPostListData, ESortOption } from "@data";
-import * as Utils from "@utils";
+import { EPostListData, ESortOption } from "@/data";
+import * as Utils from "@/utils";
 
 import { API_URL_LOKAL } from "@env";
 

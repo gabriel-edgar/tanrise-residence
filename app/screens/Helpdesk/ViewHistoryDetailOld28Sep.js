@@ -13,13 +13,11 @@ import {
   Image,
   Tag,
   CategoryIconSoft,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme, Images } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme, Images } from "@/config";
 import { CheckBox, Badge } from "react-native-elements";
-// import {Image} from 'react-native';
-import StarRating from "react-native-star-rating";
 import { useNavigation } from "@react-navigation/native";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -44,9 +42,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
 import Modal from "react-native-modal";
-
-import SegmentedControlTab from "react-native-segmented-control-tab";
-
 import { API_URL_LOKAL } from "@env";
 import httpClient from "../../controllers/HttpClient";
 
@@ -107,12 +102,12 @@ export default function ViewHistoryDetail({ route }) {
   const imagesDummy = [
     {
       id: "1",
-      image: require("@assets/images/icon-helpdesk/newtiket.png"),
+      image: require("@/assets/images/icon-helpdesk/newtiket.png"),
       selected: true,
     },
     {
       id: "2",
-      image: require("@assets/images/icon-helpdesk/history.png"),
+      image: require("@/assets/images/icon-helpdesk/history.png"),
       //   selected: true,
     },
     { id: "3", image: Images.location2 },

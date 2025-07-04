@@ -6,9 +6,9 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { HomeChannelData, RecentListData } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { HomeChannelData, RecentListData } from "@/data";
 import React, { useState } from "react";
 import {
   ActivityIndicator,

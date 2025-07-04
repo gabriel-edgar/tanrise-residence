@@ -1,0 +1,13 @@
+<!-- res/drawable/launch_screen.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color -->
+    <item android:drawable="@color/white" />
+
+    <!-- Centered logo -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo_tanrise_blackfont"
+            android:scaleType="fitCenter" />
+    </item>
+</layer-list>

@@ -9,12 +9,12 @@ import {
     CategoryGrid,
     CategoryBoxColor,
     ModalFilterLocation,
-  } from '@components';
-  import {BaseColor, BaseStyle, useTheme} from '@config';
+  } from '@/components';
+  import {BaseColor, BaseStyle, useTheme} from '@/config';
   import {CheckBox} from 'react-native-elements';
   
   import {useNavigation} from '@react-navigation/native';
-  import {haveChildren} from '@utils';
+  import {haveChildren} from '@/utils';
   import React, {useEffect, useState, useMemo} from 'react';
   import {useTranslation} from 'react-i18next';
   import {FlatList, TouchableOpacity, View} from 'react-native';

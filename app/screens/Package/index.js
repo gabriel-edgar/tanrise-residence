@@ -10,15 +10,15 @@ import {
   Icon,
   Tag,
   colors,
-} from "@components";
-import { BaseStyle, useTheme, BaseColor } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
+} from "@/data";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -29,8 +29,8 @@ import {
   View,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { NewsList, NotFound } from "../../components";
 
 import { useSelector } from "react-redux";

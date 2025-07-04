@@ -5,21 +5,21 @@ import {
   SafeAreaView,
   TabSlider,
   Tag,
-} from "@components";
-import { BaseStyle, useTheme, BaseColor } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
-import * as Utils from "@utils";
+} from "@/data";
+import * as Utils from "@/utils";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import {
   FlatList,
   ScrollView,
@@ -31,8 +31,7 @@ import {
   TextInput,
   RefreshControl,
 } from "react-native";
-import { FFriends } from "@data";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { FFriends } from "@/data";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
 

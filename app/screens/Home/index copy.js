@@ -18,7 +18,7 @@ import {
   Preview,
   FlatListSlider,
   FlexWrapLayout,
-} from "@components";
+} from "@/components";
 import {
   BaseColor,
   BaseStyle,
@@ -26,14 +26,14 @@ import {
   Typography,
   FontWeight,
   useFont,
-} from "@config";
+} from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
+} from "@/data";
 import React, {
   useEffect,
   useState,
@@ -55,8 +55,8 @@ import {
   PixelRatio,
   Button,
   AppState,
+  TouchableOpacity 
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import ImageZoom from "react-native-image-pan-zoom";
 import { useSelector, useDispatch } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
@@ -67,7 +67,7 @@ import Swiper from "react-native-swiper";
 import Categories from "./Categories";
 import SliderNews from "./SliderNews";
 import axios from "axios";
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 import numFormat from "../../components/numFormat";
 
 import { notifikasi_nbadge, actionTypes } from "../../actions/NotifActions";
@@ -1901,7 +1901,7 @@ const Home = (props) => {
                       >
                         <Text
                           adjustsFontSizeToFit={true}
-                          allowFontScaling={true}
+                          //allowFontScaling={true}
                           style={{
                             color: "#fff",
                             alignSelf: "center",
@@ -2104,7 +2104,7 @@ const Home = (props) => {
                       >
                         <Text
                           adjustsFontSizeToFit={true}
-                          allowFontScaling={true}
+                          //allowFontScaling={true}
                           style={{
                             color: "#fff",
                             alignSelf: "center",
@@ -2696,7 +2696,7 @@ const Home = (props) => {
                     // resizeMode="stretch"
                     // resizeMode="cover"
                     resizeMode="contain"
-                    // source={require('@assets/images/ChairmanMessage.jpeg')}
+                    // source={require('@/assets/images/ChairmanMessage.jpeg')}
                     style={{
                       // width: Dimensions.get('window').width,
                       marginLeft: "5%",

@@ -1,8 +1,8 @@
-import Button from "@components/Button";
-import Icon from "@components/Icon";
-import Image from "@components/Image";
-import Text from "@components/Text";
-import TextInput from "@components/TextInput";
+import Button from "@/components/Button";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Text from "@/components/Text";
+import TextInput from "@/components/TextInput";
 import PropTypes from "prop-types";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import styles from "./styles";
 import ModalSelector from "react-native-modal-selector";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 
 const ModalDropdown_lotno = (props) => {
   const { colors } = useTheme();

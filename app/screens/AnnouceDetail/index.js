@@ -8,11 +8,11 @@ import {
   StarRating,
   Tag,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { Images } from "@config";
-import { HomeListData, HomePopularData } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Images } from "@/config";
+import { HomeListData, HomePopularData } from "@/data";
+import * as Utils from "@/utils";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -25,7 +25,7 @@ import {
   View,
 } from "react-native";
 import styles from "./styles";
-import { PlaceholderLine, Placeholder } from "@components";
+import { PlaceholderLine, Placeholder } from "@/components";
 import moment from "moment";
 import RenderHtml from "react-native-render-html";
 import { useWindowDimensions } from "react-native";

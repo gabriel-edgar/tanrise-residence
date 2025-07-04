@@ -1,6 +1,5 @@
-import { Text, Header, Icon } from "@components";
+import { Text, Header, Icon } from "@/components";
 //import data_dummy from '../Home/data_dummy.json';
-//import { projectAsthana } from "./dummy.js";
 
 import {
   View,
@@ -12,7 +11,7 @@ import {
 } from "react-native";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@/config";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
@@ -145,7 +144,7 @@ const ProjectScreen = (props) => {
                 {/* <Text>{item.image}</Text> */}
                 <Image
                   source={{ uri: item.picture_url }}
-                  // source={require('@assets/images/home/slider-project/sudirmansuite.jpeg')}
+                  // source={require('@/assets/images/home/slider-project/sudirmansuite.jpeg')}
                   // src={item.image}
                   // source={}
                   // containerStyle={styles.imageContainer}

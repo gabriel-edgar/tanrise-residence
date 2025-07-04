@@ -5,8 +5,8 @@ import {
     SafeAreaView,
     Icon,
     Header
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";

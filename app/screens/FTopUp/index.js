@@ -9,9 +9,9 @@ import {
     Text,
     TextInput,
     TextInputMoney
-} from "@components";
-import { BaseColor, BaseStyle, Typography, useTheme } from "@config";
-import { FPaymentItemsData, FRecentTransactions } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, Typography, useTheme } from "@/config";
+import { FPaymentItemsData, FRecentTransactions } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

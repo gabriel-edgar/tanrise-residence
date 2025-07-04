@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text, StyleSheet } from "react-native";
-import { BaseStyle, useTheme } from "@config";
+import { BaseStyle, useTheme } from "@/config";
 
 const CustomDropdownPicker = ({ items, placeholder, onSelect, value2 }) => {
   const [open, setOpen] = useState(false);

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { View, TouchableOpacity, FlatList, StatusBar } from "react-native";
-import { ThemeSupport } from "@config";
-import { BaseStyle, useTheme } from "@config";
-import { Header, SafeAreaView, Icon, Text, Button } from "@components";
-import { ApplicationActions } from "@actions";
+import { ThemeSupport } from "@/config";
+import { BaseStyle, useTheme } from "@/config";
+import { Header, SafeAreaView, Icon, Text, Button } from "@/components";
+import { ApplicationActions } from "@/actions";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 

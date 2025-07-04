@@ -3,9 +3,9 @@ import {
     Header,
     Icon, ListSearchResult,
     PaymentItem, SafeAreaView, Text
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FPaymentItemsData } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FPaymentItemsData } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";

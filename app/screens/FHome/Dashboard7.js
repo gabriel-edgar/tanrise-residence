@@ -5,9 +5,9 @@ import {
     SafeAreaView,
     Text,
     Icon,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FTransactions } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FTransactions } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

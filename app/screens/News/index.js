@@ -9,21 +9,20 @@ import {
   Header,
   Icon,
   colors,
-} from '@components';
-import {BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseStyle, useTheme} from '@/config';
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from '@data';
+} from '@/data';
 import axios from 'axios';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, ScrollView, View, ActivityIndicator} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NewsList, NotFound} from '../../components';
 import List from '../../components/Product/List';
 import styles from './styles';

@@ -8,10 +8,10 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { ECategoryData } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { ECategoryData } from "@/data";
+import * as Utils from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

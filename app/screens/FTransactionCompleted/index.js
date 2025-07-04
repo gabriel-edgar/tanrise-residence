@@ -6,9 +6,9 @@ import {
     Text,
     Header,
     ProfileGrid,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { Products } from "@data/eConfirmed";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Products } from "@/data/eConfirmed";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,7 +19,7 @@ import {
     View,
 } from "react-native";
 import styles from "./styles";
-import { Images } from "@config";
+import { Images } from "@/config";
 
 export default function FTransactionCompleted({ route, navigation }) {
     const { colors } = useTheme();

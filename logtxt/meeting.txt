@@ -1,9 +1,0 @@
-24 des
-v photo required
-usage
-v summary add uploaded
-
-residence 
-v button register
-just project
-meter info

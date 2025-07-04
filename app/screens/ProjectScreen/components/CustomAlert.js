@@ -1,8 +1,5 @@
-import { Text, Button, Icon } from "@components";
+import { Text, Button, Icon } from "@/components";
 import { View, TouchableOpacity, Modal, Image } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-
-import ImageViewing from "react-native-image-viewing";
 
 import get from "lodash/get";
 import React, { useState } from "react";

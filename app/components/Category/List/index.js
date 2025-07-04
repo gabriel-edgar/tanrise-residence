@@ -1,6 +1,6 @@
-import Image from '@components/Image';
-import Text from '@components/Text';
-import {Images, useTheme} from '@config';
+import Image from '@/components/Image';
+import Text from '@/components/Text';
+import {Images, useTheme} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {TouchableOpacity, View, StyleSheet} from 'react-native';

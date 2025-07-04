@@ -7,11 +7,11 @@ import {
     NewsGrid,
     NewsList,
     SafeAreaView,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { PostListData } from "@data";
-import * as Utils from "@utils";
+import { PostListData } from "@/data";
+import * as Utils from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Platform, RefreshControl, View } from "react-native";
 import styles from "./styles";

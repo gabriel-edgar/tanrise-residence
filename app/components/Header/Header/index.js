@@ -1,13 +1,13 @@
-import Text from "@components/Text";
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
-import { StatusBar, TouchableOpacity, View } from "react-native";
+import Text from '@/components/Text';
+import PropTypes from 'prop-types';
+import React, {useEffect} from 'react';
+import {StatusBar, TouchableOpacity, View} from 'react-native';
 //import { useDarkMode } from "react-native-dark-mode";
-import { useSelector } from "react-redux";
-import styles from "./styles";
+import {useSelector} from 'react-redux';
+import styles from './styles';
 
 export default function Header(props) {
-  const forceDark = useSelector((state) => state.application.force_dark);
+  const forceDark = useSelector(state => state.application.force_dark);
   const {
     style,
     styleLeft,
@@ -31,12 +31,12 @@ export default function Header(props) {
   //const isDarkMode = useDarkMode();
 
   useEffect(() => {
-    let option = isDarkMode ? "light-content" : "dark-content";
+    let option = isDarkMode ? 'light-content' : 'dark-content';
     if (forceDark) {
-      option = "light-content";
+      option = 'light-content';
     }
     if (forceDark == false) {
-      option = "dark-content";
+      option = 'dark-content';
     }
     if (barStyle) {
       option = barStyle;
@@ -46,41 +46,37 @@ export default function Header(props) {
 
   return (
     <View style={[styles.contain, style]}>
-      <View style={[{ flex: 1 }, styleLeft]}>
+      <View style={[{flex: 1}, styleLeft]}>
         <TouchableOpacity
           style={[styles.contentLeft, styleContentLeft]}
-          onPress={onPressLeft}
-        >
-          {renderLeft()}
+          onPress={onPressLeft}>
+          {renderLeft ? renderLeft() : null}
         </TouchableOpacity>
       </View>
       <View style={[styles.contentCenter, styleContentCenter]}>
         <Text
           headline
           numberOfLines={_numberOfLines == 0 ? 0 : 1}
-          style={{ fontSize: 16, textAlign: "center" }}
-        >
+          style={{fontSize: 16, textAlign: 'center'}}>
           {title}
         </Text>
 
-        {subTitle != "" && (
+        {/* {subTitle != '' && (
           <Text caption2 light>
             {subTitle}
           </Text>
-        )}
+        )} */}
       </View>
       <View style={[styles.right, styleRight]}>
         <TouchableOpacity
           style={[styles.contentRightSecond, styleRightSecond]}
-          onPress={onPressRightSecond}
-        >
-          {renderRightSecond()}
+          onPress={onPressRightSecond}>
+          {renderRightSecond ? renderRightSecond() : null}
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.contentRight, styleContentRight]}
-          onPress={onPressRight}
-        >
-          {renderRight()}
+          onPress={onPressRight}>
+          {renderRight ? renderRight() : null}
         </TouchableOpacity>
       </View>
     </View>
@@ -123,8 +119,8 @@ Header.defaultProps = {
   onPressLeft: () => {},
   onPressRight: () => {},
   onPressRightSecond: () => {},
-  title: "Title",
-  subTitle: "",
-  barStyle: "",
+  title: 'Title',
+  subTitle: '',
+  barStyle: '',
   _numberOfLines: 10,
 };

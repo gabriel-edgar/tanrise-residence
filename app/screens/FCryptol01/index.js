@@ -6,9 +6,9 @@ import {
     StatisticText3Col,
     TextInput,
     NotFound
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FTransactions } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FTransactions } from "@/data";
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

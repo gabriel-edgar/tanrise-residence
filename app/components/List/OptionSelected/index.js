@@ -1,10 +1,10 @@
-import Text  from "@components/Text";
-import Icon  from "@components/Icon";
+import Text  from "@/components/Text";
+import Icon  from "@/components/Icon";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import { useTheme } from "@config";
+import { useTheme } from "@/config";
 
 const OptionSelected = ({
     style = {},

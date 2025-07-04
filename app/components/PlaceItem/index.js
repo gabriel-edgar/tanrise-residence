@@ -1,9 +1,9 @@
-import StarRating from "@components/StarRating";
-import Icon from "@components/Icon";
-import Image from "@components/Image";
-import Tag from "@components/Tag";
-import Text from "@components/Text";
-import { BaseColor, useTheme } from "@config";
+import StarRating from "@/components/StarRating";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Tag from "@/components/Tag";
+import Text from "@/components/Text";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { useTranslation } from "react-i18next";

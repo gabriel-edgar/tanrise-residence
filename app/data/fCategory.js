@@ -1,4 +1,4 @@
-import { BaseColor } from "@config";
+import { BaseColor } from "@/config";
 
 export const FCategoryData = [
   {

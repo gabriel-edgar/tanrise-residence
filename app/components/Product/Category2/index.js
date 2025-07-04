@@ -1,12 +1,12 @@
-import Icon from "@components/Icon";
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View, ImageBackground } from "react-native";
 import styles from "./styles";
-import { Images, BaseColor } from "@config";
-import { parseHexTransparency } from "@utils";
+import { Images, BaseColor } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import Loading from "./Loading";
 
 const ProductCategory2 = (props) => {

@@ -1,7 +1,7 @@
-import Image from "@components/Image";
-import StarRating from "@components/StarRating";
-import Text from "@components/Text";
-import { BaseColor, Images, useTheme } from "@config";
+import Image from "@/components/Image";
+import StarRating from "@/components/StarRating";
+import Text from "@/components/Text";
+import { BaseColor, Images, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { View } from "react-native";

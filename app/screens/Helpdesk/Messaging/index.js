@@ -37,13 +37,13 @@ import {
   // CategoryBoxColor,
   // ModalFilterLocation,
   // ButtonChooseProject,
-} from "@components";
+} from "@/components";
 import { useNavigation } from "@react-navigation/native";
 //import Styles from "../../Themes/Style";
 //import Colors from "../../Themes/Colors";
 import { justifyContent } from "styled-system";
 import { Actions } from "react-native-router-flux";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 
 const ChatScreen = (props) => {
   const { colors } = useTheme();

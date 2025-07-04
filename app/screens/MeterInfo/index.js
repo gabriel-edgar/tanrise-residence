@@ -26,14 +26,13 @@ import Icon from "react-native-vector-icons/FontAwesome";
 //   Button
 // } from 'native-base';
 
-import { BaseStyle, useTheme, BaseColor } from "@config";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 // import { ListItem } from 'react-native-elements'
 // import numFormat from "@Component/numFormat";
 
 const { height: deviceHeight, width: deviceWidth } = Dimensions.get("window");
 import moment from "moment";
 import { Picker } from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Style from "./styles";
 import { connect } from "react-redux";
 import { API_URL_LOKAL } from "@env";

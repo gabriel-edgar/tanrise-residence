@@ -1,7 +1,7 @@
-import { Header, Icon, ListThumbCircleNotif, SafeAreaView } from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { Header, Icon, ListThumbCircleNotif, SafeAreaView } from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { NotificationData } from "@data";
+import { NotificationData } from "@/data";
 import React, { useState, useEffect } from "react";
 import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";

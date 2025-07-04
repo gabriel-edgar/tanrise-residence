@@ -63,9 +63,9 @@ import {
     Text,
     TextInput,
     Transaction2Col,
-} from "@components";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
-import { EPostListData } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
+import { EPostListData } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

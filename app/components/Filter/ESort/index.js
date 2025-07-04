@@ -1,7 +1,7 @@
-import Icon from "@components/Icon";
-import ModalFilter from "@components/ModalFilter";
-import Text from "@components/Text";
-import { BaseColor, useTheme } from "@config";
+import Icon from "@/components/Icon";
+import ModalFilter from "@/components/ModalFilter";
+import Text from "@/components/Text";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,5 +1,5 @@
-import { Button, Header, Icon, Text } from "@components";
-import { useTheme } from "@config";
+import { Button, Header, Icon, Text } from "@/components";
+import { useTheme } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Animated, View } from "react-native";

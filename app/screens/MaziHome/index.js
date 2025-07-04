@@ -1,6 +1,6 @@
-import { SafeAreaView, TabSlider, Text } from "@components";
-import { BaseStyle, Images, useTheme } from "@config";
-import { MaziListApp } from "@data";
+import { SafeAreaView, TabSlider, Text } from "@/components";
+import { BaseStyle, Images, useTheme } from "@/config";
+import { MaziListApp } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +8,7 @@ import { ScrollView, View } from "react-native";
 import { SceneMap } from "react-native-tab-view";
 import ProductGrid1 from "./Grid1";
 import Screens from "./Screens";
-import PreviewComponent from "@screens/PreviewComponent";
+import PreviewComponent from "@/screens/PreviewComponent";
 
 const Apps = () => {
     const AppData = MaziListApp.filter((item) => !item.isHideInHome);

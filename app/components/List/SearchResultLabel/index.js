@@ -1,9 +1,9 @@
-import { Text } from "@components";
+import { Text } from "@/components";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import { useTheme, Images } from "@config";
+import { useTheme, Images } from "@/config";
 
 const SearchResultLabel = ({
     style = {},

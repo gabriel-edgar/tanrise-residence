@@ -1,5 +1,5 @@
-import * as Utils from "@utils";
-import { Images } from "@config";
+import * as Utils from "@/utils";
+import { Images } from "@/config";
 module.exports = [
   {
     _id: Math.round(Math.random() * 1000000),

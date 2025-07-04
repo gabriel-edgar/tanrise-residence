@@ -8,10 +8,10 @@ import {
   CardCommentPhoto,
   Text,
   ModalFilter,
-} from "@components";
-import { BaseColor, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, useTheme } from "@/config";
 // Load sample data
-import { EReviewsData } from "@data";
+import { EReviewsData } from "@/data";
 import React, { useRef, useState } from "react";
 import {
   FlatList,

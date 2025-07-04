@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import Svg, { Path, Circle, Line } from "react-native-svg";
-import { useTheme, BaseColor } from "@config";
+import { useTheme, BaseColor } from "@/config";
 import styles from "./styles";
 
 const ProgressBar = ({

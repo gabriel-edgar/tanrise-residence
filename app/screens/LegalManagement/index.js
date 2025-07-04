@@ -10,13 +10,13 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from "@components";
+} from "@/components";
 
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
-import { FFriends } from "@data";
+import { FFriends } from "@/data";
 import { useNavigation } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -28,8 +28,8 @@ import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 import client from "../../controllers/HttpClient";
 import styles from "./styles";
-import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
-import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import ModalDropdown_debtor from "@/components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@/components/ModalDropdown_lotno";
 
 const Friends = () => {
   const { t, i18n } = useTranslation();
@@ -94,7 +94,7 @@ export default function Helpdesk() {
       <ScrollView>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <Image
-            source={require("@assets/images/contract.png")}
+            source={require("@/assets/images/contract.png")}
             style={{
               height: 300,
               width: 300,

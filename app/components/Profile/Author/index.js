@@ -1,5 +1,5 @@
-import Image from "@components/Image";
-import Text from "@components/Text";
+import Image from "@/components/Image";
+import Text from "@/components/Text";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

@@ -1,15 +1,15 @@
-import Text from "@components/Text";
-import Image from "@components/Image";
-import Icon from "@components/Icon";
-import ModalFilter from "@components/ModalFilter";
+import Text from "@/components/Text";
+import Image from "@/components/Image";
+import Icon from "@/components/Icon";
+import ModalFilter from "@/components/ModalFilter";
 import PropTypes from "prop-types";
 import React, { Fragment, useEffect, useState } from "react";
 import { StatusBar, View, TouchableOpacity } from "react-native";
 //import { useDarkMode } from "react-native-dark-mode";
 import { useSelector } from "react-redux";
 import styles from "./styles";
-import { ECategories, EFeaturedShop, EPopulars, EYourStores } from "@data";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { ECategories, EFeaturedShop, EPopulars, EYourStores } from "@/data";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { useTranslation } from "react-i18next";
 
 export const HeaderLargeTitleStore = ({

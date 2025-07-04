@@ -10,9 +10,9 @@ import {
     Text,
     TextInput,
     TextInputMoney
-} from "@components";
-import { BaseColor, BaseStyle, Images, Typography, useTheme } from "@config";
-import { FChooseCategories, FCurrencies, FMarkers, FTypes } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, Images, Typography, useTheme } from "@/config";
+import { FChooseCategories, FCurrencies, FMarkers, FTypes } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";

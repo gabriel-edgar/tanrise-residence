@@ -1,5 +1,5 @@
-import { Text } from "@components";
-import { useTheme } from "@config";
+import { Text } from "@/components";
+import { useTheme } from "@/config";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View, TouchableOpacity } from "react-native";

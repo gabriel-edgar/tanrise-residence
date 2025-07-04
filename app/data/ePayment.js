@@ -1,4 +1,4 @@
-import { Images } from "@config";
+import { Images } from "@/config";
 
 export const PaymentItems = [
   { id: 1, title: "Domestic Card", iconName: "credit-card", checked: true },

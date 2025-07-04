@@ -12,13 +12,10 @@ import {
   Image,
   Tag,
   CategoryIconSoft,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme, Images } from "@config";
-import { CheckBox, Badge } from "react-native-elements";
-// import {Image} from 'react-native';
-import StarRating from "react-native-star-rating";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme, Images } from "@/config";
 import { useNavigation } from "@react-navigation/native";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {

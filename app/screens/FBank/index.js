@@ -6,9 +6,9 @@ import {
     SafeAreaView,
     Text,
     TitleFintech,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FPaymentItemsData, FRecentTransactions } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FPaymentItemsData, FRecentTransactions } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutAnimation, View } from "react-native";

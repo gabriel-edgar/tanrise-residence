@@ -1,9 +1,9 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import Image from "@components/Image";
-import Text from "@components/Text";
-import { Images, useTheme } from "@config";
-import { parseHexTransparency } from "@utils";
+import Image from "@/components/Image";
+import Text from "@/components/Text";
+import { Images, useTheme } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import styles from "./styles";
 
 const imagesInit = [

@@ -1,6 +1,6 @@
-import { Button, Header, Icon, SafeAreaView, Text } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { EPaymentItemsData } from "@data";
+import { Button, Header, Icon, SafeAreaView, Text } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { EPaymentItemsData } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutAnimation, Platform, UIManager, View } from "react-native";

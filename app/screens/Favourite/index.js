@@ -4,9 +4,9 @@ import {
     SafeAreaView,
     Text,
     ModalFilter,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FavouriteData } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FavouriteData } from "@/data";
 import React, { Fragment, useEffect, useState } from "react";
 import { FlatList, RefreshControl, View } from "react-native";
 import { useTranslation } from "react-i18next";

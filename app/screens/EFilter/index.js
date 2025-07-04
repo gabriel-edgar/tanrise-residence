@@ -8,10 +8,10 @@ import {
     SafeAreaView,
     Tag,
     Text,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { EFilterCategories, EFilterColors, EFilterSizes } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { EFilterCategories, EFilterColors, EFilterSizes } from "@/data";
+import * as Utils from "@/utils";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

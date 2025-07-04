@@ -1,6 +1,6 @@
-import { Button, ListTransactionExpand, Text } from "@components";
-import { useTheme } from "@config";
-import { FTransactionsTab } from "@data";
+import { Button, ListTransactionExpand, Text } from "@/components";
+import { useTheme } from "@/config";
+import { FTransactionsTab } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";

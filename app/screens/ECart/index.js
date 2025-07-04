@@ -7,9 +7,9 @@ import {
   ProductCard1,
   SafeAreaView,
   TextInput,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {ProductsData} from '@data';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {ProductsData} from '@/data';
 import React, {Fragment, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, RefreshControl, View} from 'react-native';

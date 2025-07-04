@@ -1,5 +1,5 @@
-import Header from "@components/Header/Header";
-import Text from "@components/Text";
+import Header from "@/components/Header/Header";
+import Text from "@/components/Text";
 import React from "react";
 
 function HeaderText({ title = "", props = {} }) {

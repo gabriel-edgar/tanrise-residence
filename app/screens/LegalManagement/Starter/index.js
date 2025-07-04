@@ -11,11 +11,11 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ListItem,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {FFriends} from '@data';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -28,7 +28,6 @@ import {
   ScrollView,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
 import styles from './styles';
@@ -96,7 +95,7 @@ export default function ContractInformation() {
             // borderColor: '#000'
           }}>
           <Image
-            source={require('@assets/images/form.png')}
+            source={require('@/assets/images/form.png')}
             style={{
               height: 200,
               width: 300,
@@ -112,7 +111,7 @@ export default function ContractInformation() {
           style={{
             marginTop: 30,
             paddingHorizontal: 20,
-            marginVertical: 200
+            marginVertical: 200,
           }}>
           <Text
             style={{
@@ -187,13 +186,24 @@ export default function ContractInformation() {
                 onChangeText={text => setItemName(text)}
               />
               <TextInput
-              style={{marginTop: 10}}
+                style={{marginTop: 10}}
                 keyboardType="numeric"
                 placeholder="Jumlah"
                 value={itemQuantity}
                 onChangeText={text => setItemQuantity(text)}
               />
-              <TouchableOpacity style={{paddingVertical: 10, width: 90, marginTop: 10, alignItems:'center', borderRadius: 8, backgroundColor: '#315447'}} onPress={handleAddItem}><Text style={{color: '#FFF'}}>Tambah Item</Text></TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  paddingVertical: 10,
+                  width: 90,
+                  marginTop: 10,
+                  alignItems: 'center',
+                  borderRadius: 8,
+                  backgroundColor: '#315447',
+                }}
+                onPress={handleAddItem}>
+                <Text style={{color: '#FFF'}}>Tambah Item</Text>
+              </TouchableOpacity>
             </View>
           </View>
 

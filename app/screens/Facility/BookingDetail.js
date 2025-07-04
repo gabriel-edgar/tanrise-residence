@@ -7,13 +7,13 @@ import {
   FilterESort,
   Header,
   Tag,
-} from "@components";
+} from "@/components";
 
 import { TabBar, TabView, SceneMap } from "react-native-tab-view";
-import Icon from "@components/Icon";
-import LabelUpper2Row from "@components/Label/Upper2Row";
-import { BaseColor, Images, useTheme } from "@config";
-import { FLinks } from "@data";
+import Icon from "@/components/Icon";
+import LabelUpper2Row from "@/components/Label/Upper2Row";
+import { BaseColor, Images, useTheme } from "@/config";
+import { FLinks } from "@/data";
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -32,7 +32,7 @@ import {
 import CheckBox from "@react-native-community/checkbox";
 import { Button, ProfileGroup } from "../../components";
 import axios from "axios";
-import { EFilterColors, EFilterSizes, FRecentTransactions } from "@data";
+import { EFilterColors, EFilterSizes, FRecentTransactions } from "@/data";
 import ModalProduct from "./ModalProduct";
 
 // or any pure javascript modules available in npm
@@ -42,10 +42,10 @@ import Modal from "react-native-modal";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
-import { EPostListData, ESortOption } from "@data";
-import * as Utils from "@utils";
+import { EPostListData, ESortOption } from "@/data";
+import * as Utils from "@/utils";
 
-import SegmentControl from "react-native-segment-control";
+// import SegmentControl from "react-native-segment-control";
 
 import { API_URL_LOKAL } from "@env";
 
@@ -871,12 +871,12 @@ export default BookingDetail = (props) => {
             <View
               style={{ flex: 1, height: "100%", backgroundColor: "#F5F7FA" }}
             >
-              <SegmentControl
+              {/* <SegmentControl
                 segments={segments}
                 color={colors.primary}
                 style={{ backgroundColor: "red", height: 50, fontSize: 12 }}
                 height={50}
-              />
+              /> */}
 
               {/* // coba dulu height nya 100%, kayak gimana */}
               {/* {renderFlatListPartner(partners)} */}

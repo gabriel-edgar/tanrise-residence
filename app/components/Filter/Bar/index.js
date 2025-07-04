@@ -1,9 +1,9 @@
-import { Icon, Text } from "@components";
+import { Icon, Text } from "@/components";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import { useTheme } from "@config";
+import { useTheme } from "@/config";
 
 const FilterBar = ({
     style = {},

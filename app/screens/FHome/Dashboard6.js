@@ -4,9 +4,9 @@ import {
     HeaderText,
     LineChart,
     SafeAreaView,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FChartItems } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FChartItems } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";

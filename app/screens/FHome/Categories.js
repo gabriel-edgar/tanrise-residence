@@ -1,5 +1,5 @@
-import { CategoryIconSoft } from "@components";
-import { FCategories } from "@data";
+import { CategoryIconSoft } from "@/components";
+import { FCategories } from "@/data";
 import React from "react";
 import { View } from "react-native";
 import { useNavigation } from "@react-navigation/core";

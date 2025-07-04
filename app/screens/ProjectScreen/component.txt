@@ -3,7 +3,7 @@ import {
   Header,
   Icon,
   Button
-} from "@components";
+} from "@/components";
 
   Text,
                       <Text style={{ fontWeight: "bold", fontSize: 14 }}>

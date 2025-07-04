@@ -6,9 +6,9 @@ import {
     CardReport08,
     Header,
     Icon
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FHotNews, FNews, FRecentTransactions } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FHotNews, FNews, FRecentTransactions } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import { AuthActions } from "@actions";
+import { AuthActions } from "@/actions";
 import {
   Button,
   Header,
@@ -6,9 +6,9 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { Images } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Images } from "@/config";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ScrollView,

@@ -1,76 +1,103 @@
-const pdfSourceFunc = (channel) => {
+import {Platform} from 'react-native';
+import RNFS from 'react-native-fs';
+
+const pdfSourceFunc = channel => {
   //alert(channel);
   const pdfSource = {
-    uri: "",
+    uri: '',
     //uri: "https://drive.google.com/file/d/1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ/view?usp=sharing"
     //uri: "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ",
     cache: true,
   };
 
-  const merchant = {
-    permata:
-      "https://drive.google.com/uc?export=download&id=1YjEYQh8ibmVyYzAb1DHgfBS-1ncZFw0g",
-    danamon:
-      "https://drive.google.com/uc?export=download&id=1KwetUbAgS5LBhAS-9j2XYubWE8i_5icn",
-    mandiri:
-      "https://drive.google.com/uc?export=download&id=1_QdtrDB05BblXQzkNkZnqLVc1l_Wcn42",
-    maybank:
-      "https://drive.google.com/uc?export=download&id=1FYarm1tOD4j06X_DeEOhVvta_Xf5Rodp",
-    bca: "https://drive.google.com/uc?export=download&id=1WAnERWsaGGDLHf3Ipb8LJr77zopzN210",
-    bni: "https://drive.google.com/uc?export=download&id=1sPXmwoaZiW4j47WTRSPnWfFeY16B6g0z",
-    sinarmas:
-      "https://drive.google.com/uc?export=download&id=1UIJL7N3t0NW--imLAzq_MJNy0fv13ykb",
-    bnc: "https://drive.google.com/uc?export=download&id=1mczFG7UPpMowH0sRB6bM5biNEpmjKq5k",
-    btn: "https://drive.google.com/uc?export=download&id=106EZEk3Br_rPeWczAIujAHQpGjKRfUD7",
-    cs1_indomaret:
-      "https://drive.google.com/uc?export=download&id=1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN",
-    cs2_alfamart:
-      "https://drive.google.com/uc?export=download&id=1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk",
-    bri: "https://drive.google.com/uc?export=download&id=1xpIHm276kn-SFYrEk8HakUiNZMQBiYQv",
-  };
+  let merchant;
+
+  const pdfPath =
+    Platform.OS === 'ios'
+      ? 'file://' + RNFS.MainBundlePath + 'sample.pdf' // this gets replaced dynamically
+      : 'file:///android_asset/sample.pdf';
+
+  if (Platform.OS === 'ios') {
+    merchant = {
+      permata: 'file://' + RNFS.MainBundlePath + '/1permata.pdf',
+      danamon: 'file://' + RNFS.MainBundlePath + '/2danamon.pdf',
+      mandiri: 'file://' + RNFS.MainBundlePath + '/3mandiri.pdf',
+      maybank: 'file://' + RNFS.MainBundlePath + '/4maybank.pdf',
+      bca: 'file://' + RNFS.MainBundlePath + '/5bca-virtual.pdf',
+      bni: 'file://' + RNFS.MainBundlePath + '/6bni.pdf',
+      sinarmas: 'file://' + RNFS.MainBundlePath + '/7sinarmas.pdf',
+      bnc: 'file://' + RNFS.MainBundlePath + '/8bnc.pdf',
+      btn: 'file://' + RNFS.MainBundlePath + '/9btn.pdf',
+      cs1_indomaret: 'file://' + RNFS.MainBundlePath + '/cs1-indomaret.pdf',
+      cs2_alfamart: 'file://' + RNFS.MainBundlePath + '/cs2-alfamart.pdf',
+      bri: 'file://' + RNFS.MainBundlePath + '/10bri.pdf',
+    };
+  } else {
+    merchant = {
+      permata:
+        'https://drive.google.com/uc?export=download&id=1YjEYQh8ibmVyYzAb1DHgfBS-1ncZFw0g',
+      danamon:
+        'https://drive.google.com/uc?export=download&id=1KwetUbAgS5LBhAS-9j2XYubWE8i_5icn',
+      mandiri:
+        'https://drive.google.com/uc?export=download&id=1_QdtrDB05BblXQzkNkZnqLVc1l_Wcn42',
+      maybank:
+        'https://drive.google.com/uc?export=download&id=1FYarm1tOD4j06X_DeEOhVvta_Xf5Rodp',
+      bca: 'https://drive.google.com/uc?export=download&id=1WAnERWsaGGDLHf3Ipb8LJr77zopzN210',
+      bni: 'https://drive.google.com/uc?export=download&id=1sPXmwoaZiW4j47WTRSPnWfFeY16B6g0z',
+      sinarmas:
+        'https://drive.google.com/uc?export=download&id=1UIJL7N3t0NW--imLAzq_MJNy0fv13ykb',
+      bnc: 'https://drive.google.com/uc?export=download&id=1mczFG7UPpMowH0sRB6bM5biNEpmjKq5k',
+      btn: 'https://drive.google.com/uc?export=download&id=106EZEk3Br_rPeWczAIujAHQpGjKRfUD7',
+      cs1_indomaret:
+        'https://drive.google.com/uc?export=download&id=1yGfxkPJLmyX2YAvxvysiQdfWCphOTbbN',
+      cs2_alfamart:
+        'https://drive.google.com/uc?export=download&id=1ofqbli3hqVIhZXTjWsgACIstAT3gZHVk',
+      bri: 'https://drive.google.com/uc?export=download&id=1xpIHm276kn-SFYrEk8HakUiNZMQBiYQv',
+    };
+  }
 
   switch (channel) {
-    case "PERMATA":
+    case 'PERMATA':
       pdfSource.uri = merchant.permata;
       break;
-    case "DANAMON":
+    case 'DANAMON':
       pdfSource.uri = merchant.danamon;
       break;
-    case "MANDIRI":
+    case 'MANDIRI':
       pdfSource.uri = merchant.mandiri;
       break;
-    case "MAYBANK":
+    case 'MAYBANK':
       pdfSource.uri = merchant.maybank;
       break;
-    case "BCA":
+    case 'BCA':
       pdfSource.uri = merchant.bca;
       break;
-    case "BNI":
+    case 'BNI':
       pdfSource.uri = merchant.bni;
       break;
-    case "SINARMAS":
+    case 'SINARMAS':
       pdfSource.uri = merchant.sinarmas;
       break;
-    case "BNC":
+    case 'BNC':
       pdfSource.uri = merchant.bnc;
       break;
-    case "BTN":
+    case 'BTN':
       pdfSource.uri = merchant.btn;
       break;
-    case "INDOMARET":
+    case 'INDOMARET':
       pdfSource.uri = merchant.cs1_indomaret;
       break;
-    case "ALFAMART":
+    case 'ALFAMART':
       pdfSource.uri = merchant.cs2_alfamart;
       break;
-    case "BRI":
+    case 'BRI':
       pdfSource.uri = merchant.bri;
       break;
     default:
-      pdfSource.uri = "";
+      pdfSource.uri = '';
     // "https://drive.google.com/uc?export=download&id=1FZalOrcH_rD2ud0rqKlujtR1_GzZ_FeQ";
   }
   return pdfSource;
 };
 
-export { pdfSourceFunc };
+export {pdfSourceFunc};

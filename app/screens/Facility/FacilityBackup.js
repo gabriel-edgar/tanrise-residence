@@ -27,12 +27,12 @@ import {
   Icon,
   Tag,
   colors,
-} from "@components";
+} from "@/components";
 import moment from "moment";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 
 import axios from "axios";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
 import { useNavigation, useRoute } from "@react-navigation/core";
 
 function BookingFacility1({ route }) {

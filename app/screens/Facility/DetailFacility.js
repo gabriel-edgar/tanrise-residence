@@ -27,11 +27,11 @@ import {
   colors,
   PlaceholderLine,
   Placeholder,
-} from "@components";
+} from "@/components";
 import axios from "axios";
 import Swiper from "react-native-swiper";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
-import * as Utils from "@utils";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
+import * as Utils from "@/utils";
 import RNPickerSelect from "@react-native-picker/picker";
 import { Button } from "../../components";
 

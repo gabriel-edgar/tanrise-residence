@@ -1,11 +1,11 @@
 import React from 'react';
 import {View} from 'react-native';
 import styles from './styles';
-import {BaseStyle, useTheme} from '@config';
+import {BaseStyle, useTheme} from '@/config';
 import {useTranslation} from 'react-i18next';
-import Text from '@components/Text';
-import Icon from '@components/Icon';
-import {parseHexTransparency} from '@utils';
+import Text from '@/components/Text';
+import Icon from '@/components/Icon';
+import {parseHexTransparency} from '@/utils';
 import LottieView from 'lottie-react-native';
 
 const NotFound = () => {
@@ -22,7 +22,7 @@ const NotFound = () => {
           }}
         /> */}
         <LottieView
-          source={require('@data/notfound.json')}
+          source={require('@/data/notfound.json')}
           autoPlay
           style={{width: 300, height: 300}}
         />

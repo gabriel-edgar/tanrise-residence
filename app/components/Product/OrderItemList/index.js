@@ -1,7 +1,7 @@
-import Tag from "@components/Tag";
-import Text from "@components/Text";
-import ProductCard3 from "@components/Product/Card3";
-import { Images, useTheme } from "@config";
+import Tag from "@/components/Tag";
+import Text from "@/components/Text";
+import ProductCard3 from "@/components/Product/Card3";
+import { Images, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

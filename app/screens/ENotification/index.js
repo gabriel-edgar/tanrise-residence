@@ -1,6 +1,6 @@
-import { ListThumbCircle, SafeAreaView, Text, Header, Icon } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { ENotificationData } from "@data";
+import { ListThumbCircle, SafeAreaView, Text, Header, Icon } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { ENotificationData } from "@/data";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, RefreshControl, View } from "react-native";

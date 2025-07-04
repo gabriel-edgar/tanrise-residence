@@ -1,12 +1,12 @@
-import Icon from "@components/Icon";
-import Text from "@components/Text";
-import { BaseColor, useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Text from "@/components/Text";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 import styles from "./styles";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 import Loading from "./Loading";
 import { Image } from "react-native-elements";
 import { useSelector } from "react-redux";

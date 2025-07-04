@@ -4,9 +4,9 @@ import {
   Icon,
   SafeAreaView,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, Typography, useTheme } from "@config";
-import { FCategoryData } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, Typography, useTheme } from "@/config";
+import { FCategoryData } from "@/data";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, RefreshControl, View } from "react-native";

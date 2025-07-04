@@ -1,6 +1,6 @@
-import Text from "@components/Text";
-import { useTheme } from "@config";
-import { parseHexTransparency } from "@utils";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import PropTypes from "prop-types";
 import React from "react";
 import { View } from "react-native";

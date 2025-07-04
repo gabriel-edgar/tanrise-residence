@@ -10,11 +10,11 @@ import {
   Header,
   Icon,
   CategoryIconSoft,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox, Badge } from "react-native-elements";
 import { Image } from "react-native";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 import { useNavigation } from "@react-navigation/native";
 
 import React, { useEffect, useState } from "react";
@@ -394,7 +394,7 @@ export default function StatusHelpTROffice({ route }) {
                   </View>
 
                   {/* <Image
-                      source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                      source={require('@/assets/images/icon-helpdesk/newtiket.png')}
                       style={styles.img}></Image> */}
                   <Text
                     style={{
@@ -487,7 +487,7 @@ export default function StatusHelpTROffice({ route }) {
                     />
                   </View>
                   {/* <Image
-                      source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                      source={require('@/assets/images/icon-helpdesk/newtiket.png')}
                       style={styles.img}></Image> */}
                   <Text
                     style={{
@@ -578,7 +578,7 @@ export default function StatusHelpTROffice({ route }) {
                   </View>
 
                   {/* <Image
-                      source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                      source={require('@/assets/images/icon-helpdesk/newtiket.png')}
                       style={styles.img}></Image> */}
                   <Text
                     style={{
@@ -667,7 +667,7 @@ export default function StatusHelpTROffice({ route }) {
                     />
                   </View>
                   {/* <Image
-                      source={require('@assets/images/icon-helpdesk/newtiket.png')}
+                      source={require('@/assets/images/icon-helpdesk/newtiket.png')}
                       style={styles.img}></Image> */}
                   <Text
                     style={{

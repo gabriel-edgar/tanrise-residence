@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Icon } from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { Icon } from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 
 const ListItem3 = ({ item, onDelete, index }) => {
   const { colors } = useTheme();

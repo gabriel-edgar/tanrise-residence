@@ -1,0 +1,31 @@
+Create SplashActivity.java:
+java
+package com.yourapp;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class SplashActivity extends Activity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.launch_screen); // Use your layout
+    startActivity(new Intent(this, MainActivity.class));
+    finish();
+  }
+}
+Update AndroidManifest.xml:
+xml
+<activity
+  android:name=".SplashActivity"
+  android:theme="@style/AppTheme"
+  android:exported="true">
+  <intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+  </intent-filter>
+</activity>
+Remove the MAIN intent filter from MainActivity.
+🎯 Why this works
+Because layouts in res/layout can't be used as android:windowBackground, Android has no way to inflate them as splash screens—unless you use an Activity to explicitly set the layout, like we’re doing here.

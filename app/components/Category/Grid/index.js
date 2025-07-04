@@ -1,10 +1,10 @@
-import Text from '@components/Text';
-import {Images} from '@config';
+import Text from '@/components/Text';
+import {Images} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {ImageBackground, TouchableOpacity, View, Image} from 'react-native';
 import styles from './styles';
-import {useTheme} from '@config';
+import {useTheme} from '@/config';
 import Loading from './Loading';
 
 const CategoryGrid = props => {

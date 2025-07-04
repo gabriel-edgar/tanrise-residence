@@ -5,9 +5,9 @@ import {
   SafeAreaView,
   TextInput,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import React, { useState, useEffect } from "react";
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -18,22 +18,21 @@ import {
   TouchableWithoutFeedback,
   Platform,
   PermissionsAndroid,
-} from "react-native";
-import styles from "./styles";
-import { useTranslation } from "react-i18next";
-import { Dropdown } from "react-native-element-dropdown";
-import DropDownPicker from "react-native-dropdown-picker";
-import httpClient, { baseURL } from "../../controllers/HttpClient";
-import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
-import { widthPixel } from "../Home/normalize";
-import ImagePicker from "react-native-image-crop-picker";
-import DocumentPicker from "react-native-document-picker";
-//import RNFS from "react-native-fs"; // File system module for reading files
-import ReactNativeBlobUtil from "react-native-blob-util";
-import { useSelector, useDispatch } from "react-redux";
-import getUser from "../../selectors/UserSelectors";
-import { ListItem2 } from "../../components";
-import axios from "axios";
+} from 'react-native';
+import styles from './styles';
+import {useTranslation} from 'react-i18next';
+import {Dropdown} from 'react-native-element-dropdown';
+import httpClient, {baseURL} from '../../controllers/HttpClient';
+import {useCustomTriggerOnFocus} from '../function/funcFocusEffect';
+import {widthPixel} from '../Home/normalize';
+import ImagePicker from 'react-native-image-crop-picker';
+// import DocumentPicker from '@react-native-documents/picker';
+import {pick, types} from '@react-native-documents/picker';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import {useSelector, useDispatch} from 'react-redux';
+import getUser from '../../selectors/UserSelectors';
+import {ListItem2} from '../../components';
+import axios from 'axios';
 
 // individual, child, pembantu
 
@@ -43,22 +42,22 @@ const successInit = {
   address: true,
 };
 
-const ClaimUnit2 = (props) => {
-  const { navigation } = props;
-  const { t } = useTranslation();
-  const { colors } = useTheme();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+const ClaimUnit2 = props => {
+  const {navigation} = props;
+  const {t} = useTranslation();
+  const {colors} = useTheme();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(successInit);
   const [projectList, setProjectList] = useState([]);
   const [unitList, setUnitList] = useState([]);
   const [project, setProject] = useState(null);
-  const [unit, setUnit] = useState("");
+  const [unit, setUnit] = useState('');
   const params = props.route.params;
   const [selectedUnits, setSelectedUnits] = useState(
-    params.selectedUnits.map((item) => {
+    params.selectedUnits.map(item => {
       return {
         ...item,
         photo: null,
@@ -66,16 +65,16 @@ const ClaimUnit2 = (props) => {
         statusUpload: false,
         //response: null,
       };
-    })
+    }),
   );
   const [responseUnits, setResponseUnits] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [open, setOpen] = useState(false);
-  console.log("68 params: ", params);
+  console.log('68 params: ', params);
   const [images, setImages] = useState([]);
   const [fileUri, setFileUri] = useState(null);
   const [arrayFile, setArrayFile] = useState([]);
-  const user = useSelector((state) => getUser(state));
+  const user = useSelector(state => getUser(state));
 
   useEffect(() => {
     onRefresh();
@@ -83,14 +82,14 @@ const ClaimUnit2 = (props) => {
   }, []);
 
   useEffect(() => {
-    const smallarrayB64Image = selectedUnits.map((item) => {
+    const smallarrayB64Image = selectedUnits.map(item => {
       return {
         ...item,
-        photo: { ...item.photo, uri: item.photo?.uri?.slice(-50) },
-        pdf: { ...item.pdf, uri: item.pdf?.uri?.slice(-50) },
+        photo: {...item.photo, uri: item.photo?.uri?.slice(-50)},
+        pdf: {...item.pdf, uri: item.pdf?.uri?.slice(-50)},
       };
     });
-    console.log("231 smallarrayB64Image: ", JSON.stringify(smallarrayB64Image));
+    console.log('231 smallarrayB64Image: ', JSON.stringify(smallarrayB64Image));
   }, [selectedUnits]);
 
   const onRefresh = () => {};
@@ -103,8 +102,8 @@ const ClaimUnit2 = (props) => {
           if (item.photo == null) {
             return item;
           }
-          return { ...item, photo: { ...item.photo } };
-        })
+          return {...item, photo: {...item.photo}};
+        }),
       );
 
       let letResponseUnits = [];
@@ -112,13 +111,13 @@ const ClaimUnit2 = (props) => {
         // Create FormData
 
         const formData = new FormData();
-        formData.append("email", user.email);
-        formData.append("lot_no", itemParam.lot_no);
-        formData.append("entity_cd", itemParam.entity_cd);
-        formData.append("project_no", itemParam.project_no);
+        formData.append('email', user.email);
+        formData.append('lot_no', itemParam.lot_no);
+        formData.append('entity_cd', itemParam.entity_cd);
+        formData.append('project_no', itemParam.project_no);
         // formData.append('project_descs', itemParam.projectDescs,
-        formData.append("platform", Platform.OS);
-        formData.append("dataPhoto", {
+        formData.append('platform', Platform.OS);
+        formData.append('dataPhoto', {
           uri:
             itemParam?.photo == null ? itemParam.pdf.uri : itemParam.photo.uri,
           type:
@@ -129,20 +128,20 @@ const ClaimUnit2 = (props) => {
             itemParam?.photo == null
               ? itemParam.pdf.name
               : user.email +
-                "-" +
+                '-' +
                 itemParam.lot_no +
-                "." +
-                itemParam.photo.mime.split("/")[1], // You can assign a custom filename
+                '.' +
+                itemParam.photo.mime.split('/')[1], // You can assign a custom filename
         });
 
-        console.log("133 formData: ", JSON.stringify(formData));
+        console.log('133 formData: ', JSON.stringify(formData));
         try {
           const response = await httpClient.request({
-            url: "/auth/upload-lot-no",
-            method: "POST",
+            url: '/auth/upload-lot-no',
+            method: 'POST',
             data: formData,
             headers: {
-              "Content-Type": "multipart/form-data", // Important for sending form data
+              'Content-Type': 'multipart/form-data', // Important for sending form data
             },
             // params,
           });
@@ -156,7 +155,7 @@ const ClaimUnit2 = (props) => {
           //   }
           // );
           // const message = response.data.message;
-          console.log("246 response: ", response?.data);
+          console.log('246 response: ', response?.data);
 
           letResponseUnits.push({
             lot_no: itemParam.lot_no,
@@ -164,8 +163,18 @@ const ClaimUnit2 = (props) => {
             project_no: itemParam.project_no,
             response: response?.data,
           });
+          console.log('167 toFilter1: ', selectedUnits);
+          const filteredList = selectedUnits.filter(
+            u =>
+              !(
+                u.lot_no === itemParam.lot_no &&
+                u.project_no === itemParam.project_no
+              ),
+          );
+          console.log('167 filteredList: ', filteredList);
+          setSelectedUnits(filteredList);
         } catch (error) {
-          console.log("error3411: ", error);
+          console.log('error3411: ', error);
           letResponseUnits.push({
             lot_no: itemParam.lot_no,
             entity_cd: itemParam.entity_cd,
@@ -180,14 +189,14 @@ const ClaimUnit2 = (props) => {
                 ? error?.response
                 : error
                 ? error
-                : "unknown error",
+                : 'unknown error',
               data: null,
             },
           });
           const message =
-            "File too large for unit no " +
+            'File too large for unit no ' +
             (index + 1) +
-            ", please reduce the size of the file";
+            ', please reduce the size of the file';
           setLoading(false);
           if (error.response?.status == 413) {
             alert(message);
@@ -196,74 +205,70 @@ const ClaimUnit2 = (props) => {
           }
         }
       }
-      console.log("286 letResponseUnits: ", JSON.stringify(letResponseUnits));
+      console.log('286 letResponseUnits: ', JSON.stringify(letResponseUnits));
       setResponseUnits(letResponseUnits);
 
       const allSuccess = letResponseUnits.every(
-        (item) => item.response.success == true
+        item => item.response.success == true,
       );
-      const message = "File too large" + ", please reduce the size of the file";
+      const message = 'File too large' + ', please reduce the size of the file';
       if (!allSuccess) {
-        throw letResponseUnits[0]?.response?.message ?? "unknown error";
+        throw letResponseUnits[0]?.response?.message ?? 'unknown error';
       }
 
-      alert("Submit success");
+      alert('Submit success');
       setLoading(false);
       navigation.pop(2);
     } catch (e) {
-      console.log("error3412: ", e);
+      console.log('error3412: ', e);
       alert(JSON.stringify(e));
       setLoading(false);
     }
   };
 
   // Render each item in the FlatList
-  const renderItemList = ({ item }) => (
+  const renderItemList = ({item}) => (
     <View
       style={{
         flex: 1,
         padding: 10,
         margin: 5,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: '#f0f0f0',
         borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       <Text
         style={{
           fontSize: 18,
           marginBottom: 10,
-        }}
-      >
+        }}>
         {item.label}
       </Text>
       <TouchableOpacity
         style={{
           padding: 10,
-          backgroundColor: "#ff6347",
+          backgroundColor: '#ff6347',
           borderRadius: 5,
         }}
-        onPress={() => handleDelete(item._index)}
-      >
+        onPress={() => handleDelete(item._index)}>
         <Text
           style={{
-            color: "#fff",
-            fontWeight: "bold",
-          }}
-        >
+            color: '#fff',
+            fontWeight: 'bold',
+          }}>
           Remove
         </Text>
       </TouchableOpacity>
     </View>
   );
 
-  const fromCamera = (itemParam) => {
+  const fromCamera = itemParam => {
     ImagePicker.openCamera({
       compressImageMaxWidth: 960,
       compressImageMaxHeight: 1280,
     })
-      .then((img) => {
+      .then(img => {
         const imgObj = {
           uri: img.path,
           width: img.width,
@@ -272,22 +277,22 @@ const ClaimUnit2 = (props) => {
           size: img.size,
         };
 
-        const updatedData = selectedUnits.map((item) =>
+        const updatedData = selectedUnits.map(item =>
           item.lot_no === itemParam.lot_no &&
           item.entity_cd === itemParam.entity_cd &&
           item.project_no === itemParam.project_no
-            ? { ...item, photo: imgObj }
-            : item
+            ? {...item, photo: imgObj}
+            : item,
         );
         setSelectedUnits(updatedData);
       })
-      .catch((e) => {
+      .catch(e => {
         //console.log("tag", e);
         // alert("353 e: " + e);
       });
   };
 
-  const fromGallery = (itemParam) => {
+  const fromGallery = itemParam => {
     let imageList = [];
 
     ImagePicker.openPicker({
@@ -295,8 +300,8 @@ const ClaimUnit2 = (props) => {
       compressImageMaxHeight: 1280,
       //multiple: true,
     })
-      .then((img) => {
-        console.log("received images", img);
+      .then(img => {
+        console.log('received images', img);
 
         const imgObj = {
           uri: img.path,
@@ -307,108 +312,114 @@ const ClaimUnit2 = (props) => {
         };
 
         // Use map to create a new array with the updated photo for lot_no 2
-        const updatedData = selectedUnits.map((item) =>
+        const updatedData = selectedUnits.map(item =>
           item.lot_no === itemParam.lot_no &&
           item.entity_cd === itemParam.entity_cd &&
           item.project_no === itemParam.project_no
-            ? { ...item, photo: imgObj }
-            : item
+            ? {...item, photo: imgObj}
+            : item,
         );
         setSelectedUnits(updatedData);
 
-        console.log("354 updatedData: ", updatedData);
+        console.log('354 updatedData: ', updatedData);
       })
-      .catch((e) => console.log("tag", e));
+      .catch(e => console.log('tag', e));
   };
 
-  const handlePhotoPick = (item) => {
-    console.log("datImage", images);
+  const handlePhotoPick = item => {
+    console.log('datImage', images);
     Alert.alert(
-      "Add Photo",
-      "Choose the place where you want to get photo",
+      'Add Photo',
+      'Choose the place where you want to get photo',
       [
-        { text: "Gallery", onPress: () => fromGallery(item) },
-        { text: "Camera", onPress: () => fromCamera(item) },
+        {text: 'Gallery', onPress: () => fromGallery(item)},
+        {text: 'Camera', onPress: () => fromCamera(item)},
         {
-          text: "Cancel",
-          onPress: () => console.log("User Cancel"),
-          style: "cancel",
+          text: 'Cancel',
+          onPress: () => console.log('User Cancel'),
+          style: 'cancel',
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
-  const removePhoto = async (itemParam) => {
-    const updatedData = selectedUnits.map((item) =>
+  const removePhoto = async itemParam => {
+    const updatedData = selectedUnits.map(item =>
       item.lot_no === itemParam.lot_no &&
       item.entity_cd === itemParam.entity_cd &&
       item.project_no === itemParam.project_no
-        ? { ...item, photo: null }
-        : item
+        ? {...item, photo: null}
+        : item,
     );
     setSelectedUnits(updatedData);
   };
 
-  const removeArrayFile = async (itemParam) => {
-    const updatedData = selectedUnits.map((item) =>
+  const removeArrayFile = async itemParam => {
+    const updatedData = selectedUnits.map(item =>
       item.lot_no === itemParam.lot_no &&
       item.entity_cd === itemParam.entity_cd &&
       item.project_no === itemParam.project_no
-        ? { ...item, pdf: null }
-        : item
+        ? {...item, pdf: null}
+        : item,
     );
     setSelectedUnits(updatedData);
   };
 
   // Function to handle file pick
-  const pickDocument = async (itemParam) => {
+  const pickDocument = async itemParam => {
     try {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         {
-          title: "Storage Permission",
-          message: "We need access to your storage to pick pdf",
+          title: 'Storage Permission',
+          message: 'We need access to your storage to pick pdf',
           //buttonNeutral: "Ask Me Later",
           //buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        }
+          buttonPositive: 'OK',
+        },
       );
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-        //type: [DocumentPicker.types.images],
+      // const res = await DocumentPicker.pick({
+      //   type: [DocumentPicker.types.pdf],
+      // });
+
+      const res = await pick({
+        type: [types.pdf],
+        allowMultiSelection: false,
       });
+
       if (res[0].size > 10000000) {
-        return alert("Can not exceed more than 10 MB");
+        return alert('Can not exceed more than 10 MB');
       }
       const dummyRes = [
         {
           fileCopyUri: null,
-          name: "1001_1001001_G2rand_Sunrise_Gresik___Private_Cluster,_Rumah_Modern_Industrial_compressed.pdf",
+          name: '1001_1001001_G2rand_Sunrise_Gresik___Private_Cluster,_Rumah_Modern_Industrial_compressed.pdf',
           size: 231510,
-          type: "application/pdf",
-          uri: "file:///Users/haniyya/Library/Developer/CoreSimulator/Devices/7D859DB8-4FBC-464E-BF5D-F051B441FFF4/data/Containers/Data/Application/BEB42D1E-D837-4069-AC71-014CA5A1A20F/tmp/com.ifcasoftware.tanriseresidence-Inbox/1001_1001001_G2rand_Sunrise_Gresik___Private_Cluster,_Rumah_Modern_Industrial_compressed.pdf",
+          type: 'application/pdf',
+          uri: 'file:///Users/haniyya/Library/Developer/CoreSimulator/Devices/7D859DB8-4FBC-464E-BF5D-F051B441FFF4/data/Containers/Data/Application/BEB42D1E-D837-4069-AC71-014CA5A1A20F/tmp/com.ifcasoftware.tanriseresidence-Inbox/1001_1001001_G2rand_Sunrise_Gresik___Private_Cluster,_Rumah_Modern_Industrial_compressed.pdf',
         },
       ];
       //return;
 
-      console.log("431 URI of picked file:", res);
+      console.log('431 URI of picked file:', res);
 
-      const updatedData = selectedUnits.map((item) =>
+      const updatedData = selectedUnits.map(item =>
         item.lot_no === itemParam.lot_no &&
         item.entity_cd === itemParam.entity_cd &&
         item.project_no === itemParam.project_no
-          ? { ...item, pdf: res[0] }
-          : item
+          ? {...item, pdf: res[0]}
+          : item,
       );
-      console.log("665 updatedData: ", updatedData);
+      console.log('665 updatedData: ', updatedData);
       setSelectedUnits(updatedData);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log("431 User cancelled the picker");
+        alert(err);
+        console.log('431 User cancelled the picker');
       } else {
-        console.error("431 Error picking document:", err);
-        alert("431 Error picking document:" + err);
+        console.error('431 Error picking document:', err);
+        alert('431 Error picking document:' + err);
       }
     }
   };
@@ -416,10 +427,9 @@ const ClaimUnit2 = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
-    >
+      edges={['right', 'top', 'left']}>
       <Header
-        title={t("Claim Unit")}
+        title={t('Claim Unit')}
         renderLeft={() => {
           return (
             <Icon
@@ -438,11 +448,10 @@ const ClaimUnit2 = (props) => {
         <Text
           style={{
             //marginTop: 65,
-            textAlign: "center",
+            textAlign: 'center',
             fontSize: 16,
             paddingHorizontal: 40,
-          }}
-        >
+          }}>
           Step 2 of 2
         </Text>
         <Text
@@ -450,35 +459,33 @@ const ClaimUnit2 = (props) => {
             marginTop: 10,
             marginHorizontal: 50,
             marginBottom: 3,
-            textAlign: "justify",
+            textAlign: 'justify',
             fontSize: 16,
             //paddingHorizontal: 40,
-          }}
-        >
-          Make sure you send document containing proof of ownership of the{" "}
+          }}>
+          Make sure you send document containing proof of ownership of the{' '}
           {params.selectedUnits.length == 1
-            ? "unit"
-            : params.selectedUnits.length + " units"}
+            ? 'unit'
+            : params.selectedUnits.length + ' units'}
         </Text>
         <Text
           style={{
             marginTop: 25,
 
             marginBottom: 3,
-            textAlign: "center",
+            textAlign: 'center',
             fontSize: 16,
-          }}
-        >
+          }}>
           {params.selectedUnits.length > 1
-            ? "Selected Units:"
-            : "Selected Unit:"}
+            ? 'Selected Units:'
+            : 'Selected Unit:'}
         </Text>
         {selectedUnits.map((item, index) => {
           const itemFound = responseUnits.find(
-            (itm) =>
+            itm =>
               itm.lot_no === item.lot_no &&
               itm.entity_cd === item.entity_cd &&
-              itm.project_no === item.project_no
+              itm.project_no === item.project_no,
           );
 
           return (
@@ -497,26 +504,24 @@ const ClaimUnit2 = (props) => {
 
                   backgroundColor: colors.background, // Card's background color
 
-                  shadowColor: "#000", // Shadow color for iOS and Android
-                  shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                  shadowColor: '#000', // Shadow color for iOS and Android
+                  shadowOffset: {width: 0, height: 2}, // Shadow offset
                   shadowOpacity: 0.1, // Shadow opacity (iOS)
                   shadowRadius: 5, // Shadow blur (iOS)
                   elevation: 3,
-                }}
-              >
+                }}>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                     marginRight: 10,
-                  }}
-                >
+                  }}>
                   <Text>
                     {/* {[index + 1] + ". " + item.label} */}
-                    {index + 1}.{" "}
+                    {index + 1}.{' '}
                     {
-                      item.lot_no + "\n    " + item.projectDescs
+                      item.lot_no + '\n    ' + item.projectDescs
                       // "\n    entity/project code: (" +
                       // item.entity_cd +
                       // "/" +
@@ -528,32 +533,29 @@ const ClaimUnit2 = (props) => {
                     itemFound?.response.success == true ? (
                       <Text
                         style={{
-                          color: "green",
-                          borderColor: "green",
+                          color: 'green',
+                          borderColor: 'green',
                           borderRadius: 3,
                           borderWidth: 1,
                           padding: 3,
-                        }}
-                      >
-                        {" "}
+                        }}>
+                        {' '}
                         Success
                       </Text>
                     ) : (
                       <TouchableOpacity
                         onPress={() => {
                           alert(itemFound.response?.message);
-                        }}
-                      >
+                        }}>
                         <Text
                           style={{
-                            color: "red",
-                            borderColor: "red",
+                            color: 'red',
+                            borderColor: 'red',
                             borderRadius: 3,
                             borderWidth: 1,
                             padding: 3,
-                          }}
-                        >
-                          {" "}
+                          }}>
+                          {' '}
                           Failed
                         </Text>
                       </TouchableOpacity>
@@ -570,83 +572,74 @@ const ClaimUnit2 = (props) => {
                   // ") "
                 }
               </Text> */}
-                <View style={{ alignSelf: "center" }}>
+                <View style={{alignSelf: 'center'}}>
                   {item?.photo == null && item?.pdf == null ? (
                     arrayFile.length > 0 ? null : (
                       <View
                         style={{
                           height: 230,
-                          justifyContent: "center",
-                          flexDirection: "column",
-                        }}
-                      >
+                          justifyContent: 'center',
+                          flexDirection: 'column',
+                        }}>
                         <View
                           style={{
                             // height: 230,
-                            justifyContent: "center",
-                            flexDirection: "row",
-                          }}
-                        >
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                          }}>
                           <TouchableOpacity
                             onPress={() => handlePhotoPick(item)}
                             style={[
                               {
-                                width: "40%",
+                                width: '40%',
                                 marginVertical: 10,
                                 padding: 10,
-                                borderColor: "#9B9B9B",
+                                borderColor: '#9B9B9B',
                                 borderWidth: 1,
-                                justifyContent: "center",
-                                alignItems: "center",
+                                justifyContent: 'center',
+                                alignItems: 'center',
                                 borderRadius: 5,
                                 marginRight: 20,
                               },
-                              { marginBottom: 20, alignSelf: "center" },
-                            ]}
-                          >
-                            <Text style={{ color: colors.text }}>
-                              Add Photo
-                            </Text>
+                              {marginBottom: 20, alignSelf: 'center'},
+                            ]}>
+                            <Text style={{color: colors.text}}>Add Photo</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => pickDocument(item)}
                             style={[
                               {
-                                width: "40%",
+                                width: '40%',
                                 marginVertical: 10,
                                 paddingVertical: 10,
-                                borderColor: "#9B9B9B",
+                                borderColor: '#9B9B9B',
                                 borderWidth: 1,
-                                justifyContent: "center",
-                                alignItems: "center",
+                                justifyContent: 'center',
+                                alignItems: 'center',
                                 borderRadius: 5,
                                 height: null,
                               },
-                              { marginBottom: 20, alignSelf: "center" },
-                            ]}
-                          >
-                            <Text style={{ color: colors.text }}>Add PDF</Text>
+                              {marginBottom: 20, alignSelf: 'center'},
+                            ]}>
+                            <Text style={{color: colors.text}}>Add PDF</Text>
                           </TouchableOpacity>
                         </View>
 
-                        <Text
-                          style={{ color: colors.text, textAlign: "center" }}
-                        >
+                        <Text style={{color: colors.text, textAlign: 'center'}}>
                           (max file size 10 MB)
                         </Text>
                       </View>
                     )
                   ) : item?.photo != null ? (
-                    <View style={{ marginBottom: 10 }}>
+                    <View style={{marginBottom: 10}}>
                       <TouchableOpacity
                         activeOpacity={1}
                         style={styles.avatarContainer}
                         onPress={() =>
-                          navigation.navigate("PreviewImageHome", {
+                          navigation.navigate('PreviewImageHome', {
                             images: item.photo.uri, // uri
                           })
-                        }
-                      >
+                        }>
                         <View>
                           <Image style={styles.avatar} source={item.photo} />
 
@@ -656,7 +649,7 @@ const ClaimUnit2 = (props) => {
                             size={18}
                             // color="#5A110D"
                             color={colors.primary}
-                            style={[styles.iconRemove, { marginLeft: 5 }]}
+                            style={[styles.iconRemove, {marginLeft: 5}]}
                             enableRTL={true}
                           />
                         </View>
@@ -672,8 +665,7 @@ const ClaimUnit2 = (props) => {
                           marginBottom: 20,
                           borderWidth: 0,
                         },
-                      ]}
-                    >
+                      ]}>
                       <View
                         style={[
                           styles.avatarContainer,
@@ -683,8 +675,7 @@ const ClaimUnit2 = (props) => {
                             backgroundColor: colors.background,
                             marginBottom: 20,
                           },
-                        ]}
-                      >
+                        ]}>
                         {/* <Image style={styles.avatar} source={images[key]} /> */}
                         <Text>{item.pdf?.name}</Text>
                         <Icon
@@ -696,7 +687,7 @@ const ClaimUnit2 = (props) => {
                           style={[
                             styles.iconRemove,
                             {
-                              position: "absolute",
+                              position: 'absolute',
                               right: -5,
                               top: -10,
 
@@ -717,18 +708,17 @@ const ClaimUnit2 = (props) => {
 
       <View
         style={{
-          width: "100%",
+          width: '100%',
 
           borderColor: colors.primary,
           backgroundColor: colors.background, // Card's background color
 
-          shadowColor: "#000", // Shadow color for iOS and Android
-          shadowOffset: { width: 0, height: 2 }, // Shadow offset
+          shadowColor: '#000', // Shadow color for iOS and Android
+          shadowOffset: {width: 0, height: 2}, // Shadow offset
           shadowOpacity: 0.2, // Shadow opacity (iOS)
           shadowRadius: 5, // Shadow blur (iOS)
           elevation: 3,
-        }}
-      >
+        }}>
         <Button
           //full
           style={{
@@ -739,25 +729,24 @@ const ClaimUnit2 = (props) => {
           loading={loading}
           onPress={() => {
             const isNullExist = selectedUnits.some(
-              (item) => item.photo == null && item.pdf == null
+              item => item.photo == null && item.pdf == null,
             );
             if (isNullExist) {
               selectedUnits.length > 1
-                ? alert("Please add document for all unit")
-                : alert("Please add document");
+                ? alert('Please add document for all unit')
+                : alert('Please add document');
             } else {
-              Alert.alert("Confirm", "Are you sure you want to submit?", [
+              Alert.alert('Confirm', 'Are you sure you want to submit?', [
                 {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
                 },
-                { text: "Submit", onPress: () => onSubmit() },
+                {text: 'Submit', onPress: () => onSubmit()},
               ]);
             }
-          }}
-        >
-          {t("Submit")}
+          }}>
+          {t('Submit')}
         </Button>
       </View>
     </SafeAreaView>

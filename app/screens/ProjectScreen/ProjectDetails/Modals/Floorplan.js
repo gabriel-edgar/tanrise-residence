@@ -1,4 +1,4 @@
-import { Text, Button, Icon, Image } from "@components";
+import { Text, Button, Icon, Image } from "@/components";
 // import Image from '../../../../components/Image';
 import {
   View,
@@ -8,12 +8,12 @@ import {
   Platform,
   StatusBar,
   Alert,
+  ScrollView 
 } from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
-import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
-import { ScrollView } from "react-native-gesture-handler";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@/config";
 
 import {
   SafeAreaView,
@@ -285,7 +285,7 @@ const Floorplan = (props) => {
                           // source={require(item.image)}
                           // source={item.image}
                           // alt={item.image}
-                          // source={require(`@assets/images/unitgalleries/gallery/PK-Principal-Antasari-Place-16-Sept-2022-1-1-35-scaled.jpg`)}
+                          // source={require(`@/assets/images/unitgalleries/gallery/PK-Principal-Antasari-Place-16-Sept-2022-1-1-35-scaled.jpg`)}
                           style={{
                             width: "100%",
                             height: 200,

@@ -1,8 +1,8 @@
-import { Button, CardCommentSignal, LineChart, Text } from "@components";
-import LabelUpper2Row from "@components/Label/Upper2Row";
-import { BaseColor, Images, useTheme } from "@config";
+import { Button, CardCommentSignal, LineChart, Text } from "@/components";
+import LabelUpper2Row from "@/components/Label/Upper2Row";
+import { BaseColor, Images, useTheme } from "@/config";
 import { useNavigation } from "@react-navigation/native";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View,  Share, } from "react-native";

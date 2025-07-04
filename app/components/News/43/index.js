@@ -1,6 +1,6 @@
-import ProfileAuthor from '@components/Profile/Author';
-import Text from '@components/Text';
-import {BaseColor, Images} from '@config';
+import ProfileAuthor from '@/components/Profile/Author';
+import Text from '@/components/Text';
+import {BaseColor, Images} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {ImageBackground, TouchableOpacity, View} from 'react-native';

@@ -1,6 +1,6 @@
-import Text from "@components/Text";
-import Button from "@components/Button";
-import { useTheme } from "@config";
+import Text from "@/components/Text";
+import Button from "@/components/Button";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { View } from "react-native";

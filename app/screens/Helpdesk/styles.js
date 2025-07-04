@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions, PixelRatio} from 'react-native';
-import {BaseColor, useTheme} from '@config';
+import {BaseColor, useTheme} from '@/config';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const colors = useTheme;
@@ -61,11 +61,11 @@ export default StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 10,
     borderColor: '#9B9B9B',
-    borderWidth: 1 / PixelRatio.get(),
+    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    height: null,
+    //height: null,
   },
   pickerWrap: {
     width: '100%',

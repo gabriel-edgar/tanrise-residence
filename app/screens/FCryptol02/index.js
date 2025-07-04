@@ -1,5 +1,5 @@
-import { Header, Icon, SafeAreaView, TabSlider } from "@components";
-import { BaseStyle, useTheme } from "@config";
+import { Header, Icon, SafeAreaView, TabSlider } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";

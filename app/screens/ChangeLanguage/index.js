@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { BaseStyle, useTheme, BaseColor } from "@config";
-import { BaseSetting } from "@config";
-import { Header, SafeAreaView, TextInput, Icon, Text } from "@components";
-import { ApplicationActions } from "@actions";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
+import { BaseSetting } from "@/config";
+import { Header, SafeAreaView, TextInput, Icon, Text } from "@/components";
+import { ApplicationActions } from "@/actions";
 import styles from "./styles";
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 
 export default function ChangeLanguage({ navigation }) {
   const dispatch = useDispatch();

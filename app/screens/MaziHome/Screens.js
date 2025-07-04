@@ -1,6 +1,6 @@
-import { Text } from "@components";
-import { useTheme } from "@config";
-import { parseHexTransparency } from "@utils";
+import { Text } from "@/components";
+import { useTheme } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import React, { useState } from "react";
 import {
     FlatList,
@@ -11,8 +11,8 @@ import {
     ScrollView,
 } from "react-native";
 import styles from "./styles";
-import { MaziListApp } from "@data";
-import { BaseColor } from "@config";
+import { MaziListApp } from "@/data";
+import { BaseColor } from "@/config";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 

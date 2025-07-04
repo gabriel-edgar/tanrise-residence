@@ -1,17 +1,17 @@
-import Icon from "@components/Icon";
-import Tag from "@components/Tag";
-import Text from "@components/Text";
-import Image from "@components/Image";
+import Icon from "@/components/Icon";
+import Tag from "@/components/Tag";
+import Text from "@/components/Text";
+import Image from "@/components/Image";
 
-import { BaseColor, Images, useTheme } from "@config";
+import { BaseColor, Images, useTheme } from "@/config";
 import PropTypes from "prop-types";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 
 import React from "react";
 import { ImageBackground, Linking, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import Loading from "./Loading";
-import Button from "@components/Button";
+import Button from "@/components/Button";
 
 const Block = ({
   description,

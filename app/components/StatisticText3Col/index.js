@@ -1,5 +1,5 @@
-import { Icon, Image, Text } from "@components";
-import { Images } from "@config";
+import { Icon, Image, Text } from "@/components";
+import { Images } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

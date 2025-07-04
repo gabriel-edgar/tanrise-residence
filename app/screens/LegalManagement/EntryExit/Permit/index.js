@@ -10,18 +10,17 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 import {CheckBox} from 'react-native-elements';
-import {FFriends} from '@data';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Platform, TouchableOpacity, View} from 'react-native';
+import {Platform, TouchableOpacity, View, ScrollView} from 'react-native';
 import axios from 'axios';
 import styles from './styles';
-import {ScrollView} from 'react-native-gesture-handler';
 
 export default function TrackPermit() {
   const {t, i18n} = useTranslation();
@@ -56,7 +55,7 @@ export default function TrackPermit() {
       edges={['right', 'top', 'left']}>
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={require('@assets/images/mypermit.png')}
+          source={require('@/assets/images/mypermit.png')}
           style={{
             height: 100,
             width: 100,
@@ -112,7 +111,7 @@ export default function TrackPermit() {
                   </Text>
                 </View>
                 <Image
-                  source={require('@assets/images/requested.png')}
+                  source={require('@/assets/images/requested.png')}
                   style={{
                     height: 70,
                     width: 70,
@@ -301,7 +300,7 @@ export default function TrackPermit() {
                   </Text>
                 </View>
                 <Image
-                  source={require('@assets/images/requested.png')}
+                  source={require('@/assets/images/requested.png')}
                   style={{
                     height: 70,
                     width: 70,
@@ -347,7 +346,7 @@ export default function TrackPermit() {
                   </Text>
                 </View>
                 <Image
-                  source={require('@assets/images/requested.png')}
+                  source={require('@/assets/images/requested.png')}
                   style={{
                     height: 70,
                     width: 70,

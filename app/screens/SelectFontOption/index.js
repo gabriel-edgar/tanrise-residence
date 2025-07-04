@@ -5,9 +5,9 @@ import {
   BaseStyle,
   useTheme, //FontSupport
   DefaultFont,
-} from "@config";
-import { SafeAreaView, Icon, Text } from "@components";
-import { ApplicationActions } from "@actions";
+} from "@/config";
+import { SafeAreaView, Icon, Text } from "@/components";
+import { ApplicationActions } from "@/actions";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 import { FontFamily } from "../../config";

@@ -12,9 +12,9 @@ import {
   ListMeterExpand,
   TextInput,
   Button,
-} from "@components";
-import { BaseStyle, useTheme, BaseColor } from "@config";
-import { FRecentTransactions, FHotNews } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
+import { FRecentTransactions, FHotNews } from "@/data";
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

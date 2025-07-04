@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { BaseColor } from "@config";
-import * as Utils from "@utils";
+import { BaseColor } from "@/config";
+import * as Utils from "@/utils";
 import Fonts from "../Fonts";
 
 export default StyleSheet.create({

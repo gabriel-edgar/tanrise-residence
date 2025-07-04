@@ -1,4 +1,4 @@
-import { AuthActions } from "@actions";
+import { AuthActions } from "@/actions";
 import {
   Button,
   Icon,
@@ -8,10 +8,10 @@ import {
   Tag,
   Text,
   Header,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { UserData } from "@data";
+import { UserData } from "@/data";
 import React, { useCallback, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, TouchableOpacity, View, Alert } from "react-native";

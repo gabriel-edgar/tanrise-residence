@@ -1,10 +1,10 @@
-import { Icon, Image, Text } from "@components";
-import { Images, BaseColor, useTheme } from "@config";
+import { Icon, Image, Text } from "@/components";
+import { Images, BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import ProgressBar from "@components/Progress/Bar";
+import ProgressBar from "@/components/Progress/Bar";
 
 const CardReport10 = ({
     icon = "",

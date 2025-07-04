@@ -1,8 +1,8 @@
-import Tag from "@components/Tag";
-import TextInput from "@components/TextInput";
-import { BaseColor, Typography, useTheme } from "@config";
-import { FCurrencies } from "@data";
-import FChooseCurrency from "@screens/FChooseCurrency";
+import Tag from "@/components/Tag";
+import TextInput from "@/components/TextInput";
+import { BaseColor, Typography, useTheme } from "@/config";
+import { FCurrencies } from "@/data";
+import FChooseCurrency from "@/screens/FChooseCurrency";
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import Modal from "react-native-modal";

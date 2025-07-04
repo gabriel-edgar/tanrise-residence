@@ -1,5 +1,5 @@
-import Text from "@components/Text";
-import { BaseColor, useTheme } from "@config";
+import Text from "@/components/Text";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";

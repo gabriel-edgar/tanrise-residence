@@ -8,19 +8,18 @@ import {
   CheckBox,
   ProfileGridSmall,
   Image,
-} from '@components';
+} from '@/components';
 import {useWindowDimensions} from 'react-native';
-import {useTheme, Images} from '@config';
-import {EFilterColors, EFilterSizes, FRecentTransactions} from '@data';
+import {useTheme, Images} from '@/config';
+import {EFilterColors, EFilterSizes, FRecentTransactions} from '@/data';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text, ScrollView} from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './styles';
-import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import LabelUpper2Row from '@components/Label/Upper2Row';
+import LabelUpper2Row from '@/components/Label/Upper2Row';
 import {useNavigation} from '@react-navigation/native';
 import RenderHtml from 'react-native-render-html';
 

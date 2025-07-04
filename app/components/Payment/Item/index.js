@@ -1,6 +1,6 @@
-import Icon from "@components/Icon";
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableHighlight, View } from "react-native";

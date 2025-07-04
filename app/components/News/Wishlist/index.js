@@ -1,7 +1,7 @@
-import Icon from "@components/Icon";
-import Image from "@components/Image";
-import Text from "@components/Text";
-import { Images, useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Text from "@/components/Text";
+import { Images, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableHighlight, View } from "react-native";

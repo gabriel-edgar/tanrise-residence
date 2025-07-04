@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import styles from "./styles";
-import Image from "@components/Image";
+import Image from "@/components/Image";
 
 const index = ({ styleThumb, users = [] }) => {
   return (

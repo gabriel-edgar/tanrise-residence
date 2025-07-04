@@ -1,5 +1,5 @@
-import {Image, Text} from '@components';
-import {Images, useTheme} from '@config';
+import {Image, Text} from '@/components';
+import {Images, useTheme} from '@/config';
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import styles from './styles';

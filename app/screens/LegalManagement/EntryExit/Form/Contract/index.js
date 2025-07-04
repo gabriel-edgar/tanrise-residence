@@ -11,11 +11,11 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ListItem,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {FFriends} from '@data';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -27,8 +27,6 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
 import styles from './styles';
@@ -96,7 +94,7 @@ export default function ContractInformation() {
             // borderColor: '#000'
           }}>
           <Image
-            source={require('@assets/images/form.png')}
+            source={require('@/assets/images/form.png')}
             style={{
               height: 200,
               width: 300,

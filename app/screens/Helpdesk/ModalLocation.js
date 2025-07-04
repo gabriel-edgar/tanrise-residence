@@ -10,12 +10,12 @@ import {
   Button,
   CategoryGrid,
   ModalFilterLocation,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
-import { FFriends } from "@data";
+import { FFriends } from "@/data";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -34,8 +34,8 @@ import axios from "axios";
 import httpClient from "../../controllers/HttpClient";
 import styles from "./styles";
 
-import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
-import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import ModalDropdown_debtor from "@/components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@/components/ModalDropdown_lotno";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL_LOKAL } from "@env";
 

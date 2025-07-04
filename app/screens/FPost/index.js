@@ -1,5 +1,5 @@
-import { FPostListData } from "@data";
-import Post, { modes } from "@screens/Post";
+import { FPostListData } from "@/data";
+import Post, { modes } from "@/screens/Post";
 import React from "react";
 
 const FPost = () => {

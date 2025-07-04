@@ -1,6 +1,6 @@
-import CounterSelectCheckout from '@components/Form/CounterSelectCheckout';
-import Text from '@components/Text';
-import {BaseColor, Images, useTheme} from '@config';
+import CounterSelectCheckout from '@/components/Form/CounterSelectCheckout';
+import Text from '@/components/Text';
+import {BaseColor, Images, useTheme} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {ImageBackground, TouchableOpacity, View} from 'react-native';
@@ -35,7 +35,7 @@ const Checkout = ({
           // source={image}
           source={
             image
-            // require('@assets/images/logo.png')
+            // require('@/assets/images/logo.png')
           }
           style={styles.imageBackgroundCard1}
           imageStyle={{borderRadius: 8}}

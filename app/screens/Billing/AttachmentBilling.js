@@ -4,10 +4,10 @@ import {
   ListThumbCircleNotif,
   SafeAreaView,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-// import {NotificationData} from '@data';
+// import {NotificationData} from '@/data';
 import React, { useState, useEffect } from "react";
 import {
   FlatList,

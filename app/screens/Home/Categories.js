@@ -1,5 +1,5 @@
-import { CategoryIconSoft, Text, Icon } from "@components";
-import { FCategories } from "@data";
+import { CategoryIconSoft, Text, Icon } from "@/components";
+import { FCategories } from "@/data";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -15,8 +15,8 @@ import Modal from "react-native-modal";
 import styles from "./styles";
 import getUser from "../../selectors/UserSelectors";
 import { useSelector } from "react-redux";
-import * as Utils from "@utils";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
+import * as Utils from "@/utils";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
 import Helpdesk from "../Helpdesk/index copy";
 
 const Categories = ({

@@ -6,8 +6,8 @@ import {
     ProfileAuthor,
     SafeAreaView,
     Text,
-} from "@components";
-import { BaseStyle, Images, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, Images, useTheme } from "@/config";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

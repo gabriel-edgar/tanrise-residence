@@ -11,11 +11,11 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {FFriends} from '@data';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -70,7 +70,7 @@ export default function TenantInformation() {
         // borderColor: '#000'
         }}>
         <Image
-          source={require('@assets/images/form.png')}
+          source={require('@/assets/images/form.png')}
           style={{
             height: 200,
             width: 300,

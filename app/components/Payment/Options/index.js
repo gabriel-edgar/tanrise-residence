@@ -1,4 +1,4 @@
-import PaymentOption from "@components/Payment/Option";
+import PaymentOption from "@/components/Payment/Option";
 import React, { useState } from "react";
 const dataInit = [
   { id: 1, title: "Domestic Card", iconName: "credit-card", checked: true },

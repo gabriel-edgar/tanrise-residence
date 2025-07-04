@@ -10,10 +10,10 @@ import {
   StarRating,
   Tag,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
-import { EFilterColors, EFilterSizes } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
+import { EFilterColors, EFilterSizes } from "@/data";
+import * as Utils from "@/utils";
 import React, { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PreviewImages from "../EProductDetail/PreviewImages";
@@ -30,7 +30,7 @@ import {
 import ModalProduct from "./ModalProduct";
 import styles from "./styles";
 import Swiper from "react-native-swiper";
-import { PlaceholderLine, Placeholder } from "@components";
+import { PlaceholderLine, Placeholder } from "@/components";
 import moment from "moment";
 import numFormat from "../../components/numFormat";
 //import Mailer from 'react-native-mail';

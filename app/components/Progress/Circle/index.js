@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import CircularProgress from "./CircularProgress";
-import Text from "@components/Text";
-import { useTheme, BaseColor } from "@config";
+import Text from "@/components/Text";
+import { useTheme, BaseColor } from "@/config";
 
 const ProgressCircle = ({
     percent = 0,

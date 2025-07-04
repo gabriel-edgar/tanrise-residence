@@ -1,9 +1,9 @@
-import Button from '@components/Button';
-import Icon from '@components/Icon';
-import Image from '@components/Image';
-import Text from '@components/Text';
-import TextInput from '@components/TextInput';
-import {useTheme, BaseStyle, BaseColor} from '@config';
+import Button from '@/components/Button';
+import Icon from '@/components/Icon';
+import Image from '@/components/Image';
+import Text from '@/components/Text';
+import TextInput from '@/components/TextInput';
+import {useTheme, BaseStyle, BaseColor} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {useTranslation} from 'react-i18next';

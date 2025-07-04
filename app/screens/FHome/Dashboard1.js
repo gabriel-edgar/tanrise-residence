@@ -4,9 +4,9 @@ import {
     ProfileGridSmall,
     SafeAreaView,
     Text,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FRecentTransactions, FHotNews } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FRecentTransactions, FHotNews } from "@/data";
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { useTranslation } from "react-i18next";

@@ -7,9 +7,9 @@ import {
   Header,
   Icon,
   Button,
-} from "@components";
-import { BaseStyle, Images, useTheme } from "@config";
-import { OrderDetail } from "@data";
+} from "@/components";
+import { BaseStyle, Images, useTheme } from "@/config";
+import { OrderDetail } from "@/data";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View, Linking } from "react-native";

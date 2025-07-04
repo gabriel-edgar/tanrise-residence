@@ -1,4 +1,4 @@
-import { BaseColor, Images } from "@config";
+import { BaseColor, Images } from "@/config";
 
 export const FBuyList = [
     {

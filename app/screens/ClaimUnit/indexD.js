@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { View, Button, Text } from "react-native";
-import DocumentPicker from "react-native-document-picker";
-import axios from "axios";
-import RNFS from "react-native-fs"; // File system module for reading files
+import React, {useState} from 'react';
+import {View, Button, Text} from 'react-native';
+// import DocumentPicker from '@react-native-documents/picker';
+import {pick, types} from '@react-native-documents/picker';
+import axios from 'axios';
+import RNFS from 'react-native-fs'; // File system module for reading files
 
 const App = () => {
   const [fileUri, setFileUri] = useState(null);
@@ -12,23 +13,29 @@ const App = () => {
   const pickDocument = async () => {
     try {
       // Allow user to pick a document
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-      });
+      // const res = await DocumentPicker.pick({
+      //   type: [DocumentPicker.types.pdf],
+      // });
 
-      setFileUri(res.uri);
-      console.log("URI of picked file:", res.uri);
+      const [file] = await pick({
+        type: [types.pdf],
+        allowMultiSelection: false,
+      });
+      console.log('25 Picked file:', file.uri, file.name, file.size);
+
+      setFileUri(file.uri);
+      console.log('25 URI of picked file:', file.uri);
 
       // Read the file as Base64
-      const base64Encoded = await RNFS.readFile(res.uri, "base64");
+      const base64Encoded = await RNFS.readFile(file.uri, 'base64');
       setBase64Data(base64Encoded);
 
-      console.log("Base64 Encoded Data:", base64Encoded);
+      console.log('Base64 Encoded Data:', base64Encoded);
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log("User cancelled the picker");
+      if (err.name === 'UserCanceledError') {
+        console.log('User canceled the document picker');
       } else {
-        console.error("Error picking document:", err);
+        console.error('Error picking document:', err);
       }
     }
   };
@@ -36,18 +43,18 @@ const App = () => {
   // Function to upload PDF (Base64) to the server
   const uploadDocument = async () => {
     if (!base64Data) {
-      console.log("No file to upload");
+      console.log('No file to upload');
       return;
     }
 
     try {
-      const response = await axios.post("http://your-server-url/upload", {
+      const response = await axios.post('http://your-server-url/upload', {
         file: base64Data,
       });
 
-      console.log("Upload successful", response.data);
+      console.log('Upload successful', response.data);
     } catch (err) {
-      console.error("Error uploading file:", err);
+      console.error('Error uploading file:', err);
     }
   };
 

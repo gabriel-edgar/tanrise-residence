@@ -11,11 +11,11 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {FFriends} from '@data';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -28,7 +28,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import DatePicker from 'react-native-date-picker';
+// import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
 import styles from './styles';
@@ -83,7 +83,7 @@ export default function ContractInformation() {
             // borderColor: '#000'
           }}>
           <Image
-            source={require('@assets/images/form.png')}
+            source={require('@/assets/images/form.png')}
             style={{
               height: 200,
               width: 300,
@@ -148,7 +148,6 @@ export default function ContractInformation() {
               }
             />
 
-
             <Text
               style={{
                 fontSize: 16,
@@ -161,18 +160,22 @@ export default function ContractInformation() {
             <View style={styles.containerDate}>
               {/* <View style={{flexDirection: "row", justifyContent: "space-around"}}> */}
               <TouchableOpacity
-                  style={{
-                    backgroundColor: '#F5F5F5',
-                    // colors.primary,
-                    paddingVertical: 15,
-                    paddingHorizontal: 15,
-                    borderRadius: 10,
-                    marginBottom: 20,
-                  }}
-                  onPress={() => setOpen(true)}>
-                    {selectedDate ? <Text>{moment(date).format('DD-MM-YYYY')}</Text> : <Text style={{color: '#aeaeae'}}>Due Date</Text>}
+                style={{
+                  backgroundColor: '#F5F5F5',
+                  // colors.primary,
+                  paddingVertical: 15,
+                  paddingHorizontal: 15,
+                  borderRadius: 10,
+                  marginBottom: 20,
+                }}
+                onPress={() => setOpen(true)}>
+                {selectedDate ? (
+                  <Text>{moment(date).format('DD-MM-YYYY')}</Text>
+                ) : (
+                  <Text style={{color: '#aeaeae'}}>Due Date</Text>
+                )}
 
-                  <DatePicker
+                {/* <DatePicker
                     modal
                     // minimumDate={new Date(moment(format).format('YYYY-MM-DD'))}
                     minimumDate={new Date(format)}
@@ -189,10 +192,9 @@ export default function ContractInformation() {
                     onCancel={() => {
                       setOpen(false);
                     }}
-                  />
+                  /> */}
               </TouchableOpacity>
               {/* </View> */}
-              
             </View>
 
             <TouchableOpacity
@@ -251,7 +253,10 @@ export default function ContractInformation() {
                   }>
                   <Picker.Item label="Select an option" value="" />
                   <Picker.Item label="Electronic" value="Electronic" />
-                  <Picker.Item label="Mechanical Plumbing" value="Mechanical Plumbing" />
+                  <Picker.Item
+                    label="Mechanical Plumbing"
+                    value="Mechanical Plumbing"
+                  />
                   {/* ... add more dropdown options */}
                 </Picker>
 

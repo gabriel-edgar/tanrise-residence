@@ -10,16 +10,16 @@ import {
   Button,
   CardBooking,
   FormCounterSelect,
-} from "@components";
-import CounterSelectCheckout from "@components/Form/CounterSelectCheckout";
+} from "@/components";
+import CounterSelectCheckout from "@/components/Form/CounterSelectCheckout";
 import ProductList from "./List";
 import numFormat from "../../components/numFormat";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { EPostListData, ESortOption } from "@data";
+import { EPostListData, ESortOption } from "@/data";
 import { useNavigation } from "@react-navigation/native";
-import * as Utils from "@utils";
-import { parseHexTransparency } from "@utils";
+import * as Utils from "@/utils";
+import { parseHexTransparency } from "@/utils";
 import React, {
   Fragment,
   useEffect,
@@ -38,6 +38,7 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  TouchableOpacity
 } from "react-native";
 import LottieView from "lottie-react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
@@ -48,7 +49,6 @@ import axios from "axios";
 import { ActivityIndicator, Divider } from "react-native-paper";
 
 import Modal from "react-native-modal";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { CheckBox, Badge } from "react-native-elements";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -224,11 +224,11 @@ const Product = (params) => {
           style={{ marginVertical: 8 }}
           // image={item.picture}
           image={
-            // require('@assets/images/logo.png')
+            // require('@/assets/images/logo.png')
             // item.images
             item.images != "" && item.images != null
               ? { uri: item.images }
-              : require("@assets/images/logo.png")
+              : require("@/assets/images/logo.png")
           }
           // costPrice={item.default_price}
           salePrice={item.default_price}
@@ -282,7 +282,7 @@ const Product = (params) => {
           }}
         /> */}
           <LottieView
-            source={require("@data/91191-404-notfound.json")}
+            source={require("@/data/91191-404-notfound.json")}
             autoPlay
             style={{ width: 300, height: 300 }}
           />
@@ -361,11 +361,11 @@ const Product = (params) => {
                 description={item.remarks}
                 // image={item.image}
                 image={
-                  // require('@assets/images/logo.png')
+                  // require('@/assets/images/logo.png')
 
                   item.images != "" && item.images != null
                     ? { uri: item.images }
-                    : require("@assets/images/logo.png")
+                    : require("@/assets/images/logo.png")
                 }
                 //image di component checkoutnya sengaja di tutup, karena tidak pakai url uri
                 salePrice={numFormattanpaRupiah(item.default_price)}

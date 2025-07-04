@@ -31,14 +31,14 @@ import {
   colors,
   ListOptionSelected,
   VenueSelectOption,
-} from "@components";
+} from "@/components";
 // holiday - village;
 import IconFontisto from "react-native-vector-icons/Fontisto";
 import moment from "moment";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 
 import axios from "axios";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { ListTransactionExpand } from "../../components";
 import { TabView, SceneMap } from "react-native-tab-view";
@@ -47,7 +47,7 @@ import ModalProduct from "./ModalProduct";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
-import ListTransaction from "@components/List/Transaction";
+import ListTransaction from "@/components/List/Transaction";
 
 import { ProgressBar } from "react-native-paper";
 import { API_URL_LOKAL } from "@env";
@@ -257,7 +257,7 @@ function BookingFacility({ route }) {
           }
         });
 
-        // AsyncStorage.setItem('@DataTower', dataArr);
+        // AsyncStorage.setItem('@/dataTower', dataArr);
         setArrDataTowerUser(arrDataTower);
 
         setSpinner(false);

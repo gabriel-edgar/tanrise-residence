@@ -10,12 +10,12 @@ import {
   CategoryGrid,
   CategoryBoxColor,
   ModalFilterLocation,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 import {CheckBox} from 'react-native-elements';
-import {FFriends} from '@data';
+import {FFriends} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import {haveChildren} from '@utils';
+import {haveChildren} from '@/utils';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, TouchableOpacity, View} from 'react-native';
@@ -40,7 +40,7 @@ export default function EntryExit() {
       edges={['right', 'top', 'left']}>
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={require('@assets/images/exitentry.png')}
+          source={require('@/assets/images/exitentry.png')}
           style={{
             height: 300,
             width: 300,

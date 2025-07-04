@@ -8,10 +8,10 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { Banks, MobileWallet, PaymentItems } from "@data/ePayment";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { Banks, MobileWallet, PaymentItems } from "@/data/ePayment";
+import * as Utils from "@/utils";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

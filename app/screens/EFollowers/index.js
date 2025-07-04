@@ -1,6 +1,6 @@
-import { Header, Icon, ListTextButton, SafeAreaView, Tag } from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { EFollowers } from "@data";
+import { Header, Icon, ListTextButton, SafeAreaView, Tag } from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { EFollowers } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, View } from "react-native";

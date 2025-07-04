@@ -1,5 +1,5 @@
-import { Icon, ModalFilter, Text, Header } from "@components";
-import { useTheme } from "@config";
+import { Icon, ModalFilter, Text, Header } from "@/components";
+import { useTheme } from "@/config";
 import React, { Fragment, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";

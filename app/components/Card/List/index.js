@@ -1,8 +1,8 @@
-import Image from "@components/Image";
-import StarRating from "@components/StarRating";
-import Tag from "@components/Tag";
-import Text from "@components/Text";
-import { BaseColor } from "@config";
+import Image from "@/components/Image";
+import StarRating from "@/components/StarRating";
+import Tag from "@/components/Tag";
+import Text from "@/components/Text";
+import { BaseColor } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

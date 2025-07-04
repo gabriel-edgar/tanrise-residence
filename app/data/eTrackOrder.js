@@ -1,4 +1,4 @@
-import { Images } from "@config";
+import { Images } from "@/config";
 
 export const OrderDetail = {
   id: "#39072197",

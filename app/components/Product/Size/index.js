@@ -1,5 +1,5 @@
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";

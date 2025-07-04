@@ -5,8 +5,8 @@ import {
   SafeAreaView,
   TextInput,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import React, { useState, useEffect } from "react";
 import {
   ScrollView,
@@ -22,7 +22,6 @@ import {
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "react-native-element-dropdown";
-import DropDownPicker from "react-native-dropdown-picker";
 import httpClient from "../../controllers/HttpClient";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 import { widthPixel } from "../Home/normalize";

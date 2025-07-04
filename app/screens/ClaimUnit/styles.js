@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Dimensions, PixelRatio } from "react-native";
-import { BaseColor } from "@config";
+import { BaseColor } from "@/config";
 //const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
 

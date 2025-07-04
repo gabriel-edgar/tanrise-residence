@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {BaseColor} from '@config';
+import {BaseColor} from '@/config';
 const {width, height} = Dimensions.get('window');
 
 export default StyleSheet.create({

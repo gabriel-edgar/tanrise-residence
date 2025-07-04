@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {Text, View, StyleSheet, Animated, Button} from 'react-native';
-import {BaseStyle, useTheme} from '@config';
+import {BaseStyle, useTheme} from '@/config';
 
 export const LoadingCount = () => {
   const counter = useRef(new Animated.Value(0)).current;

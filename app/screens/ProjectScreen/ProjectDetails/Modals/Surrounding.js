@@ -1,4 +1,4 @@
-import { Text, Button, Icon } from "@components";
+import { Text, Button, Icon } from "@/components";
 // import Image from '../../../../components/Image';
 import {
   View,
@@ -9,12 +9,12 @@ import {
   ActivityIndicator,
   Dimensions,
   useWindowDimensions,
+  ScrollView 
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
 
-import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@/config";
 
 import { useIsFocused } from "@react-navigation/native";
 import entities from "entities";

@@ -6,9 +6,9 @@ import {
     Text,
     Header,
     Icon
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FHotNews2 } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FHotNews2 } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useTranslation } from "react-i18next";

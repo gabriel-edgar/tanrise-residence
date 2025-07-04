@@ -5,8 +5,8 @@ import {
   SafeAreaView,
   TextInput,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import React, { useState, useEffect, useCallback } from "react";
 import {
   ScrollView,
@@ -20,12 +20,11 @@ import {
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "react-native-element-dropdown";
-import DropDownPicker from "react-native-dropdown-picker";
 import httpClient from "../../controllers/HttpClient";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 import { widthPixel } from "../Home/normalize";
 import ImagePicker from "react-native-image-crop-picker";
-import DocumentPicker from "react-native-document-picker";
+import DocumentPicker from '@react-native-documents/picker';
 //import RNFS from "react-native-fs"; // File system module for reading files
 import ReactNativeBlobUtil from "react-native-blob-util";
 import { useSelector, useDispatch } from "react-redux";
@@ -749,15 +748,10 @@ const ClaimUnitList = (props) => {
   // Function to handle file pick
   const pickDocument = async (itemParam) => {
     try {
-      // Allow user to pick a document
-      //DocumentPicker.pick
-      // console.log(
-      //   "434 DocumentPicker: ",
-      //   JSON.stringify(typeof DocumentPicker)
-      // );
+
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
-        //type: [DocumentPicker.types.images],
+ 
       });
       const dummyRes = [
         {

@@ -1,7 +1,7 @@
-import { Image, ListMenuIcon, Text } from "@components";
-import LabelUpper2Row from "@components/Label/Upper2Row";
-import { BaseColor, Images, useTheme } from "@config";
-import { FLinks } from "@data";
+import { Image, ListMenuIcon, Text } from "@/components";
+import LabelUpper2Row from "@/components/Label/Upper2Row";
+import { BaseColor, Images, useTheme } from "@/config";
+import { FLinks } from "@/data";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

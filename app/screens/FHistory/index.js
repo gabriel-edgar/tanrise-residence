@@ -5,9 +5,9 @@ import {
     Header,
     Icon,
     ListSearchResultLabel,
-} from "@components";
-import { BaseStyle, useTheme, Images } from "@config";
-import { FHistory } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme, Images } from "@/config";
+import { FHistory } from "@/data";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, RefreshControl, View } from "react-native";

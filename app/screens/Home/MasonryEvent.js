@@ -20,8 +20,8 @@ import {
   Text,
 } from 'react-native';
 
-import {Header, SafeAreaView, Icon} from '@components';
-import {BaseStyle, useTheme} from '@config';
+import {Header, SafeAreaView, Icon} from '@/components';
+import {BaseStyle, useTheme} from '@/config';
 import {useTranslation} from 'react-i18next';
 
 const MasonryEvent = ({

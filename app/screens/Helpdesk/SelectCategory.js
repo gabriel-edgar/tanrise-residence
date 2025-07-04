@@ -9,8 +9,8 @@ import {
   // RefreshControl,
   Header,
   Icon,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";

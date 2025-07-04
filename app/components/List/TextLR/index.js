@@ -1,9 +1,9 @@
-import { Text } from "@components";
+import { Text } from "@/components";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import styles from "./styles";
-import { useTheme } from "@config";
+import { useTheme } from "@/config";
 
 const ListTextLR = ({
     style = {},

@@ -1,8 +1,8 @@
-import { Image, SafeAreaView, Header, Tag } from "@components";
-import Icon from "@components/Icon";
-// import LabelUpper2Row from '@components/Label/Upper2Row';
-import { BaseColor, Images, useTheme, BaseStyle } from "@config";
-// import {FLinks} from '@data';
+import { Image, SafeAreaView, Header, Tag } from "@/components";
+import Icon from "@/components/Icon";
+// import LabelUpper2Row from '@/components/Label/Upper2Row';
+import { BaseColor, Images, useTheme, BaseStyle } from "@/config";
+// import {FLinks} from '@/data';
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ import {
 // import CheckBox from '@react-native-community/checkbox';
 // import {Button, ProfileGroup} from '../../components';
 import axios from "axios";
-// import {EFilterColors, EFilterSizes, FRecentTransactions} from '@data';
+// import {EFilterColors, EFilterSizes, FRecentTransactions} from '@/data';
 // import ModalProduct from './ModalProduct';
 
 // // or any pure javascript modules available in npm
@@ -35,7 +35,7 @@ import styles from "./styles";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 import moment from "moment";
 import StatusHelp from "../Helpdesk/StatusHelp";
 import { API_URL_LOKAL } from "@env";

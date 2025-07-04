@@ -5,9 +5,9 @@ import {
   ProductSize,
   FormCounterSelect,
   Text,
-} from '@components';
-import {useTheme} from '@config';
-import {EFilterColors, EFilterSizes} from '@data';
+} from '@/components';
+import {useTheme} from '@/config';
+import {EFilterColors, EFilterSizes} from '@/data';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';

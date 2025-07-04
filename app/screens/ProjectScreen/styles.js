@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { BaseColor, Fonts } from "@config";
+import { BaseColor, Fonts } from "@/config";
 const { width: screenWidth } = Dimensions.get("window");
 export default StyleSheet.create({
   textInput: {

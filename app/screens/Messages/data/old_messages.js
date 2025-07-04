@@ -1,5 +1,5 @@
-import * as Utils from "@utils";
-import { Images } from "@config";
+import * as Utils from "@/utils";
+import { Images } from "@/config";
 
 module.exports = [
   {

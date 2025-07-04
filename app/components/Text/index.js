@@ -1,4 +1,4 @@
-import {BaseColor, FontWeight, Typography, useFont, useTheme} from '@config';
+import {BaseColor, FontWeight, Typography, useFont, useTheme} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';

@@ -1,6 +1,6 @@
-import Icon from "@components/Icon";
-import TextInput from "@components/TextInput";
-import { BaseColor, useTheme } from "@config";
+import Icon from "@/components/Icon";
+import TextInput from "@/components/TextInput";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React, { useState, forwardRef } from "react";
 import { useTranslation } from "react-i18next";

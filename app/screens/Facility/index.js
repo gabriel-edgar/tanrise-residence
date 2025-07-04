@@ -11,20 +11,19 @@ import {
   Header,
   Icon,
   colors,
-} from "@components";
-import { BaseStyle, useTheme, BaseColor } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
+} from "@/data";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ScrollView, View, ActivityIndicator } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList, ScrollView, View, ActivityIndicator, TouchableOpacity  } from "react-native";
 import List from "../../components/Product/List";
 import styles from "./styles";
 import ProductGrid1 from "./Grid1";
@@ -33,17 +32,8 @@ import { Button } from "../../components";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import getProject from "../../selectors/ProjectSelector";
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 
-import {
-  // Placeholder,
-  PlaceholderMedia,
-  // PlaceholderLine,
-  // Fade,
-  Loader,
-  Shine,
-  ShineOverlay,
-} from "rn-placeholder";
 
 import { API_URL_LOKAL } from "@env";
 
@@ -246,7 +236,7 @@ const Facility = (props) => {
                       // description={null}
                       title={item.title}
                       image={item.image}
-                      // image={require('@assets/images/avata-01.jpeg')}
+                      // image={require('@/assets/images/avata-01.jpeg')}
                       // costPrice={item.costPrice}
                       // salePrice={item.salePrice}
                       // isFavorite={item.isFavorite}

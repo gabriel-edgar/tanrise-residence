@@ -5,13 +5,13 @@ import {
   Text,
   Header,
   Icon,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { CompletedOrders } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { CompletedOrders } from "@/data";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, RefreshControl, View } from "react-native";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 
 const TABS = [
   {

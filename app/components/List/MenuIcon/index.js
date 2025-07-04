@@ -1,7 +1,7 @@
-import Icon from "@components/Icon";
-import Text from "@components/Text";
-import { useTheme } from "@config";
-import { parseHexTransparency } from "@utils";
+import Icon from "@/components/Icon";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

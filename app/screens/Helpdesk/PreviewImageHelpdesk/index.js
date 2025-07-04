@@ -1,5 +1,5 @@
-import {Header, Icon, Image, SafeAreaView, Text} from '@components';
-import {BaseColor, BaseStyle, Images, useTheme} from '@config';
+import {Header, Icon, Image, SafeAreaView, Text} from '@/components';
+import {BaseColor, BaseStyle, Images, useTheme} from '@/config';
 import React, {useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import Swiper from 'react-native-swiper';

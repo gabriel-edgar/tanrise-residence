@@ -7,9 +7,9 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { EPaymentItemsData } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { EPaymentItemsData } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

@@ -10,15 +10,15 @@ import {
   Header,
   Icon,
   Tag,
-} from "@components";
-import { enableExperimental } from "@utils";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { CheckBox } from "react-native-elements";
+} from '@/components';
+import {enableExperimental} from '@/utils';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {CheckBox} from 'react-native-elements';
 
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
 
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   TouchableOpacity,
@@ -26,28 +26,28 @@ import {
   Platform,
   TouchableHighlight,
   ScrollView,
-} from "react-native";
-import { ProgressBar, MD3Colors, ToggleButton } from "react-native-paper";
-import DatePicker from "react-native-date-picker";
-import moment from "moment";
-import { useSelector } from "react-redux";
-import getUser from "../../selectors/UserSelectors";
-import axios from "axios";
-import client from "../../controllers/HttpClient";
-import styles from "./styles";
+} from 'react-native';
+import {ProgressBar, MD3Colors, ToggleButton} from 'react-native-paper';
+// import DatePicker from "react-native-date-picker";
+import moment from 'moment';
+import {useSelector} from 'react-redux';
+import getUser from '../../selectors/UserSelectors';
+import axios from 'axios';
+import client from '../../controllers/HttpClient';
+import styles from './styles';
 
 //   import {RadioButton} from 'react-native-paper';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL_LOKAL } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_URL_LOKAL} from '@env';
 export default function SeatBooking(props) {
-  const { t, i18n } = useTranslation();
-  const { colors } = useTheme();
+  const {t, i18n} = useTranslation();
+  const {colors} = useTheme();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector((state) => getUser(state));
+  const users = useSelector(state => getUser(state));
   const [email, setEmail] = useState(users.user);
   const [urlApi, seturlApi] = useState(client);
 
@@ -67,18 +67,18 @@ export default function SeatBooking(props) {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
-  console.log("dataTowerUser", dataTowerUser);
-  console.log("arrDataTowerUser", arrDataTowerUser);
-  console.log("passProp", passProp);
-  console.log("passPropStorage", passPropStorage);
+  console.log('dataTowerUser', dataTowerUser);
+  console.log('arrDataTowerUser', arrDataTowerUser);
+  console.log('passProp', passProp);
+  console.log('passPropStorage', passPropStorage);
   const TABS = [
     {
-      id: "R",
-      title: t("Reguler"),
+      id: 'R',
+      title: t('Reguler'),
     },
     {
-      id: "O",
-      title: t("Overhaul"),
+      id: 'O',
+      title: t('Overhaul'),
     },
   ];
   const [tab, setTab] = useState(TABS[0]);
@@ -86,7 +86,7 @@ export default function SeatBooking(props) {
   useEffect(() => {
     const id = props?.params?.id;
     if (id) {
-      TABS.forEach((tab) => {
+      TABS.forEach(tab => {
         tab.id == id && setTab(tab);
       });
     }
@@ -102,13 +102,13 @@ export default function SeatBooking(props) {
   const getTower = async () => {
     const data = {
       email: email,
-      app: "O",
+      app: 'O',
     };
 
     const config = {
       headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
+        accept: 'application/json',
+        'Content-Type': 'application/json',
         // token: "",
       },
     };
@@ -118,13 +118,13 @@ export default function SeatBooking(props) {
         API_URL_LOKAL + `/home/common-project/mysql/${data.email}/${data.app}`,
         {
           config,
-        }
+        },
       )
-      .then((res) => {
+      .then(res => {
         const datas = res.data;
 
         const arrDataTower = datas.Data;
-        arrDataTower.map((dat) => {
+        arrDataTower.map(dat => {
           if (dat) {
             setdataTowerUser(dat);
           }
@@ -134,15 +134,15 @@ export default function SeatBooking(props) {
 
         // return res.data;
       })
-      .catch((error) => {
-        console.log("error get tower api", error);
-        alert("error get");
+      .catch(error => {
+        console.log('error get tower api', error);
+        alert('error get');
       });
   };
 
   const getDataStorage = async () => {
-    const value = await AsyncStorage.getItem("@troStorage");
-    // const DataTower = await AsyncStorage.getItem('@DataTower');
+    const value = await AsyncStorage.getItem('@troStorage');
+    // const DataTower = await AsyncStorage.getItem('@/dataTower');
 
     const passPropStorage = JSON.parse(value);
 
@@ -178,17 +178,17 @@ export default function SeatBooking(props) {
       await axios
         .get(
           API_URL_LOKAL +
-            `/modules/troffice/master-booking-time?entity_cd=${entity}&project_no=${project}`
+            `/modules/troffice/master-booking-time?entity_cd=${entity}&project_no=${project}`,
         )
-        .then((res) => {
+        .then(res => {
           const datas = res.data.data;
 
           //   const uniqueObjArray = [
           //     ...new Map(datas.map((item) => [item["hours"], item])).values(),
           // ];
           let ans = datas.reduce((agg, curr) => {
-            console.log("agg", agg);
-            let found = agg.find((x) => x.hours === curr.hours);
+            console.log('agg', agg);
+            let found = agg.find(x => x.hours === curr.hours);
             if (found) {
               found.subslot.push(curr.subslot);
             } else {
@@ -202,19 +202,19 @@ export default function SeatBooking(props) {
           }, []);
 
           const result = ans.reduce((acc, curr) => {
-            console.log("curr >", curr);
-            console.log("acc >", acc);
+            console.log('curr >', curr);
+            console.log('acc >', acc);
             if (acc[curr.hours] === undefined) acc[curr.hours] = 0;
-            curr.subslot.forEach((x) => (acc[curr.hours] += x.length));
+            curr.subslot.forEach(x => (acc[curr.hours] += x.length));
             return acc;
           }, {});
 
-          console.log("counters >", result);
+          console.log('counters >', result);
 
           //   const uniqueObjArray = [
           //     ...new Map(ans.map((item) => [item["hours"], item])).values(),
           // ];
-          console.log("jam >", ans);
+          console.log('jam >', ans);
           // setBookingTime(uniqueObjArray);
           setBookingTime(ans);
           // setBookingSlot(ans.subslot);
@@ -222,29 +222,29 @@ export default function SeatBooking(props) {
           // setBookingTime(uniqueObjArray);
         });
     } catch (error) {
-      console.log("Error from getTime", error);
+      console.log('Error from getTime', error);
     }
     // console.log('entity?', ...entity) //untuk pecahin array jadi object pake ...
     // console.log('project?', ...project)
   };
 
-  const getMasterTime = async (props) => {
+  const getMasterTime = async props => {
     const entity = passProp.entity_cd;
     const project = passProp.project_no;
-    const dates = moment(props).format("YYYY-MM-DD");
+    const dates = moment(props).format('YYYY-MM-DD');
     try {
       await axios
         .get(
           API_URL_LOKAL +
-            `/modules/troffice/master-booking-slot?entity_cd=${entity}&project_no=${project}&category_cd=${passProp.category_cd}&type=${tab.id}&req_date=${dates}`
+            `/modules/troffice/master-booking-slot?entity_cd=${entity}&project_no=${project}&category_cd=${passProp.category_cd}&type=${tab.id}&req_date=${dates}`,
         )
-        .then((res) => {
+        .then(res => {
           const datas = res.data.data;
           setBookingSlot(datas);
-          console.log("data setbookingslot", datas);
+          console.log('data setbookingslot', datas);
         });
     } catch (error) {
-      console.log("Error from getMasterTime", error);
+      console.log('Error from getMasterTime', error);
     }
   };
 
@@ -349,15 +349,14 @@ export default function SeatBooking(props) {
   //          this.goToScreen('screen.SelectCategory', cat);
   //        });
   //      };
-  console.log("slot checked : ", getSlotOnClick);
-  console.log("slot checked : ", getBookingSlot);
+  console.log('slot checked : ', getSlotOnClick);
+  console.log('slot checked : ', getBookingSlot);
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
-    >
+      edges={['right', 'top', 'left']}>
       <Header
-        title={t("category_tro")} //belum dibuat lang
+        title={t('category_tro')} //belum dibuat lang
         renderLeft={() => {
           return (
             <Icon
@@ -376,11 +375,10 @@ export default function SeatBooking(props) {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        contentContainerStyle={{paddingHorizontal: 20}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {TABS.map((item, index) => (
-            <View key={index} style={{ flex: 1, paddingHorizontal: 20 }}>
+            <View key={index} style={{flex: 1, paddingHorizontal: 20}}>
               <Tag
                 primary
                 style={{
@@ -390,13 +388,11 @@ export default function SeatBooking(props) {
                 onPress={() => {
                   enableExperimental();
                   setTab(item);
-                }}
-              >
+                }}>
                 <Text
                   body1={tab.id != item.id}
                   light={tab.id != item.id}
-                  whiteColor={tab.id == item.id}
-                >
+                  whiteColor={tab.id == item.id}>
                   {item.title}
                 </Text>
               </Tag>
@@ -404,7 +400,7 @@ export default function SeatBooking(props) {
           ))}
         </View>
 
-        <View style={{ marginTop: 30, paddingHorizontal: 10 }}>
+        <View style={{marginTop: 30, paddingHorizontal: 10}}>
           <Text subheadline bold>
             Today
           </Text>
@@ -412,18 +408,17 @@ export default function SeatBooking(props) {
 
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignContent: 'space-between',
             borderRadius: 15,
             borderColor: colors.dark,
             borderBottomWidth: 1,
             padding: 10,
             marginBottom: 15,
             marginTop: 10,
-          }}
-        >
-          <DatePicker
+          }}>
+          {/* <DatePicker
             modal
             mode="date"
             open={open}
@@ -436,8 +431,8 @@ export default function SeatBooking(props) {
             onCancel={() => {
               setOpen(false);
             }}
-          />
-          <Text>{moment(date).format("DD-MM-YYYY")}</Text>
+          /> */}
+          <Text>{moment(date).format('DD-MM-YYYY')}</Text>
           <Icon
             name="calendar-week"
             size={20}
@@ -448,10 +443,10 @@ export default function SeatBooking(props) {
         </View>
 
         <View>
-          {tab.id == "R" ? (
-            <View style={{ flexDirection: "column" }}>
+          {tab.id == 'R' ? (
+            <View style={{flexDirection: 'column'}}>
               {loadingTab ? (
-                <View style={{ marginTop: 10 }}>
+                <View style={{marginTop: 10}}>
                   {/* <Spinner visible={this.state.spinner} /> */}
                   {/* <Placeholder style={{marginVertical: 4, paddingHorizontal: 10}}>
                       <PlaceholderLine width={100} noMargin style={{height: 40}} />
@@ -467,67 +462,63 @@ export default function SeatBooking(props) {
                   {getBookingTime.map((data, index) => (
                     <View
                       style={{
-                        flexDirection: "row",
+                        flexDirection: 'row',
                         marginLeft: 10,
                         marginRight: 20,
                         marginTop: 10,
-                        justifyContent: "center",
-                      }}
-                    >
+                        justifyContent: 'center',
+                      }}>
                       <View
                         style={{
-                          flexDirection: "row",
+                          flexDirection: 'row',
                           marginLeft: 10,
                           marginRight: 20,
                           marginTop: 10,
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
                         <Text key={index}>{data.hours}</Text>
                       </View>
 
-                      {data.hours > "10:30:00"
+                      {data.hours > '10:30:00'
                         ? data.subslot.map((slot, key) =>
                             getBookingSlot.map((slottime, slotkey) => (
-                              <View style={{ flexDirection: "row" }}>
+                              <View style={{flexDirection: 'row'}}>
                                 <TouchableOpacity
                                   key={key}
                                   style={{
                                     backgroundColor:
                                       slottime.subslot == getSlotOnClick ||
                                       slottime.hours == getHourOnClick
-                                        ? "tomato"
-                                        : "cyan",
+                                        ? 'tomato'
+                                        : 'cyan',
 
                                     padding: 50,
                                     margin: 10,
-                                    justifyContent: "center",
+                                    justifyContent: 'center',
                                   }}
                                   onPress={() =>
                                     // alert(data.subslot)
                                     data.hours == slottime.hours &&
                                     slottime.subslot == slot
-                                      ? alert("Cannot Click")
+                                      ? alert('Cannot Click')
                                       : handleGetSlot(data, slot, data.hours)
-                                  }
-                                >
+                                  }>
                                   <Text>Slot {slot}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
                                   style={{
-                                    backgroundColor: "cyan",
+                                    backgroundColor: 'cyan',
                                     padding: 25,
                                     margin: 10,
-                                    justifyContent: "center",
+                                    justifyContent: 'center',
                                   }}
-                                  disabled
-                                >
+                                  disabled>
                                   <Text>Not Available</Text>
                                 </TouchableOpacity>
                               </View>
-                            ))
+                            )),
                           )
                         : data.subslot.map((slot, key) =>
                             getBookingSlot.map((slottime, slotkey) => (
@@ -535,22 +526,21 @@ export default function SeatBooking(props) {
                                 <TouchableOpacity
                                   key={key}
                                   style={{
-                                    backgroundColor: "tomato",
+                                    backgroundColor: 'tomato',
                                     padding: 50,
                                     margin: 10,
-                                    justifyContent: "center",
+                                    justifyContent: 'center',
                                   }}
                                   onPress={() =>
                                     data.hours == slottime.hours &&
                                     slottime.subslot == slot
-                                      ? alert("Cannot Click")
+                                      ? alert('Cannot Click')
                                       : handleGetSlot(data, slot, data.hours)
-                                  }
-                                >
+                                  }>
                                   <Text>slot {slot}</Text>
                                 </TouchableOpacity>
                               </View>
-                            ))
+                            )),
                           )}
                     </View>
                   ))}
@@ -565,34 +555,31 @@ export default function SeatBooking(props) {
 
       <View
         style={{
-          flexDirection: "row",
-          width: "100%",
-          height: "15%",
+          flexDirection: 'row',
+          width: '100%',
+          height: '15%',
           borderWidth: 1,
-          borderStyle: "solid",
+          borderStyle: 'solid',
           borderTopEndRadius: 15,
           borderTopLeftRadius: 15,
-          justifyContent: "center",
+          justifyContent: 'center',
           // flex: 1,
-        }}
-      >
+        }}>
         <View
           style={{
-            alignItems: "center",
+            alignItems: 'center',
             borderRightWidth: 2,
             borderRightColor: colors.primary,
-          }}
-        >
+          }}>
           <View
             style={{
               marginBottom: 20,
-              marginLeft: "15%",
-              marginRight: "15%",
+              marginLeft: '15%',
+              marginRight: '15%',
               marginTop: 10,
-              borderStyle: "solid",
+              borderStyle: 'solid',
               borderWidth: 1,
-            }}
-          >
+            }}>
             <Text>Choosed Slot</Text>
           </View>
           {/* {getSlotOnClick.map((data, index) => (
@@ -626,7 +613,7 @@ export default function SeatBooking(props) {
           medium
           style={{
             marginTop: 35,
-            marginHorizontal: "auto",
+            marginHorizontal: 'auto',
             marginLeft: 20,
             marginRight: 20,
             marginBottom: 20,
@@ -634,9 +621,8 @@ export default function SeatBooking(props) {
           }}
           onPress={() => {
             bookFacility();
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{t("Book Facility")}</Text>
+          }}>
+          <Text style={{textAlign: 'center'}}>{t('Book Facility')}</Text>
         </Button>
       </View>
     </SafeAreaView>

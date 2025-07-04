@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { BaseStyle, Images, useTheme, BaseColor } from "@config";
+import { BaseStyle, Images, useTheme, BaseColor } from "@/config";
 import {
   Header,
   SafeAreaView,
@@ -15,7 +15,7 @@ import {
   Text,
   TextInput,
   ProfileAuthor,
-} from "@components";
+} from "@/components";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
 

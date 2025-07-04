@@ -1,5 +1,5 @@
-import { Header, Icon, SafeAreaView, Tag, Text, TextInput } from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { Header, Icon, SafeAreaView, Tag, Text, TextInput } from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

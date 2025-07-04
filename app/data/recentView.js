@@ -1,4 +1,4 @@
-import { Images } from "@config";
+import { Images } from "@/config";
 
 export const RecentListData = [
   {

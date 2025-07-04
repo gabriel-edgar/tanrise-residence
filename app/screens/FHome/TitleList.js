@@ -1,4 +1,4 @@
-import { Text } from "@components";
+import { Text } from "@/components";
 import React from 'react';
 import { TouchableOpacity, View } from "react-native";
 import styles from "./styles";

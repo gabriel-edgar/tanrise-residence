@@ -1,7 +1,7 @@
-import Icon from "@components/Icon";
-import Image from "@components/Image";
-import Text from "@components/Text";
-import { BaseColor, useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Text from "@/components/Text";
+import { BaseColor, useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

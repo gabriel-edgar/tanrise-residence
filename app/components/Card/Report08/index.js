@@ -1,6 +1,6 @@
-import ProgressCircle from "@components/Progress/Circle";
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import ProgressCircle from "@/components/Progress/Circle";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

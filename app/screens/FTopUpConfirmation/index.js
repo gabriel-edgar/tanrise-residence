@@ -5,8 +5,8 @@ import {
     ListSearchResult,
     SafeAreaView,
     Text,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";

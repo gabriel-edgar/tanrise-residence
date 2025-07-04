@@ -5,11 +5,11 @@ import {
   Button,
   PlaceholderLine,
   Placeholder,
-} from "@components";
-import Icon from "@components/Icon";
-// import LabelUpper2Row from '@components/Label/Upper2Row';
-import { BaseColor, Images, useTheme, BaseStyle } from "@config";
-// import {FLinks} from '@data';
+} from "@/components";
+import Icon from "@/components/Icon";
+// import LabelUpper2Row from '@/components/Label/Upper2Row';
+import { BaseColor, Images, useTheme, BaseStyle } from "@/config";
+// import {FLinks} from '@/data';
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -34,8 +34,8 @@ import {
 // import CheckBox from '@react-native-community/checkbox';
 // import {Button, ProfileGroup} from '../../components';
 import axios from "axios";
-import Timeline from "react-native-timeline-flatlist";
-// import {EFilterColors, EFilterSizes, FRecentTransactions} from '@data';
+// import Timeline from "react-native-timeline-flatlist";
+// import {EFilterColors, EFilterSizes, FRecentTransactions} from '@/data';
 // import ModalProduct from './ModalProduct';
 
 // // or any pure javascript modules available in npm
@@ -45,7 +45,7 @@ import styles from "./styles";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 import moment from "moment";
 
 import CheckBox from "@react-native-community/checkbox";
@@ -869,7 +869,7 @@ export default BookingListDetail = (props) => {
         }}
       >
         <Text style={{ fontWeight: "bold", marginBottom: 20 }}>Status Log</Text>
-        <Timeline
+        {/* <Timeline
           timeContainerStyle={{ width: 130 }}
           lineColor={colors.primary}
           circleColor={colors.primary}
@@ -879,7 +879,7 @@ export default BookingListDetail = (props) => {
           style={{ marginTop: 20, flex: 1, marginLeft: 10 }}
           data={datalogEdited}
           // data={dataDummy}
-        />
+        /> */}
       </View>
 
       <View>

@@ -1,6 +1,6 @@
-import { Button, Header, Icon, SafeAreaView, Text } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { parseHexTransparency } from "@utils";
+import { Button, Header, Icon, SafeAreaView, Text } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { parseHexTransparency } from "@/utils";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

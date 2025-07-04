@@ -10,10 +10,10 @@ import {
   Tag,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, Images, useTheme } from "@config";
-import { EProductOfStore } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
+import { EProductOfStore } from "@/data";
+import * as Utils from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

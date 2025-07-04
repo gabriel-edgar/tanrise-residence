@@ -5,11 +5,11 @@ import {
     SafeAreaView,
     Text,
     TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FChooseCategories } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FChooseCategories } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

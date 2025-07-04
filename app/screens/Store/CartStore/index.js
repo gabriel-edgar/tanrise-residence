@@ -9,10 +9,10 @@ import {
   TextInput,
   Text,
   FormCounterSelect,
-} from '@components';
+} from '@/components';
 import Checkout from '../Checkout';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {ProductsData} from '@data';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {ProductsData} from '@/data';
 import React, {Fragment, useEffect, useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, RefreshControl, View} from 'react-native';
@@ -310,7 +310,7 @@ const CartStore = props => {
                 style={{marginTop: 10}}
                 title={item.trx_descs}
                 // image={item.image}
-                image={require('@assets/images/logo.png')} //image di component checkoutnya sengaja di tutup, karena tidak pakai url uri
+                image={require('@/assets/images/logo.png')} //image di component checkoutnya sengaja di tutup, karena tidak pakai url uri
                 salePrice={item.unit_price}
                 // description={item.tax_rate}
                 secondDescription={item.tax_rate}

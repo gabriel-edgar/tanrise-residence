@@ -1,7 +1,7 @@
-import { Header, Icon, ListThumbSquare, SafeAreaView } from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+import { Header, Icon, ListThumbSquare, SafeAreaView } from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { MessagesData } from "@data";
+import { MessagesData } from "@/data";
 import React, { useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import { useTranslation } from "react-i18next";

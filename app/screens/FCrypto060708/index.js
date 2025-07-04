@@ -1,8 +1,8 @@
-import { Header, Icon, ListTextLR, SafeAreaView, Tag, Text } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FBuyList, FSellList, FTransfer } from "@data";
+import { Header, Icon, ListTextLR, SafeAreaView, Tag, Text } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FBuyList, FSellList, FTransfer } from "@/data";
 import { useRoute } from "@react-navigation/native";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

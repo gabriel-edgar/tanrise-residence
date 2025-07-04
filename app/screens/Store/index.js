@@ -11,16 +11,16 @@ import {
   colors,
   PlaceholderLine,
   Placeholder,
-} from "@components";
-import { BaseStyle, useTheme, BaseColor } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
-import * as Utils from "@utils";
+} from "@/data";
+import * as Utils from "@/utils";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState, useRef } from "react";
@@ -32,8 +32,8 @@ import {
   ActivityIndicator,
   Animated,
   ImageBackground,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   NewsList,
   NotFound,
@@ -552,7 +552,7 @@ const Store = (props) => {
                     <ImageBackground
                       source={
                         item.images == "" || item.images == null
-                          ? require("@assets/images/logo.png")
+                          ? require("@/assets/images/logo.png")
                           : {
                               uri: item.images,
                             }
@@ -582,7 +582,7 @@ const Store = (props) => {
                     }}
                     // description={item.description}
                     title={item.descs}
-                    image={require('@assets/images/logo.png')}
+                    image={require('@/assets/images/logo.png')}
                     // costPrice={item.costPrice}
                     // salePrice={item.salePrice}
                     // onPress={() => {}}
@@ -612,7 +612,7 @@ const Store = (props) => {
                     title={item.descs}
                     // image={item.image}
                     // image={item.image}
-                    image={require('@assets/images/logo.png')}
+                    image={require('@/assets/images/logo.png')}
                     // costPrice={item.costPrice}
                     // salePrice={item.salePrice}
                     // isFavorite={item.isFavorite}

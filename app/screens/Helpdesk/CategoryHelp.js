@@ -9,8 +9,8 @@ import {
   RefreshControl,
   Header,
   Icon,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
@@ -114,7 +114,7 @@ export default function CategoryHelp({ route }) {
 
   const getDataStorage = async () => {
     const value = await AsyncStorage.getItem("@helpdeskStorage");
-    const DataTower = await AsyncStorage.getItem("@DataTower");
+    const DataTower = await AsyncStorage.getItem("@/dataTower");
     console.log("data tower", DataTower);
 
     const passPropStorage = JSON.parse(value);

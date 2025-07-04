@@ -1,10 +1,10 @@
-import Text from '@components/Text';
-import ListTransaction from '@components/List/Transaction';
+import Text from '@/components/Text';
+import ListTransaction from '@/components/List/Transaction';
 import PropTypes from 'prop-types';
 import React, {useState, Fragment} from 'react';
 import {View, StyleSheet} from 'react-native';
 import styles from './styles';
-import {useTheme} from '@config';
+import {useTheme} from '@/config';
 import numFormat from '../../numFormat';
 
 const MeterExpand = ({

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { BaseColor, BaseStyle } from "@config";
+import { BaseColor, BaseStyle } from "@/config";
 
 export default StyleSheet.create({
     btnClearSearch: {

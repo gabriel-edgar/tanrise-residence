@@ -5,10 +5,10 @@ import {
   RateDetail,
   SafeAreaView,
   SearchBox,
-} from "@components";
-import { BaseColor, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, useTheme } from "@/config";
 // Load sample data
-import { ReviewData } from "@data";
+import { ReviewData } from "@/data";
 import React, { useRef, useState } from "react";
 import {
   FlatList,

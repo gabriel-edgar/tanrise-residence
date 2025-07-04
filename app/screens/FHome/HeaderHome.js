@@ -1,5 +1,5 @@
-import { Icon, Image, Text } from "@components";
-import { BaseColor, Images, useTheme } from "@config";
+import { Icon, Image, Text } from "@/components";
+import { BaseColor, Images, useTheme } from "@/config";
 import React, { Fragment } from "react";
 import { View, TouchableOpacity } from "react-native";
 import styles from "./styles";

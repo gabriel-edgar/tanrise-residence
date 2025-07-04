@@ -1,12 +1,12 @@
-import Icon from '@components/Icon';
-import Text from '@components/Text';
-import Tag from '@components/Tag';
-import {useTheme, BaseColor} from '@config';
+import Icon from '@/components/Icon';
+import Text from '@/components/Text';
+import Tag from '@/components/Tag';
+import {useTheme, BaseColor} from '@/config';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import styles from './styles';
-import {parseHexTransparency} from '@utils';
+import {parseHexTransparency} from '@/utils';
 
 const CardReport07 = ({
   title = '',

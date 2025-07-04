@@ -1,6 +1,6 @@
-import { Text } from "@components";
-import LabelUpper2Row from "@components/Label/Upper2Row";
-import { useTheme } from "@config";
+import { Text } from "@/components";
+import LabelUpper2Row from "@/components/Label/Upper2Row";
+import { useTheme } from "@/config";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

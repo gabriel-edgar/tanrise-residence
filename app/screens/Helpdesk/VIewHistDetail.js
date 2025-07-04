@@ -9,11 +9,11 @@ import {
   PlaceholderLine,
   Placeholder,
   Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FFriends } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FFriends } from "@/data";
 import { useNavigation } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {

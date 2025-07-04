@@ -1,4 +1,4 @@
-import { Text, Button, Icon } from "@components";
+import { Text, Button, Icon } from "@/components";
 // import Image from '../../../../components/Image';
 import {
   View,
@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Alert,
   StatusBar,
+  ScrollView
 } from "react-native";
 import {
   SafeAreaView,
@@ -17,8 +18,7 @@ import {
 import React, { useState } from "react";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
-import { BaseStyle, Fonts, BaseColor, useTheme } from "@config";
-import { ScrollView } from "react-native-gesture-handler";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@/config";
 
 import ImageViewing from "react-native-image-viewing";
 

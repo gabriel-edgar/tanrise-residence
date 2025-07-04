@@ -1,5 +1,5 @@
-import { BaseColor } from "@config";
-import { Images } from "@config";
+import { BaseColor } from "@/config";
+import { Images } from "@/config";
 
 export const FHistory = [
   {

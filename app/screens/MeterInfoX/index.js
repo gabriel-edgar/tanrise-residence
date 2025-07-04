@@ -10,7 +10,7 @@ import {
   Button,
   CardBooking,
   FormCounterSelect,
-} from "@components";
+} from "@/components";
 import {
   StyleSheet,
   Dimensions,
@@ -24,7 +24,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { BaseStyle, useTheme, BaseColor } from "@config";
+import { BaseStyle, useTheme, BaseColor } from "@/config";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";

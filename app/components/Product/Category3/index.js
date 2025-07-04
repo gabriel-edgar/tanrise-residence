@@ -1,10 +1,10 @@
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity, View, ImageBackground } from "react-native";
 import styles from "./styles";
-import { Images } from "@config";
+import { Images } from "@/config";
 import Loading from "./Loading";
 
 const ProductCategory3 = (props) => {

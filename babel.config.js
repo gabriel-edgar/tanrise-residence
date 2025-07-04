@@ -1,19 +1,26 @@
 module.exports = {
-  presets: ["module:metro-react-native-babel-preset"],
+  presets: ['module:@react-native/babel-preset'],
   plugins: [
-    ["react-native-reanimated/plugin", { disableInlineStylesWarning: true }],
     [
-      "module:react-native-dotenv",
+      'module-resolver',
       {
-        // envName: 'API_URL',
-        moduleName: "@env",
-        path: ".env",
+        root: ['./'],
+        alias: {
+          '@': './app/',
+        },
+      },
+    ],
+    [
+      'module:react-native-dotenv',
+      {
+        moduleName: '@env',
+        path: '.env',
         blacklist: null,
         whitelist: null,
-        safe: true,
+        safe: false,
         allowUndefined: true,
       },
     ],
-    "@babel/plugin-proposal-export-namespace-from",
+    'react-native-reanimated/plugin',
   ],
 };

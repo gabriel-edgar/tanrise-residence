@@ -7,12 +7,12 @@ import {
   Tag,
   Header,
   Icon,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 // Load sample data
-import {EPostListData, ESortOption} from '@data';
+import {EPostListData, ESortOption} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import * as Utils from '@utils';
+import * as Utils from '@/utils';
 import React, {Fragment, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, FlatList, RefreshControl, View} from 'react-native';

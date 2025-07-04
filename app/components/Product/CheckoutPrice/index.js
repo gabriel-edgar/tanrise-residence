@@ -1,4 +1,4 @@
-import Text from "@components/Text";
+import Text from "@/components/Text";
 import PropTypes from "prop-types";
 import React from "react";
 import { View } from "react-native";

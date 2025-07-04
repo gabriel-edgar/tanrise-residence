@@ -10,10 +10,10 @@ import {
     SafeAreaView,
     Text,
     TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, Typography, useTheme } from "@config";
-import { CategoryData } from "@data";
-import * as Utils from "@utils";
+} from "@/components";
+import { BaseColor, BaseStyle, Typography, useTheme } from "@/config";
+import { CategoryData } from "@/data";
+import * as Utils from "@/utils";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, View } from "react-native";
 import { useTranslation } from "react-i18next";

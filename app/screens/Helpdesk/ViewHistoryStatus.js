@@ -11,11 +11,9 @@ import {
   Header,
   Icon,
   CategoryIconSoft,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { CheckBox, Badge } from "react-native-elements";
-import { Image } from "react-native";
-import StarRating from "react-native-star-rating";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+
 import { useNavigation } from "@react-navigation/native";
 import {
   data_project,
@@ -538,13 +536,6 @@ export default function ViewHistoryStatus({ route }) {
                   </Text>
                 </View>
                 <View style={styles.starWrap}>
-                  <StarRating
-                    fullStarColor={"#F9A233"}
-                    disabled={false}
-                    maxStars={5}
-                    rating={starCount}
-                    selectedStar={(rating) => onStarRatingPress(rating)}
-                  />
                 </View>
 
                 <View style={styles.btnWrapModal}>

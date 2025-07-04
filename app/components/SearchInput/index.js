@@ -1,4 +1,4 @@
-import {BaseColor, BaseStyle, useFont, useTheme} from '@config';
+import {BaseColor, BaseStyle, useFont, useTheme} from '@/config';
 import PropTypes from 'prop-types';
 import React, {forwardRef} from 'react';
 import {I18nManager, TextInput, View} from 'react-native';

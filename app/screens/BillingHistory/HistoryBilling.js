@@ -20,12 +20,12 @@ import {
   Price3Col,
   Button,
   ListTransactionExpand,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { useTranslation } from "react-i18next";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import getUser from "../../selectors/UserSelectors";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";

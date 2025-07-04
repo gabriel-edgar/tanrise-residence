@@ -4,8 +4,8 @@ import React, {
   useRef,
   useCallback,
   createRef,
-} from "react";
-import { useNavigation } from "@react-navigation/core";
+} from 'react';
+import {useNavigation} from '@react-navigation/core';
 import {
   FlatList,
   ScrollView,
@@ -18,22 +18,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-} from "react-native";
+} from 'react-native';
 
-import { Header, SafeAreaView, Icon } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { useTranslation } from "react-i18next";
-import axios from "axios";
+import {Header, SafeAreaView, Icon} from '@/components';
+import {BaseStyle, useTheme} from '@/config';
+import {useTranslation} from 'react-i18next';
+import axios from 'axios';
 
-import Carousel from "react-native-reanimated-carousel";
+import Carousel from 'react-native-reanimated-carousel';
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import { API_URL_LOKAL } from "@env";
+import {API_URL_LOKAL} from '@env';
 
 const SliderNews = ({
   style = {},
@@ -48,15 +48,15 @@ const SliderNews = ({
   local,
   loop = false,
 }) => {
-  const { t } = useTranslation();
-  const { colors } = useTheme();
+  const {t} = useTranslation();
+  const {colors} = useTheme();
   const slider = createRef();
   const navigation = useNavigation();
-  const itemWidth = Math.round(Dimensions.get("window").width);
+  const itemWidth = Math.round(Dimensions.get('window').width);
   //   const separatorWidth = separatorWidth;
   const totalItemWidth = itemWidth + separatorWidth;
 
-  const [index, setIndex] = useState("");
+  const [index, setIndex] = useState('');
   const progressValue = 0;
   //   const [data, setData] = useState([]);
 
@@ -78,21 +78,21 @@ const SliderNews = ({
   //     // }
   //   };
   const onViewableCall = () => {
-    console.log("onViewableItemsChanged Calling on Scroll...");
+    console.log('onViewableItemsChanged Calling on Scroll...');
   };
 
   const viewabilityConfig = {
     viewAreaCoveragePercentThreshold: 50,
   };
 
-  const goPostDetail = (item) => {
-    console.log("for news", item);
+  const goPostDetail = item => {
+    console.log('for news', item);
 
     item?.news_title ? getNewsDetail(item) : getAnnounceDetail(item);
   };
 
-  const getNewsDetail = async (item) => {
-    navigation.navigate("PostDetail", { item });
+  const getNewsDetail = async item => {
+    navigation.navigate('PostDetail', {item});
     // console.log("rowid for detail", item.rowID);
     // await axios
     //   .get(API_URL_LOKAL + `/news/id/${item.rowID}`)
@@ -107,22 +107,22 @@ const SliderNews = ({
     //   });
   };
 
-  const getAnnounceDetail = async (item) => {
-    console.log("rowid for detail", item.rowID);
+  const getAnnounceDetail = async item => {
+    console.log('rowid for detail', item.rowID);
     await axios
       .get(API_URL_LOKAL + `/announce/id/${item.rowID}`)
-      .then((res) => {
-        console.log("114 res announce detail", res.data.data);
+      .then(res => {
+        console.log('114 res announce detail', res.data.data);
 
-        navigation.navigate("AnnounceDetailHome", { item: res.data.data });
+        navigation.navigate('AnnounceDetailHome', {item: res.data.data});
       })
-      .catch((error) => {
-        console.log("114 error get news announce detail", error);
+      .catch(error => {
+        console.log('114 error get news announce detail', error);
         // alert('error get');
       });
   };
 
-  const width = Dimensions.get("window").width;
+  const width = Dimensions.get('window').width;
   // const width = Dimensions.get('window').width - 45;
   const IMAGE_WIDTH = 250;
   // const image_margin = 70; //70 pas slide ke 1 dan ke 4 bagus
@@ -189,7 +189,7 @@ const SliderNews = ({
     //   ItemSeparatorComponent={() => <View style={{width: separatorWidth}} />}
     //   keyExtractor={(item, index) => item.toString() + index}
     // />
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Carousel
         loop={false}
         pagingEnabled={true}
@@ -200,7 +200,7 @@ const SliderNews = ({
         //   (progressValue.value = absoluteProgress)
         // }
         width={width}
-        height={430}
+        height={440}
         // mode="normal-horizontal"
         mode="parallax"
         modeConfig={{
@@ -208,50 +208,36 @@ const SliderNews = ({
           parallaxScrollingOffset: 130,
         }}
         data={data}
-        renderItem={({ index, item }) => (
+        renderItem={({index, item}) => (
           <TouchableOpacity
-            //   style={[styles.videoContainer]}
             style={{
               // backgroundColor: 'yellow',
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               marginVertical: 0,
               // marginHorizontal: 10,
 
               // marginRight: 10,
               // marginLeft: 10,
             }}
-            //   onPress={() => onPress(item)}
-            onPress={() => goPostDetail(item)}
-          >
+            onPress={() => goPostDetail(item)}>
             <View style={[styles.imageContainer, styles.shadow]}>
-              <Text style={{ color: colors.text }}>
-                {/* {[index + 1]} */}
-                {/* . {item.news_title} */}
-              </Text>
+              <Text style={{color: colors.text}}></Text>
               <Image
-                //   style={[
-                //     styles.videoPreview,
-                //     active ? {} : {height: 220, width: 300},
-                //   ]}
                 style={{
                   // height: 220,
                   // width: 370,
                   height: 450,
                   margin: 5,
                   width: 250,
-                  resizeMode: "cover",
+                  resizeMode: 'cover',
                   // marginHorizontal: 10,
                   borderRadius: 10,
-                  backgroundColor: "lightgray",
+                  backgroundColor: 'lightgray',
                 }}
-                //source={{ uri: item.url_image.replace("https", "http") }}
-                source={{ uri: item.url_image }}
-                // source={item.url_image}
-                //   source={local ? item.image : {uri: item.image}}
+                source={{uri: item.url_image}}
               />
             </View>
-            {/* <Text style={styles.desc}>{item.desc}</Text> */}
           </TouchableOpacity>
         )}
       />
@@ -264,15 +250,15 @@ const styles = StyleSheet.create({
   videoContainer: {
     width: 275,
     paddingVertical: 28,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 20,
   },
   videoPreview: {
     width: 275,
     // height: 155,
     borderRadius: 8,
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   desc: {
     fontSize: 14,
@@ -281,15 +267,15 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   imageContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   shadow: {
     ...Platform.select({
       ios: {
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 1 },
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.1,
         shadowRadius: 5,
       },

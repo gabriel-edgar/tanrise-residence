@@ -12,15 +12,15 @@ import {
   SafeAreaView,
   Text,
   Transaction2Col,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
+} from "@/data";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -33,7 +33,6 @@ import {
   RefreshControl,
   Dimensions,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector, useDispatch } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import HeaderCard from "./HeaderCard";
@@ -42,7 +41,7 @@ import styles from "./styles";
 import Swiper from "react-native-swiper";
 import Categories from "./Categories";
 import axios from "axios";
-import * as Utils from "@utils";
+import * as Utils from "@/utils";
 import numFormat from "../../components/numFormat";
 
 import { notifikasi_nbadge, actionTypes } from "../../actions/NotifActions";

@@ -6,8 +6,8 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';

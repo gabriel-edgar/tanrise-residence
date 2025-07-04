@@ -4,10 +4,10 @@ import {
   ListThumbCircleNotif,
   SafeAreaView,
   Text,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 // Load sample data
-// import {NotificationData} from '@data';
+// import {NotificationData} from '@/data';
 import React, {useState, useEffect} from 'react';
 import {
   FlatList,
@@ -166,7 +166,7 @@ const PDFAttach = props => {
             uri: paramsItem.link_url,
             cache: true,
           }}
-          // source={require('@assets/termsconditions/Facility_Booking_System_Regulation.pdf')}
+          // source={require('@/assets/termsconditions/Facility_Booking_System_Regulation.pdf')}
           onLoadComplete={(numberOfPages, filePath) => {
             console.log(`Number of pages: ${numberOfPages}`);
           }}

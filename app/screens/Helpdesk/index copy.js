@@ -10,12 +10,12 @@ import {
   // CheckBox,
   PlaceholderLine,
   Placeholder,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
-import { FFriends } from "@data";
+import { FFriends } from "@/data";
 import { useNavigation } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -26,8 +26,8 @@ import axios from "axios";
 import { API_URL } from "@env";
 import styles from "./styles";
 
-import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
-import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import ModalDropdown_debtor from "@/components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@/components/ModalDropdown_lotno";
 
 const sortOptionInit = [
   {

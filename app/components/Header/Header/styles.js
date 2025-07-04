@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, I18nManager} from 'react-native';
-import {BaseStyle} from '@config';
+import {BaseStyle} from '@/config';
 
 export default StyleSheet.create({
   contain: {height: 45, flexDirection: 'row'},

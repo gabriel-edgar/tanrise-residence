@@ -1,24 +1,40 @@
-import React from "react";
-import * as RNPlaceholder from "rn-placeholder";
-import { BaseStyle, useTheme } from "@config";
-import Progressive from "./Progressive";
+import React from 'react';
+// import * as RNPlaceholder from 'rn-placeholder';
+import {BaseStyle, useTheme} from '@/config';
+import Progressive from './Progressive';
+import {ActivityIndicator} from 'react-native-paper';
+import {View} from 'react-native';
 
-export const PlaceholderLine = ({ style, ...attrs }) => {
-  const { colors } = useTheme();
+export const PlaceholderLine = ({style, ...attrs}) => {
+  const {colors} = useTheme();
   return (
-    <RNPlaceholder.PlaceholderLine
-      {...attrs}
-      style={[style, { backgroundColor: colors.card }]}
-    />
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+      }}>
+      <ActivityIndicator
+        {...attrs}
+        style={[style, {}]}
+        color={colors.primary}
+      />
+    </View>
   );
 };
 
-export const Placeholder = ({ ...attrs }) => {
-
+export const Placeholder = ({...attrs}) => {
+  const {colors} = useTheme();
   return (
-    <RNPlaceholder.Placeholder
+    <View
       {...attrs}
-      Animation={(props) => <Progressive {...props} duration={1500}/>}
+      style={{
+        flex: 1,
+        backgroundColor: colors.card,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      //Animation={props => <Progressive {...props} duration={1500} />}
     />
   );
 };

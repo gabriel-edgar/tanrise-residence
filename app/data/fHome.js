@@ -1,4 +1,4 @@
-import { Images, BaseColor } from "@config";
+import { Images, BaseColor } from "@/config";
 
 export const FCategories = [
   {

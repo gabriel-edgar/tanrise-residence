@@ -1,11 +1,11 @@
 /** @format */
 
 import React from 'react';
-import {Icon, Text} from '@components';
+import {Icon, Text} from '@/components';
 import {View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 import getNotifRed from '../../selectors/NotifSelectors';
 import {useSelector} from 'react-redux';
 

@@ -10,15 +10,15 @@ import {
     TextInput,
     HeaderLargeTitleStore,
     HeaderLargeTitleBadge,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import {
     ECategories,
     EFeaturedShop,
     EPopulars,
     EYourStores,
     EWishlistHome,
-} from "@data";
+} from "@/data";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, ScrollView, TouchableOpacity, View } from "react-native";

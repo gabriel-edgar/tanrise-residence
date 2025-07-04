@@ -1,4 +1,4 @@
-import { Images } from "@config";
+import { Images } from "@/config";
 
 const UserData = [
   {

@@ -6,10 +6,10 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 // Load sample data
-import { UserData } from "@data";
+import { UserData } from "@/data";
 import React, { useState, useEffect, useCallback } from "react";
 import { ScrollView, View, Alert } from "react-native";
 import styles from "./styles";

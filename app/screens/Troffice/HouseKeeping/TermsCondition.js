@@ -6,11 +6,11 @@ import {
   ProfileDescription,
   SafeAreaView,
   Text,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {Images} from '@config';
-import {AboutUsData} from '@data';
-import * as Utils from '@utils';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {Images} from '@/config';
+import {AboutUsData} from '@/data';
+import * as Utils from '@/utils';
 import React, {useState, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import styles from './styles';

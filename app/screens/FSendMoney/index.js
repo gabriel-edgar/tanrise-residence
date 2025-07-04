@@ -8,10 +8,10 @@ import {
   Text,
   TextInput,
   TextInputMoney,
-} from '@components';
-import {BaseColor, BaseStyle, Typography, useTheme} from '@config';
-import {FRecentTransactions} from '@data';
-import LabelUpper2Row from '@components/Label/Upper2Row';
+} from '@/components';
+import {BaseColor, BaseStyle, Typography, useTheme} from '@/config';
+import {FRecentTransactions} from '@/data';
+import LabelUpper2Row from '@/components/Label/Upper2Row';
 
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';

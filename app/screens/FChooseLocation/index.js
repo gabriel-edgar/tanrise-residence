@@ -5,11 +5,11 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FMarkers } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FMarkers } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";

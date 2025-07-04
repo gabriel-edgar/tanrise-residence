@@ -11,13 +11,13 @@ import {
   Tag,
   Price3Col,
   ListTransactionExpand,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { FRecentTransactions, FHotNews } from "@data";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { FRecentTransactions, FHotNews } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import SegmentedControl from "./SegmendControl";
 
 import moment from "moment";

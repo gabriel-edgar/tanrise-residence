@@ -1,5 +1,5 @@
-import Text from "@components/Text";
-import { Images } from "@config";
+import Text from "@/components/Text";
+import { Images } from "@/config";
 import { useTheme } from "@react-navigation/native";
 import PropTypes from "prop-types";
 import React from "react";

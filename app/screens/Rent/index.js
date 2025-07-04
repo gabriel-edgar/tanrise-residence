@@ -13,27 +13,26 @@ import {
   colors,
   PlaceItem,
   ButtonChooseProject,
-} from "@components";
-import { BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseStyle, useTheme } from "@/config";
 import {
   HomeChannelData,
   HomeListData,
   HomePopularData,
   HomeTopicData,
   PostListData,
-} from "@data";
+} from "@/data";
 import { useRoute } from "@react-navigation/core";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ScrollView, View, ActivityIndicator } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProductBlock } from "../../components";
 import numFormat from "../../components/numFormat";
 import List from "../../components/Product/List";
 import styles from "./styles";
-import { enableExperimental } from "@utils";
+import { enableExperimental } from "@/utils";
 import { API_URL_LOKAL } from "@env";
 import { store, persist } from "../../store";
 import { homeCommonProject } from "../FunctionAxios/home-common-project";

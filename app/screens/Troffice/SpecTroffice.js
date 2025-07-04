@@ -8,8 +8,8 @@ import {
   SafeAreaView,
   Header,
   Icon,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import { CheckBox } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
@@ -24,8 +24,8 @@ import axios from "axios";
 import client from "../../controllers/HttpClient";
 import styles from "./styles";
 
-import ModalDropdown_debtor from "@components/ModalDropdown_debtor";
-import ModalDropdown_lotno from "@components/ModalDropdown_lotno";
+import ModalDropdown_debtor from "@/components/ModalDropdown_debtor";
+import ModalDropdown_lotno from "@/components/ModalDropdown_lotno";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL_LOKAL } from "@env";
 export default function SpecTroffice(props) {

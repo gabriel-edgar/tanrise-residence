@@ -4,8 +4,8 @@ import {
     SafeAreaView,
     StackedBarChart,
     Text,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

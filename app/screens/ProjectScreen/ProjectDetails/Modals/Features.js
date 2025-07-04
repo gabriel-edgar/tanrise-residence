@@ -1,4 +1,4 @@
-import { Text, Button, Icon } from "@components";
+import { Text, Button, Icon } from "@/components";
 import {
   View,
   TouchableOpacity,
@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
-import { ButtonMenuHome } from "@components";
-import { BaseStyle, Fonts, BaseColor } from "@config";
+import { ButtonMenuHome } from "@/components";
+import { BaseStyle, Fonts, BaseColor } from "@/config";
 import dummy_feature from "./dummy_features.json";
-import { useTheme } from "@config";
+import { useTheme } from "@/config";
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
 
 const Features = (props) => {

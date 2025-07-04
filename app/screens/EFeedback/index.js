@@ -6,9 +6,9 @@ import {
   StarRating,
   Text,
   TextInput,
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { Images } from "@config";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Images } from "@/config";
 import React, { useState } from "react";
 import {
   ScrollView,

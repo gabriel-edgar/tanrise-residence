@@ -1,5 +1,5 @@
-import { Transaction2Col } from "@components";
-import { FActivites } from "@data";
+import { Transaction2Col } from "@/components";
+import { FActivites } from "@/data";
 import { useNavigation } from "@react-navigation/native";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
-import Icon from "@components/Icon";
-import Text from "@components/Text";
-import { useTheme } from "@config";
+import Icon from "@/components/Icon";
+import Text from "@/components/Text";
+import { useTheme } from "@/config";
 import PropTypes from "prop-types";
 import React from "react";
 import {
@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import styles from "./styles";
-import { parseHexTransparency } from "@utils";
+import { parseHexTransparency } from "@/utils";
 import RenderHtml from "react-native-render-html";
 
 const CardReport01 = ({

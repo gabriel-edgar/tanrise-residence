@@ -9,14 +9,14 @@ import {
   Text,
   Button,
   FormCounterSelect,
-} from '@components';
+} from '@/components';
 import ProductList from './List';
 import numFormat from '../../components/numFormat';
-import {BaseColor, BaseStyle, useTheme} from '@config';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
 // Load sample data
-import {EPostListData, ESortOption} from '@data';
+import {EPostListData, ESortOption} from '@/data';
 import {useNavigation} from '@react-navigation/native';
-import * as Utils from '@utils';
+import * as Utils from '@/utils';
 import React, {Fragment, useEffect, useRef, useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {addItemToCart, updateCartItem} from '../../actions/cartActions';
@@ -28,6 +28,7 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  TouchableOpacity
 } from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import styles from './styles';
@@ -37,7 +38,6 @@ import axios from 'axios';
 import {ActivityIndicator} from 'react-native-paper';
 
 import Modal from 'react-native-modal';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CheckBox, Badge} from 'react-native-elements';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -267,7 +267,7 @@ const Product = params => {
           title={item.descs}
           style={{marginVertical: 8}}
           // image={item.picture}
-          image={require('@assets/images/logo.png')}
+          image={require('@/assets/images/logo.png')}
           // costPrice={item.default_price}
           salePrice={item.default_price}
           //   pressBuy={() => pressBuy(item)}

@@ -5,9 +5,9 @@ import {
   SafeAreaView,
   Text,
   Header,
-} from '@components';
-import {BaseColor, BaseStyle, useTheme} from '@config';
-import {Products} from '@data/eConfirmed';
+} from '@/components';
+import {BaseColor, BaseStyle, useTheme} from '@/config';
+import {Products} from '@/data/eConfirmed';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {

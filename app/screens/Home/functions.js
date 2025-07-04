@@ -1,32 +1,25 @@
-import checkVersion from "react-native-store-version";
-import VersionInfo from "react-native-version-info";
-import {
-  View,
-  Button,
-  Alert,
-  StyleSheet,
-  Linking,
-  Platform,
-} from "react-native";
+import checkVersion from 'react-native-store-version';
+import VersionInfo from 'react-native-version-info';
+import {View, Button, Alert, StyleSheet, Linking, Platform} from 'react-native';
 
 const check_version = async () => {
   const iosStoreURL =
-    "https://apps.apple.com/us/app/tanriseresidence/id6692623907";
+    'https://apps.apple.com/us/app/tanriseresidence/id6692623907';
   const androidStoreURL =
-    "https://play.google.com/store/apps/details?id=com.ifcasoftware.tanriseresidence";
+    'https://play.google.com/store/apps/details?id=com.ifcasoftware.tanriseresidence';
 
   try {
     const check = await checkVersion({
       version: VersionInfo.appVersion, // app local version
       iosStoreURL: iosStoreURL,
       androidStoreURL: androidStoreURL,
-      country: "id", // default value is 'jp'
+      country: 'id', // default value is 'jp'
     });
 
     const showAlert = () => {
       Alert.alert(
-        "New Version Available",
-        "A new version is released, please update the app to fix bug",
+        'New Version Available',
+        'A new version is released, please update the app to fix bug',
         [
           // {
           //   text: "Later",//Close
@@ -34,29 +27,27 @@ const check_version = async () => {
           //   style: "cancel",
           // },
           {
-            text: "Update",
+            text: 'Update',
             onPress: () =>
               Linking.openURL(
-                Platform.OS == "ios" ? iosStoreURL : androidStoreURL
-              ).catch((err) =>
-                console.error("Home16 Failed to open URL: ", err)
-              ),
+                Platform.OS == 'ios' ? iosStoreURL : androidStoreURL,
+              ).catch(err => console.error('Home16 Failed to open URL: ', err)),
           },
-        ]
+        ],
         // { cancelable: true } //android only
       );
       //alert("update");
     };
 
-    console.log("Home16 check: ", check);
-    if (check.result === "new") {
+    console.log('Home16 check: ', check);
+    if (check.result === 'new') {
       // if app store version is new
-      console.log("Home16 new detected ");
+      console.log('Home16 new detected ');
       showAlert();
     }
   } catch (e) {
-    console.log("Home16 error:" + e);
+    console.log('Home16 error:' + e);
   }
 };
 
-export { check_version };
+export {check_version};

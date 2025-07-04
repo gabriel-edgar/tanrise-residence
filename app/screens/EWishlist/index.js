@@ -1,6 +1,6 @@
-import { ProductCard4, SafeAreaView, Header, Icon } from "@components";
-import { BaseStyle, useTheme } from "@config";
-import { WishlistsData, EYourStores, EOptions } from "@data";
+import { ProductCard4, SafeAreaView, Header, Icon } from "@/components";
+import { BaseStyle, useTheme } from "@/config";
+import { WishlistsData, EYourStores, EOptions } from "@/data";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, RefreshControl, View } from "react-native";

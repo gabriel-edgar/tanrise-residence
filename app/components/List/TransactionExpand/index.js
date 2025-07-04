@@ -1,10 +1,10 @@
-import { Text, Button } from "@components";
-import ListTransaction from "@components/List/Transaction";
+import { Text, Button } from "@/components";
+import ListTransaction from "@/components/List/Transaction";
 import PropTypes from "prop-types";
 import React, { useState, Fragment, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import styles from "./styles";
-import { useTheme } from "@config";
+import { useTheme } from "@/config";
 import numFormat from "../../numFormat";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import Modal from "react-native-modal";

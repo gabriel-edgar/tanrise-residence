@@ -5,11 +5,11 @@ import {
     Button,
     PaymentOption,
     Text
-} from "@components";
-import { BaseColor, BaseStyle, useTheme } from "@config";
-import { FPayment, FPeriod } from "@data";
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { FPayment, FPeriod } from "@/data";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { haveChildren } from "@utils";
+import { haveChildren } from "@/utils";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
