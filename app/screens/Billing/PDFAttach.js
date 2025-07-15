@@ -241,7 +241,17 @@ const PDFAttach = props => {
           //   style={stylesCurrent.pdf}
           // />
 
-          <WebView source={source} style={stylesCurrent.pdf} />
+             Platform.OS == 'android'?
+      <Pdf
+        trustAllCerts={false}
+        source={source}
+        style={stylesCurrent.pdf}
+      />
+      :
+      <WebView
+        originWhitelist={['*']}
+source={source} style={stylesCurrent.pdf}
+      />
         )}
         {/* <Text>{paramsItem.link_url}</Text> */}
       </View>

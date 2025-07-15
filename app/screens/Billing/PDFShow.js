@@ -230,11 +230,18 @@ const PDFShow = props => {
         source={paramsItem.pdfSource}
         style={{flex: 1}}
       /> */}
+      {Platform.OS == 'android'?
+      <Pdf
+        trustAllCerts={false}
+        source={paramsItem.pdfSource}
+        style={styles.pdf}
+      />
+      :
       <WebView
         originWhitelist={['*']}
         source={paramsItem.pdfSource}
         style={styles.pdf}
-      />
+      />}
     </SafeAreaView>
   );
 };

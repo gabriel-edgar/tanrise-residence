@@ -1,6 +1,6 @@
-import {Text, Header, Icon, Button} from '@/components';
+import { Text, Header, Icon, Button } from "@/components";
 // import data_dummy from '../Home/data_dummy.json';
-import RNFS from 'react-native-fs';
+import RNFS from "react-native-fs";
 
 import {
   View,
@@ -17,10 +17,10 @@ import {
   Platform,
   Alert,
   PermissionsAndroid,
-} from 'react-native';
-import styles from './styles';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {BaseStyle, Fonts, BaseColor, useTheme} from '@/config';
+} from "react-native";
+import styles from "./styles";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BaseStyle, Fonts, BaseColor, useTheme } from "@/config";
 // import {
 //   BaseColor,
 //   BaseStyle,
@@ -28,61 +28,61 @@ import {BaseStyle, Fonts, BaseColor, useTheme} from '@/config';
 //   Typography,
 //   FontWeight,
 // } from "@/config";
-import {useTranslation} from 'react-i18next';
-import React, {useState, useCallback, useRef, useEffect} from 'react';
+import { useTranslation } from "react-i18next";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 
-import axios from 'axios';
+import axios from "axios";
 //import { API_URL } from "@env";
-import {useSelector, useDispatch, connect} from 'react-redux';
+import { useSelector, useDispatch, connect } from "react-redux";
 
 //import MapView from 'react-native-maps';
 //import {Marker} from 'react-native-maps';
-import RenderHtml, {defaultSystemFonts} from 'react-native-render-html';
-import CustomAlert2 from '../components/CustomAlert2';
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
+import CustomAlert2 from "../components/CustomAlert2";
 
 //import { downloadFile } from "./downloadFile";
 //import { downloadFile } from "./downloadFile21Aug";
-import Pdf from 'react-native-pdf';
-import ReactNativeBlobUtil from 'react-native-blob-util';
-import {color} from 'react-native-elements/dist/helpers';
-import WebView from 'react-native-webview';
+import Pdf from "react-native-pdf";
+import ReactNativeBlobUtil from "react-native-blob-util";
+import { color } from "react-native-elements/dist/helpers";
+import WebView from "react-native-webview";
 
-const DownloadBrochure = props => {
-  const {colors} = useTheme();
-  console.log('props dari project', props);
-  const {t} = useTranslation();
-  const {navigation} = props;
+const DownloadBrochure = (props) => {
+  const { colors } = useTheme();
+  console.log("props dari project", props);
+  const { t } = useTranslation();
+  const { navigation } = props;
   //const [playing, setPlaying] = useState(false);
 
   const paramsDetail = props.route.params;
   //const entity_cd = paramsDetail.entity_cd;
   //const project_no = paramsDetail.project_no;
-  console.log('56 paramsdetail projek detail', paramsDetail);
+  console.log("56 paramsdetail projek detail", paramsDetail);
   // const dummyArray = [
   //   paramsDetail.downloadProject[0],
   //   paramsDetail.downloadProject[0],
   // ];
   const [modalVisible, setModalVisible] = useState(false);
 
-  const stateRedux = useSelector(state => state);
-  console.log('74 stateRedux: ', stateRedux);
+  const stateRedux = useSelector((state) => state);
+  console.log("74 stateRedux: ", stateRedux);
 
   const [downloadProject, setDownloadProject] = useState(
-    paramsDetail.downloadProject,
+    paramsDetail.downloadProject
   );
   //const { width } = useWindowDimensions().width;
   // const {widthRender} = useWindowDimensions();
-  const {width: contentWidth} = useWindowDimensions();
+  const { width: contentWidth } = useWindowDimensions();
   const systemFonts = [
     ...defaultSystemFonts,
 
-    'Arial Black',
-    'Comic-Sans MS',
-    'Courier New',
-    'Lato-Bold',
-    'Lato-Regular',
-    'Lato-Black',
-    'Lato-Italic',
+    "Arial Black",
+    "Comic-Sans MS",
+    "Courier New",
+    "Lato-Bold",
+    "Lato-Regular",
+    "Lato-Black",
+    "Lato-Italic",
   ];
 
   const [itemsOverview, setItemsOverview] = useState([]);
@@ -103,17 +103,17 @@ const DownloadBrochure = props => {
 
   async function requestPermission() {
     const isIOS = Platform.constants?.systemName;
-    if (isIOS != 'iOS') {
+    if (isIOS != "iOS") {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
-            title: 'Storage Permission',
-            message: 'This app needs access to your storage.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
+            title: "Storage Permission",
+            message: "This app needs access to your storage.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          }
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
@@ -124,31 +124,31 @@ const DownloadBrochure = props => {
     return true;
   }
 
-  const downloadForIOS = async url => {
+  const downloadForIOS = async (url) => {
     //const item = items;
 
     //const url = items.link_url;
     // Extract the filename from the URL
-    const filenameWithExtension = url.split('/').pop();
+    const filenameWithExtension = url.split("/").pop();
 
     // Remove the .pdf extension (case insensitive)
-    const filename = filenameWithExtension.replace(/\.pdf$/i, '');
+    const filename = filenameWithExtension.replace(/\.pdf$/i, "");
     const path =
-      ReactNativeBlobUtil.fs.dirs.DocumentDir + '/' + filename + '.pdf';
+      ReactNativeBlobUtil.fs.dirs.DocumentDir + "/" + filename + ".pdf";
     const response = await ReactNativeBlobUtil.config({
       fileCache: true,
-      appendExt: 'pdf',
+      appendExt: "pdf",
       path,
     })
-      .fetch('GET', url, {
-        Accept: 'application/pdf',
-        'Content-Type': 'application/pdf',
+      .fetch("GET", url, {
+        Accept: "application/pdf",
+        "Content-Type": "application/pdf",
       })
       .progress((received, total) => {
-        console.log('progress', received / total);
+        console.log("progress", received / total);
       })
-      .then(async res => {
-        console.log('The file saved to ', res.path());
+      .then(async (res) => {
+        console.log("The file saved to ", res.path());
       });
 
     ReactNativeBlobUtil.ios.previewDocument(path); //ini untuk memunculkan menu preview document di ios
@@ -156,14 +156,14 @@ const DownloadBrochure = props => {
   };
 
   const downloadFile = async (url, filename) => {
-    if (Platform.OS == 'ios') {
+    if (Platform.OS == "ios") {
       downloadForIOS(url);
     } else {
       await requestPermission();
 
       //url = "https://example.com/file.pdf";
       //const filename2 = "example.txt";
-      console.log('7 downloadFile: ', filename, ' ', url);
+      console.log("7 downloadFile: ", filename, " ", url);
 
       //RNFS.DownloadDirectoryPath
       //RNFS.DocumentDirectoryPath
@@ -175,17 +175,17 @@ const DownloadBrochure = props => {
       //     : RNFS.DocumentDirectoryPath;
       const isIOS = Platform.constants?.systemName;
       const directory =
-        isIOS == 'iOS'
+        isIOS == "iOS"
           ? RNFS.DocumentDirectoryPath
           : RNFS.DownloadDirectoryPath;
 
-      const directoryShort = isIOS == 'iOS' ? 'Document' : 'Download';
+      const directoryShort = isIOS == "iOS" ? "Document" : "Download";
 
       const downloadDest = `${directory}/${filename}`;
 
       //alert(downloadDest);
 
-      console.log('7 download 2');
+      console.log("7 download 2");
       try {
         //await requestPermission();
         const result = await RNFS.downloadFile({
@@ -193,21 +193,21 @@ const DownloadBrochure = props => {
           toFile: downloadDest,
         }).promise;
         console.log(
-          '7 download directoryShort: ',
+          "7 download directoryShort: ",
           isIOS,
-          ' ',
+          " "
           // JSON.stringify(Platform)
         );
         if (result?.statusCode === 200) {
           console.log(
-            `7 File downloaded to ${directoryShort + '/' + filename}`,
+            `7 File downloaded to ${directoryShort + "/" + filename}`
           );
           Alert.alert(
-            'Download successful',
-            `File downloaded to ${directoryShort + '/' + filename}`,
+            "Download successful",
+            `File downloaded to ${directoryShort + "/" + filename}`,
             [
               {
-                text: 'OK',
+                text: "OK",
                 //onPress: () => Alert.alert("Cancel Pressed"),
                 //style: "cancel",
               },
@@ -218,10 +218,10 @@ const DownloadBrochure = props => {
               //   Alert.alert(
               //     "This alert was dismissed by tapping outside of the alert dialog."
               //   ),
-            },
+            }
           );
         } else {
-          alert('Download failed \n' + `Status code: ${result?.statusCode}`);
+          alert("Download failed \n" + `Status code: ${result?.statusCode}`);
         }
         // console.log(
         //   "7 Download successful \n" +
@@ -233,22 +233,24 @@ const DownloadBrochure = props => {
         //     `File downloaded to ${directoryShort + "/" + filename}`
         // );
       } catch (error) {
-        console.log('Download error \n' + error);
-        alert('Download error \n' + error);
+        console.log("Download error \n" + error);
+        alert("Download error \n" + error);
       }
     }
   };
 
   return (
     <SafeAreaView
-      edges={['right', 'top', 'left']}
-      style={[BaseStyle.safeAreaView, {backgroundColor: colors.background}]}>
+      edges={["right", "top", "left"]}
+      style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+      >
         <Header
-          title={t('Brochure')}
+          title={t("Brochure")}
           //title={t("")}
           renderLeft={() => {
             return (
@@ -285,23 +287,26 @@ const DownloadBrochure = props => {
             borderRadius: 20,
             //opacity: 0.8,
             // justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+            alignItems: "center",
+          }}
+        >
           <View
             style={{
               marginVertical: 0,
               marginHorizontal: 25,
               //backgroundColor: colors.background,
-            }}>
+            }}
+          >
             <Text
               style={{
-                fontFamily: 'DMSerifDisplay',
+                fontFamily: "DMSerifDisplay",
                 color: colors.text, //BaseColor.corn90,
                 marginVertical: 10,
                 fontSize: 17,
                 // marginHorizontal: 3,
-                fontWeight: 'bold',
-              }}>
+                fontWeight: "bold",
+              }}
+            >
               {/* {item.project_name} */}
               {/* Project name */}
               {/* {paramsDetail.project_descs} */}
@@ -310,12 +315,13 @@ const DownloadBrochure = props => {
 
             <Text
               style={{
-                fontFamily: 'DMSerifDisplay',
+                fontFamily: "DMSerifDisplay",
                 color: colors.text,
                 marginVertical: 5,
                 fontSize: 16,
-                fontWeight: 'bold',
-              }}>
+                fontWeight: "bold",
+              }}
+            >
               {/* {item.location} */}
               {/* lokasi */}
               {paramsDetail.caption_address}
@@ -330,13 +336,14 @@ const DownloadBrochure = props => {
             <>
               <Text
                 style={{
-                  fontFamily: 'DMSerifDisplay',
+                  fontFamily: "DMSerifDisplay",
                   color: colors.text,
                   marginVertical: 0,
                   fontSize: 16,
-                  fontWeight: 'bold',
+                  fontWeight: "bold",
                   marginHorizontal: 20,
-                }}>
+                }}
+              >
                 {index + 1}. Brochure {currentValue?.descs}
               </Text>
               <View
@@ -345,7 +352,8 @@ const DownloadBrochure = props => {
                   // justifyContent: "center",
                   // alignItems: "center",
                   marginTop: 10,
-                }}>
+                }}
+              >
                 {/* <Pdf
                   trustAllCerts={false}
                   source={{
@@ -366,19 +374,37 @@ const DownloadBrochure = props => {
                     borderRadius: 20,
                   }}
                 /> */}
-                <WebView
-                  source={{
-                    uri: currentValue?.url,
-                    cache: true,
-                  }}
-                  style={{
-                    flex: 1,
-                    width: Dimensions.get('window').width,
-                    height: Dimensions.get('window').height / 2,
-                    backgroundColor: colors.background,
-                    borderRadius: 20,
-                  }}
-                />
+                {Platform.OS == "android" ? (
+                  <Pdf
+                    trustAllCerts={false}
+                    source={{
+                      uri: currentValue?.url,
+                      cache: true,
+                    }}
+                    style={{
+                      flex: 1,
+                      width: Dimensions.get("window").width,
+                      height: Dimensions.get("window").height / 2,
+                      backgroundColor: colors.background,
+                      borderRadius: 20,
+                    }}
+                  />
+                ) : (
+                  <WebView
+                    originWhitelist={["*"]}
+                    source={{
+                      uri: currentValue?.url,
+                      cache: true,
+                    }}
+                    style={{
+                      flex: 1,
+                      width: Dimensions.get("window").width,
+                      height: Dimensions.get("window").height / 2,
+                      backgroundColor: colors.background,
+                      borderRadius: 20,
+                    }}
+                  />
+                )}
               </View>
               <TouchableOpacity
                 onPress={() => {
@@ -393,11 +419,12 @@ const DownloadBrochure = props => {
                   setMessageDownload(
                     'Want to download \n"Brochure ' +
                       paramsDetail.descs +
-                      '' +
+                      "" +
                       //downloadProject[indexDownload]?.descs +
-                      '"?',
+                      '"?'
                   );
-                }}>
+                }}
+              >
                 <View
                   style={{
                     marginTop: 20,
@@ -407,18 +434,20 @@ const DownloadBrochure = props => {
                     height: 50,
                     marginBottom: 30,
                     marginHorizontal: 20,
-                    alignContent: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                    alignContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Text
                     style={{
-                      color: 'white',
-                      fontFamily: 'DMSerifDisplay',
+                      color: "white",
+                      fontFamily: "DMSerifDisplay",
                       fontSize: 14,
-                      alignSelf: 'center',
-                      alignItems: 'center',
-                    }}>
+                      alignSelf: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     Download Brochure {index + 1}
                   </Text>
                 </View>
@@ -436,28 +465,28 @@ const DownloadBrochure = props => {
               setDAlertVisible(false);
               //handleLinking();
               console.log(
-                '949 confirm: ',
+                "949 confirm: ",
                 indexDownload,
-                ' ',
+                " ",
                 downloadProject,
-                ' ',
+                " ",
                 downloadProject[indexDownload]?.url,
-                'Brochure ' + paramsDetail.descs + '.pdf',
+                "Brochure " + paramsDetail.descs + ".pdf"
               );
               downloadFile(
                 downloadProject[indexDownload]?.url,
                 //"Brochure " + paramsDetail.descs + ".pdf"
-                'Brochure ' +
+                "Brochure " +
                   paramsDetail.descs +
-                  '_' +
+                  "_" +
                   downloadProject[indexDownload]?.descs +
-                  '.pdf',
+                  ".pdf"
               );
             }}
             onCancel={() => {
               setDAlertVisible(false);
             }}
-            style={{color: colors.text, backgroundColor: colors.background}}
+            style={{ color: colors.text, backgroundColor: colors.background }}
           />
         </View>
       </ScrollView>
