@@ -318,7 +318,6 @@ const ProjectDetails = props => {
                                         `,
                       }}
                       systemFonts={systemFonts}
-                      //defaultTextProps={{ allowFontScaling: false }}
                       enableExperimentalMarginCollapsing={true}
                       ignoredStyles={['fontSize']}
                       tagsStyles={{
@@ -760,9 +759,6 @@ const ProjectDetails = props => {
                                         `,
                     }}
                     systemFonts={systemFonts}
-                    // defaultTextProps={{
-                    //   allowFontScaling: false,
-                    // }}
                     ignoredStyles={['fontSize', 'color', 'backgroundColor']}
                     enableExperimentalMarginCollapsing={true}
                     tagsStyles={{

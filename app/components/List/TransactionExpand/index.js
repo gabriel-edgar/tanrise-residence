@@ -267,10 +267,12 @@ const TransactionExpand = ({
       );
       return;
     }
+    if ((entity_cd == '1006' && project_no == '1006001')){
     if (number != 0) {
       alert("Please pay the previous invoice first");
       return;
     }
+  }
     const params = {
       // entity_cd: item.entity_cd,
       // project_no: item.project_no,

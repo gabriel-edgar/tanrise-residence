@@ -1810,8 +1810,6 @@ const Home = (props) => {
                   source={user?.pict != null ? { uri: repl } : fotoprofil}
                 ></Image>
                 <Text
-                  // adjustsFontSizeToFit={true}
-                  // allowFontScaling={true}
                   style={{
                     // fontSize: 18,s
                     fontSize: fontPixel(18),
@@ -1901,7 +1899,6 @@ const Home = (props) => {
                       >
                         <Text
                           adjustsFontSizeToFit={true}
-                          //allowFontScaling={true}
                           style={{
                             color: "#fff",
                             alignSelf: "center",
@@ -2104,7 +2101,6 @@ const Home = (props) => {
                       >
                         <Text
                           adjustsFontSizeToFit={true}
-                          //allowFontScaling={true}
                           style={{
                             color: "#fff",
                             alignSelf: "center",

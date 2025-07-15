@@ -1031,7 +1031,6 @@ const Home = props => {
                         }}>
                         <Text
                           adjustsFontSizeToFit={true}
-                          //allowFontScaling={true}
                           style={{
                             color: '#fff',
                             alignSelf: 'center',
@@ -1212,7 +1211,6 @@ const Home = props => {
                           }}>
                           <Text
                             adjustsFontSizeToFit={true}
-                            //allowFontScaling={true}
                             style={{
                               color: '#fff',
                               alignSelf: 'center',
