@@ -31,7 +31,7 @@ import apiCall from "../../config/ApiActionCreator";
 import { decrement } from "../../actions/actionsTotal";
 import Modal from "react-native-modal";
 import moment from "moment";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Notification = (props) => {
   const { navigation, route, notification } = props;

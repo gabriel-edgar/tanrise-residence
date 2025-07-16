@@ -34,7 +34,7 @@ import styles from "./styles";
 
 import { RadioButton } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 export default function CategoryHelp({ route }) {
   const { t, i18n } = useTranslation();

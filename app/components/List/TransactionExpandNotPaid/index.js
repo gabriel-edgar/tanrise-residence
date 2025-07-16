@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
 import numFormattanpaRupiah from "../../numFormattanpaRupiah";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../../controllers/HttpClient";
 import CheckBox from "@react-native-community/checkbox";
 

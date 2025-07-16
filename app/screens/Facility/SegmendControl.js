@@ -36,7 +36,7 @@ import axios from "axios";
 import numFormat from "../../components/numFormat";
 import DynamicTabView from "react-native-dynamic-tab-view";
 import styles from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Segmented = ({
   isCenter = false,

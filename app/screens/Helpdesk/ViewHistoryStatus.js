@@ -51,7 +51,7 @@ import moment from "moment";
 
 import Modal from "react-native-modal";
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../controllers/HttpClient";
 
 export default function ViewHistoryStatus({ route }) {
@@ -535,8 +535,7 @@ export default function ViewHistoryStatus({ route }) {
                     Please rate our work !
                   </Text>
                 </View>
-                <View style={styles.starWrap}>
-                </View>
+                <View style={styles.starWrap}></View>
 
                 <View style={styles.btnWrapModal}>
                   <TouchableOpacity

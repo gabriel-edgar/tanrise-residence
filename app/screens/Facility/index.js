@@ -23,7 +23,13 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ScrollView, View, ActivityIndicator, TouchableOpacity  } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  View,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import List from "../../components/Product/List";
 import styles from "./styles";
 import ProductGrid1 from "./Grid1";
@@ -34,8 +40,7 @@ import getUser from "../../selectors/UserSelectors";
 import getProject from "../../selectors/ProjectSelector";
 import * as Utils from "@/utils";
 
-
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Facility = (props) => {
   const { navigation } = props;

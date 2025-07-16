@@ -4,33 +4,33 @@ import {
   Icon,
   SafeAreaView,
   TextInput,
-} from '@/components';
-import {BaseColor, BaseStyle, Typography, useTheme} from '@/config';
+} from "@/components";
+import { BaseColor, BaseStyle, Typography, useTheme } from "@/config";
 //import { FCategoryData } from "@/data";
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, RefreshControl, View, Linking, Text} from 'react-native';
-import {API_URL_LOKAL} from '@env';
-import userReducer from '../../reducers/UserReducer';
-import getUser from '../../selectors/UserSelectors';
-import {useSelector} from 'react-redux';
-import httpClient from '../../controllers/HttpClient';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FlatList, RefreshControl, View, Linking, Text } from "react-native";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
+import userReducer from "../../reducers/UserReducer";
+import getUser from "../../selectors/UserSelectors";
+import { useSelector } from "react-redux";
+import httpClient from "../../controllers/HttpClient";
 
-const Emergency = props => {
-  const {navigation} = props;
-  const {t} = useTranslation();
-  const {colors} = useTheme();
+const Emergency = (props) => {
+  const { navigation } = props;
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const [search, setSearch] = useState('');
-  const [modeView, setModeView] = useState('list');
+  const [search, setSearch] = useState("");
+  const [modeView, setModeView] = useState("list");
   const [data, setData] = useState([]);
   //const [dataHelp, setDataHelp] = useState([]);
   const [loading, setLoading] = useState(true);
-  const user = useSelector(state => getUser(state));
+  const user = useSelector((state) => getUser(state));
 
   const stateReduxChoosedProject = useSelector(
-    state => state.Dataproject.chooseProject,
+    (state) => state.Dataproject.chooseProject
   );
 
   //console.log("29 user: ", user);
@@ -47,32 +47,32 @@ const Emergency = props => {
   // }
 
   const email = {
-    subject: 'Help Tanrise Residence email:' + user.email,
+    subject: "Help Tanrise Residence email:" + user.email,
     body:
-      'Halo saya ' +
+      "Halo saya " +
       user.name +
-      ', email akun saya ' +
+      ", email akun saya " +
       user.email +
-      ', saya membutuhkan informasi ',
+      ", saya membutuhkan informasi ",
   };
 
   const whatsapp = {
     message:
-      'Halo saya ' +
+      "Halo saya " +
       user.name +
-      ', email akun saya ' +
+      ", email akun saya " +
       user.email +
-      ', saya membutuhkan informasi ',
+      ", saya membutuhkan informasi ",
   };
 
   const dataAddress = [
     {
-      contact_name: 'Email',
-      contact_no: 'm.hafid@ifca.co.id',
+      contact_name: "Email",
+      contact_no: "m.hafid@ifca.co.id",
     },
     {
-      contact_name: 'Whatsapp',
-      contact_no: '628112777873',
+      contact_name: "Whatsapp",
+      contact_no: "628112777873",
     },
   ];
 
@@ -88,19 +88,19 @@ const Emergency = props => {
   const loadData = async () => {
     const loadHelp = await httpClient
       .request({
-        url: '/setting/get-config-help',
-        method: 'GET',
+        url: "/setting/get-config-help",
+        method: "GET",
         params: {
           entity_cd: stateReduxChoosedProject.entity_cd,
           project_no: stateReduxChoosedProject.project_no,
         },
       })
-      .then(res => {
-        console.log('435 res: ', res.data.data);
+      .then((res) => {
+        console.log("435 res: ", res.data.data);
         return res.data.data;
       })
-      .catch(error => {
-        console.log('435 error: ', error.response.data.message);
+      .catch((error) => {
+        console.log("435 error: ", error.response.data.message);
         return [];
       });
 
@@ -109,17 +109,17 @@ const Emergency = props => {
       ? null
       : setData([
           {
-            contact_name: 'Email',
+            contact_name: "Email",
             contact_no: loadHelp[0].email,
           },
           {
-            contact_name: 'Whatsapp',
+            contact_name: "Whatsapp",
             contact_no: loadHelp[0].whatsapp,
           },
         ]);
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <CategoryIcon
         loading={loading}
@@ -146,9 +146,10 @@ const Emergency = props => {
     return (
       <SafeAreaView
         style={[BaseStyle.safeAreaView]}
-        edges={['right', 'top', 'left']}>
+        edges={["right", "top", "left"]}
+      >
         <Header
-          title={t('Help')}
+          title={t("Help")}
           renderLeft={() => {
             return (
               <Icon
@@ -178,19 +179,21 @@ const Emergency = props => {
         <Text
           style={{
             color: colors.text,
-            textAlign: 'center',
+            textAlign: "center",
             marginTop: 40,
             fontSize: 15,
-          }}>
+          }}
+        >
           {stateReduxChoosedProject.descs}
         </Text>
         <Text
           style={{
             color: colors.text,
-            textAlign: 'center',
+            textAlign: "center",
             marginTop: 10,
             fontSize: 15,
-          }}>
+          }}
+        >
           For further assistance, please contact us via:
         </Text>
         <FlatList
@@ -212,7 +215,7 @@ const Emergency = props => {
           }
           data={data}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             // if (item.contact_no == "") {
             //   return;
             // }
@@ -233,46 +236,47 @@ const Emergency = props => {
                   //overflow: 'hidden', // To make the corners round
                   flex: 1,
                   //alignContent: "center",
-                  justifyContent: 'space-between',
+                  justifyContent: "space-between",
                   //backgroundColor: "blue",
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}>
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}
+              >
                 <CategoryIcon
                   loading={loading}
                   style={{
                     margin: 10,
                     //backgroundColor: "blue",
-                    alignItems: 'center',
+                    alignItems: "center",
                   }}
                   title={item.contact_name}
                   subtitle={
-                    item.contact_no == '' ? 'empty data' : item.contact_no
+                    item.contact_no == "" ? "empty data" : item.contact_no
                   }
-                  icon={item.contact_name == 'Email' ? 'envelope' : 'phone-alt'}
+                  icon={item.contact_name == "Email" ? "envelope" : "phone-alt"}
                   // color={item.color}
                   //onPress={() => Linking.openURL(`tel:${item.contact_no}`)}
                   onPress={() =>
-                    item.contact_name == 'Email'
-                      ? item.contact_no == ''
+                    item.contact_name == "Email"
+                      ? item.contact_no == ""
                         ? null
                         : Linking.openURL(
                             `mailto:${
                               item.contact_no
                             }?subject=${encodeURIComponent(
-                              email.subject,
-                            )}&body=${encodeURIComponent(email.body)}`,
-                          ).catch(err => alert('Error opening email client'))
-                      : item.contact_no == ''
+                              email.subject
+                            )}&body=${encodeURIComponent(email.body)}`
+                          ).catch((err) => alert("Error opening email client"))
+                      : item.contact_no == ""
                       ? null
                       : Linking.openURL(
                           `whatsapp://send?phone=${
                             item.contact_no
-                          }&text=${encodeURIComponent(whatsapp.message)}`,
-                        ).catch(err =>
+                          }&text=${encodeURIComponent(whatsapp.message)}`
+                        ).catch((err) =>
                           alert(
-                            'Make sure WhatsApp is installed on your device',
-                          ),
+                            "Make sure WhatsApp is installed on your device"
+                          )
                         )
                   }
                 />

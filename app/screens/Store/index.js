@@ -32,7 +32,7 @@ import {
   ActivityIndicator,
   Animated,
   ImageBackground,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import {
   NewsList,
@@ -48,7 +48,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CheckBox, Badge } from "react-native-elements";
 import ModalSelector from "react-native-modal-selector";
 import getUser from "../../selectors/UserSelectors";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 const Store = (props) => {
   // const {navigation} = props;
   const { navigation, route } = props;

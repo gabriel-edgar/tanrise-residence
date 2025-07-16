@@ -25,7 +25,7 @@ import { Card } from "react-native-paper";
 import { useSelector } from "react-redux";
 import axios from "axios";
 // import getUser from '../../selectors/UserSelectors';
-//import { API_URL_LOKAL } from "@env";
+//import { baseURL as API_URL_LOKAL } from '@/controllers/HttpClient';
 import httpClient from "../../controllers/HttpClient";
 import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
 

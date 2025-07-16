@@ -10,7 +10,7 @@ import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 import { API_URL } from "@env";
 import styles from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Notificationdummy = (props) => {
   const { navigation } = props;

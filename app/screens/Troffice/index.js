@@ -26,7 +26,7 @@ import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 import client from "../../controllers/HttpClient";
 import styles from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 export default function Troffice() {
   const { t, i18n } = useTranslation();

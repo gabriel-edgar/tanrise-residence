@@ -38,7 +38,7 @@ import { Button } from "../../components";
 import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import RenderHtml from "react-native-render-html";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 const DetailFacility = (props) => {
   const { navigation, route } = props;
   // const {params} = props;

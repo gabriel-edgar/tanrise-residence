@@ -54,7 +54,7 @@ import { SceneMap } from "react-native-tab-view";
 import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
 // import RNFetchBlob from 'rn-fetch-blob';
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Header_Before = (props) => {
   console.log("props header", props);

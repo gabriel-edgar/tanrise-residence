@@ -18,7 +18,7 @@ import { useSelector, useDispatch, connect } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 //import {API_URL} from '@env'; // shila
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 //const API_URL = "https://dev.ifca.co.id:4414/apishilla/api";
 import { store, persist } from "../../store";
 import { homeCommonProject } from "../FunctionAxios/home-common-project";

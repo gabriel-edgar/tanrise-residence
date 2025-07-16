@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
 import numFormattanpaRupiah from "../../numFormattanpaRupiah";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../../controllers/HttpClient";
 
 const TransactionExpand = ({
@@ -82,11 +82,6 @@ const TransactionExpand = ({
   const [loading, setLoading] = useState(true);
 
   const detailDateDue = async () => {
-    // console.log(
-    //   "url getDataDue",
-    //   API_URL_LOKAL +
-    //     `/home/common-projectDue/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-    // );
     console.log(
       "84 url: ",
       `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
@@ -267,8 +262,6 @@ const TransactionExpand = ({
       );
       return;
     }
-    // console.log("entity_cd", item.entity_cd, "project_no", item.project_no);
-    // return;
     if (
       item.entity_cd.trim() == "1006" &&
       item.project_no.trim() == "1006001"

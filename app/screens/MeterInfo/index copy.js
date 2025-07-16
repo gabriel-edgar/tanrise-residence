@@ -38,7 +38,7 @@ import axios from "axios";
 import Modal from "react-native-modal";
 import numFormat from "../../components/numFormat";
 import CurrencyFormatter from "../../components/CurrencyFormatter";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 const MeterInfos = ({
   isCenter = false,
   isPrimary = false,

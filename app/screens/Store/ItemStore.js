@@ -38,7 +38,7 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import LottieView from "lottie-react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
@@ -56,7 +56,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import getCartData from "../../selectors/cartSelectors";
 import { data_cart } from "../../actions/cartActions";
 import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 let timeoutChangeMode = null;
 
 const initialLayout = { width: Dimensions.get("window").width };

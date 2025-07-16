@@ -33,7 +33,6 @@ import numFormat from "../../components/numFormat";
 import List from "../../components/Product/List";
 import styles from "./styles";
 import { enableExperimental } from "@/utils";
-import { API_URL_LOKAL } from "@env";
 import { store, persist } from "../../store";
 import { homeCommonProject } from "../FunctionAxios/home-common-project";
 import httpClient from "../../controllers/HttpClient";
@@ -98,8 +97,6 @@ const Rent = (props) => {
   };
 
   const getRent = async () => {
-    // axios
-    //   .get(API_URL_LOKAL + "/modules/rs/rent-unit")
     console.log("102 run getRent");
     await httpClient
       .request({
@@ -115,8 +112,6 @@ const Rent = (props) => {
   };
 
   const getSale = async () => {
-    // axios
-    //   .get(API_URL_LOKAL + "/modules/rs/sale-unit/")
     console.log("102 run getSale");
     await httpClient
       .request({

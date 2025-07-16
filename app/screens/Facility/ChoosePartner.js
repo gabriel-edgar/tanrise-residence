@@ -43,7 +43,7 @@ import { EPostListData, ESortOption } from "@/data";
 
 // import SegmentControl from "react-native-segment-control";
 import * as Utils from "@/utils";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 export default ChoosePartner = (props) => {
   const { navigation, route } = props;

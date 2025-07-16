@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 import Pdf from "react-native-pdf";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const TermsConditions = (props) => {
   const { navigation, route } = props;

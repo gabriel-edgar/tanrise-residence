@@ -43,7 +43,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SceneMap } from "react-native-tab-view";
 import numFormat from "../../../components/numFormat";
 import { Button, Divider } from "react-native-paper";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 const History = () => {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();

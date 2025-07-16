@@ -49,7 +49,7 @@ import * as Utils from "@/utils";
 import moment from "moment";
 
 import CheckBox from "@react-native-community/checkbox";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));

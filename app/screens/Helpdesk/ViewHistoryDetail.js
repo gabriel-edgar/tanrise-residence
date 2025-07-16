@@ -13,14 +13,14 @@ import {
   Image,
   Tag,
   CategoryIconSoft,
-} from '@/components';
-import {BaseColor, BaseStyle, useTheme, Images} from '@/config';
-import {CheckBox, Badge} from 'react-native-elements';
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme, Images } from "@/config";
+import { CheckBox, Badge } from "react-native-elements";
 // import {Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {enableExperimental} from '@/utils';
-import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import { useNavigation } from "@react-navigation/native";
+import { enableExperimental } from "@/utils";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   TouchableOpacity,
@@ -30,34 +30,34 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-} from 'react-native';
+} from "react-native";
 
-import {useSelector} from 'react-redux';
-import getUser from '../../selectors/UserSelectors';
-import axios from 'axios';
-import client from '../../controllers/HttpClient';
-import styles from './styles';
+import { useSelector } from "react-redux";
+import getUser from "../../selectors/UserSelectors";
+import axios from "axios";
+import client from "../../controllers/HttpClient";
+import styles from "./styles";
 
-import {RadioButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RadioButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import moment from 'moment';
+import moment from "moment";
 
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal";
 
-import {API_URL_LOKAL} from '@env';
-import httpClient from '../../controllers/HttpClient';
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
+import httpClient from "../../controllers/HttpClient";
 
-export default function ViewHistoryDetail({route}) {
-  const {t, i18n} = useTranslation();
-  const {colors} = useTheme();
-  const [keyword, setKeyword] = useState('');
+export default function ViewHistoryDetail({ route }) {
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   const [dataTowerUser, setdataTowerUser] = useState([]);
   const [arrDataTowerUser, setArrDataTowerUser] = useState([]);
-  const users = useSelector(state => getUser(state));
+  const users = useSelector((state) => getUser(state));
   const [email, setEmail] = useState(users.email);
   const [name, setName] = useState(users.name);
   const [urlApi, seturlApi] = useState(client);
@@ -68,16 +68,16 @@ export default function ViewHistoryDetail({route}) {
   const [dataImageMulti, setDataImageMulti] = useState([]);
   const [dataAction, setDataAction] = useState([]);
   const [dataTiketPassProp, setDataTiketPassProp] = useState(route.params);
-  const deviceWidth = Dimensions.get('window').width;
+  const deviceWidth = Dimensions.get("window").width;
   const [isImageViewVisible, setImageViewVisible] = useState();
   const [url_image, setUrl_Image] = useState();
   const [image_solved, setImageSolved] = useState([]);
   //   const [images, setImage] = useState(url_image);
   const [images, setImage] = useState(imagesDummy); //sementara aja
 
-  const [link_url, setLinkUrl] = useState('');
-  const [name_approval, setNameApproval] = useState('');
-  const [date_approval, setDateApproval] = useState('');
+  const [link_url, setLinkUrl] = useState("");
+  const [name_approval, setNameApproval] = useState("");
+  const [date_approval, setDateApproval] = useState("");
   const [modalImage, setModalImage] = useState(false);
 
   const [allDataforDetail, setAllDataforDetail] = useState([]);
@@ -88,8 +88,8 @@ export default function ViewHistoryDetail({route}) {
   // const [dataOther, setDataOther] =useState([])
 
   const selectedPayment = {
-    type: 'C',
-    descs: 'Cash',
+    type: "C",
+    descs: "Cash",
   };
   const widthStyle = {
     width: (deviceWidth * 2) / 5,
@@ -104,45 +104,45 @@ export default function ViewHistoryDetail({route}) {
 
   const imagesDummy = [
     {
-      id: '1',
-      image: require('@/assets/images/icon-helpdesk/newtiket.png'),
+      id: "1",
+      image: require("@/assets/images/icon-helpdesk/newtiket.png"),
       selected: true,
     },
     {
-      id: '2',
-      image: require('@/assets/images/icon-helpdesk/history.png'),
+      id: "2",
+      image: require("@/assets/images/icon-helpdesk/history.png"),
       //   selected: true,
     },
-    {id: '3', image: Images.location2},
-    {id: '4', image: Images.location3},
-    {id: '5', image: Images.location4},
-    {id: '6', image: Images.location5},
-    {id: '7', image: Images.location6},
-    {id: '8', image: Images.location7},
+    { id: "3", image: Images.location2 },
+    { id: "4", image: Images.location3 },
+    { id: "5", image: Images.location4 },
+    { id: "6", image: Images.location5 },
+    { id: "7", image: Images.location6 },
+    { id: "8", image: Images.location7 },
   ];
 
   // ---- create tabs
   const TABS = [
     {
       id: 1,
-      title: t('detail'),
+      title: t("detail"),
     },
     {
       id: 2,
-      title: t('feedback'),
+      title: t("feedback"),
     },
   ];
   const [tab, setTab] = useState(TABS[0]);
 
   useEffect(() => {
     const id = route?.params?.id;
-    TABS.forEach(tab => {
+    TABS.forEach((tab) => {
       tab.id == id && setTab(tab);
     });
     // console.log("144: dataTiketMulti: ", dataTiketMulti);
   }, [route?.params?.id]);
 
-  const getTicketDetailMulti = async data => {
+  const getTicketDetailMulti = async (data) => {
     const formData = {
       entity_cd: data.entity_cd,
       project_no: data.project_no,
@@ -150,16 +150,16 @@ export default function ViewHistoryDetail({route}) {
       email: email,
     };
 
-    console.log('196 form data multi: ', formData);
+    console.log("196 form data multi: ", formData);
 
     await httpClient
       .request({
-        url: '/modules/cs/ticket-all-by-report',
-        method: 'GET',
+        url: "/modules/cs/ticket-all-by-report",
+        method: "GET",
         params: formData,
       })
-      .then(res => {
-        console.log('196 res tiket multi: ', JSON.stringify(res.data.data));
+      .then((res) => {
+        console.log("196 res tiket multi: ", JSON.stringify(res.data.data));
         //return;
         const resTiketMulti = res.data.data.data_entry[0]; //res.data.data[0];
         const resImageMulti = res.data.data.data_attach; //
@@ -181,7 +181,7 @@ export default function ViewHistoryDetail({route}) {
           resOther,
         };
         setAllDataforDetail(alldata);
-        console.log('186 all data for detail: ', alldata);
+        console.log("186 all data for detail: ", alldata);
         setDataTiketMulti(resTiketMulti);
         setDataImageMulti(resImageMulti);
         setDataAction(resDataAction);
@@ -189,13 +189,13 @@ export default function ViewHistoryDetail({route}) {
         setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
+      .catch((error) => {
         //console.log("err data multi2", error.response.data.message);
         alert(error.response.data.message);
       });
   };
 
-  const getSolvedPicture = async data => {
+  const getSolvedPicture = async (data) => {
     const formData = {
       // report_no: 'EX21090021', //hardcode dulu
       report_no: data.report_no,
@@ -207,23 +207,23 @@ export default function ViewHistoryDetail({route}) {
 
     const config = {
       headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: '',
+        accept: "application/json",
+        "Content-Type": "application/json",
+        token: "",
       },
     };
 
     await httpClient
       .request({
-        url: '/modules/cs/solved-picture',
-        method: 'GET',
+        url: "/modules/cs/solved-picture",
+        method: "GET",
         params: formData,
       })
-      .then(res => {
-        console.log('290 solved-picture: ', res.data);
+      .then((res) => {
+        console.log("290 solved-picture: ", res.data);
         const resGalleryService = res.data.data;
 
-        console.log('290 resGalleryService: ', resGalleryService?.length);
+        console.log("290 resGalleryService: ", resGalleryService?.length);
         if (resGalleryService?.length != 0) {
           setImageSolved(resGalleryService);
         }
@@ -231,8 +231,8 @@ export default function ViewHistoryDetail({route}) {
         setSpinner(false);
         // return res.data;
       })
-      .catch(error => {
-        console.log('err data multi', error);
+      .catch((error) => {
+        console.log("err data multi", error);
         // alert('error nih');
       });
   };
@@ -246,24 +246,24 @@ export default function ViewHistoryDetail({route}) {
     getSolvedPicture(route.params);
   };
 
-  const handleIndexChange = index => {
-    console.log('index langsung klik', index);
+  const handleIndexChange = (index) => {
+    console.log("index langsung klik", index);
 
     setSelectedIndex(index);
 
-    console.log('Selected index', selectedIndex);
+    console.log("Selected index", selectedIndex);
   };
 
   const buttonSignature = (datas, status_button) => {
-    console.log('status button', status_button);
-    console.log('datas for signature', datas);
-    navigation.navigate('TableBeforeSignatureWO', {datas, status_button});
+    console.log("status button", status_button);
+    console.log("datas for signature", datas);
+    navigation.navigate("TableBeforeSignatureWO", { datas, status_button });
   };
 
   const buttonSignatureAfter = (datas, status_button, status) => {
-    console.log('status button', status_button);
-    console.log('datas for signature', datas);
-    navigation.navigate('TableAfterSignatureWO', {
+    console.log("status button", status_button);
+    console.log("datas for signature", datas);
+    navigation.navigate("TableAfterSignatureWO", {
       datas,
       status_button,
       status,
@@ -277,21 +277,22 @@ export default function ViewHistoryDetail({route}) {
     // status_approval,
   }) => {
     // console.log('status approval', status_approval);
-    console.log('link url image', link_url);
+    console.log("link url image", link_url);
     setLinkUrl(link_url);
     setNameApproval(name_approval);
     setDateApproval(date_approval);
     setModalImage(true);
   };
 
-  console.log('385 beforeReturn: ', dataImageMulti?.length);
+  console.log("385 beforeReturn: ", dataImageMulti?.length);
 
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('Ticket Detail')} //belum dibuat lang
+        title={t("Ticket Detail")} //belum dibuat lang
         renderLeft={() => {
           return (
             <Icon
@@ -308,13 +309,13 @@ export default function ViewHistoryDetail({route}) {
       />
       <View style={styles.wrap}>
         <Text title2>Ticket</Text>
-        <Text headline style={{fontWeight: 'normal'}}>
+        <Text headline style={{ fontWeight: "normal" }}>
           View History Ticket Detail
         </Text>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             paddingVertical: 10,
             //backgroundColor: "blue",
             // borderBottomWidth: 0.5,
@@ -328,23 +329,26 @@ export default function ViewHistoryDetail({route}) {
             // shadowRadius: 3,
             // // marginBottom: 20,
             // overflow: "hidden",
-          }}>
+          }}
+        >
           {TABS.map((item, index) => (
-            <View key={index} style={{flex: 1, paddingHorizontal: 20}}>
+            <View key={index} style={{ flex: 1, paddingHorizontal: 20 }}>
               <Tag
                 primary
                 style={{
                   backgroundColor:
-                    tab.id == item.id ? colors.primary : 'lightgray',
+                    tab.id == item.id ? colors.primary : "lightgray",
                 }}
                 onPress={() => {
                   enableExperimental();
                   setTab(item);
-                }}>
+                }}
+              >
                 <Text
                   body1={tab.id == item.id}
                   light={tab.id != item.id}
-                  whiteColor={tab.id == item.id}>
+                  whiteColor={tab.id == item.id}
+                >
                   {item.title}
                 </Text>
               </Tag>
@@ -356,9 +360,10 @@ export default function ViewHistoryDetail({route}) {
           <View
             style={{
               flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {/* <ActivityIndicator></ActivityIndicator> */}
             <PlaceholderLine />
           </View>
@@ -366,52 +371,55 @@ export default function ViewHistoryDetail({route}) {
           <View>
             {tab.id == 1 && (
               <ScrollView>
-                <View style={{margin: 5, paddingRight: 10}}>
+                <View style={{ margin: 5, paddingRight: 10 }}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Ticket No</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
-                      <Text style={{fontWeight: 'bold'}}>
+                      <Text style={{ fontWeight: "bold" }}>
                         # {dataTiketMulti.report_no}
                       </Text>
                     </View>
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Date</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
                       <Text>
                         {moment(dataTiketMulti.reported_date).format(
-                          'DD-MM-YYYY HH:mm',
+                          "DD-MM-YYYY HH:mm"
                         )}
                       </Text>
                     </View>
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Name</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
@@ -420,13 +428,14 @@ export default function ViewHistoryDetail({route}) {
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Unit</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
@@ -435,13 +444,14 @@ export default function ViewHistoryDetail({route}) {
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Contact No</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
@@ -450,13 +460,14 @@ export default function ViewHistoryDetail({route}) {
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Reported By</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
@@ -487,13 +498,14 @@ export default function ViewHistoryDetail({route}) {
                   </View> */}
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Category</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
@@ -502,131 +514,138 @@ export default function ViewHistoryDetail({route}) {
                   </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <View style={widthStyle}>
                       <Text>Status</Text>
                     </View>
-                    <View style={{width: 10}}>
+                    <View style={{ width: 10 }}>
                       <Text>:</Text>
                     </View>
                     <View>
                       <Text>
-                        {dataTiketMulti.status == 'R'
-                          ? 'Open'
-                          : dataTiketMulti.status == 'A'
-                          ? 'Assign'
-                          : dataTiketMulti.status == 'S'
-                          ? 'Need Confirmation'
-                          : dataTiketMulti.status == 'P'
-                          ? 'Process'
-                          : dataTiketMulti.status == 'F'
-                          ? 'Confirm'
-                          : dataTiketMulti.status == 'X'
-                          ? 'Cancel'
-                          : dataTiketMulti.status == 'C'
-                          ? 'Close'
-                          : dataTiketMulti.status == 'D'
-                          ? 'Completed'
-                          : ''}
+                        {dataTiketMulti.status == "R"
+                          ? "Open"
+                          : dataTiketMulti.status == "A"
+                          ? "Assign"
+                          : dataTiketMulti.status == "S"
+                          ? "Need Confirmation"
+                          : dataTiketMulti.status == "P"
+                          ? "Process"
+                          : dataTiketMulti.status == "F"
+                          ? "Confirm"
+                          : dataTiketMulti.status == "X"
+                          ? "Cancel"
+                          : dataTiketMulti.status == "C"
+                          ? "Close"
+                          : dataTiketMulti.status == "D"
+                          ? "Completed"
+                          : ""}
                       </Text>
                     </View>
                   </View>
-                  <View style={{marginTop: 10}}>
-                    <View style={{marginBottom: 5}}>
+                  <View style={{ marginTop: 10 }}>
+                    <View style={{ marginBottom: 5 }}>
                       <Text>Work Requested (Special Notes):</Text>
                     </View>
                     <View>
                       <View
                         style={{
-                          width: '100%',
-                          height: 'auto',
-                          borderColor: '#555',
+                          width: "100%",
+                          height: "auto",
+                          borderColor: "#555",
                           borderRadius: 10,
                           borderWidth: 1,
                           padding: 5,
-                        }}>
-                        <Text style={{width: '100%'}}>
+                        }}
+                      >
+                        <Text style={{ width: "100%" }}>
                           {dataTiketMulti.work_requested}
                         </Text>
                       </View>
                     </View>
                   </View>
 
-                  {dataTiketMulti.status == 'R' ? null : ( // dataTiketMulti.status == "A" // || //|| dataTiketMulti.status == "P"
-                    <View style={{marginTop: 10}}>
+                  {dataTiketMulti.status == "R" ? null : ( // dataTiketMulti.status == "A" // || //|| dataTiketMulti.status == "P"
+                    <View style={{ marginTop: 10 }}>
                       <Button
                         style={{
                           height: 40,
                           width: 200,
-                          alignSelf: 'center',
+                          alignSelf: "center",
                         }}
                         onPress={
                           () =>
                             buttonSignatureAfter(
                               allDataforDetail,
-                              'after_wo',
-                              dataTiketMulti.status,
+                              "after_wo",
+                              dataTiketMulti.status
                             )
                           // buttonSignatureAfter(allDataforDetail, {
                           //   status: dataTiketMulti.status,
                           // })
-                        }>
+                        }
+                      >
                         <Text
                           style={{
                             color: BaseColor.whiteColor,
                             fontSize: 14,
-                          }}>
+                          }}
+                        >
                           Expenses
                         </Text>
                       </Button>
-                      {dataTiketMulti.status == 'A' ? (
+                      {dataTiketMulti.status == "A" ? (
                         <View
                           style={{
                             borderWidth: 1,
-                            borderColor: 'white',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'absolute',
+                            borderColor: "white",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "absolute",
                             width: 20,
                             height: 20,
-                            backgroundColor: 'red',
+                            backgroundColor: "red",
                             top: 0,
                             right: 75,
                             borderRadius: 10,
-                          }}></View>
+                          }}
+                        ></View>
                       ) : null}
                     </View>
                   )}
 
-                  {dataTiketMulti.status == 'D' ? (
-                    <View style={{marginTop: 10}}>
+                  {dataTiketMulti.status == "D" ? (
+                    <View style={{ marginTop: 10 }}>
                       <Button
                         style={{
                           height: 40,
                           //width: 200,
-                          alignSelf: 'center',
+                          alignSelf: "center",
                         }}
                         onPress={() =>
-                          navigation.navigate('ScreenSignature', {
+                          navigation.navigate("ScreenSignature", {
                             ...dataTiketMulti,
                             resHDR: allDataforDetail.resHDR,
                           })
-                        }>
+                        }
+                      >
                         <Text
                           style={{
                             color: BaseColor.whiteColor,
                             fontSize: 14,
-                          }}>
+                          }}
+                        >
                           Approve to Close Ticket
                         </Text>
                       </Button>
                     </View>
                   ) : null}
 
-                  <View style={{marginTop: 20}}>
-                    <Text style={{fontWeight: 'bold', fontSize: 14}}>
+                  <View style={{ marginTop: 20 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 14 }}>
                       Gallery of Request
                     </Text>
                   </View>
@@ -634,16 +653,17 @@ export default function ViewHistoryDetail({route}) {
                     style={{
                       paddingBottom: 150,
                       // backgroundColor: "red",
-                    }}>
+                    }}
+                  >
                     {dataImageMulti?.length == 1 ? (
                       //const uri = dataTiketMulti.link_url;
 
                       <TouchableOpacity
                         //key={key}
-                        style={{flex: 1}}
+                        style={{ flex: 1 }}
                         activeOpacity={1}
                         onPress={() =>
-                          navigation.navigate('PreviewImageHelpdesk', {
+                          navigation.navigate("PreviewImageHelpdesk", {
                             images: [
                               {
                                 file_url:
@@ -652,12 +672,13 @@ export default function ViewHistoryDetail({route}) {
                               },
                             ],
                           })
-                        }>
+                        }
+                      >
                         <Image
                           //key={key}
                           style={{
                             flex: 1,
-                            width: '100%',
+                            width: "100%",
                             height: 400,
                             marginTop: 20,
                             borderRadius: 10,
@@ -681,22 +702,23 @@ export default function ViewHistoryDetail({route}) {
                         return (
                           <TouchableOpacity
                             key={key}
-                            style={{flex: 1}}
+                            style={{ flex: 1 }}
                             activeOpacity={1}
                             onPress={() =>
-                              navigation.navigate('PreviewImageHelpdesk', {
+                              navigation.navigate("PreviewImageHelpdesk", {
                                 images: dataImageMulti,
                               })
-                            }>
+                            }
+                          >
                             <Image
                               key={key}
                               style={{
                                 flex: 1,
-                                width: '100%',
+                                width: "100%",
                                 height: 400,
                                 marginTop: 20,
                               }}
-                              source={{uri}}
+                              source={{ uri }}
                             />
                           </TouchableOpacity>
                         );
@@ -709,22 +731,23 @@ export default function ViewHistoryDetail({route}) {
             {tab.id == 2 && (
               <ScrollView>
                 <View>
-                  {dataTiketMulti.status == 'R' ||
-                  dataTiketMulti.status == 'A' ? (
+                  {dataTiketMulti.status == "R" ||
+                  dataTiketMulti.status == "A" ? (
                     <View>
-                      <Text style={{textAlign: 'center', marginTop: 10}}>
+                      <Text style={{ textAlign: "center", marginTop: 10 }}>
                         Feedback not available at status open or status assign
                       </Text>
                     </View>
                   ) : (
-                    <View style={{marginHorizontal: 10, marginTop: 10}}>
+                    <View style={{ marginHorizontal: 10, marginTop: 10 }}>
                       <View
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
                         <View style={{}}>
-                          <Text>Assign To{'           '} :</Text>
+                          <Text>Assign To{"           "} :</Text>
                         </View>
                         {/* <View style={{ width: 10 }}>
                             <Text>:</Text>
@@ -734,72 +757,77 @@ export default function ViewHistoryDetail({route}) {
                             {
                               //backgroundColor: "blue"
                             }
-                          }>
+                          }
+                        >
                           <Text
                             style={
                               {
                                 //flexWrap: "wrap"
                               }
-                            }>
-                            {'  ' + dataTiketMulti.assign_to}
+                            }
+                          >
+                            {"  " + dataTiketMulti.assign_to}
                           </Text>
                         </View>
                       </View>
-                      <View style={{marginTop: 10}}>
+                      <View style={{ marginTop: 10 }}>
                         <View>
                           <Text>Problem Cause</Text>
                         </View>
-                        <View style={{marginTop: 10}}>
+                        <View style={{ marginTop: 10 }}>
                           <View
                             style={{
-                              width: '100%',
-                              height: 'auto',
-                              borderColor: '#555',
+                              width: "100%",
+                              height: "auto",
+                              borderColor: "#555",
                               borderRadius: 10,
                               borderWidth: 1,
                               padding: 5,
-                            }}>
-                            <Text style={{width: '100%'}}>
+                            }}
+                          >
+                            <Text style={{ width: "100%" }}>
                               {dataTiketMulti.problem_cause}
                             </Text>
                           </View>
                         </View>
                       </View>
-                      <View style={{marginTop: 10}}>
+                      <View style={{ marginTop: 10 }}>
                         <View>
                           <Text>Action Taken</Text>
                         </View>
-                        <View style={{marginTop: 10}}>
+                        <View style={{ marginTop: 10 }}>
                           <View
                             style={{
-                              width: '100%',
-                              height: 'auto',
-                              borderColor: '#555',
+                              width: "100%",
+                              height: "auto",
+                              borderColor: "#555",
                               borderRadius: 10,
                               borderWidth: 1,
                               padding: 5,
-                            }}>
-                            <Text style={{width: '100%'}}>
+                            }}
+                          >
+                            <Text style={{ width: "100%" }}>
                               {dataTiketMulti.action_taken}
                             </Text>
                           </View>
                         </View>
                       </View>
-                      <View style={{marginTop: 10}}>
+                      <View style={{ marginTop: 10 }}>
                         <View>
                           <Text>Remark</Text>
                         </View>
-                        <View style={{marginTop: 10}}>
+                        <View style={{ marginTop: 10 }}>
                           <View
                             style={{
-                              width: '100%',
-                              height: 'auto',
-                              borderColor: '#555',
+                              width: "100%",
+                              height: "auto",
+                              borderColor: "#555",
                               borderRadius: 10,
                               borderWidth: 1,
                               padding: 5,
-                            }}>
-                            <Text style={{width: '100%'}}>
+                            }}
+                          >
+                            <Text style={{ width: "100%" }}>
                               {dataTiketMulti.remarks}
                             </Text>
                           </View>
@@ -808,16 +836,17 @@ export default function ViewHistoryDetail({route}) {
 
                       {dataAction?.length != 0
                         ? dataAction?.map((data, index) => {
-                            <View key={index} style={{marginVertical: 5}}>
+                            <View key={index} style={{ marginVertical: 5 }}>
                               <View
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
                                 <View style={widthStyle}>
                                   <Text>Action By</Text>
                                 </View>
-                                <View style={{width: 10}}>
+                                <View style={{ width: 10 }}>
                                   <Text>:</Text>
                                 </View>
                                 <View>
@@ -826,13 +855,14 @@ export default function ViewHistoryDetail({route}) {
                               </View>
                               <View
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
                                 <View style={widthStyle}>
                                   <Text>Action Taken</Text>
                                 </View>
-                                <View style={{width: 10}}>
+                                <View style={{ width: 10 }}>
                                   <Text>:</Text>
                                 </View>
                                 <View>
@@ -841,13 +871,14 @@ export default function ViewHistoryDetail({route}) {
                               </View>
                               <View
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
                                 <View style={widthStyle}>
                                   <Text>Action Date</Text>
                                 </View>
-                                <View style={{width: 10}}>
+                                <View style={{ width: 10 }}>
                                   <Text>:</Text>
                                 </View>
                                 <View>
@@ -856,13 +887,14 @@ export default function ViewHistoryDetail({route}) {
                               </View>
                               <View
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
                                 <View style={widthStyle}>
                                   <Text>Action Date</Text>
                                 </View>
-                                <View style={{width: 10}}>
+                                <View style={{ width: 10 }}>
                                   <Text>:</Text>
                                 </View>
                                 <View>
@@ -876,20 +908,21 @@ export default function ViewHistoryDetail({route}) {
                       <View
                         style={{
                           marginTop: 20,
-                        }}>
-                        <Text style={{fontWeight: 'bold', fontSize: 14}}>
+                        }}
+                      >
+                        <Text style={{ fontWeight: "bold", fontSize: 14 }}>
                           Gallery of Solved
                         </Text>
                       </View>
                       {image_solved[0]?.file_url ? (
                         <>
-                          <View style={{marginBottom: '40%'}}>
+                          <View style={{ marginBottom: "40%" }}>
                             <TouchableOpacity
                               //key={key}
-                              style={{flex: 1}}
+                              style={{ flex: 1 }}
                               activeOpacity={1}
                               onPress={() =>
-                                navigation.navigate('PreviewImageHelpdesk', {
+                                navigation.navigate("PreviewImageHelpdesk", {
                                   images: [
                                     {
                                       file_url:
@@ -898,12 +931,13 @@ export default function ViewHistoryDetail({route}) {
                                     },
                                   ],
                                 })
-                              }>
+                              }
+                            >
                               <Image
                                 //key={key}
                                 style={{
                                   flex: 1,
-                                  width: '100%',
+                                  width: "100%",
                                   height: 400,
                                   marginTop: 20,
                                   borderRadius: 10,
@@ -919,7 +953,7 @@ export default function ViewHistoryDetail({route}) {
                           </View>
                         </>
                       ) : (
-                        <Text style={{marginBottom: 200, marginTop: 10}}>
+                        <Text style={{ marginBottom: 200, marginTop: 10 }}>
                           this gallery will show when problem is solved
                         </Text>
                       )}
@@ -934,31 +968,35 @@ export default function ViewHistoryDetail({route}) {
         <View>
           <Modal
             isVisible={modalImage}
-            style={{height: '100%'}}
-            onBackdropPress={() => setModalImage(false)}>
+            style={{ height: "100%" }}
+            onBackdropPress={() => setModalImage(false)}
+          >
             <View
               style={{
                 backgroundColor: BaseColor.whiteColor,
-                height: '60%',
+                height: "60%",
                 borderRadius: 30,
                 // justifyContent: 'center',
-              }}>
-              <View style={{flexDirection: 'row', width: '100%'}}>
+              }}
+            >
+              <View style={{ flexDirection: "row", width: "100%" }}>
                 <View
                   style={{
                     marginTop: 20,
-                    justifyContent: 'space-between',
+                    justifyContent: "space-between",
                     flex: 1,
-                  }}></View>
+                  }}
+                ></View>
                 <View
                   style={{
                     marginTop: 20,
-                    justifyContent: 'space-between',
+                    justifyContent: "space-between",
                     marginRight: 10,
-                  }}>
+                  }}
+                >
                   <TouchableOpacity onPress={() => setModalImage(false)}>
-                    <View style={{width: 30, height: 20}}>
-                      <Icon name={'times'} size={20}></Icon>
+                    <View style={{ width: 30, height: 20 }}>
+                      <Icon name={"times"} size={20}></Icon>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -966,36 +1004,38 @@ export default function ViewHistoryDetail({route}) {
 
               <View
                 style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  alignSelf: 'center',
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
 
                   // flex: 1,
                   // margin: 10,
-                  marginTop: '20%',
+                  marginTop: "20%",
                   margin: 10,
                   borderColor: BaseColor.grayColor,
                   borderRadius: 15,
                   borderWidth: 1,
-                  width: '90%',
+                  width: "90%",
                   // height: 300,
-                }}>
+                }}
+              >
                 <Image
-                  source={{uri: link_url}}
+                  source={{ uri: link_url }}
                   style={{
                     width: 200,
                     height: 200,
-                  }}></Image>
+                  }}
+                ></Image>
               </View>
               <View>
-                <Text style={{textAlign: 'center'}}>
+                <Text style={{ textAlign: "center" }}>
                   Signature Name : {name_approval}
                 </Text>
               </View>
               <View>
-                <Text style={{textAlign: 'center'}}>
-                  Date Approval :{' '}
-                  {moment(date_approval).format('DD-MM-YYYY H:mm')}
+                <Text style={{ textAlign: "center" }}>
+                  Date Approval :{" "}
+                  {moment(date_approval).format("DD-MM-YYYY H:mm")}
                 </Text>
               </View>
             </View>

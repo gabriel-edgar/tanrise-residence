@@ -35,7 +35,7 @@ import moment from "moment";
 import { Picker } from "@react-native-picker/picker";
 import Style from "./styles";
 import { connect } from "react-redux";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 // import getUser from '../../selectors/UserSelectors';
 // import {useSelector} from 'react-redux';
@@ -179,10 +179,6 @@ class MeterInfo extends React.Component {
     const entitycds = data[0].entity_cd;
     const projectnos = data[0].project_no;
     const emails = data[0].email;
-
-    console.log("entity_cd", entitycds);
-    console.log("project_no", projectnos);
-    console.log("emails", emails);
 
     const { user } = this.props.user;
     const dates = {

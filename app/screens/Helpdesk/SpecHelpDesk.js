@@ -33,7 +33,7 @@ import styles from "./styles";
 import ModalDropdown_debtor from "@/components/ModalDropdown_debtor";
 import ModalDropdown_lotno from "@/components/ModalDropdown_lotno";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 import httpClient from "../../controllers/HttpClient";
 

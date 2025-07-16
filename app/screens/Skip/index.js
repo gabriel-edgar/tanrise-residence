@@ -24,7 +24,7 @@ import { useSelector, useDispatch } from "react-redux";
 import getProject from "../../selectors/ProjectSelector";
 import getUser from "../../selectors/UserSelectors";
 // import {ProductBlock} from '../../components';
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 const Skip = (props) => {
   const { navigation } = props;
   const { colors } = useTheme();

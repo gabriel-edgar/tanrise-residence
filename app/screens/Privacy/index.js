@@ -6,44 +6,44 @@ import {
   ProfileDescription,
   SafeAreaView,
   Text,
-} from '@/components';
-import {BaseColor, BaseStyle, useTheme} from '@/config';
-import {Images} from '@/config';
-import {AboutUsData} from '@/data';
-import * as Utils from '@/utils';
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View, useWindowDimensions} from 'react-native';
-import styles from './styles';
-import {useTranslation} from 'react-i18next';
-import axios from 'axios';
-import RenderHTML from 'react-native-render-html';
-import {API_URL_LOKAL} from '@env';
-import {useSelector, useDispatch} from 'react-redux';
-import httpClient from '../../controllers/HttpClient';
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Images } from "@/config";
+import { AboutUsData } from "@/data";
+import * as Utils from "@/utils";
+import React, { useState, useEffect } from "react";
+import { ScrollView, View, useWindowDimensions } from "react-native";
+import styles from "./styles";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+import RenderHTML from "react-native-render-html";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
+import { useSelector, useDispatch } from "react-redux";
+import httpClient from "../../controllers/HttpClient";
 
-const Privacy = props => {
-  const {width} = useWindowDimensions();
-  const {navigation} = props;
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+const Privacy = (props) => {
+  const { width } = useWindowDimensions();
+  const { navigation } = props;
+  const { colors } = useTheme();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  console.log('30 colors: ', colors);
+  console.log("30 colors: ", colors);
   // const [ourTeam, setOurTeam] = useState(AboutUsData);
 
   const [data, setData] = useState([]);
-  const stateRedux = useSelector(state => state.user);
+  const stateRedux = useSelector((state) => state.user);
   const token = stateRedux.accessToken;
 
   const stateReduxChoosedProject = useSelector(
-    state => state.Dataproject.chooseProject,
+    (state) => state.Dataproject.chooseProject
   );
 
   useEffect(() => {
     setTimeout(() => {
       httpClient
         .request({
-          url: '/setting/privacy-policy',
-          method: 'GET',
+          url: "/setting/privacy-policy",
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,17 +52,17 @@ const Privacy = props => {
             project_no: stateReduxChoosedProject?.project_no,
           },
         })
-        .then(({data}) => {
-          console.log('49 data >', data.data[0]);
+        .then(({ data }) => {
+          console.log("49 data >", data.data[0]);
           setData(data.data[0]);
         })
-        .catch(error => console.error('49 error: ', error))
+        .catch((error) => console.error("49 error: ", error))
         .finally(() => setLoading(false));
     }, 1000);
   }, []);
 
   useEffect(() => {
-    console.log('datauser', data);
+    console.log("datauser", data);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -72,7 +72,7 @@ const Privacy = props => {
     h1: {
       color: colors.text,
       fontSize: 24,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       marginBottom: 10,
     },
     p: {
@@ -83,16 +83,17 @@ const Privacy = props => {
     },
     a: {
       color: colors.text,
-      textDecorationLine: 'underline',
+      textDecorationLine: "underline",
     },
   };
 
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('Privacy Policy')}
+        title={t("Privacy Policy")}
         renderLeft={() => {
           return (
             <Icon
@@ -113,14 +114,14 @@ const Privacy = props => {
           <Image
             //source={require("../../assets/images/pakubuwono.png")}
             //source={require("../../assets/images/logoIFCA.png")}
-            source={require('../../assets/images/image-home/logo-tanrise-blackfont.png')}
+            source={require("../../assets/images/image-home/logo-tanrise-blackfont.png")}
             resizeMode="contain"
             style={{
               height: 140,
-              width: '80%',
-              alignSelf: 'center',
+              width: "80%",
+              alignSelf: "center",
               //marginHorizontal: 100,
-              flexDirection: 'row',
+              flexDirection: "row",
               //resizeMode: "contain",
               marginTop: 10,
               //padding: 20,
@@ -129,15 +130,16 @@ const Privacy = props => {
             }}
           />
         </View>
-        <View style={{padding: 20}}>
+        <View style={{ padding: 20 }}>
           <View>
             <RenderHTML
               source={{
-                html: data?.descriptions ?? 'Deskripsi Privacy Policy',
+                html: data?.descriptions ?? "Deskripsi Privacy Policy",
                 // Optional Chaining (?.), Nullish Coalescing (??)
               }}
               contentWidth={width}
-              tagsStyles={tagsStyles}></RenderHTML>
+              tagsStyles={tagsStyles}
+            ></RenderHTML>
             {/* <Text
               body2
               style={{

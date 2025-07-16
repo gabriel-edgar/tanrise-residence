@@ -42,7 +42,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
 import Modal from "react-native-modal";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../controllers/HttpClient";
 
 export default function ViewHistoryDetail({ route }) {

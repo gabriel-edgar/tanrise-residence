@@ -30,7 +30,7 @@ import getUser from "../../selectors/UserSelectors";
 import axios from "axios";
 
 import moment from "moment";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const Detail = (dataTiketPassProp) => {
   const { t, i18n } = useTranslation();

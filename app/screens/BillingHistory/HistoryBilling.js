@@ -34,7 +34,7 @@ import CurrencyFormatter from "../../components/CurrencyFormatter";
 import { TransactionExpandHistory } from "../../components";
 
 import moment from "moment";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const BlockLine = () => {
   return (

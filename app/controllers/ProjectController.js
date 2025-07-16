@@ -1,7 +1,7 @@
 import axios from "axios";
 import { setAuthStorage } from "../config/Storage";
 import httpClient from "./HttpClient";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import { store, persist } from "../store";
 
 class ProjectController {

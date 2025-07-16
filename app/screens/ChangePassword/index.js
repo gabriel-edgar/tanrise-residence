@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import getUser from "../../selectors/UserSelectors";
 import Modal from "react-native-modal";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../controllers/HttpClient";
 import { useNavigation } from "@react-navigation/native";
 import { logout } from "../../actions/UserActions";

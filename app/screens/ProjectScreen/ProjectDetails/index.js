@@ -1,4 +1,4 @@
-import {Text, Header, Icon, Button} from '@/components';
+import { Text, Header, Icon, Button } from "@/components";
 
 import {
   View,
@@ -14,46 +14,45 @@ import {
   Linking,
   RefreshControl,
   Platform,
-} from 'react-native';
-import styles from './styles';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {BaseStyle, Fonts, colors, useTheme} from '@/config';
+} from "react-native";
+import styles from "./styles";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BaseStyle, Fonts, colors, useTheme } from "@/config";
 
-import {useTranslation} from 'react-i18next';
-import ButtonMenuHome from '../components/ButtonMenu/ButtonMenuHome';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import React, {useState, useCallback, useRef, useEffect} from 'react';
+import { useTranslation } from "react-i18next";
+import ButtonMenuHome from "../components/ButtonMenu/ButtonMenuHome";
+import YoutubePlayer from "react-native-youtube-iframe";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 
-import Features from './Modals/Features';
-import Gallery from './Modals/Gallery';
+import Features from "./Modals/Features";
+import Gallery from "./Modals/Gallery";
 
-import {data_gallery} from './data_gallery.json';
-import {data_floorplan} from './data_floorplan.json';
-import Floorplan from './Modals/Floorplan';
-import Surrounding from './Modals/Surrounding';
-import axios from 'axios';
+import { data_gallery } from "./data_gallery.json";
+import { data_floorplan } from "./data_floorplan.json";
+import Floorplan from "./Modals/Floorplan";
+import Surrounding from "./Modals/Surrounding";
+import axios from "axios";
 
-import {useSelector, useDispatch, connect} from 'react-redux';
-import getUser from '../../../selectors/UserSelectors';
+import { useSelector, useDispatch, connect } from "react-redux";
+import getUser from "../../../selectors/UserSelectors";
 
-import RenderHtml, {defaultSystemFonts} from 'react-native-render-html';
-import CustomAlert2 from '../components/CustomAlert2';
-import {API_URL_LOKAL} from '@env';
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
+import CustomAlert2 from "../components/CustomAlert2";
 
-import {ActivityIndicator} from 'react-native-paper';
-import httpClient from '../../../controllers/HttpClient';
+import { ActivityIndicator } from "react-native-paper";
+import httpClient from "../../../controllers/HttpClient";
 
-const ProjectDetails = props => {
-  const {colors} = useTheme();
+const ProjectDetails = (props) => {
+  const { colors } = useTheme();
 
-  const {t} = useTranslation();
-  const {navigation} = props;
+  const { t } = useTranslation();
+  const { navigation } = props;
   const [playing, setPlaying] = useState(false);
 
   const paramsDetail = props.route.params;
   const entity_cd = paramsDetail.entity_cd;
   const project_no = paramsDetail.project_no;
-  console.log('paramsdetail projek detail', paramsDetail);
+  console.log("paramsdetail projek detail", paramsDetail);
   const [modalVisible, setModalVisible] = useState(false);
   const [visibleFeatures, setVisibleFeatures] = useState(false);
   const [visibleGallery, setVisibleGallery] = useState(false);
@@ -62,10 +61,10 @@ const ProjectDetails = props => {
 
   const [gallery, setGallery] = useState(data_gallery);
   const [floorplan, setFloorplan] = useState(data_floorplan);
-  const user = useSelector(state => getUser(state));
+  const user = useSelector((state) => getUser(state));
 
-  const stateRedux = useSelector(state => state);
-  console.log('74 stateRedux: ', stateRedux);
+  const stateRedux = useSelector((state) => state);
+  console.log("74 stateRedux: ", stateRedux);
 
   const [dataProjectDetail, setDataProjectDetail] = useState([]);
   const [galleryProject, setGalleryProject] = useState([]);
@@ -75,30 +74,30 @@ const ProjectDetails = props => {
   const [surroundingProject, setSurroundingProject] = useState([]);
   const [downloadProject, setDownloadProject] = useState([]);
   const [projectAddress, setProjectAddress] = useState([]);
-  const {width} = useWindowDimensions().width;
+  const { width } = useWindowDimensions().width;
   // const {widthRender} = useWindowDimensions();
-  const {width: contentWidth} = useWindowDimensions();
+  const { width: contentWidth } = useWindowDimensions();
   const systemFonts = [
     ...defaultSystemFonts,
 
-    'Arial Black',
-    'Comic-Sans MS',
-    'Courier New',
-    'Lato-Bold',
-    'Lato-Regular',
-    'Lato-Black',
-    'Lato-Italic',
+    "Arial Black",
+    "Comic-Sans MS",
+    "Courier New",
+    "Lato-Bold",
+    "Lato-Regular",
+    "Lato-Black",
+    "Lato-Italic",
   ];
 
   const [itemsOverview, setItemsOverview] = useState([]);
   const [webViewKey, setwebViewKey] = useState(1);
-  const [regionChange, setRegion] = useState('');
+  const [regionChange, setRegion] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [isDAlertVisible, setDAlertVisible] = useState(false);
   const [loadData, setLoadData] = useState(true);
 
   const clik = () => {
-    console.log('cek vis', visibleFeatures);
+    console.log("cek vis", visibleFeatures);
     setVisibleFeatures(true);
   };
 
@@ -113,17 +112,17 @@ const ProjectDetails = props => {
   };
 
   const getProjectDetails = async () => {
-    console.log('149 user: ', user);
+    console.log("149 user: ", user);
     try {
       await httpClient
         .request({
-          url: '/modules/project/show-details',
-          method: 'GET',
-          params: {entity_cd: entity_cd, project_no: project_no},
+          url: "/modules/project/show-details",
+          method: "GET",
+          params: { entity_cd: entity_cd, project_no: project_no },
         })
-        .then(result => {
+        .then((result) => {
           const pasing = result.data.data;
-          console.log('137 data di project', pasing);
+          console.log("137 data di project", pasing);
           setDataProjectDetail(pasing);
           setGalleryProject(pasing.gallery);
           setOverviewProject(pasing.overview);
@@ -134,20 +133,20 @@ const ProjectDetails = props => {
           setProjectAddress(pasing.project);
           setLoadData(false);
         })
-        .catch(error => {
-          console.log('Error getProject' + error.response.data.message);
-          alert('Error getProject' + error.response.data.message);
+        .catch((error) => {
+          console.log("Error getProject" + error.response.data.message);
+          alert("Error getProject" + error.response.data.message);
           setLoadData(false);
         });
       // .finally(); //setLoadData(false)
       //setLoadData(false);
     } catch (error) {
-      console.log('ini konsol eror', error);
+      console.log("ini konsol eror", error);
       //setLoadData(false);
     }
   };
 
-  const showModalOverview = item => {
+  const showModalOverview = (item) => {
     setModalVisible(true);
     setItemsOverview(item);
   };
@@ -156,28 +155,31 @@ const ProjectDetails = props => {
 
   return (
     <SafeAreaView
-      edges={['right', 'top', 'left']}
-      style={[BaseStyle.safeAreaView, {backgroundColor: colors.background}]}>
+      edges={["right", "top", "left"]}
+      style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+      >
         <ImageBackground
-          source={{uri: paramsDetail.picture_url}}
+          source={{ uri: paramsDetail.picture_url }}
           imageStyle={{
             borderBottomLeftRadius: 16,
             borderBottomRightRadius: 16,
             //   borderRadius: 20,
           }}
           style={{
-            resizeMode: 'contain',
-            width: Dimensions.get('screen').width,
+            resizeMode: "contain",
+            width: Dimensions.get("screen").width,
 
             height: 350,
-          }}>
+          }}
+        >
           <Header
             //   title={t('project_details')}
-            title={t('')}
+            title={t("")}
             renderLeft={() => {
               return (
                 <Icon
@@ -190,15 +192,15 @@ const ProjectDetails = props => {
                 />
               );
             }}
-            style={{height: 80, borderRadius: 40}}
+            style={{ height: 80, borderRadius: 40 }}
             onPressLeft={() => {
               navigation.goBack();
             }}
           />
           <View
             style={{
-              position: 'absolute',
-              backgroundColor: 'white',
+              position: "absolute",
+              backgroundColor: "white",
               // top: 0,
               left: 0,
               right: 0,
@@ -211,17 +213,19 @@ const ProjectDetails = props => {
               opacity: 0.8,
               // justifyContent: 'center',
               // alignItems: 'center',
-            }}>
-            <View style={{marginVertical: 10, marginHorizontal: 25}}>
+            }}
+          >
+            <View style={{ marginVertical: 10, marginHorizontal: 25 }}>
               <Text
                 style={{
-                  fontFamily: 'DMSerifDisplay',
-                  color: 'black', //colors.corn90,
+                  fontFamily: "DMSerifDisplay",
+                  color: "black", //colors.corn90,
                   marginVertical: 10,
                   fontSize: 18,
                   // marginHorizontal: 3,
-                  fontWeight: 'bold',
-                }}>
+                  fontWeight: "bold",
+                }}
+              >
                 {/* {item.project_name} */}
                 {/* Project name */}
                 {/* {paramsDetail.project_descs} */}
@@ -230,12 +234,13 @@ const ProjectDetails = props => {
 
               <Text
                 style={{
-                  fontFamily: 'DMSerifDisplay',
-                  color: 'gray',
+                  fontFamily: "DMSerifDisplay",
+                  color: "gray",
                   marginVertical: 5,
                   fontSize: 16,
-                  fontWeight: 'bold',
-                }}>
+                  fontWeight: "bold",
+                }}
+              >
                 {paramsDetail.entity_name}
                 {/* {paramsDetail.caption_address} */}
               </Text>
@@ -243,54 +248,58 @@ const ProjectDetails = props => {
           </View>
         </ImageBackground>
         {loadData === true ? (
-          <ActivityIndicator style={{marginTop: 30}} />
+          <ActivityIndicator style={{ marginTop: 30 }} />
         ) : (
           <>
             {/* brosur ----  */}
             <TouchableOpacity
               onPress={() => {
                 //alert("435 test");
-                navigation.navigate('DownloadBrochure', {
+                navigation.navigate("DownloadBrochure", {
                   downloadProject,
                   descs: paramsDetail.descs,
                 });
                 //setDAlertVisible(true)}
-              }}>
+              }}
+            >
               <View
                 style={{
-                  marginTop: '10%',
+                  marginTop: "10%",
                   backgroundColor: colors.primary,
                   borderRadius: 15,
 
                   height: 50,
                   marginBottom: 10,
                   marginHorizontal: 20,
-                  alignContent: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+                  alignContent: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Text
                   style={{
-                    color: 'white',
-                    fontFamily: 'DMSerifDisplay',
+                    color: "white",
+                    fontFamily: "DMSerifDisplay",
                     fontSize: 14,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                  }}>
+                    alignSelf: "center",
+                    alignItems: "center",
+                  }}
+                >
                   Download Brochure
                 </Text>
               </View>
             </TouchableOpacity>
             {/* -- overview  */}
-            <View style={{marginHorizontal: 20, marginTop: 20}}>
+            <View style={{ marginHorizontal: 20, marginTop: 20 }}>
               <Text
                 style={{
                   fontSize: 14,
-                  fontFamily: 'DMSerifDisplay',
+                  fontFamily: "DMSerifDisplay",
                   color: colors.text,
                   marginVertical: 5,
-                  fontWeight: 'bold',
-                }}>
+                  fontWeight: "bold",
+                }}
+              >
                 Overview
               </Text>
               {overviewProject.length != 0 ? (
@@ -306,7 +315,7 @@ const ProjectDetails = props => {
 
                   // </View>
 
-                  <View key={index} style={{flex: 1}}>
+                  <View key={index} style={{ flex: 1 }}>
                     <RenderHtml
                       key={index}
                       contentWidth={contentWidth}
@@ -319,48 +328,48 @@ const ProjectDetails = props => {
                       }}
                       systemFonts={systemFonts}
                       enableExperimentalMarginCollapsing={true}
-                      ignoredStyles={['fontSize']}
+                      ignoredStyles={["fontSize"]}
                       tagsStyles={{
                         em: {
                           color: colors.text,
                           // fontSize: 12,
-                          fontFamily: 'DMSerifDisplay',
+                          fontFamily: "DMSerifDisplay",
                           // fontFamily: Fonts.type.ComicSansMS,
                           // textAlign: 'justify',
-                          fontStyle: 'normal',
+                          fontStyle: "normal",
                         },
                         strong: {
                           color: colors.text,
                           // fontSize: 12,
                           // fontFamily: "DMSerifDisplay",
-                          fontWeight: '600',
-                          ...(Platform.OS === 'android' && {
-                            fontWeight: '600',
-                            fontFamily: 'DMSerifDisplay',
+                          fontWeight: "600",
+                          ...(Platform.OS === "android" && {
+                            fontWeight: "600",
+                            fontFamily: "DMSerifDisplay",
                           }),
                         },
                         b: {
                           color: colors.text,
                           // fontSize: 12,
                           // fontFamily: "DMSerifDisplay",
-                          fontWeight: '600',
-                          ...(Platform.OS === 'android' && {
-                            fontWeight: '600',
-                            fontFamily: 'DMSerifDisplay',
+                          fontWeight: "600",
+                          ...(Platform.OS === "android" && {
+                            fontWeight: "600",
+                            fontFamily: "DMSerifDisplay",
                           }),
                         },
 
                         p: {
                           color: colors.text,
                           fontSize: 13,
-                          fontFamily: 'DMSerifDisplay',
+                          fontFamily: "DMSerifDisplay",
                           // fontFamily: Fonts.type.ComicSansMS,
                           //textAlign: 'justify',
                         },
                         span: {
                           color: colors.text,
                           fontSize: 13,
-                          fontFamily: 'DMSerifDisplay',
+                          fontFamily: "DMSerifDisplay",
                           // fontFamily: Fonts.type.ComicSansMS,
                           //textAlign: 'justify',
                         },
@@ -368,10 +377,10 @@ const ProjectDetails = props => {
                           // color: isDarkMode ? 'blue' : 'red',
                           color: colors.text,
                           // fontSize: 12,
-                          fontFamily: 'DMSerifDisplay',
+                          fontFamily: "DMSerifDisplay",
                         },
                         div: {
-                          textAlign: 'justify',
+                          textAlign: "justify",
                           color: colors.text,
                         },
                       }}
@@ -380,25 +389,27 @@ const ProjectDetails = props => {
                     <TouchableOpacity onPress={() => showModalOverview(item)}>
                       <View
                         style={{
-                          flexDirection: 'row',
+                          flexDirection: "row",
                           marginVertical: 5,
 
-                          alignItems: 'center',
-                        }}>
+                          alignItems: "center",
+                        }}
+                      >
                         <Text
                           style={{
                             fontSize: 12,
-                            fontFamily: 'DMSerifDisplay',
+                            fontFamily: "DMSerifDisplay",
                             color: colors.text,
                             marginBottom: 2,
                             marginRight: 5,
-                            alignSelf: 'center',
+                            alignSelf: "center",
                             // alignContent: 'center',
                             // justifyContent: 'center',
                             // alignItems: 'center',
                             borderBottomWidth: 0.5,
                             borderBottomColor: colors.text,
-                          }}>
+                          }}
+                        >
                           Show more
                         </Text>
                         <Icon
@@ -425,38 +436,43 @@ const ProjectDetails = props => {
                 <Text
                   style={{
                     fontSize: 12,
-                    fontFamily: 'DMSerifDisplay',
+                    fontFamily: "DMSerifDisplay",
                     color: colors.text,
                     marginVertical: 5,
-                  }}>
+                  }}
+                >
                   No data overview
                 </Text>
               )}
             </View>
             {/* --- grid features dll  */}
-            <View style={{marginHorizontal: 20, marginTop: 20}}>
+            <View style={{ marginHorizontal: 20, marginTop: 20 }}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                   marginTop: 30,
-                }}>
+                }}
+              >
                 <ButtonMenuHome
                   onPress={() => clik()}
-                  title={'Features'}
-                  nameicon={'gem'}></ButtonMenuHome>
+                  title={"Features"}
+                  nameicon={"gem"}
+                ></ButtonMenuHome>
                 <ButtonMenuHome
                   onPress={() => setVisibleGallery(true)}
-                  title={'Gallery'}
-                  nameicon={'images'}></ButtonMenuHome>
+                  title={"Gallery"}
+                  nameicon={"images"}
+                ></ButtonMenuHome>
                 <ButtonMenuHome
                   onPress={() => setVisibleFloorplan(true)}
-                  title={'Unit Plan'}
-                  nameicon={'houzz'}></ButtonMenuHome>
+                  title={"Unit Plan"}
+                  nameicon={"houzz"}
+                ></ButtonMenuHome>
                 <ButtonMenuHome
                   onPress={() => setVisibleSurrounding(true)}
-                  title={'Surrounding'}
-                  nameicon={'map-marker-alt'}
+                  title={"Surrounding"}
+                  nameicon={"map-marker-alt"}
                   // onPress={() =>
                   //   navigation.navigate('CalculatorScreen')
                   // }
@@ -471,31 +487,34 @@ const ProjectDetails = props => {
                 marginTop: 15,
                 // backgroundColor: 'yellow',
                 marginBottom: 0,
-              }}>
+              }}
+            >
               <Text
                 style={{
-                  fontFamily: 'DMSerifDisplay',
+                  fontFamily: "DMSerifDisplay",
                   fontSize: 14,
                   color: colors.text,
                   marginVertical: 15,
-                  fontWeight: 'bold',
-                }}>
+                  fontWeight: "bold",
+                }}
+              >
                 Video
               </Text>
 
               {overviewProject.length != 0 ? (
                 overviewProject.map((item, index) => {
-                  console.log('529 item: ' + item.youtube_link);
-                  let text = item.youtube_link + '';
-                  text = text.replace('https://www.youtube.com/embed/', '');
-                  text = text.split('&')[0];
-                  console.log('532 item: ' + text);
+                  console.log("529 item: " + item.youtube_link);
+                  let text = item.youtube_link + "";
+                  text = text.replace("https://www.youtube.com/embed/", "");
+                  text = text.split("&")[0];
+                  console.log("532 item: " + text);
                   return (
                     <View
                       style={{
                         borderRadius: 15,
-                        overflow: 'hidden',
-                      }}>
+                        overflow: "hidden",
+                      }}
+                    >
                       <YoutubePlayer
                         key={index}
                         height={197}
@@ -524,15 +543,17 @@ const ProjectDetails = props => {
                 marginTop: 15,
                 // backgroundColor: 'yellow',
                 marginBottom: 0,
-              }}>
+              }}
+            >
               <Text
                 style={{
-                  fontFamily: 'DMSerifDisplay',
+                  fontFamily: "DMSerifDisplay",
                   fontSize: 14,
                   color: colors.text,
                   marginVertical: 15,
-                  fontWeight: 'bold',
-                }}>
+                  fontWeight: "bold",
+                }}
+              >
                 Contact
               </Text>
 
@@ -544,59 +565,65 @@ const ProjectDetails = props => {
                       borderRadius: 15,
                       padding: 10,
                       marginBottom: 10,
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
-                        fontFamily: 'DMSerifDisplay',
-                        color: 'black', //colors.text,
+                        fontFamily: "DMSerifDisplay",
+                        color: "black", //colors.text,
                         fontSize: 12,
-                        textAlign: 'center',
-                      }}>
-                      Address: {'\n'}
+                        textAlign: "center",
+                      }}
+                    >
+                      Address: {"\n"}
                       {item.coordinat_address}
-                      {'\n'}
+                      {"\n"}
                     </Text>
 
                     <Text
                       style={{
-                        fontFamily: 'DMSerifDisplay',
-                        color: 'black', //colors.text,
+                        fontFamily: "DMSerifDisplay",
+                        color: "black", //colors.text,
                         fontSize: 12,
-                        textAlign: 'center',
+                        textAlign: "center",
                         marginLeft: 3,
-                      }}>
-                      Phone: {'\n'}
+                      }}
+                    >
+                      Phone: {"\n"}
                       {item.wa_no}
-                      {'\n'}
+                      {"\n"}
                     </Text>
                     <Text
                       style={{
-                        fontFamily: 'DMSerifDisplay',
-                        color: 'black', //colors.text,
+                        fontFamily: "DMSerifDisplay",
+                        color: "black", //colors.text,
                         fontSize: 12,
-                        textAlign: 'center',
-                      }}>
-                      Email: {'\n'}
+                        textAlign: "center",
+                      }}
+                    >
+                      Email: {"\n"}
                       {item.email_add}
                     </Text>
                   </View>
 
                   <Text
                     style={{
-                      textAlign: 'center',
-                      fontFamily: 'DMSerifDisplay',
+                      textAlign: "center",
+                      fontFamily: "DMSerifDisplay",
                       color: colors.text,
                       fontSize: 12,
-                      fontWeight: 'bold',
-                    }}>
+                      fontWeight: "bold",
+                    }}
+                  >
                     ARE YOU INTERESTED? IT'S TIME TO DISCOVER YOUR HOME
                   </Text>
 
                   <View
                     style={{
-                      alignItems: 'center',
+                      alignItems: "center",
                       marginTop: 20,
-                    }}>
+                    }}
+                  >
                     {/* <WebView
                                     scalesPageToFit={true}
                                     bounces={false}
@@ -628,34 +655,37 @@ const ProjectDetails = props => {
                     <Button
                       style={{
                         backgroundColor: colors.primary,
-                        width: '50%',
+                        width: "50%",
                         height: 40,
                       }}
                       onPress={() => {
                         console.log(
-                          '628 item.coordinat_project: ',
-                          item.coordinat_project,
+                          "628 item.coordinat_project: ",
+                          item.coordinat_project
                         );
                         return item.coordinat_project == null
-                          ? Alert.alert('No available location project')
+                          ? Alert.alert("No available location project")
                           : Linking.openURL(item.coordinat_project);
-                      }}>
+                      }}
+                    >
                       <View
                         style={{
-                          flexDirection: 'row',
+                          flexDirection: "row",
                           //backgroundColor: colors.primary,
-                        }}>
+                        }}
+                      >
                         <Text
                           style={{
-                            fontFamily: 'DMSerifDisplay',
-                            color: 'white',
+                            fontFamily: "DMSerifDisplay",
+                            color: "white",
                             fontSize: 12,
                             paddingRight: 5,
-                            fontWeight: 'bold',
-                          }}>
+                            fontWeight: "bold",
+                          }}
+                        >
                           Find Location
                         </Text>
-                        <Icon name="location-arrow" color={'white'} size={14} />
+                        <Icon name="location-arrow" color={"white"} size={14} />
                       </View>
                     </Button>
                   </View>
@@ -673,9 +703,9 @@ const ProjectDetails = props => {
               setDAlertVisible(false);
               //handleLinking();
               console.log(
-                '949 confirm: ',
+                "949 confirm: ",
                 downloadProject[0]?.url,
-                'Brochure ' + paramsDetail.descs + '.pdf',
+                "Brochure " + paramsDetail.descs + ".pdf"
               );
               // downloadFile(
               //   downloadProject[0]?.url,
@@ -690,7 +720,8 @@ const ProjectDetails = props => {
           <Modal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}>
+            visible={modalVisible}
+          >
             <View
               style={[
                 styles.centeredView,
@@ -699,16 +730,19 @@ const ProjectDetails = props => {
                   borderTopRightRadius: 25,
                   borderTopLeftRadius: 25,
                 },
-              ]}>
+              ]}
+            >
               <View>
                 <View
                   style={{
-                    flexDirection: 'row',
+                    flexDirection: "row",
                     marginHorizontal: 20,
                     marginVertical: 20,
-                  }}>
+                  }}
+                >
                   <TouchableOpacity
-                    onPress={() => setModalVisible(!modalVisible)}>
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
                     <View>
                       <Icon
                         name="arrow-left"
@@ -721,15 +755,17 @@ const ProjectDetails = props => {
                   <View
                     style={{
                       flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <Text
                       style={{
-                        fontFamily: 'DMSerifDisplay',
+                        fontFamily: "DMSerifDisplay",
                         color: colors.text,
                         fontSize: 16,
-                      }}>
+                      }}
+                    >
                       Overview
                     </Text>
                   </View>
@@ -739,8 +775,9 @@ const ProjectDetails = props => {
                   style={{
                     borderWidth: 0.3,
                     borderColor: colors.text,
-                    borderStyle: 'solid',
-                  }}></View>
+                    borderStyle: "solid",
+                  }}
+                ></View>
               </View>
               {/* <View style={styles.modalView}> */}
               {itemsOverview.length != 0 ? (
@@ -748,7 +785,8 @@ const ProjectDetails = props => {
                   style={{
                     marginHorizontal: 30,
                     marginVertical: 20,
-                  }}>
+                  }}
+                >
                   <RenderHtml
                     contentWidth={contentWidth}
                     source={{
@@ -759,64 +797,64 @@ const ProjectDetails = props => {
                                         `,
                     }}
                     systemFonts={systemFonts}
-                    ignoredStyles={['fontSize', 'color', 'backgroundColor']}
+                    ignoredStyles={["fontSize", "color", "backgroundColor"]}
                     enableExperimentalMarginCollapsing={true}
                     tagsStyles={{
                       em: {
                         color: colors.text,
                         // fontSize: 12,
-                        fontFamily: 'DMSerifDisplay',
+                        fontFamily: "DMSerifDisplay",
                         // fontFamily: Fonts.type.ComicSansMS,
                         // textAlign: 'justify',
-                        fontStyle: 'normal',
+                        fontStyle: "normal",
                       },
                       strong: {
                         color: colors.text,
                         // fontSize: 12,
                         // fontFamily: "DMSerifDisplay",
-                        fontWeight: '600',
-                        ...(Platform.OS === 'android' && {
-                          fontWeight: '600',
-                          fontFamily: 'DMSerifDisplay',
+                        fontWeight: "600",
+                        ...(Platform.OS === "android" && {
+                          fontWeight: "600",
+                          fontFamily: "DMSerifDisplay",
                         }),
                       },
                       b: {
                         color: colors.text,
                         // fontSize: 12,
                         // fontFamily: "DMSerifDisplay",
-                        fontWeight: '600',
-                        ...(Platform.OS === 'android' && {
-                          fontWeight: '600',
-                          fontFamily: 'DMSerifDisplay',
+                        fontWeight: "600",
+                        ...(Platform.OS === "android" && {
+                          fontWeight: "600",
+                          fontFamily: "DMSerifDisplay",
                         }),
                       },
 
                       p: {
                         color: colors.text,
                         fontSize: 13,
-                        fontFamily: 'DMSerifDisplay',
+                        fontFamily: "DMSerifDisplay",
                         // fontFamily: Fonts.type.ComicSansMS,
-                        textAlign: 'justify',
+                        textAlign: "justify",
                       },
                       span: {
                         color: colors.text,
                         fontSize: 13,
-                        fontFamily: 'DMSerifDisplay',
+                        fontFamily: "DMSerifDisplay",
                         // fontFamily: Fonts.type.ComicSansMS,
-                        textAlign: 'justify',
+                        textAlign: "justify",
                       },
                       li: {
                         // color: isDarkMode ? 'blue' : 'red',
                         color: colors.text,
                         // fontSize: 12,
-                        fontFamily: 'DMSerifDisplay',
+                        fontFamily: "DMSerifDisplay",
                       },
                       div: {
-                        textAlign: 'justify',
+                        textAlign: "justify",
                         color: colors.text,
                       },
                       font: {
-                        textAlign: 'justify',
+                        textAlign: "justify",
                         color: colors.text,
                       },
                     }}
@@ -839,7 +877,8 @@ const ProjectDetails = props => {
               <Icon name="arrow-left" size={18} color={colors.primary} />
             </TouchableOpacity>
           }
-          datas={featureProject}></Features>
+          datas={featureProject}
+        ></Features>
         {/* // modal gallery  */}
         <Gallery
           onRequestClose={() => {
@@ -851,7 +890,8 @@ const ProjectDetails = props => {
               <Icon name="arrow-left" size={18} color={colors.primary} />
             </TouchableOpacity>
           }
-          datas={galleryProject}></Gallery>
+          datas={galleryProject}
+        ></Gallery>
         <Floorplan
           onRequestClose={() => {
             setVisibleFloorplan(false);
@@ -862,7 +902,8 @@ const ProjectDetails = props => {
               <Icon name="arrow-left" size={18} color={colors.primary} />
             </TouchableOpacity>
           }
-          datas={planProject}></Floorplan>
+          datas={planProject}
+        ></Floorplan>
         <Surrounding
           onRequestClose={() => {
             setVisibleSurrounding(false);
@@ -873,7 +914,8 @@ const ProjectDetails = props => {
               <Icon name="arrow-left" size={18} color={colors.primary} />
             </TouchableOpacity>
           }
-          datas={surroundingProject}></Surrounding>
+          datas={surroundingProject}
+        ></Surrounding>
       </ScrollView>
     </SafeAreaView>
   );

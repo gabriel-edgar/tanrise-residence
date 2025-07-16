@@ -33,7 +33,7 @@ import { data_project } from "../../actions/ProjectActions";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from "@react-native-firebase/messaging";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import { FontWeight } from "../../config";
 

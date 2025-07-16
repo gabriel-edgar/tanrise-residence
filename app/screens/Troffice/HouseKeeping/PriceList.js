@@ -44,7 +44,7 @@
 //   RadioButtonLabel,
 // } from "react-native-simple-radio-button";
 // import { lightGreen100 } from "react-native-paper/lib/typescript/styles/colors";
-// import { API_URL_LOKAL } from "@env";
+// import { baseURL as API_URL_LOKAL } from '@/controllers/HttpClient';
 // export default function PriceList(props) {
 //   const { t, i18n } = useTranslation();
 //   const { colors } = useTheme();

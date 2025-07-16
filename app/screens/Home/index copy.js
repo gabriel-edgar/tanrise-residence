@@ -100,7 +100,7 @@ import Modal from "react-native-modal";
 
 import { fontPixel, pixelSizeVertical } from "./normalize";
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from '@/controllers/HttpClient';
 import httpClient from "../../controllers/HttpClient";
 import ProjectController from "../../controllers/ProjectController";
 import { store, persist } from "../../reducers";

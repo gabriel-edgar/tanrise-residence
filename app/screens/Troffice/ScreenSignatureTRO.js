@@ -47,7 +47,7 @@ import Signature from "react-native-signature-canvas";
 import IconAnt from "react-native-vector-icons/AntDesign";
 import ViewHistoryDetail from "./ViewHistoryDetailTRO";
 // import RNFetchBlob from 'rn-fetch-blob';
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 export default function ScreenSignatureTRO({ route }) {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();

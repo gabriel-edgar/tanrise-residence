@@ -35,7 +35,7 @@
 // import { Divider } from "react-native-paper";
 // import numFormattanpaRupiah from "../../../components/numFormattanpaRupiah";
 // import MaskInput, { Masks, createNumberMask } from "react-native-mask-input";
-// import { API_URL_LOKAL } from "@env";
+// import { baseURL as API_URL_LOKAL } from '@/controllers/HttpClient';
 // const rupiahMask = createNumberMask({
 //   prefix: [],
 //   delimiter: ".",

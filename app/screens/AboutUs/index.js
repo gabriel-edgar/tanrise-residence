@@ -6,33 +6,33 @@ import {
   ProfileDescription,
   SafeAreaView,
   Text,
-} from '@/components';
-import {BaseColor, BaseStyle, useTheme} from '@/config';
-import {Images} from '@/config';
-import {AboutUsData} from '@/data';
-import * as Utils from '@/utils';
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View} from 'react-native';
-import styles from './styles';
-import {useTranslation} from 'react-i18next';
-import axios from 'axios';
-import {API_URL_LOKAL} from '@env';
-import {useSelector, useDispatch} from 'react-redux';
-import httpClient from '../../controllers/HttpClient';
-import RenderHtml from 'react-native-render-html';
-import {color} from 'react-native-elements/dist/helpers';
+} from "@/components";
+import { BaseColor, BaseStyle, useTheme } from "@/config";
+import { Images } from "@/config";
+import { AboutUsData } from "@/data";
+import * as Utils from "@/utils";
+import React, { useState, useEffect } from "react";
+import { ScrollView, View } from "react-native";
+import styles from "./styles";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
+import { useSelector, useDispatch } from "react-redux";
+import httpClient from "../../controllers/HttpClient";
+import RenderHtml from "react-native-render-html";
+import { color } from "react-native-elements/dist/helpers";
 
-const AboutUs = props => {
-  const {navigation} = props;
-  const {colors} = useTheme();
-  const {t} = useTranslation();
+const AboutUs = (props) => {
+  const { navigation } = props;
+  const { colors } = useTheme();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   //console.log("26 colors: ", colors);
-  const stateRedux = useSelector(state => state.user);
+  const stateRedux = useSelector((state) => state.user);
   const token = stateRedux.accessToken;
 
   const stateReduxChoosedProject = useSelector(
-    state => state.Dataproject.chooseProject,
+    (state) => state.Dataproject.chooseProject
   );
 
   // const [ourTeam, setOurTeam] = useState(AboutUsData);
@@ -45,8 +45,8 @@ const AboutUs = props => {
     //   .get(API_URL_LOKAL + `/setting/about-us`)
     await httpClient
       .request({
-        url: '/setting/about-us',
-        method: 'GET',
+        url: "/setting/about-us",
+        method: "GET",
         params: {
           entity_cd: stateReduxChoosedProject?.entity_cd,
           project_no: stateReduxChoosedProject?.project_no,
@@ -55,17 +55,17 @@ const AboutUs = props => {
         //   Authorization: `Bearer ${token}`,
         // },
       })
-      .then(res => {
+      .then((res) => {
         setData(res.data.data[0]);
       })
-      .catch(error => {
-        console.log('error get about us', error);
+      .catch((error) => {
+        console.log("error get about us", error);
         // alert('error get');
       });
   };
 
   useEffect(() => {
-    console.log('datauser', data);
+    console.log("datauser", data);
     setTimeout(() => {
       setLoading(false);
       dataAbout();
@@ -75,9 +75,10 @@ const AboutUs = props => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["right", "top", "left"]}
+    >
       <Header
-        title={t('about_us')}
+        title={t("about_us")}
         renderLeft={() => {
           return (
             <Icon
@@ -101,12 +102,13 @@ const AboutUs = props => {
               //alignSelf: "center",
               //width: "80%",
             }
-          }>
+          }
+        >
           {/* <Image source={Images.trip4} style={{width: '100%', height: 135}} /> */}
           <Image
             //source={require("../../assets/images/Logo-Carstensz.png")}
             //source={require("../../assets/images/logoIFCA.png")}
-            source={require('../../assets/images/image-home/logo-tanrise-blackfont.png')}
+            source={require("../../assets/images/image-home/logo-tanrise-blackfont.png")}
             resizeMode="contain"
             style={{
               //height: 150,
@@ -119,8 +121,8 @@ const AboutUs = props => {
               //alignSelf: "center",
               marginVertical: 10,
               height: 150,
-              width: '80%',
-              alignSelf: 'center',
+              width: "80%",
+              alignSelf: "center",
               //marginHorizontal: 100,
               //flexDirection: "row",
               //objectFit: "fill",
@@ -130,15 +132,16 @@ const AboutUs = props => {
             }}
           />
         </View>
-        <View style={{paddingTop: 3}}>
+        <View style={{ paddingTop: 3 }}>
           <Text
             headline
             semibold
             style={{
-              textAlign: 'center',
+              textAlign: "center",
               paddingBottom: 20,
-              alignItems: 'center',
-            }}>
+              alignItems: "center",
+            }}
+          >
             {/* {t('who_we_are')} */}
             {data.about_title}
           </Text>
@@ -153,14 +156,16 @@ const AboutUs = props => {
               {data.about_us?.replace(/<\/?[^>]+(>|$;)/gi, '')}
             </Text>
           </View> */}
-          <View style={{marginHorizontal: 30}}>
+          <View style={{ marginHorizontal: 30 }}>
             <RenderHtml
-              source={{html: data.about_descs}}
+              source={{ html: data.about_descs }}
               //contentWidth={"70%"}
-              tagsStyles={{p: {color: colors.text}}}
+              tagsStyles={{ p: { color: colors.text } }}
             />
           </View>
-          <View style={[styles.address, {backgroundColor: colors.background}]}>
+          <View
+            style={[styles.address, { backgroundColor: colors.background }]}
+          >
             <Text
               semibold
               style={{
@@ -168,7 +173,8 @@ const AboutUs = props => {
                 paddingBottom: 0,
                 paddingTop: 15,
                 marginBottom: 0,
-              }}>
+              }}
+            >
               Contact Us
             </Text>
             <Text
@@ -177,22 +183,24 @@ const AboutUs = props => {
                 paddingTop: 0,
                 //paddingBottom: 10,
                 fontSize: 15,
-                textAlign: 'center',
-              }}>
+                textAlign: "center",
+              }}
+            >
               {data.contact_name}
             </Text>
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: "row",
                 //justifyContent: "center",
-                alignItems: 'center',
+                alignItems: "center",
                 //backgroundColor: "blue",
                 marginTop: 0,
                 paddingTop: 0,
-              }}>
+              }}
+            >
               <Icon
                 style={{
-                  alignSelf: 'center', //backgroundColor: "blue"
+                  alignSelf: "center", //backgroundColor: "blue"
                   marginRight: 10,
                   color: colors.text,
                 }}
@@ -205,15 +213,16 @@ const AboutUs = props => {
                   //justifyContent: "center",
                   marginTop: 20,
                   //backgroundColor: "blue",
-                }}>
+                }}
+              >
                 <RenderHtml
-                  source={{html: data.contact_info}}
-                  contentWidth={'90%'}
-                  tagsStyles={{p: {color: colors.text}}}
+                  source={{ html: data.contact_info }}
+                  contentWidth={"90%"}
+                  tagsStyles={{ p: { color: colors.text } }}
                   style={{
                     //marginTop: 50,
-                    backgroundColor: 'red',
-                    alignSelf: 'center',
+                    backgroundColor: "red",
+                    alignSelf: "center",
                   }}
                 />
               </View>
@@ -236,7 +245,8 @@ const AboutUs = props => {
                 paddingBottom: 30,
                 paddingTop: 15,
                 color: colors.text,
-              }}>
+              }}
+            >
               Address
             </Text>
             {/* <Text
@@ -250,11 +260,11 @@ const AboutUs = props => {
               {data.address}
             </Text> */}
             <RenderHtml
-              source={{html: data.address}}
-              contentWidth={'90%'}
+              source={{ html: data.address }}
+              contentWidth={"90%"}
               tagsStyles={{
-                p: {color: colors.text},
-                div: {color: colors.text},
+                p: { color: colors.text },
+                div: { color: colors.text },
               }}
             />
           </View>

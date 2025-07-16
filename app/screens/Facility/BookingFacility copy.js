@@ -45,7 +45,7 @@ import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
 import { FTypes } from "@/data";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 function BookingFacility({ route }) {
   // console.log('route in booking facility', route.params);

@@ -3,7 +3,7 @@
 
 //
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import axios from "axios";
 import httpClient from "../../controllers/HttpClient";
 

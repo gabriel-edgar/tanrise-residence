@@ -37,7 +37,7 @@ import getUser from "../../selectors/UserSelectors";
 
 import * as Utils from "@/utils";
 import moment from "moment";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const TABS = [
   {

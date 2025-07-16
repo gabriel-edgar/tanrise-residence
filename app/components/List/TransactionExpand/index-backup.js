@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
 import numFormattanpaRupiah from "../../numFormattanpaRupiah";
-import { API_URL_LOKAL } from "@env";
 import httpClient from "../../../controllers/HttpClient";
 
 const TransactionExpand = ({
@@ -82,23 +81,11 @@ const TransactionExpand = ({
   const [loading, setLoading] = useState(true);
 
   const detailDateDue = async () => {
-    // console.log(
-    //   "url getDataDue",
-    //   API_URL_LOKAL +
-    //     `/home/common-projectDue/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-    // );
     console.log(
       "84 url: ",
       `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
     );
     try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     `/home/common-projectDue/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
-
-      // /modules/billing/detail-history/mgr@ifca.co.id/01/02/C10/D121
-
       const res = await httpClient.request({
         url: `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
         method: "GET",
@@ -122,15 +109,6 @@ const TransactionExpand = ({
       `/modules/billing/summary-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
     );
     try {
-      // console.log(
-      //   "api not due detail",
-      //   API_URL_LOKAL +
-      //     `/home/common-projectCurrent/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     `/home/common-projectCurrent/IFCAPB/${email}/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`
-      // );
       const res = await httpClient.request({
         url: `/modules/billing/summary-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
         method: "GET",

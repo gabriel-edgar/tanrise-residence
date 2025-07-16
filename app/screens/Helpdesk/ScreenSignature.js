@@ -47,7 +47,7 @@ import Modal from "react-native-modal";
 
 import Signature from "react-native-signature-canvas";
 // import RNFetchBlob from 'rn-fetch-blob';
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 export default function ScreenSignature({ route }) {
   const { t, i18n } = useTranslation();

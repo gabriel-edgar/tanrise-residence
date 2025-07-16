@@ -47,7 +47,7 @@ import * as Utils from "@/utils";
 
 // import SegmentControl from "react-native-segment-control";
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const dataProduk = [
   { id: 1, txt: "first check", isChecked: false },

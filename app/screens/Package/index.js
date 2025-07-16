@@ -29,7 +29,7 @@ import {
   View,
   ActivityIndicator,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { NewsList, NotFound } from "../../components";
 
@@ -37,7 +37,7 @@ import { useSelector } from "react-redux";
 import getUser from "../../selectors/UserSelectors";
 
 import styles from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const TABS = [
   {

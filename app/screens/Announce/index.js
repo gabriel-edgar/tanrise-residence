@@ -27,7 +27,7 @@ import { FlatList, ScrollView, View, ActivityIndicator } from "react-native";
 import { CardReport01, CardReport08 } from "../../components";
 import List from "../../components/Product/List";
 import styles from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import { store, persist } from "../../store";
 
 const Announce = (props) => {

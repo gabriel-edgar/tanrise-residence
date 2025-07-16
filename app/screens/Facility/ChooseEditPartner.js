@@ -42,7 +42,7 @@ import getUser from "../../selectors/UserSelectors";
 import { EPostListData, ESortOption } from "@/data";
 import * as Utils from "@/utils";
 
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 
 const dataProduk = [
   { id: 1, txt: "first check", isChecked: false },

@@ -41,7 +41,7 @@ import React, {
 const { height: deviceHeight, width: deviceWidth } = Dimensions.get("window");
 import moment from "moment";
 import Style from "./styles";
-import { API_URL_LOKAL } from "@env";
+import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../controllers/HttpClient";
 
 const MeterInfoX = (params) => {
