@@ -162,15 +162,18 @@ const BillingHistory = () => {
   };
 
   function removeAfterDot(input) {
+    // return input
     const index = input.indexOf('.');
-    if (index !== -1) {
-      return formatNumber(parseInt(input.substring(0, index))); // Return substring before the dot
-    }
-    return formatNumber(parseInt(input)); // Return original string if no dot is found
+    // if (index !== -1) {
+    //   return formatNumber(parseInt(input.substring(0, index))); // Return substring before the dot
+    // }
+    return formatNumber(input); // Return original string if no dot is found
   }
 
   const formatNumber = num => {
-    return 'Rp ' + new Intl.NumberFormat('de-DE').format(num); // Using German formatting
+    //  return num;
+    return num.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    // return 'Rp ' + new Intl.NumberFormat('de-DE').format(num); // Using German formatting
   };
 
   const checkHowToPay = channel => {

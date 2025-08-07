@@ -80,6 +80,8 @@ const TransactionExpand = ({
   const [datadetailNotDue, setDetailNotDue] = useState([]);
 
   const [loading, setLoading] = useState(true);
+console.log('83 ListTransactionProps',ListTransactionProps)
+console.log('83 item',item)
 
   const detailDateDue = async () => {
     console.log(
@@ -192,18 +194,18 @@ const TransactionExpand = ({
     }
   };
 
-  const sumTotal =
-    datadetailDateDue != 0
-      ? datadetailDateDue.reduceRight((max, bills) => {
-          // return (max += parseInt(bills.mbal_amt));
-          // return (max += parseInt(bills.mdoc_amt));
-          return (max += parseInt(bills.mfinal_amt));
-        }, 0)
-      : null;
-  const math_total = Math.floor(sumTotal);
-  const replaceTotal = math_total
-    .toFixed()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+const sumTotal =
+  datadetailDateDue != 0
+    ? datadetailDateDue.reduceRight((max, bills) => {
+        return max + parseFloat(bills.mfinal_amt);
+      }, 0)
+    : 0;
+
+const replaceTotal = sumTotal
+  .toFixed(2) // Keep 2 decimals, e.g., "442604.75"
+  .replace('.', ',')
+  .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adds thousand separator
+
   console.log("sum detail mbal mont", sumTotal);
   console.log("replace total", replaceTotal);
 
@@ -212,14 +214,16 @@ const TransactionExpand = ({
   const sumTotalNotDue =
     datadetailNotDue_null != 0
       ? datadetailNotDue.reduceRight((max, bills) => {
-          // return (max += parseInt(bills.mdoc_amt));
-          return (max += parseInt(bills.mfinal_amt));
+          return (max += parseFloat(bills.mfinal_amt));
         }, 0)
-      : null;
+      : 0;
   const math_total_notdue = Math.floor(sumTotalNotDue);
-  const replaceTotal_notdue = math_total_notdue
-    .toFixed()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  // const replaceTotal_notdue = math_total_notdue
+  // .toFixed(2)
+  // .replace('.', ',')
+  // .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  // change to more pure from mfinal_amt
+  const replaceTotal_notdue = numFormattanpaRupiah(item?.mfinal_amt)
   console.log("c", math_total_notdue);
   console.log("replace total due date", replaceTotal_notdue);
 
@@ -381,7 +385,6 @@ const TransactionExpand = ({
                       >
                         <Text>Rp. </Text>
                         <Text subhead>
-                          {/* {numFormattanpaRupiah(item.mdoc_amt)} */}
                           {numFormattanpaRupiah(item.mfinal_amt)}
                           {/* //tadinya ini mbal_amt */}
                           {/* 100.000.000.00 */}
@@ -418,7 +421,7 @@ const TransactionExpand = ({
                       flexDirection: "row",
                       justifyContent: "space-between",
 
-                      width: "35%",
+                      width: "45%",
                     }}
                   >
                     <Text subhead bold style={{ fontSize: 16 }}>
@@ -485,8 +488,6 @@ const TransactionExpand = ({
                           /(\d)(?=(\d{3})+(?!\d))/g,
                           '$1.',
                         )} */}
-                          {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                          {/* {numFormattanpaRupiah(item.mdoc_amt)} */}
                           {numFormattanpaRupiah(item.mfinal_amt)}
                           {/* 100.000.000.00 */}
                         </Text>
@@ -522,14 +523,14 @@ const TransactionExpand = ({
                       flexDirection: "row",
                       justifyContent: "space-between",
 
-                      width: "35%",
+                      width: "45%",
                     }}
                   >
                     <Text subhead bold style={{ fontSize: 16 }}>
                       Rp.{" "}
                     </Text>
                     <Text subhead bold style={{ fontSize: 16 }}>
-                      {replaceTotal_notdue}
+                      {numFormattanpaRupiah(item?.mfinal_amt)}
                     </Text>
                   </View>
                 </View>
