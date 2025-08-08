@@ -229,7 +229,7 @@ const Billing = (props) => {
       .catch((error) => {});
   };
 
-  useCustomTriggerOnFocus(onRefresh, 5000);
+  useCustomTriggerOnFocus(onRefresh, 8000);
 
   // Make function to call the api
   async function fetchData() {

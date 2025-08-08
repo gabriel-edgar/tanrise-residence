@@ -183,28 +183,28 @@ const ClaimUnit = (props) => {
     //setProjectList(dataDummyProject);
   };
 
-  const loadDataEntityList = async () => {
-    await httpClient
-      .request({
-        url: "/auth/get-entity",
-        method: "GET",
-        //data,
-        //params: { email: user.email },
-      })
-      .then((res) => {
-        console.log("190 entity res: ", res.data.data);
-        setEntityList(res.data.data);
-        // {
-        //     "entity_cd": "0001",
-        //     "entity_name": "PT JAYA SUKSES MAKMUR SENTOSA TBK"
-        // }
-        //loadDataUnit(res.data.project);
-      })
-      .catch((err) => {
-        // setProjectList(dataDummy);
-        alert(err);
-      });
-  };
+  // const loadDataEntityList = async () => {
+  //   await httpClient
+  //     .request({
+  //       url: "/auth/get-entity",
+  //       method: "GET",
+  //       //data,
+  //       //params: { email: user.email },
+  //     })
+  //     .then((res) => {
+  //       console.log("190 entity res: ", res.data.data);
+  //       setEntityList(res.data.data);
+  //       // {
+  //       //     "entity_cd": "0001",
+  //       //     "entity_name": "PT JAYA SUKSES MAKMUR SENTOSA TBK"
+  //       // }
+  //       //loadDataUnit(res.data.project);
+  //     })
+  //     .catch((err) => {
+  //       // setProjectList(dataDummy);
+  //       alert(err);
+  //     });
+  // };
 
   const loadDataProjectList = async () => {
     //console.log("96 p entity: ", entity.value.entity_cd);
@@ -748,10 +748,15 @@ const ClaimUnit = (props) => {
                     { color: colors.text },
                   ]}
                   iconStyle={styles.iconStyle}
-                  data={unitList}
+                  // data={unitList}
+                  data={unitList.map((item, index) => ({
+                    ...item,
+                    label: `${[item.cluster_cd] + ". " + item.lot_no}`,
+                  }))}
                   search
                   maxHeight={300}
                   labelField="lot_no"
+                  // labelField="label"
                   valueField="lot_no"
                   placeholder={!isFocus ? placeholderState : "..."}
                   searchPlaceholder="Search..."

@@ -58,6 +58,7 @@ const AttachmentBilling = (props) => {
   const datadetailNotDue = route.params.datadetailNotDue;
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
   const sumTotalNotDue = route.params.sumTotalNotDue;
+  const item = route.params.item;
   console.log("61 sumTotalNotDue: ", sumTotalNotDue);
   const [price, setPrice] = useState("");
   const [webViewPayment, setWebViewPayment] = useState(false);
@@ -313,7 +314,7 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-        {"Invoice " + route.params.datadetailNotDue[0].doc_no}
+         {"Unit "+item.lot_no+" | "}{"Invoice " + route.params.datadetailNotDue[0].doc_no}
       </Text>
       <ScrollView>
         <View style={{ flex: 1, padding: 10 }}>

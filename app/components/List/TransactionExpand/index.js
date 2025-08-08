@@ -1,4 +1,4 @@
-import { Text, Button } from "@/components";
+import { Text, Button, Icon } from "@/components";
 import ListTransaction from "@/components/List/Transaction";
 import PropTypes from "prop-types";
 import React, { useState, Fragment, useEffect } from "react";
@@ -84,6 +84,7 @@ console.log('83 ListTransactionProps',ListTransactionProps)
 console.log('83 item',item)
 
   const detailDateDue = async () => {
+    setLoading(true);
     console.log(
       "84 url: ",
       `/modules/billing/detail-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
@@ -100,7 +101,8 @@ console.log('83 item',item)
       //console.log("84 detail date due -->", res);
       setLoading(false);
     } catch (error) {
-      setErrors(error);
+      setLoading(false);
+      error.status == 429 ? setErrors('Please wait and hide and show to refresh') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
       console.log("84 error detail date due -->", error);
 
       // alert(hasError.toString());
@@ -172,6 +174,7 @@ console.log('83 item',item)
   ];
 
   const detailNotDue = async () => {
+    setLoading(true);
     console.log(
       "84111 ",
       `/modules/billing/summary-history?email=${email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`
@@ -188,8 +191,9 @@ console.log('83 item',item)
       console.log("84111 detail not due -->", res.data);
       setLoading(false);
     } catch (error) {
-      setErrors(error);
-      console.log("84111 error detail not due -->", error);
+      setLoading(false);
+      error.status == 429 ? setErrors('Please wait and hide and show to refresh') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
+      console.log("84111 error detail not due -->", JSON.stringify(error));
       // alert(hasError.toString());
     }
   };
@@ -227,9 +231,11 @@ const replaceTotal = sumTotal
   console.log("c", math_total_notdue);
   console.log("replace total due date", replaceTotal_notdue);
 
-  // useEffect(() => {
-  //   detailDateDue();
-  // }, []);
+  useEffect(() => {
+    if (number == 0 && tab_id == 1){
+      clickExpand()
+    }
+  }, []);
 
   const clickExpand = async () => {
     console.log("177 item: ", item);
@@ -320,7 +326,7 @@ const replaceTotal = sumTotal
         style={{ height: 35, backgroundColor: "lightgray" }}
         onPress={() => clickExpand()}
       >
-        <Text style={{ color: "black", fontSize: 14 }}>Show Detail</Text>
+        <Text style={{ color: "black", fontSize: 14 }}> <Icon name={isExpand ? "chevron-up":"chevron-down"} size={20} /></Text>
       </Button>
       {/* 
       <Button style={{ height: 35 }} onPress={() => clickExpand()}>
@@ -437,7 +443,7 @@ const replaceTotal = sumTotal
               //tab_id == 1 &&
               tab_id == 2 && (
                 <View style={{ alignSelf: "center" }}>
-                  <Text>Not have data detailss </Text>
+                  <Text> {hasError}</Text>
                 </View>
               )
             )
@@ -537,10 +543,9 @@ const replaceTotal = sumTotal
               </View>
             ) : (
               //tab_id == 2 &&
-              tab_id == 1 &&
-              datadetailNotDue == null && (
+              tab_id == 1 && (
                 <View style={{ alignSelf: "center" }}>
-                  <Text>Not have data detail </Text>
+                  <Text> {hasError}</Text>
                 </View>
               )
             )
