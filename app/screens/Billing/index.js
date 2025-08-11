@@ -505,11 +505,12 @@ const Billing = (props) => {
             style={{
               flex: 1,
               paddingHorizontal: 20,
-              //backgroundColor: "blue",
+              // backgroundColor: "blue",
               paddingBottom: 5,
+              display: tab.id === 1 ? 'flex' : 'none'
             }}
           >
-            {tab.id == 1 && dataCurrent != 0
+            { dataCurrent != 0
               ? dataCurrent.map((item, key) => (
                   <ListTransactionExpand
                     onPress={() => navigation.navigate("FHistoryDetail")}
@@ -548,8 +549,7 @@ const Billing = (props) => {
                     }}
                   />
                 ))
-              : tab.id == 1 &&
-                dataCurrent == 0 && (
+              : (
                   <View
                     style={{
                       flex: 1,
@@ -593,10 +593,11 @@ const Billing = (props) => {
             flex: 1,
             paddingHorizontal: 20,
             paddingBottom: 5,
-            //backgroundColor: "blue",
+            // backgroundColor: "blue",
+            display: tab.id === 2 ? 'flex' : 'none'
           }}
         >
-          {tab.id == 2 && data.length != 0
+          { data.length != 0
             ? data.map((item, key) => (
                 <ListTransactionExpand
                   onPress={() => navigation.navigate("FHistoryDetail")}
@@ -635,7 +636,7 @@ const Billing = (props) => {
                   }}
                 />
               ))
-            : tab.id == 2 && (
+            :  (
                 <View
                   style={{
                     flex: 1,

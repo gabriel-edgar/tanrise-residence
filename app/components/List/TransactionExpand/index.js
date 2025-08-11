@@ -232,7 +232,7 @@ const replaceTotal = sumTotal
   console.log("replace total due date", replaceTotal_notdue);
 
   useEffect(() => {
-    if (number == 0 && tab_id == 1){
+    if (number == 0){
       clickExpand()
     }
   }, []);
