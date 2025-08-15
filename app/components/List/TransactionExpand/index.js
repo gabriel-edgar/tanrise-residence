@@ -98,80 +98,17 @@ console.log('83 item',item)
 
       console.log("84 res detail-history: ", res.data);
       setDetailDateDue(res.data.data);
-      //console.log("84 detail date due -->", res);
+
+      res.data.data.length == 0 ? setErrors('Data empty'): null
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      error.status == 429 ? setErrors('Please wait and hide and show to refresh') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
+      error.status == 429 ? setErrors('Try again later') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
       console.log("84 error detail date due -->", error);
 
       // alert(hasError.toString());
     }
   };
-
-  const dummyDataDueSummary = {
-    entity_cd: "1006",
-    project_no: "1006001",
-    tower: "TAMAN DAYU",
-    name: "R TEGUH SUKARDIANA",
-    doc_no: "BC25050270",
-    doc_date: "2025-05-01 00:00:00.000",
-    due_date: "2025-05-20 00:00:00.000",
-    lot_no: "D05/007",
-    debtor_acct: "N001/D05/007",
-    mbal_amt: "724426.00",
-    mtax_deduct_amt: ".00",
-    mfinal_amt: "724426.00",
-  };
-
-  const dummyDataSummaryHistory = [
-    {
-      entity_cd: "1006",
-      project_no: "1006001",
-      tower: "TAMAN DAYU",
-      name: "R TEGUH SUKARDIANA",
-      doc_no: "BC25050270",
-      doc_date: "2025-05-01 00:00:00.000",
-      descs:
-        "Iuran Pengelolan lingkungan Lot : D05/007 From 01 Apr 2025 - 30 Apr 2025",
-      due_date: "2025-05-20 00:00:00.000",
-      lot_no: "D05/007",
-      debtor_acct: "N001/D05/007",
-      mdoc_amt: "507994.00",
-      mtax_deduct_amt: ".00",
-      mfinal_amt: "507994.00",
-    },
-    {
-      entity_cd: "1006",
-      project_no: "1006001",
-      tower: "TAMAN DAYU",
-      name: "R TEGUH SUKARDIANA",
-      doc_no: "BC25050270",
-      doc_date: "2025-05-01 00:00:00.000",
-      descs: "Water : 01/04/2025 - 30/04/2025",
-      due_date: "2025-05-20 00:00:00.000",
-      lot_no: "D05/007",
-      debtor_acct: "N001/D05/007",
-      mdoc_amt: "216432.00",
-      mtax_deduct_amt: ".00",
-      mfinal_amt: "216432.00",
-    },
-    {
-      entity_cd: "1006",
-      project_no: "1006001",
-      tower: "TAMAN DAYU",
-      name: "R TEGUH SUKARDIANA",
-      doc_no: "BC25050270",
-      doc_date: "2025-05-01 00:00:00.000",
-      descs: "Diskon",
-      due_date: "2025-05-20 00:00:00.000",
-      lot_no: "D05/007",
-      debtor_acct: "N001/D05/007",
-      mdoc_amt: "-216432.00",
-      mtax_deduct_amt: ".00",
-      mfinal_amt: "-216432.00",
-    },
-  ];
 
   const detailNotDue = async () => {
     setLoading(true);
@@ -187,12 +124,14 @@ console.log('83 item',item)
       });
       console.log("84 res summary-history", res);
       setDetailNotDue(res.data.data);
+      // alert(JSON.stringify(res.data.data))
+      res.data.data.length == 0 ? setErrors('Data empty'): null
       //setDetailNotDue(dummyDataSummaryHistory);
       console.log("84111 detail not due -->", res.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      error.status == 429 ? setErrors('Please wait and hide and show to refresh') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
+      error.status == 429 ? setErrors('Try again later') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
       console.log("84111 error detail not due -->", JSON.stringify(error));
       // alert(hasError.toString());
     }
@@ -232,7 +171,7 @@ const replaceTotal = sumTotal
   console.log("replace total due date", replaceTotal_notdue);
 
   useEffect(() => {
-    if (number == 0){
+    if (number == 0 && tab_id == 1){
       clickExpand()
     }
   }, []);
@@ -241,8 +180,7 @@ const replaceTotal = sumTotal
     console.log("177 item: ", item);
     console.log("177 email: ", email);
     await setIsExpand(!isExpand);
-    await detailDateDue();
-    await detailNotDue();
+    (tab_id == 2)? await detailDateDue() : await detailNotDue();
     (await isLast) ? scrollToBottom() : null;
   };
 
@@ -386,7 +324,7 @@ const replaceTotal = sumTotal
                           flexDirection: "row",
                           justifyContent: "space-between",
 
-                          width: "35%",
+                          width: "40%",
                         }}
                       >
                         <Text>Rp. </Text>
@@ -485,7 +423,7 @@ const replaceTotal = sumTotal
                           flexDirection: "row",
                           justifyContent: "space-between",
 
-                          width: "35%",
+                          width: "40%",
                         }}
                       >
                         <Text>Rp. </Text>

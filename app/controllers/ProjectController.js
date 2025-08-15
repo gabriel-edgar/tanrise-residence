@@ -37,14 +37,19 @@ class ProjectController {
   //   }
   // };
 
-  data_unit = async (entity_cd, project_no, email) => {
+  data_unit = async (entity_cd, project_no, email, cluster_cd) => {
     console.log("32 run data_unit");
     console.log("32 ", entity_cd, project_no, email);
     try {
       const result = await httpClient.request({
         url: "/home/common-unit",
         method: "GET",
-        params: { entity_cd: entity_cd, project_no: project_no, email: email },
+        params: { 
+          entity_cd: entity_cd, 
+          project_no: project_no, 
+          email: email,
+          cluster_cd: cluster_cd 
+        },
       });
       console.log("32 res: ", result.data);
       // if (!result.data.success) {
@@ -54,7 +59,7 @@ class ProjectController {
       // }
     } catch (error) {
       console.log("32 error: ", error);
-      Alert(error.response.data.message);
+      alert(error.response.data.message);
       return Promise.reject(error);
     }
   };

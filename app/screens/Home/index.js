@@ -30,6 +30,7 @@ import {
   data_unit,
   choosed_unit,
   choosed_project,
+  choosed_cluster,
   action_helpdesk_dot,
   action_project_dot,
   action_data_notification,
@@ -84,6 +85,9 @@ const Home = (props) => {
   const stateReduxChoosedProject = useSelector(
     (state) => state.Dataproject.chooseProject
   );
+  const stateReduxChoosedCluster = useSelector(
+    (state) => state.Dataproject.choosedCluster
+  );
   const stateReduxHelpdeskDot = useSelector(
     (state) => state.Dataproject.helpdesk_dot
   );
@@ -107,14 +111,18 @@ const Home = (props) => {
   const [getDataDue, setDataDue] = useState([]);
   const [getDataNotDue, setDataNotDue] = useState([]);
   const [projectListUseState, setProjectListUseState] = useState([]);
+  const [clusterListUseState, setClusterListUseState] = useState([]);
+  const [clusterUseState, setClusterUseState] = useState(
+    stateReduxChoosedCluster
+  );
 
   const repl =
     user?.pict != null
       ? fotoprofil.uri //.replace("https", "http")
       : require("../../assets/images/image-home/Main_Image.png");
 
-  const [text_lotno, setTextLotno] = useState(stateReduxChoosedUnit);
-  const [text_project, setTextProject] = useState(stateReduxChoosedProject);
+  const [lotnoObj, setLotnoObj] = useState(stateReduxChoosedUnit);
+  const [projectObj, setProjectObj] = useState(stateReduxChoosedProject);
   const [isChooseProject, setIsChooseProject] = useState(false);
 
   const [newsannounce, setNewsAnnounce] = useState([]);
@@ -136,6 +144,8 @@ const Home = (props) => {
   const [dotList, setDotList] = useState([]);
   const [dotChooseUnit, setDotChooseUnit] = useState(false);
   const [claimUnit, setClaimUnit] = useState(false);
+  const [isUnitListLoading, setIsUnitListLoading] = useState(false);
+  const [isClusterListLoading, setIsClusterListLoading] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -143,22 +153,27 @@ const Home = (props) => {
       intervalIdNotif = setInterval(() => {
         projectDot();
         getProjectList();
-        if (text_project) {
-          if (Object.keys(text_project).length !== 0) {
-            loadUnitReact(text_project);
-            dataNewsAnnounce(text_project);
-            dataPromoClubFacilities(text_project);
+        if (clusterUseState) {
+          if (Object.keys(clusterUseState).length !== 0) {
+            loadUnitReact(clusterUseState);
+            dataNewsAnnounce(clusterUseState);
+            dataPromoClubFacilities(clusterUseState);
           }
         }
-      }, 15000); // Update every 1000 milliseconds (1 second)
+        if (projectObj) {
+          if (Object.keys(projectObj).length !== 0) {
+          getClusterList(projectObj.entity_cd, projectObj.project_no);
+          }
+        }
+      }, 45000); // Update every 1000 milliseconds (1 second)
 
       return () => clearInterval(intervalIdNotif);
-    }, [text_project])
+    }, [clusterUseState, projectObj])
   );
 
   useEffect(() => {
-    text_project ? setIsChooseProject(false) : setIsChooseProject(true);
-  }, [text_project]);
+    projectObj ? setIsChooseProject(false) : setIsChooseProject(true);
+  }, [projectObj]);
 
   //appState
   // active
@@ -203,8 +218,8 @@ const Home = (props) => {
       if (
         stateReduxNotificationData.some(
           (obj) =>
-            obj?.entity_cd === text_project?.entity_cd &&
-            obj?.project_no === text_project?.project_no &&
+            obj?.entity_cd === projectObj?.entity_cd &&
+            obj?.project_no === projectObj?.project_no &&
             obj?.lot_no === stateReduxChoosedUnit?.lot_no
         )
       ) {
@@ -215,8 +230,8 @@ const Home = (props) => {
       if (
         stateReduxNotificationData.some(
           (obj) =>
-            obj?.entity_cd === text_project?.entity_cd &&
-            obj?.project_no === text_project?.project_no
+            obj?.entity_cd === projectObj?.entity_cd &&
+            obj?.project_no === projectObj?.project_no
         )
       ) {
       } else {
@@ -239,7 +254,6 @@ const Home = (props) => {
     setLoading(true);
 
     setFotoProfil({ uri: user?.pict });
-
     loadData();
     check_version();
 
@@ -247,8 +261,12 @@ const Home = (props) => {
   }, []);
 
   const loadUnitReact = (item) => {
-    dispatch(data_unit(item.entity_cd, item.project_no, email)).then(() => {
+    // setIsUnitListLoading(true)
+    dispatch(
+      data_unit(item.entity_cd, item.project_no, email, item?.cluster_cd)
+    ).then(() => {
       // alert("load unit react");
+      // setIsUnitListLoading(false)
     });
   };
 
@@ -256,10 +274,10 @@ const Home = (props) => {
     await loadDataClaimUnit();
     await doSomething();
 
-    console.log("460 run1 :", text_project);
-    if (text_project) {
+    console.log("460 run1 :", projectObj);
+    if (projectObj) {
       console.log("460 run2");
-      loadUnitReact(text_project);
+      getClusterList(projectObj.entity_cd, projectObj.project_no);
     }
 
     await dataMobileHeader();
@@ -293,6 +311,27 @@ const Home = (props) => {
       });
   };
 
+  const getClusterList = async (entity_cd, project_no) => {
+    await httpClient
+      .request({
+        url: "/home/common-cluster",
+        method: "GET",
+        params: {
+          entity_cd: entity_cd,
+          project_no: project_no,
+          email: email,
+        },
+      })
+      .then((res) => {
+        // console.log('311'+res.data.data)
+        setClusterListUseState(res.data.data);
+        // dispatch(data_project(res.data.data));
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
   //useCustomTriggerOnFocus(loadData, 120000);
 
   const projectDot = async () => {
@@ -316,8 +355,8 @@ const Home = (props) => {
     saveDataNotification(dots);
     saveDataNotificationPersist(dots);
     await setDotList(dots);
-    if (text_project) {
-      if (dots.some((obj) => obj.entity_cd != text_project.entity_cd)) {
+    if (projectObj) {
+      if (dots.some((obj) => obj.entity_cd != projectObj.entity_cd)) {
         saveProjectDotNotification(true);
       } else {
         saveProjectDotNotification(false);
@@ -326,7 +365,7 @@ const Home = (props) => {
       if (
         dots.some(
           (obj) =>
-            obj.entity_cd === text_project.entity_cd &&
+            obj.entity_cd === projectObj.entity_cd &&
             obj.lot_no === stateReduxChoosedUnit.lot_no
         )
       ) {
@@ -384,6 +423,9 @@ const Home = (props) => {
   const saveUnit = useCallback((unit) => dispatch(choosed_unit(unit)));
   const saveProject = useCallback((project) =>
     dispatch(choosed_project(project))
+  );
+  const saveClusterRedux = useCallback((cluster) =>
+    dispatch(choosed_cluster(cluster))
   );
   const saveHelpdeskDotNotification = useCallback((state) =>
     dispatch(action_helpdesk_dot(state))
@@ -443,9 +485,9 @@ const Home = (props) => {
     let params;
     if (project == null) {
       params = {
-        entity_cd: text_project.entity_cd,
-        project_no: text_project.project_no,
-        //descs: text_project.descs,
+        entity_cd: projectObj.entity_cd,
+        project_no: projectObj.project_no,
+        //descs: projectObj.descs,
       };
     } else {
       params = {
@@ -482,9 +524,9 @@ const Home = (props) => {
     let params;
     if (project == null) {
       params = {
-        entity_cd: text_project.entity_cd,
-        project_no: text_project.project_no,
-        //descs: text_project.descs,
+        entity_cd: projectObj.entity_cd,
+        project_no: projectObj.project_no,
+        //descs: projectObj.descs,
       };
     } else {
       params = {
@@ -563,21 +605,6 @@ const Home = (props) => {
             title: item?.promo_title,
           };
         });
-        //console.log("445 5.5 ", slicedataeventresto);
-        //console.log("445 6 ", arrayImageEventResto);
-
-        // const slicedatapromo = datapromoclub.slice(0, 6);
-        // //console.log('slice data promo', slicedatapromo);
-        // //console.log('image promo club', datapromoclub.image);
-
-        // const tes = slicedatapromo.map((item, key) => {
-        //   return {
-        //     ...item.images[0],
-        //   };
-        // });
-        // //console.log('tes gambar map', tes);
-
-        //console.log("445 7image club fac", arrayImagePromoClubFac);
 
         setImagePromoClubFac(arrayImagePromoClubFac);
         setPromoClubFacSlice(slicedatapromoclubfac);
@@ -627,45 +654,59 @@ const Home = (props) => {
       });
   };
 
-  //TOTAL DATE DUE
-  const sum =
-    getDataDue == 0
-      ? 0
-      : getDataDue.reduceRight((max, bills) => {
-          return (max += parseInt(bills.mbal_amt));
-        }, 0);
+  const onChangeProject = async (project) => {
+    setIsClusterListLoading(true);
+    await saveProject(project);
 
-  //TOTAL DATE NOT DUE
-  const sumNotDue =
-    getDataNotDue == 0 || getDataNotDue == null
-      ? 0
-      : getDataNotDue.reduceRight((max, bills) => {
-          return (max += parseInt(bills.mbal_amt));
-        }, 0);
+    setProjectObj(project);
 
-  const math_total = Math.floor(sumNotDue) + Math.floor(sum);
+    // clear unit
+    setLotnoObj(null);
+    await saveUnit({});
 
-  //LENGTH
-  const onSelect = (indexSelected) => {};
+    //news and promo
+    await dataNewsAnnounce(project);
+    await dataPromoClubFacilities(project);
 
-  const unique =
-    getDataDue == 0 ? 0 : [...new Set(getDataDue.map((item) => item.doc_no))];
+    //dot management
+    if (
+      dotList.some((obj) => obj.entity_cd != project.entity_cd)
+      //|| dotList?.length > 1
+    ) {
+      saveProjectDotNotification(true);
+    } else {
+      saveProjectDotNotification(false);
+    }
+    await saveHelpdeskDotNotification(false);
 
-  const uniqueNotDue =
-    getDataNotDue == 0 || getDataNotDue == null
-      ? 0
-      : [...new Set(getDataNotDue.map((item) => item.doc_no))];
+    //clear cluster
+    setClusterUseState(null);
+    await getClusterList(project.entity_cd, project.project_no);
+    setIsClusterListLoading(false);
+  };
 
-  const invoice = unique == 0 ? 0 : unique.length;
+  const onChangeCluster = async (cluster) => {
+    setIsUnitListLoading(true);
+    console.log("676 cluster", cluster);
+    // alert(JSON.stringify(cluster))
+    setClusterUseState(cluster);
 
-  const invoiceNotDue = uniqueNotDue == 0 ? 0 : uniqueNotDue.length;
+    // clear unit
+    await setLotnoObj(null);
+    await saveUnit({});
+
+    //get unit list
+    await loadUnitReact(cluster);
+    await saveClusterRedux(cluster);
+    setIsUnitListLoading(false);
+  };
 
   const onChangelot = (lot, fromUseEffectState = false) => {
     //setDefaultLotno(false);
 
     fromUseEffectState ? null : saveUnit(lot);
 
-    setTextLotno(lot);
+    setLotnoObj(lot);
 
     //dot choose unit
     if (
@@ -686,7 +727,7 @@ const Home = (props) => {
     if (
       dotList.some(
         (obj) =>
-          obj?.entity_cd === text_project?.entity_cd &&
+          obj?.entity_cd === projectObj?.entity_cd &&
           obj?.lot_no === lot?.lot_no
       )
     ) {
@@ -694,36 +735,6 @@ const Home = (props) => {
     } else {
       saveHelpdeskDotNotification(false);
     }
-  };
-
-  const onChangeProject = (project) => {
-    saveProject(project);
-
-    setTextProject(project);
-
-    loadUnitReact(project);
-    setTextLotno("");
-
-    saveUnit({});
-
-    //news and promo
-    dataNewsAnnounce(project);
-    dataPromoClubFacilities(project);
-
-    //dot management
-    // console.log(
-    //   '861 dotList.some: ',
-    //   dotList.some(obj => obj.entity_cd != project.entity_cd),
-    // );
-    if (
-      dotList.some((obj) => obj.entity_cd != project.entity_cd)
-      //|| dotList?.length > 1
-    ) {
-      saveProjectDotNotification(true);
-    } else {
-      saveProjectDotNotification(false);
-    }
-    saveHelpdeskDotNotification(false);
   };
 
   const goToMoreNewsAnnounce = (item) => {
@@ -738,7 +749,7 @@ const Home = (props) => {
     navigation.navigate("ClubFacilities", { items: item });
   };
 
-  const renderOption = (item) => (
+  const renderOption = (item, index, cluster = null) => (
     <View
       style={{
         flex: 1,
@@ -753,23 +764,25 @@ const Home = (props) => {
       >
         {item.descs}
       </Text>
-      {dotList.some((obj) => obj.entity_cd === item.entity_cd) && (
-        <View
-          style={{
-            width: 10,
-            height: 10,
-            backgroundColor: "red",
-            borderRadius: 5,
-            marginLeft: 10,
-            position: "absolute",
-            right: -20,
-          }}
-        />
-      )}
+      {cluster == null
+        ? dotList.some((obj) => obj.entity_cd === item.entity_cd) && (
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: "red",
+                borderRadius: 5,
+                marginLeft: 10,
+                position: "absolute",
+                right: -20,
+              }}
+            />
+          )
+        : null}
     </View>
   );
 
-  const renderOptionUnit = (item) => (
+  const renderOptionUnit = (item, index) => (
     <View
       style={{
         flex: 1,
@@ -783,6 +796,7 @@ const Home = (props) => {
         }}
       >
         {item.lot_no}
+        {/* - {item?.cluster_cd} */}
       </Text>
       {dotList.some(
         (obj) =>
@@ -996,6 +1010,7 @@ const Home = (props) => {
                   style={{ marginHorizontal: 5 }}
                 />
               </View>
+              {/* start choose project  */}
               {projectListUseState.length != 0 ? (
                 <View
                   style={{
@@ -1029,18 +1044,18 @@ const Home = (props) => {
                         fontFamily: "KaiseiHarunoUmi",
                         flexDirection: "row",
                       }}
-                      data={projectListUseState.map((item) => ({
+                      data={projectListUseState.map((item, index) => ({
                         ...item,
-                        label: renderOption(item),
+                        label: renderOption(item, index),
+                        key: index,
                       }))}
                       optionTextStyle={{ color: "#333" }}
                       selectedItemTextStyle={{ color: "#3C85F1" }}
                       accessible={true}
-                      keyExtractor={(item) => item}
                       cancelButtonAccessibilityLabel={"Cancel Button"}
                       cancelText={"Cancel"}
                       onChange={(option) => {
-                        onChangeProject(option);
+                        onChangeProject({ ...option, label: "" });
                       }}
                     >
                       <View
@@ -1061,7 +1076,7 @@ const Home = (props) => {
                             fontFamily: font, //"KaiseiHarunoUmi",
                           }}
                         >
-                          {text_project ? "" : "Choose Project"}
+                          {projectObj ? "Project" : "Choose Project"}
                         </Text>
                         <Text
                           style={{
@@ -1073,7 +1088,7 @@ const Home = (props) => {
                             fontFamily: font, //"KaiseiHarunoUmi",
                           }}
                         >
-                          {text_project?.project_descs}
+                          {projectObj?.project_descs}
                         </Text>
                         <Icon
                           name="caret-down"
@@ -1143,69 +1158,31 @@ const Home = (props) => {
                     >
                       Please claim your unit before using this mobile app
                     </Text>
-
-                    {/* {
-                      <ModalSelector
-                        style={{
-                          justifyContent: "center",
-                          alignSelf: "center",
-                        }}
-                        childrenContainerStyle={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                        //data={lotno}
-                        optionTextStyle={{ color: "#333" }}
-                        selectedItemTextStyle={{ color: "#3C85F1" }}
-                        accessible={true}
-                        keyExtractor={(item) => item.lot_no}
-                        labelExtractor={(item) => item.lot_no} //khusus untuk lotno
-                        cancelButtonAccessibilityLabel={"Cancel Button"}
-                        cancelText={"Cancel"}
-                        onChange={(option) => {
-                          onChangelot(option);
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: "#CDB04A",
-                            alignSelf: "center",
-                            fontSize: 16,
-
-                            justifyContent: "center",
-                            fontWeight: "800",
-                            fontFamily: "KaiseiHarunoUmi",
-                          }}
-                        ></Text>
-                      </ModalSelector>
-                    } */}
                   </View>
                 </View>
               )}
+              {/* start choose cluster  */}
               {projectListUseState.length != 0 ? (
-                stateReduxDataUnit.length != 0 ? (
+                !isClusterListLoading ? (
                   <View
                     style={{
                       backgroundColor: colors.primary, //"#315447",
                       height: 35,
-                      width: 180,
-                      justifyContent: "center",
+                      width: 350,
                       paddingHorizontal: 10,
                       borderRadius: 10,
+                      alignContent: "center",
+                      justifyContent: "center",
+                      marginVertical: 15,
+                      marginTop: 0,
                     }}
                   >
                     <View
                       style={{
                         flexDirection: "row",
-                        paddingLeft: 0,
                       }}
                     >
                       <ModalSelector
-                        disabled={isChooseProject}
                         style={{
                           justifyContent: "center",
                           alignSelf: "center",
@@ -1220,16 +1197,24 @@ const Home = (props) => {
                           fontFamily: "KaiseiHarunoUmi",
                           flexDirection: "row",
                         }}
-                        data={stateReduxDataUnit}
+                        data={clusterListUseState.map((item, index) => ({
+                          ...item,
+                          label: renderOption(item, index, "cluster"),
+                          key: index,
+                        }))}
+                        // labelExtractor={(item, index) => item.descs}
                         optionTextStyle={{ color: "#333" }}
                         selectedItemTextStyle={{ color: "#3C85F1" }}
                         accessible={true}
-                        keyExtractor={(item) => item.lot_no}
-                        labelExtractor={(item) => renderOptionUnit(item)} //khusus untuk lotno
                         cancelButtonAccessibilityLabel={"Cancel Button"}
                         cancelText={"Cancel"}
                         onChange={(option) => {
-                          onChangelot(option);
+                          onChangeCluster({
+                            ...option,
+                            entity_cd: projectObj.entity_cd,
+                            project_no: projectObj.project_no,
+                            label: "",
+                          });
                         }}
                       >
                         <View
@@ -1237,7 +1222,6 @@ const Home = (props) => {
                             flexDirection: "row",
                             flex: 1,
                             justifyContent: "space-between",
-                            paddingRight: 10,
                           }}
                         >
                           <Text
@@ -1247,13 +1231,11 @@ const Home = (props) => {
                               alignSelf: "center",
                               fontSize: 14,
                               justifyContent: "center",
-                              paddingRight: 10,
-
                               fontWeight: "800",
                               fontFamily: font, //"KaiseiHarunoUmi",
                             }}
                           >
-                            {text_lotno?.lot_no ? "Unit" : "Choose Unit"}
+                            {clusterUseState ? "Cluster" : "Choose Cluster"}
                           </Text>
                           <Text
                             style={{
@@ -1265,7 +1247,7 @@ const Home = (props) => {
                               fontFamily: font, //"KaiseiHarunoUmi",
                             }}
                           >
-                            {text_lotno?.lot_no}
+                            {clusterUseState?.descs}
                           </Text>
                           <Icon
                             name="caret-down"
@@ -1276,95 +1258,163 @@ const Home = (props) => {
                           />
                         </View>
                       </ModalSelector>
-                      {dotChooseUnit ? (
-                        <View
-                          style={{
-                            borderWidth: 1,
-                            borderColor: BaseColor.whiteColor,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            position: "absolute",
-                            width: 20,
-                            height: 35,
-                            backgroundColor: "red",
-                            top: -10,
-                            right: -20,
-                            borderRadius: 10,
-                          }}
-                        ></View>
-                      ) : null}
                     </View>
                   </View>
                 ) : (
-                  <View
-                    style={{
-                      backgroundColor: colors.primary, //"#315447",
-                      height: 35,
-                      justifyContent: "center",
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
-                    }}
-                  >
+                  <ActivityIndicator style={{ margin: 13 }}></ActivityIndicator>
+                )
+              ) : null}
+              {/* start choose unit  */}
+              {projectListUseState.length != 0 ? (
+                !isUnitListLoading ? (
+                  stateReduxDataUnit.length != 0 ? (
                     <View
                       style={{
-                        flexDirection: "row",
-                        paddingLeft: 5,
+                        backgroundColor: colors.primary, //"#315447",
+                        height: 35,
+                        width: 180,
                         justifyContent: "center",
+                        paddingHorizontal: 10,
+                        borderRadius: 10,
                       }}
                     >
-                      <Text
+                      <View
                         style={{
-                          color: "#fff",
-                          alignSelf: "center",
-                          fontSize: 14,
-                          justifyContent: "center",
-                          paddingRight: 5,
-
-                          fontWeight: "800",
-                          fontFamily: font, //"KaiseiHarunoUmi",
+                          flexDirection: "row",
+                          paddingLeft: 0,
                         }}
                       >
-                        Unit not found
-                      </Text>
-
-                      <ModalSelector
-                        style={{
-                          justifyContent: "center",
-                          alignSelf: "center",
-                        }}
-                        childrenContainerStyle={{
-                          color: "#CDB04A",
-                          alignSelf: "center",
-                          fontSize: 16,
-                          justifyContent: "center",
-                          fontWeight: "800",
-                          fontFamily: "KaiseiHarunoUmi",
-                        }}
-                        //data={lotno}
-                        optionTextStyle={{ color: "#333" }}
-                        selectedItemTextStyle={{ color: "#3C85F1" }}
-                        accessible={true}
-                        keyExtractor={(item) => item.lot_no}
-                        labelExtractor={(item) => item.lot_no} //khusus untuk lotno
-                        cancelButtonAccessibilityLabel={"Cancel Button"}
-                        cancelText={"Cancel"}
-                        onChange={(option) => {
-                          onChangelot(option);
-                        }}
-                      >
-                        <Text
+                        <ModalSelector
+                          disabled={!clusterUseState}
                           style={{
+                            justifyContent: "center",
+                            alignSelf: "center",
+                            flex: 1,
+                          }}
+                          childrenContainerStyle={{
                             color: "#CDB04A",
                             alignSelf: "center",
                             fontSize: 16,
                             justifyContent: "center",
                             fontWeight: "800",
                             fontFamily: "KaiseiHarunoUmi",
+                            flexDirection: "row",
                           }}
-                        ></Text>
-                      </ModalSelector>
+                          data={stateReduxDataUnit.map((item, index) => ({
+                            ...item,
+                            key: index,
+                          }))}
+                          optionTextStyle={{ color: "#333" }}
+                          selectedItemTextStyle={{ color: "#3C85F1" }}
+                          accessible={true}
+                          labelExtractor={(item, index) =>
+                            renderOptionUnit(item, index)
+                          } //khusus untuk lotno
+                          cancelButtonAccessibilityLabel={"Cancel Button"}
+                          cancelText={"Cancel"}
+                          onChange={(option) => {
+                            onChangelot(option);
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              flex: 1,
+                              justifyContent: "space-between",
+                              paddingRight: 10,
+                            }}
+                          >
+                            <Text
+                              adjustsFontSizeToFit={true}
+                              style={{
+                                color: "#fff",
+                                alignSelf: "center",
+                                fontSize: 14,
+                                justifyContent: "center",
+                                paddingRight: 10,
+
+                                fontWeight: "800",
+                                fontFamily: font, //"KaiseiHarunoUmi",
+                              }}
+                            >
+                              {lotnoObj?.lot_no ? "Unit" : "Choose Unit"}
+                            </Text>
+                            <Text
+                              style={{
+                                color: "#CDB04A",
+                                alignSelf: "center",
+                                fontSize: 16,
+                                justifyContent: "center",
+                                fontWeight: "800",
+                                fontFamily: font, //"KaiseiHarunoUmi",
+                              }}
+                            >
+                              {lotnoObj?.lot_no}
+                            </Text>
+                            <Icon
+                              name="caret-down"
+                              solid
+                              size={26}
+                              style={{ marginLeft: 5 }}
+                              color={"#CDB04A"}
+                            />
+                          </View>
+                        </ModalSelector>
+                        {dotChooseUnit ? (
+                          <View
+                            style={{
+                              borderWidth: 1,
+                              borderColor: BaseColor.whiteColor,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              position: "absolute",
+                              width: 20,
+                              height: 35,
+                              backgroundColor: "red",
+                              top: -10,
+                              right: -20,
+                              borderRadius: 10,
+                            }}
+                          ></View>
+                        ) : null}
+                      </View>
                     </View>
-                  </View>
+                  ) : (
+                    <View
+                      style={{
+                        backgroundColor: colors.primary, //"#315447",
+                        height: 35,
+                        justifyContent: "center",
+                        paddingHorizontal: 10,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          paddingLeft: 5,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: "#fff",
+                            alignSelf: "center",
+                            fontSize: 14,
+                            justifyContent: "center",
+                            paddingRight: 5,
+
+                            fontWeight: "800",
+                            fontFamily: font, //"KaiseiHarunoUmi",
+                          }}
+                        >
+                          Unit not found
+                        </Text>
+                      </View>
+                    </View>
+                  )
+                ) : (
+                  <ActivityIndicator style={{ margin: 6 }}></ActivityIndicator>
                 )
               ) : null}
             </View>
@@ -1735,7 +1785,10 @@ const Home = (props) => {
               }}
             >
               {imageGreetings.map((item, index) => (
-                <View style={{ flexDirection: "row", width: "100%" }}>
+                <View
+                  key={index}
+                  style={{ flexDirection: "row", width: "100%" }}
+                >
                   <View
                     style={{
                       marginTop: 10,

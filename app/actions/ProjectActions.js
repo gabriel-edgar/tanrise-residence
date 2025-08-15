@@ -5,6 +5,7 @@ export const actionTypes = {
   UNIT_SUCCESS: "UNIT_SUCCESS",
   CHOOSED_UNIT: "CHOOSED_UNIT",
   CHOOSED_PROJECT: "CHOOSED_PROJECT",
+  CHOOSED_CLUSTER: "CHOOSED_CLUSTER",
   HELPDESK_DOT: "HELPDESK_DOT",
   PROJECT_DOT: "PROJECT_DOT",
   NOTIFICATION_DATA: "NOTIFICATION_DATA",
@@ -30,6 +31,11 @@ const choosedunit_success = (choosedUnit) => ({
 const choosedproject_success = (choosedProject) => ({
   type: actionTypes.CHOOSED_PROJECT,
   choosedProject,
+});
+
+const choosedcluster_success = (choosedCluster) => ({
+  type: actionTypes.CHOOSED_CLUSTER,
+  choosedCluster,
 });
 
 const change_helpdesk_dot = (state) => ({
@@ -59,7 +65,7 @@ export const data_project = (dataproject) => async (dispatch) => {
   dispatch(project_success(dataproject));
 };
 
-export const data_unit = (entity_cd, project_no, email) => async (dispatch) => {
+export const data_unit = (entity_cd, project_no, email, cluster_cd) => async (dispatch) => {
   console.log(
     "16_1 dataunit di project action: ",
     entity_cd,
@@ -69,7 +75,8 @@ export const data_unit = (entity_cd, project_no, email) => async (dispatch) => {
   const dataunit = await ProjectController.data_unit(
     entity_cd,
     project_no,
-    email
+    email,
+    cluster_cd
   );
   console.log("460 16_2 dataunit di project action: ", dataunit);
   dispatch(unit_success(dataunit));
@@ -83,6 +90,11 @@ export const choosed_unit = (unit) => async (dispatch) => {
 export const choosed_project = (project) => async (dispatch) => {
   console.log("18_1 dataProject di project action: ", project);
   dispatch(choosedproject_success(project));
+};
+
+export const choosed_cluster = (cluster) => async (dispatch) => {
+  // console.log("18_1 cluster di project action: ");
+  dispatch(choosedcluster_success(cluster));
 };
 
 export const action_helpdesk_dot = (state) => async (dispatch) => {

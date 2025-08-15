@@ -363,6 +363,46 @@ const MeterInfoX = (params) => {
           </Picker>
         </View> */}
         <View style={{ alignItems: "center" }}>
+                    <View
+            style={{
+              flexDirection: "row",
+              //justifyContent: "flex-start",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Montserrat-SemiBold",
+                color: colors.background == "white" ? "#4E4E4E" : "white",
+                marginTop: 15,
+                //alignSelf: "baseline",
+                //backgroundColor: "blue",
+              }}
+            >
+              Years
+            </Text>
+            <TextInput
+              style={{
+                height: 55,
+                backgroundColor:
+                colors.background == "white" ? "#f5f5f5" : "#323232",
+                color: colors.background == "white" ? "black" : "white",
+                marginBottom: 10,
+                marginLeft: 20,
+                width: 250,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                textAlign:'center'
+              }}
+              // placeholder={defaultYears}
+              placeholder="YYYY"
+              placeholderTextColor="#a9a9a9"
+              // defaultValue={this.state.defaultYears}
+              value={getYears}
+              onChangeText={(val) => setGetYears(val)}
+            />
+          </View>
           <View
             style={{
               flexDirection: "row",
@@ -406,48 +446,7 @@ const MeterInfoX = (params) => {
               ))}
             </Picker>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              //justifyContent: "flex-start",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontFamily: "Montserrat-SemiBold",
-                color: colors.background == "white" ? "#4E4E4E" : "white",
-                marginTop: 15,
-                //alignSelf: "baseline",
-                //backgroundColor: "blue",
-              }}
-            >
-              Years
-            </Text>
-            <TextInput
-              style={{
-                height: 55,
-                backgroundColor:
-                  colors.background == "white" ? "#f5f5f5" : "#323232",
-                color: colors.background == "white" ? "black" : "white",
-                paddingHorizontal: 10,
-                marginBottom: 10,
-                marginLeft: 20,
-                width: 250,
-                // borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-                paddingLeft: 20,
-              }}
-              // placeholder={defaultYears}
-              placeholder="YYYY"
-              placeholderTextColor="#a9a9a9"
-              // defaultValue={this.state.defaultYears}
-              value={getYears}
-              onChangeText={(val) => setGetYears(val)}
-            />
-          </View>
+
         </View>
         <View
           style={{

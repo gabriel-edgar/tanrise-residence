@@ -6,6 +6,7 @@ const initialState = {
   dataUnit: [],
   notificationData: [],
   choosedUnit: {}, // more easy & safety null
+  choosedCluster: null,
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const projectReducer = (state = initialState, action) => {
       return {
         ...state,
         chooseProject: action.choosedProject,
+      };
+    case actionTypes.CHOOSED_CLUSTER:
+      return {
+        ...state,
+        choosedCluster: action.choosedCluster,
       };
     case actionTypes.HELPDESK_DOT:
       return {

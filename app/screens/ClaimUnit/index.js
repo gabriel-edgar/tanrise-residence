@@ -17,6 +17,7 @@ import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 import { widthPixel } from "../Home/normalize";
 import getUser from "../../selectors/UserSelectors";
 import { useSelector, useDispatch } from "react-redux";
+import { ActivityIndicator } from "react-native-paper";
 
 // individual, child, pembantu
 
@@ -26,99 +27,20 @@ const successInit = {
   address: true,
 };
 
-const dataDummyProject = [
-  {
-    db_profile: "DBLIVE",
-    descs: "Voza Tower",
-    email: "pppsrs.arc100@gmail.com",
-    entity_cd: "1003",
-    entity_name: "PPPSRSKCS VOZA PREMIUM OFFICE",
-    picture_url:
-      "https://ifcamobileapp.tanrise.com/tanrise_admin/public/storage/project/featuredimage-office.jpg",
-    project_descs: "Voza Tower",
-    project_no: "1003001",
-    rowID: "7",
-    seq_no: "3",
-    status: "Y",
-    userID: "FINANCE",
-  },
-  {
-    db_profile: "DBLIVE",
-    descs: "ARC100",
-    email: "pppsrs.arc100@gmail.com",
-    entity_cd: "1004",
-    entity_name: "PPPSRSS ARC 100",
-    picture_url:
-      "https://ifcamobileapp.tanrise.com/tanrise_admin/public/storage/project/featuredimage-apartment.jpg",
-    project_descs: "ARC100",
-    project_no: "1004001",
-    rowID: "8",
-    seq_no: "4",
-    status: "Y",
-    userID: "FINANCE",
-  },
-];
-
-const dataDummyUnit = [
-  {
-    cluster_cd: "ARC",
-    entity_cd: "1004",
-    lot_no: "TR-09-07",
-    project_no: "1004001",
-  },
-  {
-    cluster_cd: "ARC2",
-    entity_cd: "1004",
-    lot_no: "TR-09-08",
-    project_no: "1004001",
-  },
-  {
-    cluster_cd: "ARC3",
-    entity_cd: "1004",
-    lot_no: "TR-09-09",
-    project_no: "1004001",
-  },
-];
-
-const dataDummyUnitVorza = [
-  {
-    cluster_cd: "Vorza",
-    entity_cd: "1003",
-    lot_no: "VR-09-07",
-    project_no: "1003001",
-  },
-  {
-    cluster_cd: "Vorza2",
-    entity_cd: "1003",
-    lot_no: "VR-09-08",
-    project_no: "1003001",
-  },
-  {
-    cluster_cd: "Vorza3",
-    entity_cd: "1003",
-    lot_no: "VR-09-09",
-    project_no: "1003001",
-  },
-];
-
 const ClaimUnit = (props) => {
   const { navigation } = props;
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(successInit);
-  const [entityList, setEntityList] = useState([]);
   const [projectList, setProjectList] = useState([]);
+  const [clusterList, setClusterList] = useState([]);
   const [unitList, setUnitList] = useState([]);
   const [entity, setEntity] = useState(null);
   const [project, setProject] = useState(null);
+  const [cluster, setCluster] = useState(null);
   const [unit, setUnit] = useState("");
   const [selectedUnits, setSelectedUnits] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
-  const [open, setOpen] = useState(false);
   const user = useSelector((state) => getUser(state));
   console.log("66 selectedUnits: ", selectedUnits);
   const [roleList, setRoleList] = useState([
@@ -129,110 +51,79 @@ const ClaimUnit = (props) => {
   const [role, setRole] = useState("");
   const [placeholderState, setPlaceholderState] = useState("Choose Unit");
   const [isDisabledCUnit, setIsDisabledCUnit] = useState(true);
+  const [isDisabledCCluster, setIsDisabledCCluster] = useState(true);
+
+  const [isLoadingCluster, setLoadingCluster] = useState();
+  const [isLoadingUnit, setLoadingUnit] = useState();
 
   useEffect(() => {
-    //setProjectList(dataDummy);
-    //setUnitList(dataDummyUnit);
     onRefresh();
-    //console.log("54 colors: ", colors);
   }, []);
 
   useEffect(() => {
-    //setProjectList(dataDummy);
-    // setUnitList(dataDummyUnit);
-    // onRefresh();
-    //console.log("54 colors: ", colors);
-    if (entity) {
-      // if (project.project_no == "1003001") {
-      //   setUnitList(dataDummyUnitVorza);
-      // } else {
-      //   setUnitList(dataDummyUnit);
-      // }
-      setIsDisabledCUnit(true);
-
-      setProject(null);
-    }
-  }, [entity]);
-
-  useEffect(() => {
-    //setProjectList(dataDummy);
-    // setUnitList(dataDummyUnit);
-    // onRefresh();
-    //console.log("54 colors: ", colors);
     if (project) {
-      // if (project.project_no == "1003001") {
-      //   setUnitList(dataDummyUnitVorza);
-      // } else {
-      //   setUnitList(dataDummyUnit);
-      // }
-      setIsDisabledCUnit(false);
-      loadDataUnitList();
+      loadDataClusterList();
+      setIsDisabledCCluster(false);
+      setIsDisabledCUnit(true);
     }
   }, [project]);
 
   const onRefresh = () => {
-    //alert("run onRefresh");
     loadData();
   };
 
   //useCustomTriggerOnFocus(onRefresh);
 
   const loadData = async () => {
-    //loadDataEntityList();
     loadDataProjectList();
-    //setProjectList(dataDummyProject);
   };
 
-  // const loadDataEntityList = async () => {
-  //   await httpClient
-  //     .request({
-  //       url: "/auth/get-entity",
-  //       method: "GET",
-  //       //data,
-  //       //params: { email: user.email },
-  //     })
-  //     .then((res) => {
-  //       console.log("190 entity res: ", res.data.data);
-  //       setEntityList(res.data.data);
-  //       // {
-  //       //     "entity_cd": "0001",
-  //       //     "entity_name": "PT JAYA SUKSES MAKMUR SENTOSA TBK"
-  //       // }
-  //       //loadDataUnit(res.data.project);
-  //     })
-  //     .catch((err) => {
-  //       // setProjectList(dataDummy);
-  //       alert(err);
-  //     });
-  // };
-
   const loadDataProjectList = async () => {
-    //console.log("96 p entity: ", entity.value.entity_cd);
     await httpClient
       .request({
         url: "/auth/get-entity",
         method: "GET",
-        //data,
-        //params: { entity_cd: entity.value.entity_cd },
       })
       .then((res) => {
-        //alert(res.data.data);
-        //console.log("96 project res: ", res.data.data);
         setProjectList(res.data.data);
-        //loadDataUnit(res.data.project);
       })
       .catch((err) => {
         console.log("96 project err: ", err);
-        // setProjectList(dataDummy);
         alert(err);
       });
   };
 
-  const loadDataUnitList = async () => {
+  const loadDataClusterList = async () => {
+    setLoadingCluster(true);
     const dataParams = {
       entity_cd: project?.entity_cd,
       project_no: project?.project_no,
-      //email: user.email,
+    };
+    await httpClient
+      .request({
+        url: "/auth/get-cluster",
+        method: "GET",
+        //data,
+        params: dataParams,
+      })
+      .then((res) => {
+        // alert(res.data.data);
+        console.log("96 cluster res: ", res.data.data);
+        setClusterList(res.data.data);
+      })
+      .catch((err) => {
+        console.log("96 cluster err: ", err);
+        alert(err);
+      });
+    setLoadingCluster(false);
+  };
+
+  const loadDataUnitList = async (cluster) => {
+    setLoadingUnit(true);
+    const dataParams = {
+      entity_cd: project?.entity_cd,
+      project_no: project?.project_no,
+      cluster_cd: cluster?.cluster_cd,
     };
     console.log("120 dataParams: ", dataParams);
     await httpClient
@@ -242,67 +133,35 @@ const ClaimUnit = (props) => {
         params: dataParams,
       })
       .then((res) => {
+        // alert(res.data.data)
         console.log("133 unit res: ", res.data.data);
         setUnitList(res.data.data);
       })
       .catch((err) => {
         alert(JSON.stringify(err));
       });
+    setLoadingUnit(false);
   };
 
   const handleSelectUnit = (item) => {
-    // Toggle item selection
-    // item = {
-    //   // ...item,
-    //   _index: item._index,
-    //   cluster_cd: item.cluster_cd,
-    //   entity_cd: item.entity_cd,
-    //   project_no: item.project_no,
-    //   lot_no: item.lot_no,
-    //   //projectDescs: "Est GRAND SUNRISE ESPLANADE", //project.descs
-    // };
-    // Modify the existing object directly to maintain the same reference
-
     item.projectDescs = project.descs; //"Est GRAND SUNRISE ESPLANADE"; // Modify the property directly
-    // console.log("182 item: ", item);
-    // if (selectedUnits.includes(item)) {
-    //   //setSelectedUnits(selectedUnits.filter((item) => item !== item));
-    // } else {
-    //   setSelectedUnits([...selectedUnits, item]);
-    // }
 
     const isSelected = selectedUnits.some(
       (unit) => JSON.stringify(unit) === JSON.stringify(item)
     );
 
     if (isSelected) {
-      // setSelectedUnits(
-      //   selectedUnits.filter(
-      //     (unit) => JSON.stringify(unit) !== JSON.stringify(item)
-      //   )
-      // );
     } else {
       setSelectedUnits([...selectedUnits, item]);
     }
   };
 
   const renderLabel1 = (text) => {
-    // if (project || isFocus) {
-    //   return (
-    //     <Text style={[styles.label, isFocus && { color: "black" }]}>
-    //       Choose project
-    //     </Text>
-    //   );
-    // }
-    // return null;
     return (
       <View
         style={[
           styles.label,
           {
-            //backgroundColor: "lightblue",
-            //paddingHorizontal: 20,
-            //paddingVertical: 10,
             backgroundColor: colors.background,
             borderRadius: 15,
             borderWidth: 0.5,
@@ -373,22 +232,6 @@ const ClaimUnit = (props) => {
       };
       console.log("params for click attach", params);
       navigation.navigate("ClaimUnit2", params);
-
-      // await httpClient
-      //   .request({
-      //     url: "/modules/cs/save",
-      //     method: "POST",
-      //     data,
-      //   })
-      //   .then((res) => {
-      //     alert(
-      //       "You will receive an email if your account request is successful."
-      //     );
-      //     navigation.navigate.goBack();
-      //   })
-      //   .catch((err) => {
-      //     alert(JSON.stringify(err));
-      //   });
     }
   };
 
@@ -530,61 +373,6 @@ const ClaimUnit = (props) => {
           This form is intended for people who already have a unit
         </Text>
         <View style={styles.contain}>
-          {/* <View
-            style={[styles.container, { backgroundColor: colors.background }]}
-          >
-            {renderLabel1("Choose Entity")}
-            <Dropdown
-              style={[
-                styles.dropdown,
-                {
-                  // color: colors.text,
-                  color: "blue",
-                  backgroundColor:
-                    colors.background == "#010101" ? "#222222" : "#eeeeee",
-                },
-                isFocus && { borderColor: "blue" },
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={[
-                styles.selectedTextStyle,
-                { color: colors.text },
-              ]}
-              inputSearchStyle={[
-                styles.inputSearchStyle,
-                { color: colors.text },
-              ]}
-              iconStyle={styles.iconStyle}
-              data={entityList.map((item, index) => ({
-                label: `${[index + 1] + ". " + item.entity_name} (${
-                  item.entity_cd
-                })`, // Combine firstName and lastName as the label
-                value: item,
-              }))}
-              search
-              itemTextStyle={{
-                //backgroundColor: colors.background,
-                color: colors.text, // Set the label color here
-                //fontSize: 16,
-              }}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              activeColor={colors.background}
-              containerStyle={{
-                backgroundColor: colors.background,
-              }}
-              placeholder={"Choose Entity"}
-              searchPlaceholder="Search..."
-              value={entity}
-              // onFocus={() => setIsFocus(true)}
-              // onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setEntity(item);
-                // setIsFocus(false);
-              }}
-            />
-          </View> */}
           <View
             style={[
               styles.container,
@@ -650,83 +438,94 @@ const ClaimUnit = (props) => {
               }}
             />
           </View>
-          {/* choose role */}
-          {/* <View
-            style={[styles.container, { backgroundColor: colors.background }]}
-          >
-            {renderLabel1("Choose Role")}
-            <Dropdown
+
+          <>
+            <View
               style={[
-                styles.dropdown,
+                styles.container,
                 {
-                  color: colors.text,
-                  backgroundColor:
-                    colors.background == "#010101" ? "#222222" : "#eeeeee",
+                  backgroundColor: colors.background,
+                  opacity: isDisabledCCluster ? 0.5 : null,
                 },
-                isFocus && { borderColor: "blue" },
               ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={[
-                styles.selectedTextStyle,
-                { color: colors.text },
-              ]}
-              inputSearchStyle={[
-                styles.inputSearchStyle,
-                { color: colors.text },
-              ]}
-              iconStyle={styles.iconStyle}
-              containerStyle={{
-                backgroundColor: colors.background,
-              }}
-              itemTextStyle={{
-                //backgroundColor: colors.background,
-                color: colors.text, // Set the label color here
-                //fontSize: 16,
-              }}
-              data={roleList}
-              search
-              activeColor={colors.background}
-              maxHeight={300}
-              labelField="descs"
-              valueField="descs"
-              placeholder={"Choose Role"}
-              searchPlaceholder="Search..."
-              value={role}
-              // onFocus={() => setIsFocus(true)}
-              // onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setRole(item);
-                //setIsFocus(false);
-              }}
-            />
-          </View> */}
-          {/* end choose role */}
-          {/* {true ? ( */}
-          {true ? (
-            <>
-              {/* {renderLabel2("Unit")}
-              <TextInput
-                style={[BaseStyle.textInput, { marginBottom: 10 }]}
-                onChangeText={(text) => setUnit(text)}
-                autoCorrect={false}
-                placeholder={t("")}
-                // placeholderTextColor={
-                //   success.address ? BaseColor.grayColor : colors.primary
-                // }
-                value={unit}
-              /> */}
-              <View
-                style={[
-                  styles.container,
-                  {
+            >
+              {renderLabel1("Choose Cluster")}
+              {isLoadingCluster ? (
+                <ActivityIndicator></ActivityIndicator>
+              ) : (
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    {
+                      color: colors.text,
+                      backgroundColor:
+                        colors.background == "#010101" ? "#222222" : "#eeeeee",
+                    },
+                    isFocus && { borderColor: "blue" },
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  disable={isDisabledCCluster}
+                  selectedTextStyle={[
+                    styles.selectedTextStyle,
+                    { color: colors.text },
+                  ]}
+                  inputSearchStyle={[
+                    styles.inputSearchStyle,
+                    { color: colors.text },
+                  ]}
+                  iconStyle={styles.iconStyle}
+                  // data={clusterList}
+                  data={clusterList.map((item, index) => ({
+                    ...item,
+                    label: `${[index + 1] + ". " + item.descs}`,
+                  }))}
+                  search
+                  maxHeight={300}
+                  // labelField="descs"
+                  labelField="label"
+                  valueField="label"
+                  // valueField="lot_no"
+                  placeholder={"Choose..."}
+                  searchPlaceholder="Search..."
+                  value={cluster}
+                  containerStyle={{
                     backgroundColor: colors.background,
-                    opacity: isDisabledCUnit ? 0.5 : null,
-                  },
-                ]}
-              >
-                {renderLabel1(
-                  selectedUnits.length > 0 ? "Choose Unit" : "Choose Unit"
-                )}
+                  }}
+                  itemTextStyle={{
+                    //backgroundColor: colors.background,
+                    color: colors.text, // Set the label color here
+                    //fontSize: 16,
+                  }}
+                  activeColor={colors.background}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    setIsFocus(false);
+                    setCluster(item);
+                    setIsDisabledCUnit(false);
+                    loadDataUnitList(item);
+                  }}
+                />
+              )}
+            </View>
+          </>
+
+          <>
+            <View
+              style={[
+                styles.container,
+                {
+                  backgroundColor: colors.background,
+                  opacity: isDisabledCUnit ? 0.5 : null,
+                },
+              ]}
+            >
+              {renderLabel1(
+                selectedUnits.length > 0 ? "Choose Unit" : "Choose Unit"
+              )}
+              {isLoadingUnit ? (
+                <ActivityIndicator></ActivityIndicator>
+              ) : (
                 <Dropdown
                   style={[
                     styles.dropdown,
@@ -758,7 +557,7 @@ const ClaimUnit = (props) => {
                   labelField="lot_no"
                   // labelField="label"
                   valueField="lot_no"
-                  placeholder={!isFocus ? placeholderState : "..."}
+                  placeholder={unitList.length==0?'Unit not Found':!isFocus ? placeholderState : "..."}
                   searchPlaceholder="Search..."
                   value={unit}
                   containerStyle={{
@@ -780,82 +579,28 @@ const ClaimUnit = (props) => {
                     setPlaceholderState("Choose More Unit");
                   }}
                 />
-              </View>
-              {/* {renderLabel1(
-                selectedUnits.length > 0 ? "Selected Units" : "Selected Unit"
-              )} */}
-              <View
-                // style={[
-                //   styles.container,
-                //   { backgroundColor: colors.background },
-                // ]}
-                style={{ width: "100%", alignItems: "center" }}
-              >
-                <View
-                  style={[
-                    //styles.label,
-                    {
-                      //backgroundColor: "lightblue",
-                      //paddingHorizontal: 20,
-                      //paddingVertical: 10,
-                      backgroundColor: colors.background,
-                      borderRadius: 15,
-                      //borderWidth: 0.5,
-                      borderColor:
-                        selectedUnits.length == 0 ? null : colors.background,
-                      alignSelf: "start",
-                      marginLeft: 30,
+              )}
+            </View>
 
-                      position: "absolute",
-                      //backgroundColor: "white",
-                      left: -3,
-                      top: -5,
-                      zIndex: 999,
-                      paddingHorizontal: 8,
-                      fontSize: 14,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      {
-                        color: colors.text,
-                        //backgroundColor: colors.background,
-                        borderRadius: 50,
-                      },
-                    ]}
-                  >
-                    {selectedUnits.length == 0
-                      ? null
-                      : selectedUnits.length > 1
-                      ? "Selected " + selectedUnits.length + " Units:"
-                      : "Selected Unit:"}
-                  </Text>
-                </View>
-                <FlatList
-                  style={{ width: "90%" }}
-                  data={selectedUnits}
-                  renderItem={renderItemList}
-                  keyExtractor={(item) => item.value}
-                  numColumns={2} // Set number of columns to 2
-                  columnWrapperStyle={{
-                    justifyContent: "space-between", // Spacing between columns
-                  }} // Styling for the row of items
-                />
-              </View>
-            </>
-          ) : null}
-
-          {/* <View style={{ width: "100%" }}>
-            <Button
-              full
-              style={{ marginTop: 20 }}
-              loading={loading}
-              onPress={() => onSignUp()}
+            <View
+              // style={[
+              //   styles.container,
+              //   { backgroundColor: colors.background },
+              // ]}
+              style={{ width: "100%", alignItems: "center" }}
             >
-              {t("Claim Unit")}
-            </Button>
-          </View> */}
+              <FlatList
+                style={{ width: "90%" }}
+                data={selectedUnits}
+                renderItem={renderItemList}
+                keyExtractor={(item) => item.value}
+                numColumns={2} // Set number of columns to 2
+                columnWrapperStyle={{
+                  justifyContent: "space-between", // Spacing between columns
+                }} // Styling for the row of items
+              />
+            </View>
+          </>
         </View>
         <View
           style={{

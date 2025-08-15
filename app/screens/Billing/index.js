@@ -340,49 +340,13 @@ const Billing = (props) => {
     { label: "Project 3", value: "Project 3" },
   ];
 
-  if (itemData.isProject == 1) {
-    if (
-      choosedProject == null //|| choosedProject == ""
-    ) {
-      return (
-        <SafeAreaView
-          style={BaseStyle.safeAreaView}
-          edges={["right", "top", "left"]}
-        >
-          <Header
-            // title={t('choose_friend')}
-            title={t("Invoice")} //belum ada lang translatenya
-            renderLeft={() => {
-              return (
-                <Icon
-                  name="angle-left"
-                  size={20}
-                  color={colors.primary}
-                  enableRTL={true}
-                />
-              );
-            }}
-            onPressLeft={() => {
-              navigation.goBack();
-            }}
-          />
-          <ButtonChooseProject
-            items={dataDD}
-            placeholder="Select project"
-            onSelect={handleSelect}
-          />
-        </SafeAreaView>
-      );
-    }
-  }
-
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, { flex: 1 }]}
       edges={["right", "top", "left"]}
     >
       <Header
-        title={t("Invoice")}
+        title={"Invoice "+ stateReduxChoosedUnit.lot_no}
         renderLeft={() => {
           return (
             <Icon
