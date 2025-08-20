@@ -83,6 +83,7 @@ const TransactionExpand = ({
 console.log('83 ListTransactionProps',ListTransactionProps)
 console.log('83 item',item)
 
+//paid
   const detailDateDue = async () => {
     setLoading(true);
     console.log(
@@ -110,6 +111,7 @@ console.log('83 item',item)
     }
   };
 
+  //not paid
   const detailNotDue = async () => {
     setLoading(true);
     console.log(

@@ -399,8 +399,6 @@ const AttachmentBilling = (props) => {
         // };
 
         const dataPost = {
-          // entity_cd: "1004",
-          // project_no: "1004001",
           entity_cd: item.entity_cd,
           project_no: item.project_no,
           debtor_acct: item.debtor_acct, //"L-TR-09-07",

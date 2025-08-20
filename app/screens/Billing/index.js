@@ -193,8 +193,8 @@ const Billing = (props) => {
 
   const onRefresh = () => {
     // alert("run onRefresh");
-    fetchData();
-    fetchDataCurrent();
+    fetchData();    // not paid
+    fetchDataCurrent();    // paid
     fetchDataPaymentActive();
   };
 
@@ -231,12 +231,9 @@ const Billing = (props) => {
 
   useCustomTriggerOnFocus(onRefresh, 8000);
 
-  // Make function to call the api
+  // not paid
   async function fetchData() {
     try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL + `/modules/billing/due-summary/${user.email}`
-      // );
       const res = await httpClient.request({
         url: `/modules/billing/due-summary/${user.email}`,
         method: "GET",
@@ -287,11 +284,9 @@ const Billing = (props) => {
       : null;
   console.log("sum", sum);
 
+    // paid
   async function fetchDataCurrent() {
     try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL + `/modules/billing/current-summary/IFCAPB/${user.user}`
-      // );
       const res = await httpClient.request({
         url: `/modules/billing/current-summary/${user.email}`,
         method: "GET",
