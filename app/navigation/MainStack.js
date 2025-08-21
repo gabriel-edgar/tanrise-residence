@@ -22,6 +22,7 @@ import AttachmentBilling from '../screens/Billing/AttachmentBilling';
 import PaymentDetail from '../screens/Billing/PaymentDetail';
 import MultiPaymentDetail from '../screens/Billing/MultiInvoice/MultiPaymentDetail';
 import MerchantList from '../screens/Billing/MerchantList';
+import MultiMerchantList from '../screens/Billing/MultiInvoice/MultiMerchantList';
 import VAScreen from '../screens/Billing/VAScreen';
 import BillingHistory from '../screens/BillingHistory';
 import HistoryBilling from '../screens/BillingHistory/HistoryBilling';
@@ -539,6 +540,11 @@ function MainStack() {
       <Stack.Screen
         name="MerchantList"
         component={MerchantList}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MultiMerchantList"
+        component={MultiMerchantList}
         options={{headerShown: false}}
       />
       <Stack.Screen

@@ -274,6 +274,10 @@ const Billing = (props) => {
     { label: "Project 3", value: "Project 3" },
   ];
 
+  const totalAmtNumber = selectedInvoices.reduce((sum, item) => {
+    return sum + (parseFloat(item.mfinal_amt) || 0);
+  }, 0);
+
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, { flex: 1 }]}
@@ -469,8 +473,8 @@ const Billing = (props) => {
                       !!selectedInvoices.find((i) => item.doc_no == i.doc_no)
                     }
                     checkBoxOnValueChange={() => {
-                      if (!isStartMulti){
-                        setIsStartMulti(true)
+                      if (!isStartMulti) {
+                        setIsStartMulti(true);
                       }
                       const exists = selectedInvoices.find(
                         (i) => i.doc_no === item.doc_no
@@ -598,7 +602,7 @@ const Billing = (props) => {
           )}
         </View>
       </ScrollView>
-      { tab.id == 1 && dataCurrent != 0 ? (
+      {tab.id == 1 && dataCurrent != 0 ? (
         <View
           style={{
             flexDirection: "row",
@@ -659,22 +663,15 @@ const Billing = (props) => {
               padding: 10,
               marginRight: 10,
               textAlign: "center",
-              fontWeight:'bold',
-              fontSize:16
+              fontWeight: "bold",
+              fontSize: 16,
             }}
             //value={message}
             //onChangeText={setMessage}
             //placeholder="Type a message"
           >
             {/* Rp. {numFormattanpaRupiah(selectedInvoices.reduce((sum,item)=>{return sum +(parseFloat(item.mfinal_amt) || 0)}, 0))} */}
-            Rp.{" "}
-            {numFormattanpaRupiah(
-              selectedInvoices
-                .reduce((sum, item) => {
-                  return sum + (parseFloat(item.mfinal_amt) || 0);
-                }, 0)
-                .toFixed(2)
-            )}
+            Rp. {numFormattanpaRupiah(totalAmtNumber.toFixed(2))}
           </Text>
           <TouchableOpacity
             style={{
@@ -690,19 +687,14 @@ const Billing = (props) => {
                 );
                 return;
               }
-              if (selectedInvoices.length == 0){
-                alert('Please select invoice')
+              if (selectedInvoices.length == 0) {
+                alert("Please select invoice");
                 return;
               }
               navigation.navigate("MultiPaymentDetail", {
                 selectedInvoices,
-                totalAmt: numFormattanpaRupiah(
-                  selectedInvoices
-                    .reduce((sum, item) => {
-                      return sum + (parseFloat(item.mfinal_amt) || 0);
-                    }, 0)
-                    .toFixed(2)
-                ),
+                totalAmt: numFormattanpaRupiah(totalAmtNumber.toFixed(2)),
+                totalAmtNumber: totalAmtNumber,
               });
             }}
           >

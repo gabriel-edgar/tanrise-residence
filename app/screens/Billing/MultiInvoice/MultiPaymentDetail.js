@@ -29,6 +29,7 @@ import httpClient from "../../../controllers/HttpClient";
 import numFormattanpaRupiah from "../../../components/numFormattanpaRupiah";
 import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
+import getUser from "../../../selectors/UserSelectors";
 
 const fileDummy = [
   {
@@ -38,27 +39,7 @@ const fileDummy = [
   },
 ];
 
-const abc = {
-    "selectedInvoices": [
-        {
-            "entity_cd": "1006",
-            "project_no": "1006001",
-            "tower": "TAMAN DAYU",
-            "name": "I WAYAN GINANTO SH, MBA, MH. MM",
-            "doc_no": "BC25039476",
-            "doc_date": "2025-04-30 00:00:00.000",
-            "due_date": "2025-04-30 00:00:00.000",
-            "lot_no": "GP02/005",
-            "debtor_acct": "G004/GP02/005",
-            "mbal_amt": "884832.00",
-            "mtax_deduct_amt": ".00",
-            "mfinal_amt": "884832.00"
-        }
-    ],
-    "totalAmt": "884.832,00"
-}
-
-const AttachmentBilling = (props) => {
+const MultiPaymentDetail = (props) => {
   const { navigation, route } = props;
   console.log("route params", route);
   //   const url_attachment = route.params;
@@ -79,11 +60,13 @@ const AttachmentBilling = (props) => {
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedInvoicesExtended, setSelectedInvoicesExtended] = useState(selectedInvoices);
   console.log("54 route.params: ", route.params);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
 
   const [textToCopy, setTextToCopy] = useState("Example VA Number");
+    const user = useSelector((state) => getUser(state));
 
   const copyToClipboard = () => {
     Clipboard.setString(textToCopy);
@@ -98,7 +81,7 @@ const AttachmentBilling = (props) => {
   };
 
   useEffect(() => {
-    console.log(107,{params})
+    console.log(107, { params });
     loadData();
   }, []);
 
@@ -181,27 +164,6 @@ const AttachmentBilling = (props) => {
     }
     return input; // Return original string if no dot is found
   }
-
-  const handleChangePrice = (text) => {
-    // Example usage
-    const valueHasilConvert = removeAfterDot(selectedInvoices[0].mfinal_amt);
-
-    // Remove all non-numeric characters
-    const numericValue = text.replace(/\D/g, "");
-
-    if (parseInt(valueHasilConvert) < parseInt(numericValue)) {
-      alert("Price cannot be higher than the original price");
-      return;
-    }
-
-    // Use a regular expression to allow only numbers
-    const regex = /^[0-9]*$/;
-    if (regex.test(numericValue) || numericValue === "") {
-      setPrice(numericValue);
-    } else {
-      alert("Invalid Input", "Please enter only numbers.");
-    }
-  };
 
   // Function to format the number
   const formatNumber = (num) => {
@@ -308,6 +270,30 @@ const AttachmentBilling = (props) => {
   //   );
   // }
 
+  const getPaymentDetailList = async (item) => {
+    try {
+      const res = await httpClient.request({
+        url: `/modules/billing/summary-history`,
+        method: "GET",
+        params: {
+          email: user.email,
+          entity_cd: stateReduxChoosedProject.entity_cd,
+          project_no: stateReduxChoosedProject.project_no,
+          debtor_acct: item.debtor_acct,
+          doc_no: item.doc_no,
+        },
+      });
+
+      console.log("327 getPaymentDetailList: res: ", res.data.data);
+      // add to 
+      setPaymentMethodList(res.data.data);
+    } catch (error) {
+      setPaymentMethodList([]);
+      console.log("60 PaymentMethodList: error: ", error);
+      //setErrors(error.response.data.message);
+    }
+  };
+
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
@@ -330,12 +316,15 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-         {"Selected Invoice "}
+        {"Selected Invoices (" + selectedInvoicesExtended.length + ")"}
       </Text>
       <ScrollView>
         <View style={{ flex: 1, padding: 10 }}>
-          {selectedInvoices?.map((item, key) => (
-            <View key={key}>
+          {selectedInvoicesExtended?.map((item, key) => (
+            <View
+              key={key}
+              style={{ backgroundColor: key % 2 == 0 ? "lightgray" : "" }}
+            >
               <View
                 style={{
                   flexDirection: "row",
@@ -345,8 +334,8 @@ const AttachmentBilling = (props) => {
                   paddingVertical: 5,
                 }}
               >
-                <View style={{ width: "50%", paddingLeft: 10 }}>
-                  <Text subhead>{item.doc_no}</Text>
+                <View style={{ width: "50%" }}>
+                  <Text subhead>{[key + 1] + ". " + item.doc_no}</Text>
                 </View>
                 <View
                   style={{
@@ -371,14 +360,7 @@ const AttachmentBilling = (props) => {
               </View>
             </View>
           ))}
-          <View
-            style={{
-              borderTopWidth: 0.5,
-              borderStyle: "dashed",
-              borderColor: colors.primary,
-              marginLeft: 9,
-            }}
-          ></View>
+
           <View
             style={{
               flexDirection: "row",
@@ -386,10 +368,12 @@ const AttachmentBilling = (props) => {
               width: "100%",
               // paddingHorizontal: 10,
               paddingVertical: 5,
+              backgroundColor:
+                selectedInvoicesExtended.length % 2 == 0 ? "lightgray" : "",
             }}
           >
             <View style={{ width: "50%", paddingLeft: 10 }}>
-              <Text subhead bold style={{ fontSize: 16 }}>
+              <Text subhead bold>
                 Total
               </Text>
             </View>
@@ -401,72 +385,23 @@ const AttachmentBilling = (props) => {
                 width: "35%",
               }}
             >
-              <Text subhead bold style={{ fontSize: 16 }}>
+              <Text subhead bold>
                 Rp.{" "}
               </Text>
-              <Text subhead bold style={{ fontSize: 16 }}>
-                {params.total}
+              <Text subhead bold>
+                {params.totalAmt}
                 {/* 100.000.000.00 */}
               </Text>
               {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
             </View>
           </View>
-          {/*<View
-          style={{
-            flexDirection: "row",
-            marginTop: 20,
-            marginHorizontal: 20,
-            alignItems: "center",
-            //backgroundColor:'blue'
-          }}
-        >
-          <Text subhead bold style={{ fontSize: 16 }}>
-            Rp.{"   "}
-          </Text>
-          <TextInput
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 10,
-              padding: 10,
-              fontSize: 18,
-              //marginRight: 10,
-              backgroundColor,
-              color: colors.text,
-            }}
-            //value={price}
-            value={formatNumber(price)} // Format for display
-            onChangeText={handleChangePrice}
-            placeholder="Type a price"
-            keyboardType="numeric"
-          />
-        </View>
-        <Button
-          style={{
-            height: 35,
-            margin: 10,
-            marginTop: 30,
-            width: "40%",
-            alignSelf: "flex-end",
-          }}
-          onPress={() => {
-            changeBackgroundColor();
-            handleChangePrice(removeAfterDot(selectedInvoices[0].mdoc_amt));
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 14 }}>Set to Full Price</Text>
-        </Button>*/}
-          {/* <Text subhead bold style={{ fontSize: 16 }}>
-          {price}
-        </Text> */}
+          
           <Button
             style={{ height: 45, margin: 10, marginTop: 20 }}
             onPress={() =>
               //clickPayment()
-              navigation.navigate("MerchantList", {
+              navigation.navigate("MultiMerchantList", {
                 ...route.params,
-                replaceTotal_notdue,
               })
             }
           >
@@ -476,84 +411,11 @@ const AttachmentBilling = (props) => {
           </Button>
         </View>
       </ScrollView>
-      <Modal
-        animationType="slide" // You can use "slide", "fade", or "none"
-        transparent={true} // Set to false if you want a solid background
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)} // For Android back button
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-          }}
-        >
-          <View
-            style={{
-              width: 300,
-              padding: 20,
-              backgroundColor: "white",
-              borderRadius: 10,
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginBottom: 5,
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              VA Number
-            </Text>
-            <View
-              style={{
-                padding: 20,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text>{textToCopy}</Text>
-              {/* <Button title="Copy Text" onPress={copyToClipboard} /> */}
-              <Button
-                style={{
-                  height: 35,
-                  margin: 10,
-                  //marginTop: 30,
-                  //width: "40%",
-                  alignSelf: "center",
-                }}
-                onPress={copyToClipboard}
-              >
-                <Text style={{ color: "#fff", fontSize: 14 }}>Copy Text</Text>
-              </Button>
-            </View>
-            {/* <Button
-              title="Close Modal"
-              onPress={() => setModalVisible(false)}
-            /> */}
-            <Button
-              style={{
-                height: 35,
-                margin: 10,
-                marginTop: 10,
-                //width: "40%",
-                alignSelf: "center",
-              }}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={{ color: "#fff", fontSize: 14 }}>Close</Text>
-            </Button>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
 
-export default AttachmentBilling;
+export default MultiPaymentDetail;
 
 const stylesCurrent = StyleSheet.create({
   pdf: {

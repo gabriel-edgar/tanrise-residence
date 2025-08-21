@@ -37,7 +37,7 @@ const ListTransaction = ({
       {/* <View style={[styles.image, {backgroundColor: colors.primaryLight}]}>
         <Icon name={icon} size={24} solid color={BaseColor.whiteColor} />
       </View> */}
-      <View
+      {tab_id == 1 ?<View
         style={{
           // backgroundColor:'blue',
           alignSelf: "center",
@@ -51,7 +51,7 @@ const ListTransaction = ({
             disable={false}
           />
         </Pressable>
-      </View>
+      </View>: null}
       <View style={{ flex: 0.7, marginLeft:10 }}>
         <Text subhead>{doc_no}</Text>
         <Text footnote style={{ marginTop: 5 }}>
