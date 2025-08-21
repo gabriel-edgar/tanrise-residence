@@ -20,6 +20,7 @@ import {BottomTabNavigatorMazi, tabBarIcon} from './components';
 import Billing from '../screens/Billing';
 import AttachmentBilling from '../screens/Billing/AttachmentBilling';
 import PaymentDetail from '../screens/Billing/PaymentDetail';
+import MultiPaymentDetail from '../screens/Billing/MultiInvoice/MultiPaymentDetail';
 import MerchantList from '../screens/Billing/MerchantList';
 import VAScreen from '../screens/Billing/VAScreen';
 import BillingHistory from '../screens/BillingHistory';
@@ -528,6 +529,11 @@ function MainStack() {
       <Stack.Screen
         name="PaymentDetail"
         component={PaymentDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MultiPaymentDetail"
+        component={MultiPaymentDetail}
         options={{headerShown: false}}
       />
       <Stack.Screen

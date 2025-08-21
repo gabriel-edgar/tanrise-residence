@@ -48,10 +48,6 @@ import { ActivityIndicator } from "react-native-paper";
 import { store, persist } from "../../store";
 // import { homeCommonProject } from "../FunctionAxios/home-common-project";
 import { useCustomTriggerOnFocus } from "./funcFocusEffect";
-import CheckBox from "@react-native-community/checkbox";
-import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
-import { normalizeFontSize } from "../function/dinamicFontSize";
-import { FontWeight } from "../../config";
 
 const Billing = (props) => {
   const itemData = props.route.params.item;
@@ -79,8 +75,6 @@ const Billing = (props) => {
   const [spinner, setSpinner] = useState(true);
   const [loading, setLoading] = useState(true);
   const [paymentActive, setPaymentActive] = useState([]);
-  const [selectedInvoices, setSelectedInvoices] = useState([]);
-  const [isStartMulti, setIsStartMulti] = useState(false);
 
   // const stateRedux = useSelector((state) => state.user);
   // console.log("81 accessTokenStateRedux: ", stateRedux.accessToken);
@@ -116,6 +110,73 @@ const Billing = (props) => {
       });
     }
   }, [route?.params?.id]);
+  //-----FOR GET ENTITY & PROJJECT
+  // const getTower = async () => {
+  //   const data = {
+  //     email: email,
+  //     //   email: 'haniyya.ulfah@ifca.co.id',
+  //     //app: "O",
+  //   };
+
+  //   await homeCommonProject(token, data, setDataDD, setArrDataProject);
+
+  //   return;
+
+  //   console.log("105 token: ", token);
+
+  //   const config = {
+  //     // headers: {
+  //     //   accept: "application/json",
+  //     //   "Content-Type": "application/json",
+  //     //   // token: "",
+  //     // },
+  //     params: data,
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       //Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVkZW50aWFscyI6eyJlbWFpbCI6Im1nckBpZmNhLmNvLmlkIiwicGFzc3dvcmQiOiJwYXNzMTIzNCJ9LCJleHAiOjE3MjM0NDc1NDR9.nQdbeI7VN6t0g5QvUn0vsNhp1frkYNjwr_dMuinMRZA`,
+  //     },
+  //   };
+
+  //   await axios
+  //     .get(API_URL_LOKAL + `/home/common-project`, config)
+  //     .then((res) => {
+  //       console.log("125 res: ", res.data.data);
+
+  //       const arrDataTower = res.data.data;
+  //       console.log("141 res: ", arrDataTower);
+
+  //       const arrayDropDown = arrDataTower.map((item, index) => {
+  //         return { label: item.descs, value: index };
+  //       });
+
+  //       console.log("147 arrayDropDown: ", arrayDropDown);
+  //       setDataDD(arrayDropDown);
+
+  //       // let dataArr = {};
+  //       arrDataTower.map((dat) => {
+  //         if (dat) {
+  //           console.log("data trower", dat.entity_cd);
+  //           setdataTowerUser(dat);
+  //           setEntity(dat.entity_cd);
+  //           setProjectNo(dat.project_no);
+  //           // const jsonValue = JSON.stringify(dat);
+  //           //   setdataFormHelp(saveStorage);
+  //           // console.log('storage', saveStorage);
+  //           // dataArr.push(jsonValue);
+  //           // getDebtor(dat);
+  //         }
+  //       });
+  //       // AsyncStorage.setItem('@/dataTower', dataArr);
+  //       setArrDataTowerUser(arrDataTower);
+
+  //       setSpinner(false);
+  //       // return res.data;
+  //     })
+  //     .catch((error) => {
+  //       console.log("125 error get tower api", error);
+  //       //alert("125 error get: ", error);
+  //     });
+  // };
 
   useEffect(() => {
     //getTower(user);
@@ -132,8 +193,8 @@ const Billing = (props) => {
 
   const onRefresh = () => {
     // alert("run onRefresh");
-    fetchData(); // not paid
-    fetchDataCurrent(); // paid
+    fetchData();    // not paid
+    fetchDataCurrent();    // paid
     fetchDataPaymentActive();
   };
 
@@ -223,7 +284,7 @@ const Billing = (props) => {
       : null;
   console.log("sum", sum);
 
-  // paid
+    // paid
   async function fetchDataCurrent() {
     try {
       const res = await httpClient.request({
@@ -279,33 +340,23 @@ const Billing = (props) => {
       style={[BaseStyle.safeAreaView, { flex: 1 }]}
       edges={["right", "top", "left"]}
     >
-      <View
-        style={{
-          backgroundColor: colors.background,
-          shadowColor: colors.text, // Shadow color for iOS and Android
-          shadowOffset: { width: 0, height: 2 }, // Shadow offset
-          shadowOpacity: 0.2, // Shadow opacity (iOS)
-          shadowRadius: 5, // Shadow blur (iOS)
-          elevation: 3,
+      <Header
+        title={"Invoice "+ stateReduxChoosedUnit.lot_no}
+        renderLeft={() => {
+          return (
+            <Icon
+              name="angle-left"
+              size={20}
+              color={colors.primary}
+              enableRTL={true}
+            />
+          );
         }}
-      >
-        <Header
-          title={"Invoice " + stateReduxChoosedUnit.lot_no}
-          renderLeft={() => {
-            return (
-              <Icon
-                name="angle-left"
-                size={20}
-                color={colors.primary}
-                enableRTL={true}
-              />
-            );
-          }}
-          onPressLeft={() => {
-            navigation.goBack();
-          }}
-        />
-        {/* {itemData.isProject == null && (
+        onPressLeft={() => {
+          navigation.goBack();
+        }}
+      />
+      {/* {itemData.isProject == 1 && (
         <>
           <ButtonChooseProject
             items={dataDD}
@@ -317,53 +368,46 @@ const Billing = (props) => {
         </>
       )} */}
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("BillingHistory");
-          }}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: colors.primary,
-            borderRadius: 10,
-            padding: 10,
-            margin: 20,
-            marginTop: 10,
-            width: "60%",
-            alignSelf: "center",
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("BillingHistory");
+        }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: colors.primary,
+          borderRadius: 10,
+          padding: 10,
+          margin: 20,
+          marginTop: 10,
+          width: "60%",
+          alignSelf: "center",
 
-            shadowColor: colors.text, // Shadow color for iOS and Android
-            shadowOffset: { width: 0, height: 2 }, // Shadow offset
-            shadowOpacity: 0.2, // Shadow opacity (iOS)
-            shadowRadius: 5, // Shadow blur (iOS)
-            elevation: 3,
+          shadowColor: colors.text, // Shadow color for iOS and Android
+          shadowOffset: { width: 0, height: 2 }, // Shadow offset
+          shadowOpacity: 0.2, // Shadow opacity (iOS)
+          shadowRadius: 5, // Shadow blur (iOS)
+          elevation: 3,
+        }}
+      >
+        <Icon name="clipboard-list" size={20} color="white" enableRTL={true} />
+        <Text
+          style={{
+            textAlign: "center",
+            marginLeft: 10,
+            fontSize: 16,
+            color: "white",
           }}
         >
-          <Icon
-            name="clipboard-list"
-            size={20}
-            color="white"
-            enableRTL={true}
-          />
-          <Text
-            style={{
-              textAlign: "center",
-              marginLeft: 10,
-              fontSize: normalizeFontSize(13),
-              color: "white",
-            }}
-            allowFontScaling={true}
-          >
-            {"Payment Active ( "}
-            <Text style={{ color: paymentActive.length > 0 ? "red" : "white" }}>
-              {paymentActive.length}
-            </Text>
-            {" ) "}
-            {/* {paymentActive.length > 0 ? "🔴" : ""} */}
+          {"Payment Active ( "}
+          <Text style={{ color: paymentActive.length > 0 ? "red" : "white" }}>
+            {paymentActive.length}
           </Text>
-        </TouchableOpacity>
-      </View>
+          {" ) "}
+          {/* {paymentActive.length > 0 ? "🔴" : ""} */}
+        </Text>
+      </TouchableOpacity>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -371,7 +415,7 @@ const Billing = (props) => {
         style={{
           // backgroundColor: "blue",
           paddingBottom: 20,
-          paddingTop: 15,
+          // paddingTop: 5,
           // borderTopWidth: 0.5,
         }}
       >
@@ -422,13 +466,11 @@ const Billing = (props) => {
               paddingHorizontal: 20,
               // backgroundColor: "blue",
               paddingBottom: 5,
-              display: tab.id === 1 ? "flex" : "none",
+              display: tab.id === 1 ? 'flex' : 'none'
             }}
           >
-            {dataCurrent != 0 ? (
-              dataCurrent.map((item, key) => (
-                //not paid
-                <>
+            { dataCurrent != 0
+              ? dataCurrent.map((item, key) => (
                   <ListTransactionExpand
                     onPress={() => navigation.navigate("FHistoryDetail")}
                     // key={item.id}
@@ -464,60 +506,44 @@ const Billing = (props) => {
                       shadowRadius: 5, // Shadow blur (iOS)
                       elevation: 3,
                     }}
-                    // checkBoxValue={true}
-                    checkBoxValue={
-                      !!selectedInvoices.find((i) => item.doc_no == i.doc_no)
-                    }
-                    checkBoxOnValueChange={() => {
-                      if (!isStartMulti){
-                        setIsStartMulti(true)
-                      }
-                      const exists = selectedInvoices.find(
-                        (i) => i.doc_no === item.doc_no
-                      );
-                      let newArray;
-
-                      if (exists) {
-                        // Remove the item
-                        newArray = selectedInvoices.filter(
-                          (i) => i.doc_no !== item.doc_no
-                        );
-                      } else {
-                        // Add the item
-                        newArray = [...selectedInvoices, item];
-                      }
-
-                      setSelectedInvoices(newArray);
-                    }}
                   />
-                </>
-              ))
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  // height: '100%',
-                  marginTop: "70%",
-                  // justifyContent: 'center',
-                  // alignContent: 'center',
-                  // alignItems: 'center',
-                  // alignSelf: 'center',
-                }}
-              >
-                <Text
-                  style={{
-                    justifyContent: "center",
-                    alignContent: "center",
-                    alignItems: "center",
-                    alignSelf: "center",
-                    fontSize: 16,
-                    marginTop: 10,
-                  }}
-                >
-                  Data not available.
-                </Text>
-              </View>
-            )}
+                ))
+              : (
+                  <View
+                    style={{
+                      flex: 1,
+                      // height: '100%',
+                      marginTop: "70%",
+                      // justifyContent: 'center',
+                      // alignContent: 'center',
+                      // alignItems: 'center',
+                      // alignSelf: 'center',
+                    }}
+                  >
+                    {/* <IconFontisto
+                    name="holiday-village"
+                    size={40}
+                    color={colors.primary}
+                    style={{
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      alignSelf: 'center',
+                    }}></IconFontisto> */}
+                    <Text
+                      style={{
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        fontSize: 16,
+                        marginTop: 10,
+                      }}
+                    >
+                      Data not available.
+                    </Text>
+                  </View>
+                )}
           </View>
         )}
 
@@ -527,129 +553,111 @@ const Billing = (props) => {
             paddingHorizontal: 20,
             paddingBottom: 5,
             // backgroundColor: "blue",
-            display: tab.id === 2 ? "flex" : "none",
+            display: tab.id === 2 ? 'flex' : 'none'
           }}
         >
-          {data.length != 0 ? (
-            data.map((item, key) => (
-              <ListTransactionExpand
-                onPress={() => navigation.navigate("FHistoryDetail")}
-                // key={item.id}
-                key={key}
-                number={key}
-                tower={item.tower}
-                name={item.name}
-                trx_type={item.trx_type}
-                doc_no={item.doc_no}
-                doc_date={moment(item.doc_date).format("DD MMMM YYYY")}
-                descs={item.descs}
-                due_date={moment(item.due_date).format("DD MMMM YYYY")}
-                payment_date={"dummy payment"}
-                mbal_amt={`${numFormat(`${item.mbal_amt}`)}`}
-                lot_no={item.lot_no}
-                debtor_acct={item.debtor_acct}
-                entity_cd={entity}
-                project_no={project_no}
-                email={user.email}
-                tab_id={2}
-                item={item}
-                scrollToBottom={scrollToBottom}
-                isLast={data.length == key + 1}
-                isPaymentActive={paymentActive.length}
-                style={{
-                  borderRadius: 10,
-                  marginTop: 20,
-                  padding: 10,
-                  backgroundColor: colors.background,
-                  shadowColor: colors.text, // Shadow color for iOS and Android
-                  shadowOffset: { width: 0, height: 2 }, // Shadow offset
-                  shadowOpacity: 0.2, // Shadow opacity (iOS)
-                  shadowRadius: 5, // Shadow blur (iOS)
-                  elevation: 3,
-                }}
-              />
-            ))
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                // height: '100%',
-                marginTop: "70%",
-                // justifyContent: 'center',
-                // alignContent: 'center',
-                // alignItems: 'center',
-                // alignSelf: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  justifyContent: "center",
-                  alignContent: "center",
-                  alignItems: "center",
-                  alignSelf: "center",
-                  fontSize: 16,
-                  marginTop: 10,
-                  //color: "white",
-                }}
-              >
-                Data not available.
-              </Text>
-            </View>
-          )}
+          { data.length != 0
+            ? data.map((item, key) => (
+                <ListTransactionExpand
+                  onPress={() => navigation.navigate("FHistoryDetail")}
+                  // key={item.id}
+                  key={key}
+                  number={key}
+                  tower={item.tower}
+                  name={item.name}
+                  trx_type={item.trx_type}
+                  doc_no={item.doc_no}
+                  doc_date={moment(item.doc_date).format("DD MMMM YYYY")}
+                  descs={item.descs}
+                  due_date={moment(item.due_date).format("DD MMMM YYYY")}
+                  payment_date={"dummy payment"}
+                  mbal_amt={`${numFormat(`${item.mbal_amt}`)}`}
+                  lot_no={item.lot_no}
+                  debtor_acct={item.debtor_acct}
+                  entity_cd={entity}
+                  project_no={project_no}
+                  email={user.email}
+                  tab_id={2}
+                  item={item}
+                  scrollToBottom={scrollToBottom}
+                  isLast={data.length == key + 1}
+                  isPaymentActive={paymentActive.length}
+                  style={{
+                    borderRadius: 10,
+                    marginTop: 20,
+                    padding: 10,
+                    backgroundColor: colors.background,
+                    shadowColor: colors.text, // Shadow color for iOS and Android
+                    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                    shadowOpacity: 0.2, // Shadow opacity (iOS)
+                    shadowRadius: 5, // Shadow blur (iOS)
+                    elevation: 3,
+                  }}
+                />
+              ))
+            :  (
+                <View
+                  style={{
+                    flex: 1,
+                    // height: '100%',
+                    marginTop: "70%",
+                    // justifyContent: 'center',
+                    // alignContent: 'center',
+                    // alignItems: 'center',
+                    // alignSelf: 'center',
+                  }}
+                >
+                  {/* <IconFontisto
+                    name="holiday-village"
+                    size={40}
+                    color={colors.primary}
+                    style={{
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      alignSelf: 'center',
+                    }}></IconFontisto> */}
+                  <Text
+                    style={{
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      alignSelf: "center",
+                      fontSize: 16,
+                      marginTop: 10,
+                      //color: "white",
+                    }}
+                  >
+                    Data not available.
+                  </Text>
+                </View>
+              )}
         </View>
       </ScrollView>
-      { tab.id == 1 && dataCurrent != 0 ? (
+      {/* {tab.id == 1 && dataCurrent != 0 ? (
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
             padding: 10,
-            paddingBottom: 20,
-
-            backgroundColor: colors.background,
-            shadowColor: colors.text, // Shadow color for iOS and Android
-            shadowOffset: { width: 0, height: 2 }, // Shadow offset
-            shadowOpacity: 0.2, // Shadow opacity (iOS)
-            shadowRadius: 5, // Shadow blur (iOS)
-            elevation: 3,
+            marginBottom: 20,
           }}
         >
-          {/* <Text
+          <Text
             style={{
-              flex: 0.2,
+              flex: 0.5,
               borderWidth: 1,
               borderColor: "#ccc",
               borderRadius: 10,
               padding: 10,
               marginRight: 10,
             }}
+            //value={message}
+            //onChangeText={setMessage}
+            //placeholder="Type a message"
           >
-            0
-            
-          </Text> */}
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 3,
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ marginRight: 5 }}>All</Text>
-            <CheckBox
-              value={dataCurrent?.length == selectedInvoices.length}
-              onValueChange={() => {
-                if (dataCurrent?.length == selectedInvoices.length) {
-                  setSelectedInvoices([]);
-                } else {
-                  setSelectedInvoices(dataCurrent);
-                }
-              }}
-              disable={false}
-              style={{ marginRight: 10 }}
-              testID
-            />
-          </View>
+            0 selected
+          </Text>
           <Text
             style={{
               flex: 1,
@@ -658,65 +666,31 @@ const Billing = (props) => {
               borderRadius: 10,
               padding: 10,
               marginRight: 10,
-              textAlign: "center",
-              fontWeight:'bold',
-              fontSize:16
             }}
             //value={message}
             //onChangeText={setMessage}
             //placeholder="Type a message"
           >
-            {/* Rp. {numFormattanpaRupiah(selectedInvoices.reduce((sum,item)=>{return sum +(parseFloat(item.mfinal_amt) || 0)}, 0))} */}
-            Rp.{" "}
-            {numFormattanpaRupiah(
-              selectedInvoices
-                .reduce((sum, item) => {
-                  return sum + (parseFloat(item.mfinal_amt) || 0);
-                }, 0)
-                .toFixed(2)
-            )}
+            Total:
           </Text>
           <TouchableOpacity
             style={{
-              flex: 0.4,
-              backgroundColor: colors.primary,
+              backgroundColor: "#007bff",
               padding: 10,
               borderRadius: 10,
             }}
-            onPress={() => {
-              if (paymentActive.length > 0) {
-                alert(
-                  'There is an active payment,\nPlease "pay and wait" or "cancel" payment'
-                );
-                return;
-              }
-              if (selectedInvoices.length == 0){
-                alert('Please select invoice')
-                return;
-              }
-              navigation.navigate("MultiPaymentDetail", {
-                selectedInvoices,
-                totalAmt: numFormattanpaRupiah(
-                  selectedInvoices
-                    .reduce((sum, item) => {
-                      return sum + (parseFloat(item.mfinal_amt) || 0);
-                    }, 0)
-                    .toFixed(2)
-                ),
-              });
-            }}
+            //onPress={sendMessage}
           >
             <Text
               style={{
                 color: "#fff",
-                textAlign: "center",
               }}
             >
-              Pay ({selectedInvoices.length})
+              Send
             </Text>
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) : null} */}
     </SafeAreaView>
   );
 };

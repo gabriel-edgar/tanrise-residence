@@ -5,8 +5,10 @@ export default StyleSheet.create({
   container: {
     flexDirection: 'row',
     width: '100%',
-    alignItems: 'center',
-    height: Utils.scaleWithPixel(80),
+    // alignItems: 'start',
+    // height: Utils.scaleWithPixel(65),
+    padding:7,
+    marginBottom:15
   },
   image: {
     height: Utils.scaleWithPixel(48),

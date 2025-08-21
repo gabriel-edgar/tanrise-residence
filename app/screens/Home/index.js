@@ -165,7 +165,7 @@ const Home = (props) => {
           getClusterList(projectObj.entity_cd, projectObj.project_no);
           }
         }
-      }, 45000); // Update every 1000 milliseconds (1 second)
+      }, 80000); // Update every 1000 milliseconds (1 second)
 
       return () => clearInterval(intervalIdNotif);
     }, [clusterUseState, projectObj])

@@ -68,6 +68,8 @@ const TransactionExpand = ({
     tab_id: tab_id,
   },
   isExpandInit = false,
+  checkBoxValue = null,
+  checkBoxOnValueChange = ()=>{},
 }) => {
   const { colors } = useTheme();
   const [isExpand, setIsExpand] = useState(false); //number == 0 ? true :
@@ -80,10 +82,10 @@ const TransactionExpand = ({
   const [datadetailNotDue, setDetailNotDue] = useState([]);
 
   const [loading, setLoading] = useState(true);
-console.log('83 ListTransactionProps',ListTransactionProps)
-console.log('83 item',item)
+  console.log("83 ListTransactionProps", ListTransactionProps);
+  console.log("83 item", item);
 
-//paid
+  //paid
   const detailDateDue = async () => {
     setLoading(true);
     console.log(
@@ -100,11 +102,15 @@ console.log('83 item',item)
       console.log("84 res detail-history: ", res.data);
       setDetailDateDue(res.data.data);
 
-      res.data.data.length == 0 ? setErrors('Data empty'): null
+      res.data.data.length == 0 ? setErrors("Data empty") : null;
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      error.status == 429 ? setErrors('Try again later') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
+      error.status == 429
+        ? setErrors("Try again later")
+        : setErrors(
+            "Please hide and show to refresh,\n" + error.message.toString()
+          );
       console.log("84 error detail date due -->", error);
 
       // alert(hasError.toString());
@@ -127,29 +133,33 @@ console.log('83 item',item)
       console.log("84 res summary-history", res);
       setDetailNotDue(res.data.data);
       // alert(JSON.stringify(res.data.data))
-      res.data.data.length == 0 ? setErrors('Data empty'): null
+      res.data.data.length == 0 ? setErrors("Data empty") : null;
       //setDetailNotDue(dummyDataSummaryHistory);
       console.log("84111 detail not due -->", res.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      error.status == 429 ? setErrors('Try again later') : setErrors('Please hide and show to refresh,\n'+error.message.toString());
+      error.status == 429
+        ? setErrors("Try again later")
+        : setErrors(
+            "Please hide and show to refresh,\n" + error.message.toString()
+          );
       console.log("84111 error detail not due -->", JSON.stringify(error));
       // alert(hasError.toString());
     }
   };
 
-const sumTotal =
-  datadetailDateDue != 0
-    ? datadetailDateDue.reduceRight((max, bills) => {
-        return max + parseFloat(bills.mfinal_amt);
-      }, 0)
-    : 0;
+  const sumTotal =
+    datadetailDateDue != 0
+      ? datadetailDateDue.reduceRight((max, bills) => {
+          return max + parseFloat(bills.mfinal_amt);
+        }, 0)
+      : 0;
 
-const replaceTotal = sumTotal
-  .toFixed(2) // Keep 2 decimals, e.g., "442604.75"
-  .replace('.', ',')
-  .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adds thousand separator
+  const replaceTotal = sumTotal
+    .toFixed(2) // Keep 2 decimals, e.g., "442604.75"
+    .replace(".", ",")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adds thousand separator
 
   console.log("sum detail mbal mont", sumTotal);
   console.log("replace total", replaceTotal);
@@ -168,13 +178,13 @@ const replaceTotal = sumTotal
   // .replace('.', ',')
   // .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   // change to more pure from mfinal_amt
-  const replaceTotal_notdue = numFormattanpaRupiah(item?.mfinal_amt)
+  const replaceTotal_notdue = numFormattanpaRupiah(item?.mfinal_amt);
   console.log("c", math_total_notdue);
   console.log("replace total due date", replaceTotal_notdue);
 
   useEffect(() => {
-    if (number == 0 && tab_id == 1){
-      clickExpand()
+    if (number == 0 && tab_id == 1) {
+      clickExpand();
     }
   }, []);
 
@@ -182,7 +192,7 @@ const replaceTotal = sumTotal
     console.log("177 item: ", item);
     console.log("177 email: ", email);
     await setIsExpand(!isExpand);
-    (tab_id == 2)? await detailDateDue() : await detailNotDue();
+    tab_id == 2 ? await detailDateDue() : await detailNotDue();
     (await isLast) ? scrollToBottom() : null;
   };
 
@@ -248,25 +258,27 @@ const replaceTotal = sumTotal
             borderBottomColor: colors.background,
           },
           !isExpand && {
-            borderBottomWidth: 1,
+            borderBottomWidth: 0,
             paddingBottom: 1,
             borderBottomColor: colors.border,
           },
         ])}
         {...ListTransactionProps}
         onPress={() => clickExpand()}
+        item={item}
+        tab_id={tab_id}
+        checkBoxValue={checkBoxValue}
+        checkBoxOnValueChange={checkBoxOnValueChange}
       />
-      <Button
-        style={{ height: 35, backgroundColor: "lightgray", marginBottom: 10 }}
-        onPress={() => clickAttachment()}
-      >
-        <Text style={{ color: "black", fontSize: 14 }}>Attachment</Text>
-      </Button>
+
       <Button
         style={{ height: 35, backgroundColor: "lightgray" }}
         onPress={() => clickExpand()}
       >
-        <Text style={{ color: "black", fontSize: 14 }}> <Icon name={isExpand ? "chevron-up":"chevron-down"} size={20} /></Text>
+        <Text style={{ color: "black", fontSize: 14 }}>
+          {" "}
+          <Icon name={isExpand ? "chevron-up" : "chevron-down"} size={20} />
+        </Text>
       </Button>
       {/* 
       <Button style={{ height: 35 }} onPress={() => clickExpand()}>
@@ -307,6 +319,18 @@ const replaceTotal = sumTotal
                     Attachment
                   </Text>
                 </Button> */}
+                <Button
+                  style={{
+                    height: 35,
+                    backgroundColor: "lightgray",
+                    marginBottom: 10,
+                  }}
+                  onPress={() => clickAttachment()}
+                >
+                  <Text style={{ color: "black", fontSize: 14 }}>
+                    Attachment
+                  </Text>
+                </Button>
                 {datadetailDateDue.map((item, key) => (
                   <View key={key}>
                     <View
@@ -403,7 +427,19 @@ const replaceTotal = sumTotal
                   onPress={() => clickPaymentDetail()}
                 >
                   <Text style={{ color: "#fff", fontSize: 14 }}>
-                    Payment Billing
+                    Pay Invoice
+                  </Text>
+                </Button>
+                <Button
+                  style={{
+                    height: 35,
+                    backgroundColor: "lightgray",
+                    marginBottom: 10,
+                  }}
+                  onPress={() => clickAttachment()}
+                >
+                  <Text style={{ color: "black", fontSize: 14 }}>
+                    Attachment
                   </Text>
                 </Button>
                 {datadetailNotDue.map((item, key) => (
