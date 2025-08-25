@@ -182,11 +182,11 @@ const TransactionExpand = ({
   console.log("c", math_total_notdue);
   console.log("replace total due date", replaceTotal_notdue);
 
-  useEffect(() => {
-    if (number == 0 && tab_id == 1) {
-      clickExpand();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (number == 0 && tab_id == 1) {
+  //     clickExpand();
+  //   }
+  // }, []);
 
   const clickExpand = async () => {
     console.log("177 item: ", item);

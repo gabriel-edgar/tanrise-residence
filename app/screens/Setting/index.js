@@ -262,7 +262,7 @@ export default function Setting({ navigation }) {
             underlayColor={colors.background}
           >
             <Text body1 grayColor>
-              {API_URL_LOKAL.slice(46, 47).toUpperCase() + ""}
+              {API_URL_LOKAL.slice(46, 47).toUpperCase() == 'A' ? 'LIVE' : API_URL_LOKAL.slice(46, 47).toUpperCase() == 'D' ? 'TRAIN' : 'LOCAL'}
             </Text>
           </TouchableHighlight>
         </View>

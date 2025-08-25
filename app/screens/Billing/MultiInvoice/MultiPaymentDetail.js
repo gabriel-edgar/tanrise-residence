@@ -20,6 +20,7 @@ import {
   Linking,
   Modal,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
@@ -46,7 +47,7 @@ const MultiPaymentDetail = (props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const [attachment, setAttachment] = useState([]);
-  const [hasError, setErrors] = useState(false);
+  const [hasError, setErrors] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const stateReduxChoosedProject = useSelector(
     (state) => state.Dataproject.chooseProject
@@ -60,13 +61,16 @@ const MultiPaymentDetail = (props) => {
   const [webViewPayment, setWebViewPayment] = useState(false);
   const [urlPayment, setUrlPayment] = useState("https://www.google.com");
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedInvoicesExtended, setSelectedInvoicesExtended] = useState(selectedInvoices);
+  const [selectedInvoicesExtended, setSelectedInvoicesExtended] =
+    useState(selectedInvoices);
   console.log("54 route.params: ", route.params);
+  const [loading, setLoading] = useState(false);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
 
   const [textToCopy, setTextToCopy] = useState("Example VA Number");
-    const user = useSelector((state) => getUser(state));
+  const user = useSelector((state) => getUser(state));
+  const [isExpand, setIsExpand] = useState(false);
 
   const copyToClipboard = () => {
     Clipboard.setString(textToCopy);
@@ -84,6 +88,60 @@ const MultiPaymentDetail = (props) => {
     console.log(107, { params });
     loadData();
   }, []);
+
+  const detailNotPaid = async (item, index, newArray) => {
+    try {
+      //not Paid
+      const res = await httpClient.request({
+        url: `/modules/billing/summary-history?email=${user.email}&entity_cd=${item.entity_cd}&project_no=${item.project_no}&debtor_acct=${item.debtor_acct}&doc_no=${item.doc_no}`,
+        method: "GET",
+      });
+      console.log("84 res summary-history", res);
+      // alert(JSON.stringify(res.data.data))
+      res.data.data.length == 0
+        ? (newArray[index] = {
+            ...newArray[index],
+            detail: [{ descs: "not found" }],
+          })
+        : (newArray[index] = {
+            ...newArray[index],
+            detail: res.data.data,
+          });
+      console.log("84111 detail not due -->", res.data);
+    } catch (error) {
+      alert(error?.message);
+      setLoading(false);
+      newArray[index] = {
+        ...newArray[index],
+        detail: [{ descs: "error " + error?.message }],
+      };
+      error.status == 429
+        ? setErrors("Try again later")
+        : setErrors(
+            "Please hide and show to refresh,\n" + error.message.toString()
+          );
+      console.log("84111 error detail not due -->", JSON.stringify(error));
+      // alert(hasError.toString());
+    }
+  };
+
+  const onDetail = async () => {
+    setIsExpand(true);
+    setLoading(true);
+    let newArray = [...selectedInvoicesExtended];
+    let array = [...selectedInvoicesExtended];
+
+    const promises = [];
+
+    for (const [index, item] of array.entries()) {
+      promises.push(detailNotPaid(item, index, newArray));
+    }
+
+    await Promise.all(promises); // Waits for all to finish
+
+    setSelectedInvoicesExtended(newArray);
+    setLoading(false);
+  };
 
   const clickPayment = () => {
     Alert.alert(
@@ -113,47 +171,7 @@ const MultiPaymentDetail = (props) => {
   };
 
   const loadData = async () => {
-    await getAttachment();
-  };
-
-  const getAttachment = async () => {
-    const entity_cd = route.params.entity_cd; //route.params.entity_cd;
-    const project_no = route.params.project_no; //route.params.project_no;
-    const debtor_acct = route.params.debtor_acct;
-    const doc_no = route.params.doc_no;
-
-    console.log("60 attachment: ", entity_cd, project_no, debtor_acct, doc_no);
-
-    // console.log(
-    //   'params api attach',
-    //   API_URL_LOKAL +
-    //     `/getDataAttach/IFCAPB/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`,
-    // );
-    try {
-      // const res = await axios.get(
-      //   API_URL_LOKAL +
-      //     ` /getDataAttach/IFCAPB/${entity_cd}/${project_no}/${debtor_acct}/${doc_no}`,
-      // );
-
-      // /modules/billing/attach?entity_cd=1001&project_no=1001001&debtor_acct=GSE/AA-50/1&doc_no=BL23090008
-
-      const res = await httpClient.request({
-        url: `/modules/billing/attach?entity_cd=${entity_cd}&project_no=${project_no}&debtor_acct=${debtor_acct}&doc_no=${doc_no}`,
-        method: "GET",
-      });
-
-      console.log("60 attachment: res: ", res.data.data);
-      setAttachment(res.data.data);
-    } catch (error) {
-      console.log("60 attachment: error: ", error);
-      setErrors(error.response.data.message);
-      // alert(hasError.toString());
-    }
-  };
-
-  const openAttach = (item) => {
-    console.log("itm", item);
-    navigation.navigate("PDFAttach", item);
+    onDetail();
   };
 
   function removeAfterDot(input) {
@@ -168,37 +186,6 @@ const MultiPaymentDetail = (props) => {
   // Function to format the number
   const formatNumber = (num) => {
     return new Intl.NumberFormat("de-DE").format(num); // Using German formatting
-  };
-
-  const renderItem = ({ item, index }) => {
-    return (
-      <Card key={index} style={{ paddingVertical: 20 }}>
-        <TouchableOpacity
-          onPress={() => {
-            openAttach(item);
-          }}
-        >
-          <View style={{ flexDirection: "row", flex: 1, marginHorizontal: 10 }}>
-            <View style={{ justifyContent: "space-between", flex: 1 }}>
-              <Text style={{ fontSize: 18, marginRight: 5 }} bold>
-                {item.descs + " " + item.debtor_acct}
-              </Text>
-            </View>
-            <Icon
-              name="file-pdf"
-              size={34}
-              color={BaseColor.grayColor}
-              enableRTL={true}
-            />
-          </View>
-        </TouchableOpacity>
-      </Card>
-      //   <View key={index} style={{}}>
-      //     <Text>{item.descs}</Text>
-      //     <Text>{item.remark}</Text>
-      //     <Text>{item.link_url}</Text>
-      //   </View>
-    );
   };
 
   // if (webViewPayment) {
@@ -270,29 +257,29 @@ const MultiPaymentDetail = (props) => {
   //   );
   // }
 
-  const getPaymentDetailList = async (item) => {
-    try {
-      const res = await httpClient.request({
-        url: `/modules/billing/summary-history`,
-        method: "GET",
-        params: {
-          email: user.email,
-          entity_cd: stateReduxChoosedProject.entity_cd,
-          project_no: stateReduxChoosedProject.project_no,
-          debtor_acct: item.debtor_acct,
-          doc_no: item.doc_no,
-        },
-      });
+  // const getPaymentDetailList = async (item) => {
+  //   try {
+  //     const res = await httpClient.request({
+  //       url: `/modules/billing/summary-history`,
+  //       method: "GET",
+  //       params: {
+  //         email: user.email,
+  //         entity_cd: stateReduxChoosedProject.entity_cd,
+  //         project_no: stateReduxChoosedProject.project_no,
+  //         debtor_acct: item.debtor_acct,
+  //         doc_no: item.doc_no,
+  //       },
+  //     });
 
-      console.log("327 getPaymentDetailList: res: ", res.data.data);
-      // add to 
-      setPaymentMethodList(res.data.data);
-    } catch (error) {
-      setPaymentMethodList([]);
-      console.log("60 PaymentMethodList: error: ", error);
-      //setErrors(error.response.data.message);
-    }
-  };
+  //     console.log("327 getPaymentDetailList: res: ", res.data.data);
+  //     // add to
+  //     setPaymentMethodList(res.data.data);
+  //   } catch (error) {
+  //     setPaymentMethodList([]);
+  //     console.log("60 PaymentMethodList: error: ", error);
+  //     //setErrors(error.response.data.message);
+  //   }
+  // };
 
   return (
     <SafeAreaView
@@ -318,12 +305,24 @@ const MultiPaymentDetail = (props) => {
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
         {"Selected Invoices (" + selectedInvoicesExtended.length + ")"}
       </Text>
+
       <ScrollView>
+        {/* <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
+        {JSON.stringify(selectedInvoicesExtended, null, 2)}
+      </Text> */}
         <View style={{ flex: 1, padding: 10 }}>
           {selectedInvoicesExtended?.map((item, key) => (
             <View
               key={key}
-              style={{ backgroundColor: key % 2 == 0 ? "lightgray" : "" }}
+              style={{
+                backgroundColor:
+                  colors.background == "white"
+                    ? key % 2 == 0
+                      ? "lightgray"
+                      : ""
+                    : "",
+                paddingHorizontal: 5,
+              }}
             >
               <View
                 style={{
@@ -335,27 +334,46 @@ const MultiPaymentDetail = (props) => {
                 }}
               >
                 <View style={{ width: "50%" }}>
-                  <Text subhead>{[key + 1] + ". " + item.doc_no}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-
-                    width: "35%",
-                  }}
-                >
-                  <Text>Rp. </Text>
                   <Text subhead>
-                    {/* {item.mbal_amt.replace(
+                    {[key + 1] +
+                      ". " +
+                      item.doc_no +
+                      "\n\n" +
+                      item?.detail
+                        ?.map(
+                          (item, index) =>
+                            [key + 1] +
+                            "." +
+                            [index+1] +
+                            ". " +
+                            item?.descs +
+                            "\n\n"
+                        )
+                        .join("")}
+                  </Text>
+                </View>
+                <View style={{ justifyContent: "center" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      // justifyContent: "space-between",
+                      // alignItems:'flex-start'
+
+                      // width: "35%",
+                    }}
+                  >
+                    <Text>Rp. </Text>
+                    <Text subhead>
+                      {/* {item.mbal_amt.replace(
                           /(\d)(?=(\d{3})+(?!\d))/g,
                           '$1.',
                         )} */}
-                    {/* {numFormattanpaRupiah(item.mbal_amt)} */}
-                    {numFormattanpaRupiah(item.mfinal_amt)}
-                    {/* 100.000.000.00 */}
-                  </Text>
-                  {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                      {/* {numFormattanpaRupiah(item.mbal_amt)} */}
+                      {numFormattanpaRupiah(item.mfinal_amt)}
+                      {/* 100.000.000.00 */}
+                    </Text>
+                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+                  </View>
                 </View>
               </View>
             </View>
@@ -369,7 +387,12 @@ const MultiPaymentDetail = (props) => {
               // paddingHorizontal: 10,
               paddingVertical: 5,
               backgroundColor:
-                selectedInvoicesExtended.length % 2 == 0 ? "lightgray" : "",
+                colors.background == "white"
+                  ? selectedInvoicesExtended.length % 2 == 0
+                    ? "lightgray"
+                    : ""
+                  : "",
+              paddingHorizontal: 5,
             }}
           >
             <View style={{ width: "50%", paddingLeft: 10 }}>
@@ -395,20 +418,101 @@ const MultiPaymentDetail = (props) => {
               {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
             </View>
           </View>
-          
+
           <Button
             style={{ height: 45, margin: 10, marginTop: 20 }}
-            onPress={() =>
-              //clickPayment()
+            onPress={() => {
+              // Find the first detail that starts with "not found"
+              let notFoundDetail = null;
+
+              for (const item of selectedInvoicesExtended) {
+                const match = item.detail?.find((detailItem) =>
+                  detailItem?.descs?.toLowerCase().startsWith("not found")
+                );
+                if (match) {
+                  notFoundDetail = item;
+                  break;
+                }
+              }
+
+              // Handle "not found" case
+              if (notFoundDetail) {
+                Alert.alert(
+                  "Warning",
+                  `${notFoundDetail?.doc_no} does not have data detail`,
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancelled"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {},
+                    },
+                  ]
+                );
+                return;
+              }
+
+              let error;
+              // Handle "error" case
+              for (const item of selectedInvoicesExtended) {
+                const match2 = item.detail?.find((detailItem) =>
+                  detailItem?.descs?.toLowerCase().startsWith("error")
+                );
+                if (match2) {
+                  error = item;
+                  break;
+                }
+              }
+
+              // Handle "not found" case
+              if (error) {
+                Alert.alert("Warning", `${error?.doc_no} error get data detail`, [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancelled"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => {},
+                  },
+                ]);
+                return;
+              }
+
+              // All good, proceed with navigation
               navigation.navigate("MultiMerchantList", {
                 ...route.params,
-              })
-            }
+              });
+            }}
           >
             <Text style={{ color: "#fff", fontSize: 14 }}>
               Select Payment Method
             </Text>
           </Button>
+          {loading ? (
+            <ActivityIndicator></ActivityIndicator>
+          ) : (
+            <Button
+              style={{
+                height: 30,
+                margin: 10,
+                marginTop: 20,
+                width: "50%",
+                backgroundColor: "gray",
+                alignSelf: "center",
+              }}
+              onPress={() => {
+                onDetail();
+              }}
+            >
+              {/* <Icon name={isExpand ? "" : "chevron-down"} size={20} /> */}
+              <Text style={{ color: "white" }}> Refresh</Text>
+            </Button>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

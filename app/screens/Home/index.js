@@ -56,6 +56,7 @@ const { width } = Dimensions.get("window");
 import { check_version } from "./functions";
 import { useCustomTriggerOnFocus } from "../function/funcFocusEffect";
 import { useFocusEffect } from "@react-navigation/native";
+import Marquee from "../../components/Marque/Marque";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -146,6 +147,7 @@ const Home = (props) => {
   const [claimUnit, setClaimUnit] = useState(false);
   const [isUnitListLoading, setIsUnitListLoading] = useState(false);
   const [isClusterListLoading, setIsClusterListLoading] = useState(false);
+  const [notifUseState, setNotifUseState] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -342,6 +344,7 @@ const Home = (props) => {
         params: { email: user.email },
       })
       .then((res) => {
+        setNotifUseState(res.data.data)
         return res.data.data;
       })
       .catch((error) => {
@@ -1419,6 +1422,20 @@ const Home = (props) => {
               ) : null}
             </View>
           </View>
+
+{/* <Marquee
+  text={
+    lotnoObj?.lot_no
+     ? // JSON.stringify([{message:'this is message'}]
+        JSON.stringify(notifUseState
+      )
+      // notifUseState
+      //     .filter((item) => item.lot_no === lotnoObj.lot_no)
+      //     .map((item) => item.message || '')
+      //     .join(' | ')
+      : ''
+  }
+/> */}
 
           <View style={styles.paddingContent}>
             {user == null || user == "" ? (

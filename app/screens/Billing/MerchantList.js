@@ -412,6 +412,7 @@ const AttachmentBilling = (props) => {
           type_payment: "Close",
           lot_no: item.lot_no,
         };
+        console.log('415 dataPost', dataPost)
 
         //post
         const res = await httpClient.request({
@@ -562,7 +563,8 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-            {"Unit "+item.lot_no+" | "}{"Invoice " + item.doc_no}
+        {"Unit " + item.lot_no + " | "}
+        {"Invoice " + item.doc_no}
       </Text>
       <ScrollView>
         <View style={{ marginHorizontal: 20 }}>
@@ -602,6 +604,10 @@ const AttachmentBilling = (props) => {
                   //onValueChange={setIsChecked}
                   disabled={true} // Set the disabled prop
                   style={{ marginRight: 8 }}
+                  tintColors={{
+                    true: colors.primary,
+                    false: colors.background != "white" ? "white" : "black",
+                  }}
                 />
               </TouchableOpacity>
             ))

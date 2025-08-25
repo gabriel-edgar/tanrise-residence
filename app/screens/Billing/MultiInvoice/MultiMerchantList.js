@@ -6,7 +6,7 @@ import {
   Text,
   Button,
 } from "@/components";
-import { BaseColor, BaseStyle, useTheme } from "@/config";;
+import { BaseColor, BaseStyle, useTheme } from "@/config";
 import React, { useState, useEffect } from "react";
 import {
   FlatList,
@@ -35,9 +35,7 @@ const AttachmentBilling = (props) => {
   const { colors } = useTheme();
   const [hasError, setErrors] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const reduxProject = useSelector(
-    (state) => state.Dataproject.chooseProject
-  );
+  const reduxProject = useSelector((state) => state.Dataproject.chooseProject);
   const params = route.params;
   const item = route.params.selectedInvoices[0];
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
@@ -99,10 +97,7 @@ const AttachmentBilling = (props) => {
       return;
     }
 
-    if (
-      user.Handphone == null ||
-      user.Handphone == ""
-    ) {
+    if (user.Handphone == null || user.Handphone == "") {
       alert("Please add phone number in Edit Profile in Settings");
       return;
     }
@@ -123,26 +118,23 @@ const AttachmentBilling = (props) => {
 
     if (paymentMethod.payment_channel == "BNI") {
       try {
-
         const dataPost = {
           entity_cd: item.entity_cd,
           project_no: item.project_no,
           debtor_acct: item.debtor_acct,
-          debtor_name: item.name, 
+          debtor_name: item.name,
           lot_no: item.lot_no,
           debtor_phone: user.Handphone,
           debtor_email: user.email,
-          list_doc_no: params.selectedInvoices.map((item)=>
-            item.doc_no
-          ),
+          list_doc_no: params.selectedInvoices.map((item) => item.doc_no),
           total_amt: params?.totalAmtNumber,
           virtual_acct: "",
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
         };
-    console.log("289 post" , dataPost);
+        console.log("289 post", dataPost);
 
-        return
+        return;
         //post
         const res = await httpClient.request({
           url: `/modules/billing/store`,
@@ -172,12 +164,13 @@ const AttachmentBilling = (props) => {
         const status = error.response.status
           ? "Status: " + error.response.status
           : "";
-        alert("."+JSON.stringify(error.response.data.message) + "\n" + status
+        alert(
+          "." + JSON.stringify(error.response.data.message) + "\n" + status
         );
       }
     } else {
       try {
-        let dataVA;;
+        let dataVA;
         const dataGet = {
           entity_cd: item.entity_cd,
           project_no: item.project_no,
@@ -202,21 +195,19 @@ const AttachmentBilling = (props) => {
           entity_cd: item.entity_cd,
           project_no: item.project_no,
           debtor_acct: item.debtor_acct,
-          debtor_name: item.name, 
+          debtor_name: item.name,
           lot_no: item.lot_no,
           debtor_phone: user.Handphone,
           debtor_email: user.email,
           virtual_acct: dataVA,
-          list_doc_no: params.selectedInvoices.map((item)=>
-            item.doc_no
-          ),
+          list_doc_no: params.selectedInvoices.map((item) => item.doc_no),
           total_amt: params?.totalAmtNumber,
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
         };
-        console.log("289 post" , dataPost);
+        console.log("289 post", dataPost);
 
-        return
+        return;
         //post
         const res = await httpClient.request({
           url: `/modules/billing/store`,
@@ -275,7 +266,8 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-            {"Unit "+item.lot_no+" | "}{" Multi Invoice"}
+        {"Unit " + item.lot_no + " | "}
+        {" Multi Invoice"}
       </Text>
       <ScrollView>
         <View style={{ marginHorizontal: 20 }}>
@@ -310,6 +302,10 @@ const AttachmentBilling = (props) => {
                   value={item.payment_channel == paymentMethod?.payment_channel}
                   disabled={true} // Set the disabled prop
                   style={{ marginRight: 8 }}
+                  tintColors={{
+                    true: colors.primary,
+                    false: colors.background != "white" ? "white" : "black",
+                  }}
                 />
               </TouchableOpacity>
             ))

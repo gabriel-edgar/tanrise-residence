@@ -651,7 +651,10 @@ const Billing = (props) => {
               }}
               disable={false}
               style={{ marginRight: 10 }}
-              testID
+              tintColors={{
+                true: colors.primary,
+                false: colors.background != "white" ? "white" : "black",
+              }}
             />
           </View>
           <Text

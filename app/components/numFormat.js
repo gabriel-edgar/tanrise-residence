@@ -1,5 +1,5 @@
 export default function numFormat(angka) {
-  const data = Math.floor(angka);
+  let data = Math.floor(angka);
   if (data == null) {
     data = 0;
   }

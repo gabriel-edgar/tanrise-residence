@@ -37,34 +37,38 @@ const ListTransaction = ({
       {/* <View style={[styles.image, {backgroundColor: colors.primaryLight}]}>
         <Icon name={icon} size={24} solid color={BaseColor.whiteColor} />
       </View> */}
-      {tab_id == 1 ?<View
-        style={{
-          // backgroundColor:'blue',
-          alignSelf: "center",
-        }}
-      >
-        <Pressable onPress={(e) => e.stopPropagation()}>
-          <CheckBox
-            value={checkBoxValue}
-            onValueChange={()=>
-              checkBoxOnValueChange()}
-            disable={false}
-          />
-        </Pressable>
-      </View>: null}
-      <View style={{ flex: 0.7, marginLeft:10 }}>
+      {tab_id == 1 ? (
+        <View
+          style={{
+            // backgroundColor:'blue',
+            alignSelf: "center",
+          }}
+        >
+          <Pressable onPress={(e) => e.stopPropagation()}>
+            <CheckBox
+              value={checkBoxValue}
+              onValueChange={() => checkBoxOnValueChange()}
+              disable={false}
+              tintColors={{
+                true: colors.primary,
+                false: colors.background != "white" ? "white" : "black",
+              }}
+            />
+          </Pressable>
+        </View>
+      ) : null}
+      <View style={{ flex: 0.7, marginLeft: 10 }}>
         <Text subhead>{doc_no}</Text>
         <Text footnote style={{ marginTop: 5 }}>
           {tab_id == 2 ? "Paid" : "Rp " + numFormattanpaRupiah(item.mfinal_amt)}
-          {/* - {debtor_acct} */}
         </Text>
       </View>
-      <View style={{ flex: 1,  }}>
-        <Text subhead style={{...styles.text}}>
+      <View style={{ flex: 1 }}>
+        <Text subhead style={{ ...styles.text }}>
           {doc_date}
         </Text>
-        <Text footnote light style={{ ...styles.text,marginTop: 5 }}>
-          {name}
+        <Text footnote light style={{ ...styles.text, marginTop: 5 }}>
+          {name} - {debtor_acct}
         </Text>
       </View>
     </TouchableOpacity>
