@@ -344,7 +344,7 @@ const MultiPaymentDetail = (props) => {
                           (item, index) =>
                             [key + 1] +
                             "." +
-                            [index+1] +
+                            [index + 1] +
                             ". " +
                             item?.descs +
                             "\n\n"
@@ -420,6 +420,7 @@ const MultiPaymentDetail = (props) => {
           </View>
 
           <Button
+            disable={loading}
             style={{ height: 45, margin: 10, marginTop: 20 }}
             onPress={() => {
               // Find the first detail that starts with "not found"
@@ -469,17 +470,21 @@ const MultiPaymentDetail = (props) => {
 
               // Handle "not found" case
               if (error) {
-                Alert.alert("Warning", `${error?.doc_no} error get data detail`, [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancelled"),
-                    style: "cancel",
-                  },
-                  {
-                    text: "OK",
-                    onPress: () => {},
-                  },
-                ]);
+                Alert.alert(
+                  "Warning",
+                  `${error?.doc_no} error get data detail`,
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancelled"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {},
+                    },
+                  ]
+                );
                 return;
               }
 
@@ -489,9 +494,10 @@ const MultiPaymentDetail = (props) => {
               });
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 14 }}>
+            <Text style={{ color: "#fff", fontSize: 14, marginLeft: 10 }}>
               Select Payment Method
             </Text>
+            {loading ? <ActivityIndicator></ActivityIndicator> : null}
           </Button>
           {loading ? (
             <ActivityIndicator></ActivityIndicator>

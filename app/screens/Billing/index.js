@@ -618,19 +618,6 @@ const Billing = (props) => {
             elevation: 3,
           }}
         >
-          {/* <Text
-            style={{
-              flex: 0.2,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 10,
-              padding: 10,
-              marginRight: 10,
-            }}
-          >
-            0
-            
-          </Text> */}
           <View
             style={{
               justifyContent: "center",
