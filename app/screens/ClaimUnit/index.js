@@ -594,10 +594,10 @@ const ClaimUnit = (props) => {
                 data={selectedUnits}
                 renderItem={renderItemList}
                 keyExtractor={(item) => item.value}
-                numColumns={2} // Set number of columns to 2
-                columnWrapperStyle={{
-                  justifyContent: "space-between", // Spacing between columns
-                }} // Styling for the row of items
+                // numColumns={2} // Set number of columns to 2
+                // columnWrapperStyle={{
+                //   justifyContent: "space-between", // Spacing between columns
+                // }} // Styling for the row of items
               />
             </View>
           </>

@@ -425,7 +425,7 @@ const Billing = (props) => {
               flex: 1,
               paddingHorizontal: 20,
               // backgroundColor: "blue",
-              paddingBottom: 5,
+              paddingBottom: 30,
               display: tab.id === 1 ? "flex" : "none",
             }}
           >
@@ -491,7 +491,7 @@ const Billing = (props) => {
                         newArray = [...selectedInvoices, item];
                       }
 
-                      setSelectedInvoices(newArray);
+                      setSelectedInvoices(newArray?.sort((a, b) => new Date(a.doc_date) - new Date(b.doc_date)));
                     }}
                   />
                 </>
@@ -647,7 +647,7 @@ const Billing = (props) => {
           <Text
             style={{
               flex: 1,
-              borderWidth: 1,
+              // borderWidth: 1,
               borderColor: "#ccc",
               borderRadius: 10,
               padding: 10,
@@ -678,7 +678,7 @@ const Billing = (props) => {
                 return;
               }
               if (selectedInvoices.length == 0) {
-                alert("Please select invoice");
+                // alert("Please select invoice");
                 return;
               }
               navigation.navigate("MultiPaymentDetail", {

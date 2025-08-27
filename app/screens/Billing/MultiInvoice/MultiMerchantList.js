@@ -29,6 +29,7 @@ import CheckBox from "@react-native-community/checkbox";
 import getUser from "../../../selectors/UserSelectors";
 import { transparent } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import { opacity } from "react-native-reanimated/lib/typescript/Colors";
+import moment from "moment";
 
 const AttachmentBilling = (props) => {
   const { navigation, route } = props;
@@ -46,6 +47,8 @@ const AttachmentBilling = (props) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [paymentMethodList, setPaymentMethodList] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [paymentMethodError, setPaymentMethodError] = useState("");
+  const [loadingMethod, setLoadingMethod] = useState(false);
   const user = useSelector((state) => getUser(state));
 
   const changeBackgroundColor = () => {
@@ -72,6 +75,7 @@ const AttachmentBilling = (props) => {
   };
 
   const getPaymentMethodList = async () => {
+    setLoadingMethod(true);
     try {
       const res = await httpClient.request({
         url: `/pg/get-payment-channel`,
@@ -84,11 +88,12 @@ const AttachmentBilling = (props) => {
 
       console.log("60 PaymentMethodList: res: ", res.data.data);
       setPaymentMethodList(res.data.data);
+      setPaymentMethodError("");
     } catch (error) {
-      setPaymentMethodList([]);
+      setPaymentMethodError(error.message);
       console.log("60 PaymentMethodList: error: ", error);
-      //setErrors(error.response.data.message);
     }
+    setLoadingMethod(false);
   };
 
   const handlePay = async () => {
@@ -133,6 +138,7 @@ const AttachmentBilling = (props) => {
           type_payment: "Close",
         };
         console.log("289 post", dataPost);
+        alert(JSON.stringify(dataPost, null, 2));
 
         return;
         //post
@@ -146,7 +152,6 @@ const AttachmentBilling = (props) => {
         const condition = res.data.success;
 
         if (condition) {
-          alert(JSON.stringify(res.data.message));
           console.log("291 Pay1: res: ", res.data);
           const dataPay = res.data.data?.response_url;
           if (dataPay != null) {
@@ -157,16 +162,13 @@ const AttachmentBilling = (props) => {
             });
           }
         } else {
-          console.log("291 Pay2: res: ", res.data);
-          alert(JSON.stringify(res.data));
+          alert(JSON.stringify(res.data?.message));
         }
       } catch (error) {
         const status = error.response.status
           ? "Status: " + error.response.status
           : "";
-        alert(
-          "." + JSON.stringify(error.response.data.message) + "\n" + status
-        );
+        alert(JSON.stringify(error.response.data.message) + "\n" + status);
       }
     } else {
       try {
@@ -206,6 +208,8 @@ const AttachmentBilling = (props) => {
           type_payment: "Close",
         };
         console.log("289 post", dataPost);
+        alert(JSON.stringify(dataPost, null, 2));
+        // Alert.alert('Data Post', JSON.stringify(dataPost, null, 2));
 
         return;
         //post
@@ -219,7 +223,6 @@ const AttachmentBilling = (props) => {
         const condition = res.data.success;
 
         if (condition) {
-          alert(JSON.stringify(res.data.message));
           console.log("60 Pay: res: ", res.data);
           const dataPay = res.data.data;
           navigation.navigate("VAScreen", {
@@ -229,16 +232,13 @@ const AttachmentBilling = (props) => {
             dataPay,
           });
         } else {
-          const dataPay = res.data.data;
           alert(res.data.message);
         }
       } catch (error) {
         const status = error.response.status
           ? "Status: " + error.response.status
           : "";
-        alert(
-          ".." + JSON.stringify(error.response.data.message) + "\n" + status
-        );
+        alert(JSON.stringify(error.response.data.message) + "\n" + status);
       }
     }
     setLoading(false);
@@ -269,8 +269,67 @@ const AttachmentBilling = (props) => {
         {"Unit " + item.lot_no + " | "}
         {" Multi Invoice"}
       </Text>
+      {params.selectedInvoices.map((item, index) => (
+        <View
+          key={index}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            backgroundColor: colors.primary,
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+            marginHorizontal: 5,
+          }}
+        >
+          <Text style={{ color: "white", flex: 1, textAlign: "left" }}>
+            {moment(item.doc_date).format("DD MMMM YYYY")}
+          </Text>
+          <Text style={{ color: "white", flex: 1, textAlign: "right" }}>
+            {item.doc_no}
+          </Text>
+        </View>
+      ))}
+
       <ScrollView>
         <View style={{ marginHorizontal: 20 }}>
+          <View
+            style={{
+              justifyContent: "space-between",
+              marginTop: 7,
+              paddingTop: 10,
+              borderTopWidth: 0.5,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}
+            >
+              Payment
+            </Text>
+          </View>
+          {loadingMethod ? (
+            <ActivityIndicator></ActivityIndicator>
+          ) : paymentMethodError ? (
+            <>
+              <Text style={{ textAlign: "center" }}>
+                {"Payment method error: " + paymentMethodError}
+              </Text>
+              <Button
+                style={{
+                  height: 45,
+                  margin: 10,
+                  marginVertical: 30,
+                  alignContent: "center",
+                }}
+                onPress={() => getPaymentMethodList()}
+              >
+                <Text style={{ color: "#fff", fontSize: 14 }}>
+                  Refresh Method{" "}
+                </Text>
+              </Button>
+            </>
+          ) : null}
           {paymentMethodList?.length == 0 ? (
             <Text style={{ textAlign: "center" }}>
               Payment Channel not found for{"\n"} entity code {item.entity_cd}{" "}

@@ -264,7 +264,7 @@ const TransactionExpand = ({
           },
         ])}
         {...ListTransactionProps}
-        onPress={() => clickExpand()}
+        // onPress={() => clickExpand()}
         item={item}
         tab_id={tab_id}
         checkBoxValue={checkBoxValue}

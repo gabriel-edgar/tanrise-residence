@@ -25,7 +25,7 @@ export default function Marquee({ text }: { text: string }) {
   }, []);
 
   return (
-    <View style={{ overflow: 'hidden', width, }}>
+    <View style={{ overflow: 'hidden', width, marginTop:10 }}>
       <Animated.Text
         style={{
           transform: [{ translateX: animatedValue }],

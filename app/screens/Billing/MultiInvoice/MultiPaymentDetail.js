@@ -31,6 +31,7 @@ import numFormattanpaRupiah from "../../../components/numFormattanpaRupiah";
 import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
 import getUser from "../../../selectors/UserSelectors";
+import moment from "moment";
 
 const fileDummy = [
   {
@@ -330,15 +331,20 @@ const MultiPaymentDetail = (props) => {
                   justifyContent: "space-between",
                   width: "100%",
                   // paddingHorizontal: 10,
-                  paddingVertical: 5,
+                  paddingVertical: 0,
                 }}
               >
-                <View style={{ width: "50%" }}>
+                <View style={{ width: "60%" }}>
+                  <Text style={{fontWeight:'700'}} subhead>
+                    {
+                    // [key + 1] +
+                    //   ". " +
+                      moment(item.doc_date).format("DD MMMM YYYY")+" | "+item.doc_no }
+                      </Text> 
                   <Text subhead>
-                    {[key + 1] +
-                      ". " +
-                      item.doc_no +
-                      "\n\n" +
+                    {
+
+                      "\n" +
                       item?.detail
                         ?.map(
                           (item, index) =>
@@ -352,27 +358,16 @@ const MultiPaymentDetail = (props) => {
                         .join("")}
                   </Text>
                 </View>
-                <View style={{ justifyContent: "center" }}>
+                <View style={{ justifyContent: "center",  }}>
                   <View
                     style={{
                       flexDirection: "row",
-                      // justifyContent: "space-between",
-                      // alignItems:'flex-start'
-
-                      // width: "35%",
                     }}
                   >
                     <Text>Rp. </Text>
                     <Text subhead>
-                      {/* {item.mbal_amt.replace(
-                          /(\d)(?=(\d{3})+(?!\d))/g,
-                          '$1.',
-                        )} */}
-                      {/* {numFormattanpaRupiah(item.mbal_amt)} */}
                       {numFormattanpaRupiah(item.mfinal_amt)}
-                      {/* 100.000.000.00 */}
                     </Text>
-                    {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
                   </View>
                 </View>
               </View>
@@ -442,11 +437,11 @@ const MultiPaymentDetail = (props) => {
                   "Warning",
                   `${notFoundDetail?.doc_no} does not have data detail`,
                   [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancelled"),
-                      style: "cancel",
-                    },
+                    // {
+                    //   text: "Cancel",
+                    //   onPress: () => console.log("Cancelled"),
+                    //   style: "cancel",
+                    // },
                     {
                       text: "OK",
                       onPress: () => {},
@@ -474,11 +469,11 @@ const MultiPaymentDetail = (props) => {
                   "Warning",
                   `${error?.doc_no} error get data detail`,
                   [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancelled"),
-                      style: "cancel",
-                    },
+                    // {
+                    //   text: "Cancel",
+                    //   onPress: () => console.log("Cancelled"),
+                    //   style: "cancel",
+                    // },
                     {
                       text: "OK",
                       onPress: () => {},
@@ -516,7 +511,7 @@ const MultiPaymentDetail = (props) => {
               }}
             >
               {/* <Icon name={isExpand ? "" : "chevron-down"} size={20} /> */}
-              <Text style={{ color: "white" }}> Refresh</Text>
+              <Text style={{ color: "white" , fontSize:13 }}> Refresh Invoice Detail</Text>
             </Button>
           )}
         </View>

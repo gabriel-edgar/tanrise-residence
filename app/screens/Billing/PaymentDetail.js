@@ -34,6 +34,7 @@ import numFormattanpaRupiah from "../../components/numFormattanpaRupiah";
 import { WebView } from "react-native-webview";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { FontWeight } from "../../config";
+import moment from "moment";
 
 const fileDummy = [
   {
@@ -314,7 +315,9 @@ const AttachmentBilling = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-         {"Unit "+item.lot_no+" | "}{"Invoice " + route.params.datadetailNotDue[0].doc_no}
+        {moment(item.doc_date).format("DD MMMM YYYY")+" | "}
+        {"Unit " + item.lot_no + " | "}
+        {item.doc_no}
       </Text>
       <ScrollView>
         <View style={{ flex: 1, padding: 10 }}>

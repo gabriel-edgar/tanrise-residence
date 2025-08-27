@@ -58,14 +58,14 @@ const ListTransaction = ({
         </View>
       ) : null}
       <View style={{ flex: 0.7, marginLeft: 10 }}>
-        <Text subhead>{doc_no}</Text>
+        <Text subhead>{doc_date}</Text>
         <Text footnote style={{ marginTop: 5 }}>
           {tab_id == 2 ? "Paid" : "Rp " + numFormattanpaRupiah(item.mfinal_amt)}
         </Text>
       </View>
       <View style={{ flex: 1 }}>
         <Text subhead style={{ ...styles.text }}>
-          {doc_date}
+          {doc_no}
         </Text>
         <Text footnote light style={{ ...styles.text, marginTop: 5 }}>
           {name} - {debtor_acct}

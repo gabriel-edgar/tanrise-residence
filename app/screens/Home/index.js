@@ -164,10 +164,10 @@ const Home = (props) => {
         }
         if (projectObj) {
           if (Object.keys(projectObj).length !== 0) {
-          getClusterList(projectObj.entity_cd, projectObj.project_no);
+            getClusterList(projectObj.entity_cd, projectObj.project_no);
           }
         }
-      }, 80000); // Update every 1000 milliseconds (1 second)
+      }, 50000); // Update every 1000 milliseconds (1 second)
 
       return () => clearInterval(intervalIdNotif);
     }, [clusterUseState, projectObj])
@@ -344,7 +344,7 @@ const Home = (props) => {
         params: { email: user.email },
       })
       .then((res) => {
-        setNotifUseState(res.data.data)
+        setNotifUseState(res.data.data);
         return res.data.data;
       })
       .catch((error) => {
@@ -1110,7 +1110,7 @@ const Home = (props) => {
                           justifyContent: "center",
                           alignItems: "center",
                           width: 20,
-                          height: 35,
+                          height: 20,
                           backgroundColor: "red",
                           position: "absolute",
                           top: -10,
@@ -1340,7 +1340,11 @@ const Home = (props) => {
                                 fontFamily: font, //"KaiseiHarunoUmi",
                               }}
                             >
-                              {lotnoObj?.lot_no ? "Unit" : "Choose Unit"}
+                              {!clusterUseState
+                                ? "Choose Cluster First"
+                                : lotnoObj?.lot_no
+                                ? "Unit"
+                                : "Choose Unit"}
                             </Text>
                             <Text
                               style={{
@@ -1372,7 +1376,7 @@ const Home = (props) => {
                               alignItems: "center",
                               position: "absolute",
                               width: 20,
-                              height: 35,
+                              height: 20,
                               backgroundColor: "red",
                               top: -10,
                               right: -20,
@@ -1423,19 +1427,17 @@ const Home = (props) => {
             </View>
           </View>
 
-{/* <Marquee
-  text={
-    lotnoObj?.lot_no
-     ? // JSON.stringify([{message:'this is message'}]
-        JSON.stringify(notifUseState
-      )
-      // notifUseState
-      //     .filter((item) => item.lot_no === lotnoObj.lot_no)
-      //     .map((item) => item.message || '')
-      //     .join(' | ')
-      : ''
-  }
-/> */}
+          {/* <Marquee
+            text={
+              lotnoObj?.lot_no
+                ? notifUseState?.notifications
+                    ?.map(
+                      (item) => "Unit " + item.lot_no + " - " + item.remarks
+                    )
+                    .join("|")
+                : ""
+            }
+          /> */}
 
           <View style={styles.paddingContent}>
             {user == null || user == "" ? (
