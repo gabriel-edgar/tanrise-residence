@@ -26,6 +26,7 @@ import {
   choosed_unit,
   choosed_project,
   action_remove_redux_dot,
+  choosed_cluster,
 } from "../../actions/ProjectActions";
 
 const { authentication } = AuthActions;
@@ -50,6 +51,9 @@ const Profile = (props) => {
   );
 
   const saveUnit = useCallback((unit) => dispatch(choosed_unit(unit)));
+  const saveClusterRedux = useCallback((cluster) =>
+    dispatch(choosed_cluster(cluster))
+  );
   const saveProject = useCallback((project) =>
     dispatch(choosed_project(project))
   );
@@ -58,6 +62,7 @@ const Profile = (props) => {
   const logoutUser = () => {
     setLoading(true);
     saveUnit({});
+    saveClusterRedux(null);
     saveProject("");
     clearReduxDot();
     logoutUser2();

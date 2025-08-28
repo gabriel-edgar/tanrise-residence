@@ -416,7 +416,7 @@ const MultiPaymentDetail = (props) => {
 
           <Button
             disable={loading}
-            style={{ height: 45, margin: 10, marginTop: 20 }}
+            style={{ height: 45, margin: 10, marginTop: 20, opacity:loading?0.5:1 }}
             onPress={() => {
               // Find the first detail that starts with "not found"
               let notFoundDetail = null;
@@ -492,7 +492,7 @@ const MultiPaymentDetail = (props) => {
             <Text style={{ color: "#fff", fontSize: 14, marginLeft: 10 }}>
               Select Payment Method
             </Text>
-            {loading ? <ActivityIndicator></ActivityIndicator> : null}
+            {/* {loading ? <ActivityIndicator></ActivityIndicator> : null} */}
           </Button>
           {loading ? (
             <ActivityIndicator></ActivityIndicator>

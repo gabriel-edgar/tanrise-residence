@@ -269,30 +269,30 @@ const AttachmentBilling = (props) => {
         {"Unit " + item.lot_no + " | "}
         {" Multi Invoice"}
       </Text>
-      {params.selectedInvoices.map((item, index) => (
-        <View
-          key={index}
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 5,
-            backgroundColor: colors.primary,
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            marginHorizontal: 5,
-          }}
-        >
-          <Text style={{ color: "white", flex: 1, textAlign: "left" }}>
-            {moment(item.doc_date).format("DD MMMM YYYY")}
-          </Text>
-          <Text style={{ color: "white", flex: 1, textAlign: "right" }}>
-            {item.doc_no}
-          </Text>
-        </View>
-      ))}
 
       <ScrollView>
         <View style={{ marginHorizontal: 20 }}>
+          {params.selectedInvoices.map((item, index) => (
+            <View
+              key={index}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 5,
+                backgroundColor: colors.primary,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                // marginHorizontal: 5,
+              }}
+            >
+              <Text style={{ color: "white", flex: 1, textAlign: "left" }}>
+                {moment(item.doc_date).format("DD MMMM YYYY")}
+              </Text>
+              <Text style={{ color: "white", flex: 1, textAlign: "right" }}>
+                {item.doc_no}
+              </Text>
+            </View>
+          ))}
           <View
             style={{
               justifyContent: "space-between",
@@ -302,9 +302,7 @@ const AttachmentBilling = (props) => {
               borderRadius: 10,
             }}
           >
-            <Text
-              style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}
-            >
+            <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}>
               Payment
             </Text>
           </View>
