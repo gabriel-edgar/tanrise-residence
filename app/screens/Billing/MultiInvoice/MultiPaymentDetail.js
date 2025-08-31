@@ -66,6 +66,7 @@ const MultiPaymentDetail = (props) => {
     useState(selectedInvoices);
   console.log("54 route.params: ", route.params);
   const [loading, setLoading] = useState(false);
+  const [isShowRefresh, setIsShowRefresh] = useState(false);
 
   const [backgroundColor, setBackgroundColor] = useState(colors.background); // Default background color
 
@@ -435,7 +436,7 @@ const MultiPaymentDetail = (props) => {
               if (notFoundDetail) {
                 Alert.alert(
                   "Warning",
-                  `${notFoundDetail?.doc_no} does not have data detail`,
+                  `${notFoundDetail?.doc_no} does not has invoice detail`,
                   [
                     // {
                     //   text: "Cancel",
@@ -448,6 +449,7 @@ const MultiPaymentDetail = (props) => {
                     },
                   ]
                 );
+                setIsShowRefresh(true)
                 return;
               }
 
@@ -467,7 +469,7 @@ const MultiPaymentDetail = (props) => {
               if (error) {
                 Alert.alert(
                   "Warning",
-                  `${error?.doc_no} error get data detail`,
+                  `${error?.doc_no} error get invoice detail`,
                   [
                     // {
                     //   text: "Cancel",
@@ -480,6 +482,7 @@ const MultiPaymentDetail = (props) => {
                     },
                   ]
                 );
+                setIsShowRefresh(true)
                 return;
               }
 
@@ -494,7 +497,7 @@ const MultiPaymentDetail = (props) => {
             </Text>
             {/* {loading ? <ActivityIndicator></ActivityIndicator> : null} */}
           </Button>
-          {loading ? (
+          {isShowRefresh ? loading ? (
             <ActivityIndicator></ActivityIndicator>
           ) : (
             <Button
@@ -513,7 +516,7 @@ const MultiPaymentDetail = (props) => {
               {/* <Icon name={isExpand ? "" : "chevron-down"} size={20} /> */}
               <Text style={{ color: "white" , fontSize:13 }}> Refresh Invoice Detail</Text>
             </Button>
-          )}
+          ): null}
         </View>
       </ScrollView>
     </SafeAreaView>

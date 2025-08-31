@@ -647,7 +647,7 @@ const Billing = (props) => {
           <Text
             style={{
               flex: 1,
-              // borderWidth: 1,
+              borderWidth: 1,
               borderColor: "#ccc",
               borderRadius: 10,
               padding: 10,
