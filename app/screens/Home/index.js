@@ -1079,7 +1079,7 @@ const Home = (props) => {
                             fontFamily: font, //"KaiseiHarunoUmi",
                           }}
                         >
-                          {projectObj ? "Project" : "Choose Project"}
+                          {projectObj ? "" : "Choose Project"}
                         </Text>
                         <Text
                           style={{
@@ -1275,7 +1275,7 @@ const Home = (props) => {
                       style={{
                         backgroundColor: colors.primary, //"#315447",
                         height: 35,
-                        width: 180,
+                        width: 200,
                         justifyContent: "center",
                         paddingHorizontal: 10,
                         borderRadius: 10,

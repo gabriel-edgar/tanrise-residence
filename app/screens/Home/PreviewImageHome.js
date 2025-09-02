@@ -1,10 +1,12 @@
 import { Header, Icon, Image, SafeAreaView, Text } from "@/components";
 import { BaseColor, BaseStyle, Images, useTheme } from "@/config";
 import React, { useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
 import Swiper from "react-native-swiper";
 import styles from "./styles";
 import { FontWeight } from "../../config";
+import ImageZoom from "react-native-image-pan-zoom";
+const { width, height } = Dimensions.get("window");
 
 const imagesInit = [
   { id: "1", image: Images.location1, selected: true },
@@ -18,52 +20,17 @@ const imagesInit = [
 
 export default function PreviewImageHome({ navigation, route }) {
   const { colors } = useTheme();
-  const imagesParam = route?.params?.images ?? imagesInit;
+  const imagesParam = route?.params?.images ?? "";
   const title = route?.params?.title;
   let flatListRef = null;
   let swiperRef = null;
 
-  const [images, setImages] = useState(imagesParam);
+  const [image, setImage] = useState(imagesParam);
 
   const [indexSelected, setIndexSelected] = useState(0);
 
-  console.log("images preview", images);
+  console.log("images preview", image); //string
 
-  /**
-   * call when select image
-   *
-   * @param {*} indexSelected
-   */
-  const onSelect = (indexSelected) => {
-    setIndexSelected(indexSelected);
-    setImages(
-      images.map((item, index) => {
-        if (index == indexSelected) {
-          return {
-            ...item,
-            selected: true,
-          };
-        } else {
-          return {
-            ...item,
-            selected: false,
-          };
-        }
-      })
-    );
-    flatListRef.scrollToIndex({
-      animated: true,
-      index: indexSelected,
-    });
-  };
-
-  /**
-   * @description Called when image item is selected or activated
-   * @author Passion UI <passionui.com>
-   * @date 2019-08-03
-   * @param {*} touched
-   * @returns
-   */
   const onTouchImage = (touched) => {
     if (touched == indexSelected) return;
     swiperRef.scrollBy(touched - indexSelected, false);
@@ -96,14 +63,24 @@ export default function PreviewImageHome({ navigation, route }) {
       >
         {title}
       </Text> */}
-      <View>
-        <Image
+      {/* <Image
           // key={key}
           style={{ width: "100%", height: "90%" }}
           resizeMode="contain"
-          source={{ uri: images }}
+          source={{ uri: image }}
+        /> */}
+      <ImageZoom
+        cropWidth={Dimensions.get("window").width}
+        cropHeight={Dimensions.get("window").height}
+        imageWidth={Dimensions.get("window").width}
+        imageHeight={650}
+      >
+        <Image
+          style={{ width: Dimensions.get("window").width, height: 500 }}
+          resizeMode="contain"
+          source={{ uri: image }}
         />
-      </View>
+      </ImageZoom>
     </SafeAreaView>
   );
 }

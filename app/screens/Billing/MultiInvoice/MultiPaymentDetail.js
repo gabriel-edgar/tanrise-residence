@@ -305,7 +305,7 @@ const MultiPaymentDetail = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-        {"Selected Invoices (" + selectedInvoicesExtended.length + ")"}
+        {"Invoices (" + selectedInvoicesExtended.length + ")"}
       </Text>
 
       <ScrollView>
@@ -324,6 +324,8 @@ const MultiPaymentDetail = (props) => {
                       : ""
                     : "",
                 paddingHorizontal: 5,
+                borderTopWidth:colors.background == "white"?0:1,
+                borderColor:colors.text
               }}
             >
               <View
@@ -340,12 +342,12 @@ const MultiPaymentDetail = (props) => {
                     {
                     // [key + 1] +
                     //   ". " +
-                      moment(item.doc_date).format("DD MMMM YYYY")+" | "+item.doc_no }
+                      moment(item.doc_date).format("DD MMMM YYYY") }
                       </Text> 
                   <Text subhead>
                     {
-
-                      "\n" +
+item.doc_no+
+                      "\n\n" +
                       item?.detail
                         ?.map(
                           (item, index) =>
@@ -401,7 +403,7 @@ const MultiPaymentDetail = (props) => {
                 flexDirection: "row",
                 justifyContent: "space-between",
 
-                width: "35%",
+                width: "50%",
               }}
             >
               <Text subhead bold>
@@ -450,7 +452,7 @@ const MultiPaymentDetail = (props) => {
                   ]
                 );
                 setIsShowRefresh(true)
-                return;
+                // return;
               }
 
               let error;

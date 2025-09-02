@@ -39,7 +39,7 @@ import News from '../screens/News';
 import Rent from '../screens/Rent';
 import EProductDetail from '../screens/EProductDetail';
 import PostDetail from '../screens/PostDetail';
-import MeterInfo from '../screens/MeterInfo';
+// import MeterInfo from '../screens/MeterInfo';
 import MeterInfoX from '../screens/MeterInfoX';
 import Search from '../screens/Search';
 import PreviewImage from '../screens/PreviewImage';
@@ -377,11 +377,11 @@ function MainStack() {
         component={PreviewImageHelpdesk}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="MeterInfo"
         component={MeterInfo}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="MeterInfoX"
         component={MeterInfoX}

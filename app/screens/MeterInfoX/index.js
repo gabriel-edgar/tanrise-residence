@@ -22,6 +22,7 @@ import {
   Pressable,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { BaseStyle, useTheme, BaseColor } from "@/config";
@@ -40,42 +41,31 @@ import React, {
 } from "react";
 const { height: deviceHeight, width: deviceWidth } = Dimensions.get("window");
 import moment from "moment";
-import Style from "./styles";
-import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import httpClient from "../../controllers/HttpClient";
 
 const MeterInfoX = (params) => {
-  const [dataMember, setDataMember] = useState(params.params);
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useNavigation();
-  const [projectDesc, setProjectDesc] = useState("");
-  const [chooseMonths, setChooseMonths] = useState("");
-  const toYears = moment(new Date()).format("YYYY");
-  const [getYears, setGetYears] = useState(toYears);
+  const nowMonth = moment(new Date()).format("MM");
+  const lastMonth = moment().subtract(1, "months").format("MM");
+
+  // alert('55'+nowMonth)
+  const [chooseMonths, setChooseMonths] = useState(lastMonth);
+  const nowYears = moment(new Date()).format("YYYY");
+  const [getYears, setGetYears] = useState(nowYears);
   const projectSelector = useSelector((state) => getProject(state));
   const user = useSelector((state) => getUser(state));
-  const [email, setEmail] = useState(user != null ? user.user : "");
-  const [dataProject, setDataProject] = useState([]);
+  const [email, setEmail] = useState(user != null ? user.email : "");
   const [dataMeter, setDataMeter] = useState([]);
-  const [message, setMessage] = useState("");
-  const [errorMsg, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [spinner, setSpinner] = useState(false);
 
   const stateReduxChoosedUnit = useSelector(
     (state) => state.Dataproject.choosedUnit
   );
 
-  console.log("params >", dataMember);
-  console.log("email >", email);
-  console.log("user >", user);
-  console.log("65 projectSelector >", projectSelector);
-  //console.log("projectSelector >", projectSelector.Data[0].entity_cd);
-  console.log("getMeterLoad", dataMeter);
-  console.log("dataProject", dataProject);
-  console.log("chooseMonths", chooseMonths);
-
-  const toMonth = moment(new Date()).format("MM");
+  // const toMonth = moment(new Date()).format("MM");
 
   const toMonthName = moment(new Date()).format("MMMM");
 
@@ -89,15 +79,15 @@ const MeterInfoX = (params) => {
     }
   };
   const defaultMonths = [
-    { value: "1", descs: "January" },
-    { value: "2", descs: "February" },
-    { value: "3", descs: "March" },
-    { value: "4", descs: "April" },
-    { value: "5", descs: "May" },
-    { value: "6", descs: "June" },
-    { value: "7", descs: "July" },
-    { value: "8", descs: "August" },
-    { value: "9", descs: "September" },
+    { value: "01", descs: "January" },
+    { value: "02", descs: "February" },
+    { value: "03", descs: "March" },
+    { value: "04", descs: "April" },
+    { value: "05", descs: "May" },
+    { value: "06", descs: "June" },
+    { value: "07", descs: "July" },
+    { value: "08", descs: "August" },
+    { value: "09", descs: "September" },
     { value: "10", descs: "October" },
     { value: "11", descs: "November" },
     { value: "12", descs: "December" },
@@ -105,179 +95,50 @@ const MeterInfoX = (params) => {
 
   const defaultYears = moment(new Date()).format("YYYY");
 
-  const getProjects = () => {
-    const getEmail = email;
-    console.log(
-      "url tes",
-      "http://apps.pakubuwono-residence.com/apiwebpbi/api/getProject" +
-        "/" +
-        `${getEmail}`
-    );
-
-    fetch(API_URL_LOKAL + "/getProject" + "/" + `${getEmail}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        let resData = res.Data;
-        console.log("resData", res.Data);
-        console.log("resData1", res.Data);
-        // setDataProject(resData);
-        setDataProject([]);
-        // getMeterLoad(resData);
-        // onRetrieve(resData);
-        setSpinner(false);
-        // if (!res.Error) {
-
-        // ---- getMeterLoad baru di load jika data yang ada di getProject muncul.
-
-        // } else {
-        // this.setState({isLoaded: true}, () => {
-        // alert(res.Pesan);
-        // });
-        // }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // const getMeterLoad = data => {
-  //   const entitycds = data[0].entity_cd;
-  //   const projectnos = data[0].project_no;
-  //   const emails = data[0].email;
-
-  //   console.log('entity_cd', entitycds);
-  //   console.log('project_no', projectnos);
-  //   console.log('emails', emails);
-  //   console.log(
-  //     'dataFilter',
-  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/' +
-  //       entitycds +
-  //       '/' +
-  //       projectnos +
-  //       '/' +
-  //       emails +
-  //       '/' +
-  //       toMonth +
-  //       '/' +
-  //       toYears,
-  //   );
-
-  //   fetch(
-  //     'http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/' +
-  //       entitycds +
-  //       '/' +
-  //       projectnos +
-  //       '/' +
-  //       emails +
-  //       '/' +
-  //       toMonth +
-  //       '/' +
-  //       toYears,
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         Accept: 'application/json',
-  //       },
-  //     },
-  //   )
-  //     // .then(response => response.json())
-  //     .then(res => {
-  //       if (!res.Error) {
-  //         let resData = res.Data;
-  //         setDataMeter(resData);
-  //         setSpinner(false);
-  //       } else {
-  //         // alert(res.Pesan);
-  //       }
-  //       // console.log('getDuedate2', res);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
-
-  const onRetrieve = () => {
-    //alert(getYears);
-    if (!getYears || !chooseMonths || !toMonth) {
-      alert("Please fill in Years");
+  const onRetrieve = (val = null, year = null) => {
+    // alert(JSON.stringify({getYears, chooseMonths, toMonth }));
+    if (!getYears || !chooseMonths) {
+      alert("Please fill in Years and Month");
     } else {
       setSpinner(true);
 
-      const toEmail = email;
       const Entitycdz = stateReduxChoosedUnit.entity_cd;
       const Projectnoz = stateReduxChoosedUnit.project_no;
-      // const Entitycdz = projectSelector.Data[0].entity_cd;
-      // const Projectnoz = projectSelector.Data[0].project_no;
-      const Monthz = chooseMonths || toMonth;
-      const Yearz = getYears;
+      const lot_no = stateReduxChoosedUnit.lot_no;
 
-      console.log("Entitycdz", Entitycdz);
-      console.log("Projectnoz", Projectnoz);
-      console.log("Monthz", Monthz);
-      console.log("getYears", getYears);
-      console.log("toEmail", toEmail);
-      console.log(
-        "cek isi retrieve >",
-        "http://apps.pakubuwono-residence.com/apiwebpbi/api/modules/meter/data-filter/IFCAPB/" +
-          Entitycdz +
-          "/" +
-          Projectnoz +
-          "/" +
-          toEmail +
-          "/" +
-          Monthz +
-          "/" +
-          Yearz
-      );
-      // fetch(
-      //   API_URL_LOKAL +
-      //     "/modules/meter/data-filter/IFCAPB/" +
-      //     Entitycdz +
-      //     "/" +
-      //     Projectnoz +
-      //     "/" +
-      //     toEmail +
-      //     "/" +
-      //     Monthz +
-      //     "/" +
-      //     Yearz,
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       Accept: "application/json",
-      //     },
-      //   }
-      // )
+      const dataParams = {
+        entity_cd: Entitycdz,
+        project_no: Projectnoz,
+        email: email,
+        month: val ? val : chooseMonths,
+        year: year ? year : getYears,
+        lot_no: lot_no,
+      };
+      // alert(JSON.stringify(dataParams));
       httpClient
         .request({
-          url: `/modules/meter/data-filter/${user.email}`,
+          url: `/modules/mu/get-detail`,
           method: "GET",
+          params: dataParams,
         })
-        //.then((response) => response.json())
         .then((res) => {
-          //console.log("cek isi RES", res);
+          // alert(JSON.stringify(res));
           if (res.data.success) {
-            let resData = res.data;
-            let resMessage = res.message;
-            let resError = res.data.success;
+            let resData = res.data.data;
+            let resMessage = res.data.message;
             setDataMeter(resData);
-            setMessage(resMessage);
-            setError(!resError);
-
+            setErrorMsg("");
             setSpinner(false);
-            // console.log('getMeterLoad', this);
           } else {
-            alert(res.data.message);
+            setDataMeter([]);
+            setErrorMsg(res.data.message);
             setSpinner(false);
           }
         })
         .catch((error) => {
-          alert(error);
+          // alert(error?.message);
+          setErrorMsg(JSON.stringify(error.message.response.data.message));
+          setDataMeter([]);
           console.log(error);
           setSpinner(false);
         });
@@ -285,9 +146,7 @@ const MeterInfoX = (params) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      //getProjects();
-    }, 1000);
+    onRetrieve();
   }, []);
 
   return (
@@ -311,65 +170,21 @@ const MeterInfoX = (params) => {
       <ScrollView
         showsVerticalScrollIndicator={true}
         showsHorizontalScrollIndicator={false}
-        //  contentContainerStyle={{ paddingHorizontal: 20 }}
         style={{
           paddingLeft: 10,
           paddingRight: 10,
           paddingTop: 10,
           backgroundColor: colors.backgroundColor, //BaseColor.whiteColor,
-          //backgroundColor: BaseColor.whiteColor,
           height: "100%",
         }}
       >
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-          }}
-        >
-          <Text
-            style={[
-              Style.subTitle2,
-              {
-                color: colors.background == "white" ? "#4E4E4E" : "white",
-              },
-            ]}
-          >
-            Project
-          </Text>
-          <Picker
-            style={[
-              styles.Dropdown1,
-              {
-                backgroundColor:
-                  colors.background == "white" ? "#f0f0f0" : "#323232",
-                color: colors.background == "white" ? "#777777" : "white",
-              },
-            ]}
-            mode={"dropdown"}
-            selectedValue={projectDesc}
-            onValueChange={(val) => setProjectDesc(val)}
-          >
-            {/* <Picker.Item label="Java" value="java" /> 
-            {dataProject?.map((data, key) => {
-              return (
-                <Picker.Item
-                  key={key}
-                  label={data.descs}
-                  value={data.project_no}
-                />
-              );
-            })}
-          </Picker>
-        </View> */}
         <View style={{ alignItems: "center" }}>
-                    <View
+          <View
             style={{
               flexDirection: "row",
-              //justifyContent: "flex-start",
             }}
           >
-            <Text
+            {/* <Text
               style={{
                 fontSize: 16,
                 fontFamily: "Montserrat-SemiBold",
@@ -380,28 +195,7 @@ const MeterInfoX = (params) => {
               }}
             >
               Years
-            </Text>
-            <TextInput
-              style={{
-                height: 55,
-                backgroundColor:
-                colors.background == "white" ? "#f5f5f5" : "#323232",
-                color: colors.background == "white" ? "black" : "white",
-                marginBottom: 10,
-                marginLeft: 20,
-                width: 250,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 10,
-                textAlign:'center'
-              }}
-              // placeholder={defaultYears}
-              placeholder="YYYY"
-              placeholderTextColor="#a9a9a9"
-              // defaultValue={this.state.defaultYears}
-              value={getYears}
-              onChangeText={(val) => setGetYears(val)}
-            />
+            </Text> */}
           </View>
           <View
             style={{
@@ -409,7 +203,7 @@ const MeterInfoX = (params) => {
               justifyContent: "flex-start",
             }}
           >
-            <Text
+            {/* <Text
               style={{
                 fontSize: 16,
                 fontFamily: "Montserrat-SemiBold",
@@ -419,36 +213,79 @@ const MeterInfoX = (params) => {
               }}
             >
               Month
-            </Text>
-            <Picker
-              style={[
-                styles.Dropdown2,
-                {
-                  backgroundColor:
-                    colors.background == "white" ? "#f0f0f0" : "#323232",
-                  //color: colors.background == "white" ? "#777777" : "white",
-                  //color: "white",
-                  //height: 100,
-                },
-              ]}
-              itemStyle={{ color: colors.text }}
-              mode={"dropdown"}
-              selectedValue={chooseMonths || toMonth}
-              onValueChange={(val) => setChooseMonths(val)}
+            </Text> */}
+            <View
+              style={{
+                borderRadius: 10,
+                overflow: "hidden",
+                marginBottom: 12,
+                marginLeft: 15,
+              }}
             >
-              {defaultMonths.map((data, key) => (
-                <Picker.Item
-                  //style={{ color: "white" }}
-                  key={key}
-                  label={data.descs}
-                  value={data.value}
-                />
-              ))}
-            </Picker>
+              <Picker
+                style={[
+                  styles.Dropdown2,
+                  {
+                    backgroundColor:
+                      colors.background == "white" ? "#f0f0f0" : "#323232",
+                    //color: colors.background == "white" ? "#777777" : "white",
+                    color: colors.text,
+                  },
+                ]}
+                itemStyle={{ color: colors.text }}
+                mode={"dropdown"}
+                selectedValue={chooseMonths}
+                onValueChange={(val) => {
+                  if (chooseMonths != val) {
+                    onRetrieve(val);
+                    setChooseMonths(val);
+                  }
+                }}
+              >
+                {defaultMonths.map((data, key) => (
+                  <Picker.Item
+                    //style={{ color: "white" }}
+                    key={key}
+                    label={data.descs}
+                    value={data.value}
+                  />
+                ))}
+              </Picker>
+            </View>
+            <TextInput
+              style={{
+                height: 55,
+                backgroundColor:
+                  colors.background == "white" ? "#f5f5f5" : "#323232",
+                color: colors.background == "white" ? "black" : "white",
+                marginBottom: 10,
+                marginLeft: 20,
+                width: 70,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                textAlign: "center",
+                fontSize: 18,
+                padding: 10,
+                alignSelf: "center",
+              }}
+              // placeholder="YYYY"
+              placeholderTextColor="#a9a9a9"
+              defaultValue={getYears}
+              // value={getYears}
+              keyboardType="numeric"
+              onChangeText={(val) => {
+                if (val.length == 4) {
+                  if (getYears != val) {
+                    onRetrieve(null, val);
+                    setGetYears(val);
+                  }
+                }
+              }}
+            />
           </View>
-
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -460,7 +297,7 @@ const MeterInfoX = (params) => {
               width: 100,
               height: 45,
               alignSelf: "center",
-              marginTop: 20,
+              marginTop: 0,
               backgroundColor: "#58D68D",
               color: "black",
               justifyContent: "center",
@@ -480,209 +317,218 @@ const MeterInfoX = (params) => {
               Retrieve
             </Text>
           </TouchableOpacity>
-        </View>
-
+        </View> */}
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "500",
+            textAlign: "left",
+            color: colors.text,
+            marginHorizontal: 15,
+          }}
+        >
+          Data Meter ({dataMeter.length}) :
+        </Text>
         {customStyleIndex === 0 && (
           <ScrollView style={styles.listview}>
-            {
-              spinner ? (
-                <ActivityIndicator size="large" color="#37BEB7" />
-              ) : errorMsg == true ? (
-                <Text>{message}</Text>
-              ) : dataMeter != null ? (
-                dataMeter.map((data, key) => {
-                  return (
-                    <View key={key} style={styles.card}>
-                      <View>
-                        <View
+            {spinner ? (
+              <ActivityIndicator size="large" color="#37BEB7" />
+            ) : errorMsg ? (
+              <Text
+                style={{
+                  marginTop: 15,
+                  textAlign: "center",
+                  backgroundColor: colors.primary,
+                  color: colors.text,
+                  padding: 10,
+                  borderRadius: 10,
+                  marginHorizontal: 10,
+
+                  borderColor: colors.primary,
+                  backgroundColor: colors.background, // Card's background color
+                  shadowColor: "#000", // Shadow color for iOS and Android
+                  shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                  shadowOpacity: 0.2, // Shadow opacity (iOS)
+                  shadowRadius: 5, // Shadow blur (iOS)
+                  elevation: 3,
+                  borderWidth: colors.background == "#010101" ? 1 : 0,
+                  marginBottom:10
+                }}
+              >
+                {errorMsg}
+              </Text>
+            ) : dataMeter != null ? (
+              dataMeter.map((data, key) => {
+                return (
+                  <View
+                    key={key}
+                    style={{
+                      ...styles.card,
+                      backgroundColor: colors.background,
+
+                      borderColor: colors.primary,
+                      backgroundColor: colors.background, // Card's background color
+                      shadowColor: "#000", // Shadow color for iOS and Android
+                      shadowOffset: { width: 0, height: 2 }, // Shadow offset
+                      shadowOpacity: 0.2, // Shadow opacity (iOS)
+                      shadowRadius: 5, // Shadow blur (iOS)
+                      elevation: 3,
+                      borderWidth: colors.background == "#010101" ? 1 : 0,
+                    }}
+                  >
+                    <View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
+                            fontSize: 12,
+                            fontWeight: "500",
+                            textAlign: "left",
+                            color: colors.text,
                           }}
                         >
-                          <Text
-                            style={{
-                              fontSize: 18,
-                              fontWeight: "500",
-                              textAlign: "left",
-                            }}
-                          >
-                            {data.lot_no}
-                          </Text>
+                          {data.meter_id}
+                        </Text>
+                        <View>
                           <Text
                             style={{
                               fontSize: 12,
                               fontWeight: "500",
                               textAlign: "right",
-                              color: "#9B9B9B",
+                              color: colors.text,
                             }}
                           >
-                            {data.descs}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 16,
-                              fontWeight: "500",
-                              textAlign: "left",
-                              color: "#F99B23",
-                            }}
-                          >
-                            {data.name}
-                          </Text>
-                          <View>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: "500",
-                                textAlign: "right",
-                                color: "#9B9B9B",
-                              }}
-                            >
-                              {data.meter_id}
-                            </Text>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#F3F3F3",
-                            marginTop: 5,
-                          }}
-                        />
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginTop: 5,
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                            }}
-                          >
-                            {/* <Icon name="event" size={13} color="#9B9B9B"/> */}
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: "500",
-                                textAlign: "left",
-                                color: "#9B9B9B",
-                              }}
-                            >
-                              {moment(data.doc_date).format("DD MMM YYYY")}
-                            </Text>
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                            }}
-                          >
-                            {/* <Icon name="attach-money" size={13} color="#F99B23"/> */}
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: "500",
-                                textAlign: "left",
-                                color: "#333",
-                              }}
-                            >
-                              {/* {numFormat(data.trx_amt)} */}
-                              {data.trx_amt}
-                            </Text>
-                          </View>
-                        </View>
-
-                        {/* Title */}
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginTop: 8,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                            }}
-                          >
-                            Current
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                            }}
-                          >
-                            Last
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                            }}
-                          >
-                            Total x {parseInt(data.multiplier)}
-                          </Text>
-                        </View>
-
-                        {/* Value */}
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                              textAlign: "left",
-                            }}
-                          >
-                            {data.curr_read + meterType(data.meter_type)}
-                          </Text>
-                          <Text>|</Text>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                              textAlign: "left",
-                            }}
-                          >
-                            {data.last_read + meterType(data.meter_type)}
-                          </Text>
-                          <Text>|</Text>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                              textAlign: "left",
-                            }}
-                          >
-                            {data.usage + meterType(data.meter_type)}
+{moment(data.read_date).format("DD MMMM YYYY")}
                           </Text>
                         </View>
                       </View>
+                      <View
+                        style={{
+                          borderBottomWidth: 1,
+                          borderBottomColor: colors.text,
+                          marginTop: 5,
+                        }}
+                      />
+         
+
+                      {/* Title */}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginTop: 8,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: colors.text,
+                          }}
+                        >
+                          Current
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: colors.text,
+                          }}
+                        >
+                          Last
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            color: colors.text,
+                          }}
+                        >
+                          Usage
+                        </Text>
+                      </View>
+
+                      {/* Value */}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            textAlign: "left",
+                            color: colors.text,
+                          }}
+                        >
+                          {parseFloat(data.curr_read).toFixed(2)}
+                        </Text>
+                        <Text
+                          style={{
+                            color: colors.text,
+                          }}
+                        >
+                          |
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            textAlign: "left",
+                            color: colors.text,
+                          }}
+                        >
+                          {parseFloat(data.last_read).toFixed(2)}
+                        </Text>
+                        <Text
+                          style={{
+                            color: colors.text,
+                          }}
+                        >
+                          |
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "500",
+                            textAlign: "left",
+                            color: colors.text,
+                          }}
+                        >
+                          {parseFloat(data.usage).toFixed(2)}
+                        </Text>
+                      </View>
+                      <View style={{ alignItems: "center" }}>
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          style={styles.avatarContainer}
+                          onPress={() =>
+                            navigation.navigate("PreviewImageHome", {
+                              images: data.file_url, // uri
+                            })
+                          }
+                        >
+                          <View>
+                            <Image
+                              style={styles.avatar}
+                              source={{ uri: data.file_url }}
+                            />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  );
-                })
-              ) : null
-              //(alert("Data not found"))
-            }
+                  </View>
+                );
+              })
+            ) : null}
           </ScrollView>
         )}
       </ScrollView>
@@ -701,12 +547,13 @@ const styles = StyleSheet.create({
     // elevation:5,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    borderRadius: 5,
+    borderRadius: 15,
     margin: 10,
   },
   listview: {
-    marginTop: "1%",
-    height: "100%",
+    // marginTop: "1%",
+    // height: "100%",
+    marginBottom: 100,
   },
   listitemm: {
     height: 100,
@@ -789,20 +636,11 @@ const styles = StyleSheet.create({
     // paddingLeft: Fonts.moderateScale(10),
   },
   Dropdown2: {
-    // fontFamily: Fonts.type.sfuiDisplaySemibold,
-    borderBottomWidth: 0,
     borderColor: "#DDD",
     backgroundColor: "#f0f0f0",
-    //paddingHorizontal: 20,
-    //paddingVertical: 15,
     fontSize: 18,
-    width: 250,
-    marginBottom: 10,
-    marginLeft: 15,
+    width: 190,
     borderRadius: 10,
-    //textAlignVertical: "top",
-    //color: "#777777",
-    // paddingLeft: Fonts.moderateScale(10),
   },
   container: {
     flex: 1,
@@ -821,5 +659,22 @@ const styles = StyleSheet.create({
   yearMonthText: {
     fontSize: 20,
     marginTop: 12,
+  },
+  avatar: {
+    width: deviceWidth - 100,
+    height: 200,
+    borderRadius: 5,
+  },
+  avatarContainer: {
+    width: deviceWidth - 100,
+    marginVertical: 10,
+    marginTop: 15,
+    borderColor: "#9B9B9B",
+    borderWidth: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    height: 200,
+    backgroundColor: "white",
   },
 });

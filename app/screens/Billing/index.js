@@ -198,6 +198,7 @@ const Billing = (props) => {
         setDataCurrent(res.data.data);
       } else {
         setDataCurrent(filter);
+        setSelectedInvoices(filter)
       }
 
       console.log("200 DATA DUE DATE -->", res.data);
@@ -626,7 +627,7 @@ const Billing = (props) => {
               flexDirection: "row",
             }}
           >
-            <Text style={{ marginRight: 5 }}>All</Text>
+            {/* <Text style={{ marginRight: 5 }}>All</Text>
             <CheckBox
               value={dataCurrent?.length == selectedInvoices.length}
               onValueChange={() => {
@@ -642,7 +643,7 @@ const Billing = (props) => {
                 true: colors.primary,
                 false: colors.background != "white" ? "white" : "black",
               }}
-            />
+            /> */}
           </View>
           <Text
             style={{
@@ -655,12 +656,9 @@ const Billing = (props) => {
               textAlign: "center",
               fontWeight: "bold",
               fontSize: 16,
+              marginLeft: 5,
             }}
-            //value={message}
-            //onChangeText={setMessage}
-            //placeholder="Type a message"
           >
-            {/* Rp. {numFormattanpaRupiah(selectedInvoices.reduce((sum,item)=>{return sum +(parseFloat(item.mfinal_amt) || 0)}, 0))} */}
             Rp. {numFormattanpaRupiah(totalAmtNumber.toFixed(2))}
           </Text>
           <TouchableOpacity
@@ -694,7 +692,7 @@ const Billing = (props) => {
                 textAlign: "center",
               }}
             >
-              Pay ({selectedInvoices.length})
+              Pay 
             </Text>
           </TouchableOpacity>
         </View>

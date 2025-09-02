@@ -44,7 +44,7 @@ const ListTransaction = ({
             alignSelf: "center",
           }}
         >
-          <Pressable onPress={(e) => e.stopPropagation()}>
+          {/* <Pressable onPress={(e) => e.stopPropagation()}>
             <CheckBox
               value={checkBoxValue}
               onValueChange={() => checkBoxOnValueChange()}
@@ -54,7 +54,7 @@ const ListTransaction = ({
                 false: colors.background != "white" ? "white" : "black",
               }}
             />
-          </Pressable>
+          </Pressable> */}
         </View>
       ) : null}
       <View style={{ flex: 0.7, marginLeft: 10 }}>

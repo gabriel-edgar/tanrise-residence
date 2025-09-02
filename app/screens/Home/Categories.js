@@ -47,7 +47,7 @@ const Categories = ({
     }
     console.log("38 stateReduxChoosedUnit: ", stateReduxChoosedUnit);
     if (
-      (item.Title == "Helpdesk" || item.Title == "Billing") &&
+      (item.Title == "Helpdesk" || item.Title == "Billing" || item.Title == "Meter Info") &&
       Object?.keys(stateReduxChoosedUnit).length === 0
     ) {
       return alert("Please choose unit first");
@@ -99,17 +99,11 @@ const Categories = ({
   const menuMeterInfo = {
     id: 233,
     Title: "Meter Info",
-    //IconClass: Platform.OS == "ios" ? "home" : "house-user", //"ellipsis-v",
-    //IconClass: "laptop-house",
-    //IconClass: "house-damage",
-    //IconClass: "building",
     IconClass: "bolt",
     Screen: "MeterInfoX",
     //Screen: "MeterInfo",
     user_facility: "N",
     user_menu: "Y",
-    //icon_url: require("../assets/images/icon_at_home/icon-6.jpeg"),
-    //isProject: 0,
   };
 
   const menuOther = {
@@ -124,11 +118,7 @@ const Categories = ({
 
   const otherMenu = isOtherMenu ? menu : [];
 
-  const modMenu = isClaimUnit ? [...otherMenu, menuClaimUnit] : [...otherMenu];
-
-  //for choosedUnit Check
-  //isClaimUnit.length != 0 ? [...menu, menuClaimUnit] : [...menu];
-  //const modMenu = true ? [...menu, menuClaimUnit] : [...menu];
+  const modMenu = isClaimUnit ? [...otherMenu, menuMeterInfo, menuClaimUnit,] : [...otherMenu];
 
   return (
     <View>

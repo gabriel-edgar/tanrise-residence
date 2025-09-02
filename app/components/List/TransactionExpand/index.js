@@ -264,7 +264,7 @@ const TransactionExpand = ({
           },
         ])}
         {...ListTransactionProps}
-        // onPress={() => clickExpand()}
+        onPress={() => clickExpand()}
         item={item}
         tab_id={tab_id}
         checkBoxValue={checkBoxValue}
@@ -311,14 +311,6 @@ const TransactionExpand = ({
             ) : //tab_id == 1 &&
             tab_id == 2 && datadetailDateDue != 0 ? (
               <View>
-                {/* <Button
-                  style={{ height: 35 }}
-                  onPress={() => clickAttachment()}
-                >
-                  <Text style={{ color: "#fff", fontSize: 14 }}>
-                    Attachment
-                  </Text>
-                </Button> */}
                 <Button
                   style={{
                     height: 35,
@@ -422,14 +414,14 @@ const TransactionExpand = ({
             ) : //tab_id == 2 &&
             tab_id == 1 && datadetailNotDue != 0 ? (
               <View>
-                <Button
+                {/* <Button
                   style={{ height: 35, marginBottom: 10 }}
                   onPress={() => clickPaymentDetail()}
                 >
                   <Text style={{ color: "#fff", fontSize: 14 }}>
                     Pay Invoice
                   </Text>
-                </Button>
+                </Button> */}
                 <Button
                   style={{
                     height: 35,

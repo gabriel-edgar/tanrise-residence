@@ -267,7 +267,7 @@ const AttachmentBilling = (props) => {
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
         {"Unit " + item.lot_no + " | "}
-        {" Multi Invoice"}
+        {" All Invoice"}
       </Text>
 
       <ScrollView>
