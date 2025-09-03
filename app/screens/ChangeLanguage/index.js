@@ -63,7 +63,7 @@ export default function ChangeLanguage({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={BaseStyle.safeAreaView} edges={["top", "right", "bottom", "left"]}>
       <Header
         title={t("change_language")}
         renderLeft={() => {

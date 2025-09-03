@@ -120,7 +120,7 @@ const FHistoryScreen = ({ navigation }) => {
     return (
         <SafeAreaView
             style={[BaseStyle.safeAreaView]}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             {renderContent()}
         </SafeAreaView>

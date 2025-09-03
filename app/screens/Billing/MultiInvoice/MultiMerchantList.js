@@ -139,7 +139,7 @@ const AttachmentBilling = (props) => {
         };
         console.log("289 post", dataPost);
         alert(JSON.stringify(dataPost, null, 2));
-
+    setLoading(false);
         return;
         //post
         const res = await httpClient.request({
@@ -210,7 +210,7 @@ const AttachmentBilling = (props) => {
         console.log("289 post", dataPost);
         alert(JSON.stringify(dataPost, null, 2));
         // Alert.alert('Data Post', JSON.stringify(dataPost, null, 2));
-
+    setLoading(false);
         return;
         //post
         const res = await httpClient.request({
@@ -247,7 +247,7 @@ const AttachmentBilling = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={"Payment Method"}

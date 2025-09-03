@@ -246,7 +246,7 @@ export default function EPayment({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={BaseStyle.safeAreaView} edges={["top", "right", "bottom", "left"]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "android" ? "height" : "padding"}
         style={{ flex: 1 }}

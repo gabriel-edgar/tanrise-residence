@@ -58,7 +58,7 @@ const Dashboard6 = () => {
     return (
         <SafeAreaView
             style={[BaseStyle.safeAreaView, { flex: 1 }]}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             <HeaderText title={t("report")} />
             <ScrollView

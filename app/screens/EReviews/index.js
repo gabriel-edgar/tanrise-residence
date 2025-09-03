@@ -78,7 +78,7 @@ const Review = (props) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "right", "bottom", "left"]}>
       <View style={{ height: "auto" }}>
         <Header
           title={t("customer_review")}

@@ -806,7 +806,7 @@ const Header_Before = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       {renderContent()}
     </SafeAreaView>
@@ -1904,7 +1904,7 @@ const Detail = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       {renderContent()}
     </SafeAreaView>
@@ -2022,7 +2022,7 @@ const SignatureBefore = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <View
         style={{
@@ -2182,7 +2182,7 @@ export default function TableBeforeSignatureWO({ route }) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={

@@ -56,7 +56,7 @@ const Review = (props) => {
     <SafeAreaView
       // style={BaseStyle.safeAreaView}
       style={{ flex: 1 }}
-      edges={['right', 'top', 'left']}
+      edges={["top", "right", "bottom", "left"]}
     >
       <View style={{ height: "auto" }}>
         <Header

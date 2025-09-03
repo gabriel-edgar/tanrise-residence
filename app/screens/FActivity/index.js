@@ -48,7 +48,7 @@ export default function FActivity() {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       <HeaderText title={t('activities')} />
       <View style={styles.contain}>
         <View

@@ -194,7 +194,7 @@ const MultiPaymentDetail = (props) => {
   //   return (
   //     <SafeAreaView
   //       style={BaseStyle.safeAreaView}
-  //       edges={["right", "top", "left"]}
+  //       edges={["top", "right", "bottom", "left"]}
   //     >
   //       <Header
   //         title={"Payment Screen"}
@@ -286,7 +286,7 @@ const MultiPaymentDetail = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={"Payment Detail"}
@@ -417,7 +417,11 @@ item.doc_no+
             </View>
           </View>
 
-          <Button
+
+        </View>
+      </ScrollView>
+      <View>
+                  <Button
             disable={loading}
             style={{ height: 45, margin: 10, marginTop: 20, opacity:loading?0.5:1 }}
             onPress={() => {
@@ -519,8 +523,7 @@ item.doc_no+
               <Text style={{ color: "white" , fontSize:13 }}> Refresh Invoice Detail</Text>
             </Button>
           ): null}
-        </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

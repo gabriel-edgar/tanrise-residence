@@ -89,7 +89,7 @@ const ProjectScreen = (props) => {
   console.log("85 projectData: ", projectData);
   return (
     <SafeAreaView
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
       style={[
         BaseStyle.safeAreaView,
         { flex: 1 },
@@ -98,7 +98,7 @@ const ProjectScreen = (props) => {
     >
       {/* <SafeAreaView
       style={[BaseStyle.safeAreaView, { flex: 1 }]}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     ></SafeAreaView> */}
       <Header
         title={t("List Property")}

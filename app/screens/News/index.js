@@ -77,7 +77,7 @@ const News = props => {
     return (
       <SafeAreaView
         style={[BaseStyle.safeAreaView, {flex: 1}]}
-        edges={['right', 'top', 'left']}>
+        edges={["top", "right", "bottom", "left"]}>
         <Header
           title={t('News')}
           renderLeft={() => {
@@ -134,7 +134,7 @@ const News = props => {
     <View style={{flex: 1}}>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={['right', 'top', 'left']}>
+        edges={["top", "right", "bottom", "left"]}>
         {renderContent()}
       </SafeAreaView>
     </View>

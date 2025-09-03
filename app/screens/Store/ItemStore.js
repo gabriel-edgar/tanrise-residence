@@ -868,7 +868,7 @@ export default function ItemStore({ route }) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={"Items Store"}

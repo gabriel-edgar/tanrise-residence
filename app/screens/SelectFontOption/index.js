@@ -40,7 +40,7 @@ export default function SelectFontOption({ navigation }) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <View style={styles.contain}>
         <View style={[styles.contentModal, { backgroundColor: colors.card }]}>

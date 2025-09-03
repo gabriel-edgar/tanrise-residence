@@ -39,6 +39,7 @@ import CheckBox from "@react-native-community/checkbox";
 import { storeStorage, getStorage } from "../function/asyncStorage";
 import getUser from "../../selectors/UserSelectors";
 import moment from "moment";
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 const fileDummy = [
   {
@@ -304,7 +305,7 @@ const AttachmentBilling = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={"Payment Method"}
@@ -411,6 +412,7 @@ const AttachmentBilling = (props) => {
           <View>
             <Button
               style={{
+                opacity:loading?0.5:1,
                 height: 45,
                 margin: 10,
                 marginVertical: 30,

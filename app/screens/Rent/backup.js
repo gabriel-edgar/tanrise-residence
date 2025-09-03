@@ -74,7 +74,7 @@ const Rent = (props) => {
   const renderContent = () => {
     const mainNews = PostListData[0];
     return (
-      <SafeAreaView edges={["right", "top", "left"]}>
+      <SafeAreaView edges={["top", "right", "bottom", "left"]}>
         <Header
           title={t("Rent or Sale")}
           renderLeft={() => {
@@ -127,7 +127,7 @@ const Rent = (props) => {
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         {renderContent()}
       </SafeAreaView>

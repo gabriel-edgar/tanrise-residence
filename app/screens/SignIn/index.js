@@ -221,7 +221,7 @@ const SignIn = (props) => {
     >
       {/* <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       > */}
       <View style={{ marginVertical: 50 }} />
 

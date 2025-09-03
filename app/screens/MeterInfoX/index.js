@@ -73,9 +73,9 @@ const MeterInfoX = (params) => {
 
   const meterType = (type) => {
     if (type == "E") {
-      return "KWH";
+      return "kWh";
     } else {
-      return "M3";
+      return "m3";
     }
   };
   const defaultMonths = [
@@ -152,7 +152,7 @@ const MeterInfoX = (params) => {
   return (
     <SafeAreaView>
       <Header
-        title={t("Meter Info")}
+        title={t("Meter Info "+stateReduxChoosedUnit.lot_no)}
         renderLeft={() => {
           return (
             <Icon
@@ -391,7 +391,7 @@ const MeterInfoX = (params) => {
                             color: colors.text,
                           }}
                         >
-                          {data.meter_id}
+                          {data.meter_id} ({meterType(data.meter_type)})
                         </Text>
                         <View>
                           <Text
@@ -431,7 +431,7 @@ const MeterInfoX = (params) => {
                             color: colors.text,
                           }}
                         >
-                          Current
+                          Current 
                         </Text>
                         <Text
                           style={{

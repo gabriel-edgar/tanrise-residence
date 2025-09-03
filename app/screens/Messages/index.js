@@ -152,7 +152,7 @@
 //   };
 
 //   return (
-//     <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'top', 'left']}>
+//     <SafeAreaView style={BaseStyle.safeAreaView} edges={["top", "right", "bottom", "left"]}>
 //       <Header
 //         title={t("reviews")}
 //         renderLeft={() => {

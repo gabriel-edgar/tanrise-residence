@@ -708,7 +708,7 @@ const Header_After = (props) => {
     //     //BaseStyle.safeAreaView,
     //     { backgroundColor: "red", flex: 1 },
     //   ]}
-    //   edges={["right", "top", "left"]}
+    //   edges={["top", "right", "bottom", "left"]}
     // >
     renderContent()
     //</SafeAreaView>
@@ -1818,7 +1818,7 @@ const Detail = (props) => {
     //       //backgroundColor: "red"
     //     },
     //   ]}
-    //   edges={["right", "top", "left"]}
+    //   edges={["top", "right", "bottom", "left"]}
     // >
     renderContent()
     // </SafeAreaView>
@@ -1927,7 +1927,7 @@ const SignatureAfter = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <View
         style={{
@@ -2198,7 +2198,7 @@ export default function TableAfterSignatureWO({ route }) {
     <>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         <Header
           title={

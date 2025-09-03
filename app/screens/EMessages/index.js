@@ -121,7 +121,7 @@ export default function Messages({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'top', 'left']}>
+    <SafeAreaView style={BaseStyle.safeAreaView} edges={["top", "right", "bottom", "left"]}>
       <View
         style={{
           flexDirection: "row",

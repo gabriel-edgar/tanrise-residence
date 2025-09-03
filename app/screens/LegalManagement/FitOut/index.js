@@ -37,7 +37,7 @@ export default function FitOut() {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <Image
           source={require('@/assets/images/fitout.png')}

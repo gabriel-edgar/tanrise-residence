@@ -45,7 +45,7 @@ export default function EConfirmed({route, navigation}) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}
         style={{flex: 1}}>

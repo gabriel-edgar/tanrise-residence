@@ -132,7 +132,7 @@ function BookingFacility1({ route }) {
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, { flex: 1 }]}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={t("Choose Schedule")}

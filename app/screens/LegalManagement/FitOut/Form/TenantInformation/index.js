@@ -62,7 +62,7 @@ export default function TenantInformation() {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       <View style={{justifyContent: 'center'}}>
         <View style={{alignContent: 'center', 
         marginHorizontal: 30, 

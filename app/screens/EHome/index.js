@@ -288,7 +288,7 @@ const Home = (props) => {
         <View style={{ flex: 1 }}>
             <SafeAreaView
                 style={BaseStyle.safeAreaView}
-                edges={["right", "top", "left"]}
+                edges={["top", "right", "bottom", "left"]}
             >
                 {renderContent()}
             </SafeAreaView>

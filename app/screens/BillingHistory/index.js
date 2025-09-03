@@ -65,6 +65,7 @@ const BillingHistory = () => {
       email: user.email,
       lot_no: stateReduxChoosedUnit.lot_no,
     };
+    console.log('68 getParams',getParams)
 
     const res = await httpClient
       .request({
@@ -89,7 +90,7 @@ const BillingHistory = () => {
       })
       .catch(error => {
         setDataCurrent([]);
-        //alert(JSON.stringify(error.response.data.message));
+        alert(JSON.stringify(error.response.data.message));
         setLoading(false);
       });
   }
@@ -184,7 +185,7 @@ const BillingHistory = () => {
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, {flex: 1}]}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       <Header
         title={t('Payment Active')}
         renderLeft={() => {
@@ -249,12 +250,12 @@ const BillingHistory = () => {
                     </View>
 
                     <View style={{alignSelf: 'start'}}>
-                      <Text style={{}}>: {item.doc_no}</Text>
-                      <Text>: {item.payment_channel}</Text>
-                      <Text>: {removeAfterDot(item.doc_amt)}</Text>
+                      <Text style={{}}>: {item?.doc_no}</Text>
+                      <Text>: {item?.payment_channel}</Text>
+                      <Text>: {removeAfterDot(item?.doc_amt)}</Text>
 
-                      {item.email?.length <= 25 ? (
-                        <Text>: {item.email}</Text>
+                      {item?.email?.length <= 25 ? (
+                        <Text>: {item?.email}</Text>
                       ) : null}
                     </View>
                     <View>
@@ -266,9 +267,9 @@ const BillingHistory = () => {
                       />
                     </View>
                   </View>
-                  {item.email?.length > 25 ? (
+                  {item?.email?.length > 25 ? (
                     <Text>
-                      {'       '}: {item.email}
+                      {'       '}: {item?.email}
                     </Text>
                   ) : null}
                 </TouchableOpacity>
@@ -365,8 +366,8 @@ const BillingHistory = () => {
                                   if (item.response_url != null) {
                                     navigation.navigate('WebviewScreen', {
                                       title: 'Payment Screen',
-                                      doc_no: item.doc_no,
-                                      url: item.response_url,
+                                      doc_no: item?.doc_no,
+                                      url: item?.response_url,
                                     });
                                     setModalVisible(null);
                                   }

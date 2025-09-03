@@ -107,7 +107,7 @@ function HistoryBilling({ route }) {
     <>
       <SafeAreaView
         style={[BaseStyle.safeAreaView, { flex: 1 }]}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         <Header
           title={"Invoice History"}

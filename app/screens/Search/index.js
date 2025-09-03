@@ -173,7 +173,7 @@ const Search = props => {
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, {backgroundColor: BaseColor.whiteColor}]}
-      edges={['right', 'top', 'left']}>
+      edges={["top", "right", "bottom", "left"]}>
       {renderModal()}
       <Header
         title={t('search')}

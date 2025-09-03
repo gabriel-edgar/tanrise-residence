@@ -93,7 +93,7 @@ export default function FCryptol01({ navigation }) {
     return (
         <SafeAreaView
             style={BaseStyle.safeAreaView}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             <HeaderText title={t("market")} />
             <View style={{ flex: 1 }}>

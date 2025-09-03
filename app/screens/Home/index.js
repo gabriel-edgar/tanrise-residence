@@ -885,7 +885,7 @@ const Home = (props) => {
     return (
       <View
         style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         {user == null || user == "" ? <Text>data user dihome null</Text> : null}
 
@@ -1960,7 +1960,7 @@ const Home = (props) => {
             color: "white",
           },
         ]}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         {renderContent()}
       </SafeAreaView>

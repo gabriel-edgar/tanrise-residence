@@ -414,14 +414,14 @@ const TransactionExpand = ({
             ) : //tab_id == 2 &&
             tab_id == 1 && datadetailNotDue != 0 ? (
               <View>
-                {/* <Button
+                <Button
                   style={{ height: 35, marginBottom: 10 }}
                   onPress={() => clickPaymentDetail()}
                 >
                   <Text style={{ color: "#fff", fontSize: 14 }}>
                     Pay Invoice
                   </Text>
-                </Button> */}
+                </Button>
                 <Button
                   style={{
                     height: 35,

@@ -45,7 +45,7 @@ export default function FCryptol01({ navigation }) {
     return (
         <SafeAreaView
             style={BaseStyle.safeAreaView}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             <Header
                 title={`${item.name} (${item.code})`}

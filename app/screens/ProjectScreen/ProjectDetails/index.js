@@ -155,7 +155,7 @@ const ProjectDetails = (props) => {
 
   return (
     <SafeAreaView
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
       style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}
     >
       <ScrollView

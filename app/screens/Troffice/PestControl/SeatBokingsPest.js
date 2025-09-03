@@ -689,7 +689,7 @@ export default function SeatBokingsPest(props) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={t("category_tro")} //belum dibuat lang

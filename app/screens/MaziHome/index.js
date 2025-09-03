@@ -68,7 +68,7 @@ const MaziHome = ({ navigation }) => {
     return (
         <SafeAreaView
             style={[BaseStyle.safeAreaView]}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             <View style={{ padding: 15, paddingBottom: 5 }}>
                 <Text header bold>

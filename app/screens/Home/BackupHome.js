@@ -363,7 +363,7 @@ const Home = (props) => {
     return (
       <SafeAreaView
         style={[BaseStyle.safeAreaView, { flex: 1 }]}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         {user == null || user == "" ? (
           <Text>data user dihome null</Text>
@@ -516,7 +516,7 @@ const Home = (props) => {
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         {renderContent()}
       </SafeAreaView>

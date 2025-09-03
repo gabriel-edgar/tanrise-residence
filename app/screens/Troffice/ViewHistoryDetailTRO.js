@@ -361,7 +361,7 @@ export default function ViewHistoryDetail({ route }) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={t("status")} //belum dibuat lang

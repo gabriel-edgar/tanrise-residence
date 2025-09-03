@@ -84,7 +84,7 @@ const EBank = (props) => {
     return (
         <SafeAreaView
             style={BaseStyle.safeAreaView}
-            edges={["right", "top", "left"]}
+            edges={["top", "right", "bottom", "left"]}
         >
             <Header
                 title={t("topup")}

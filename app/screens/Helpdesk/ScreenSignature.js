@@ -166,7 +166,7 @@ export default function ScreenSignature({ route }) {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={t("Signatures")} //belum dibuat lang

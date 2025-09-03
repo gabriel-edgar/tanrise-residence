@@ -228,7 +228,7 @@ const AttachmentBilling = (props) => {
     return (
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         <Header
           title={"Payment Screen"}
@@ -296,7 +296,7 @@ const AttachmentBilling = (props) => {
   return (
     <SafeAreaView
       style={BaseStyle.safeAreaView}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         title={"Payment Detail"}

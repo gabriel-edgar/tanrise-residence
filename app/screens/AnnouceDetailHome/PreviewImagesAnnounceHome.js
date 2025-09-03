@@ -75,7 +75,7 @@ export default function PreviewImagesAnnounceHome({ navigation, route }) {
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, { backgroundColor: "black" }]}
-      edges={["right", "top", "left"]}
+      edges={["top", "right", "bottom", "left"]}
     >
       <Header
         style={{ backgroundColor: "black" }}

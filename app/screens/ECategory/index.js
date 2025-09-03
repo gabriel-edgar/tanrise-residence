@@ -195,7 +195,7 @@ const ECategory = (props) => {
     return (
       <SafeAreaView
         style={[BaseStyle.safeAreaView]}
-        edges={["right", "top", "left"]}
+        edges={["top", "right", "bottom", "left"]}
       >
         <HeaderAnimated
           heightScroll={100}
