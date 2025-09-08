@@ -276,7 +276,7 @@ const WebviewScreen = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-        {"Invoice " + paramsItem.doc_no}
+        {paramsItem?.doc_no? ("Invoice " + paramsItem.doc_no):  ("Order ID " + paramsItem.order_id)}
       </Text>
       <WebView
         source={{ uri: paramsItem.url }}

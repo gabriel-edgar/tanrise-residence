@@ -1960,7 +1960,7 @@ const Home = (props) => {
             color: "white",
           },
         ]}
-        edges={["top", "right", "bottom", "left"]}
+        edges={["top", "right", "left"]}
       >
         {renderContent()}
       </SafeAreaView>

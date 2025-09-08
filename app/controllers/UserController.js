@@ -31,6 +31,7 @@ class UserController {
         method: "POST",
         data: {
           email,
+          // email: "m.hafid@ifca.co.id",
           password,
           device: Platform.OS,
           mac: "mac",
@@ -92,9 +93,9 @@ class UserController {
 
       console.log("25 if errorz: ", error);
       //Alert(error.response.data.message);
-      Platform.OS == "android"
+      !error.response.data?.message ? alert(error.message) : Platform.OS == "android"
         ? Alert.alert("Sorry! ", JSON.stringify(error.response.data.message))
-        : alert(JSON.stringify(error.response.data.message));
+        :  alert(JSON.stringify(error.response.data.message));
       //return Promise.reject(error);
 
       if (error.response) {

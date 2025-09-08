@@ -131,19 +131,22 @@ const AttachmentBilling = (props) => {
           lot_no: item.lot_no,
           debtor_phone: user.Handphone,
           debtor_email: user.email,
-          list_doc_no: params.selectedInvoices.map((item) => item.doc_no),
-          total_amt: params?.totalAmtNumber,
+          invoices: params.selectedInvoices.map((item) => ({
+            doc_no: item.doc_no,
+            doc_amt: item.mfinal_amt
+            })),
+          // total_amt: params?.totalAmtNumber,
           virtual_acct: "",
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
         };
         console.log("289 post", dataPost);
-        alert(JSON.stringify(dataPost, null, 2));
-    setLoading(false);
-        return;
+        // alert(JSON.stringify(dataPost, null, 2));
+        // setLoading(false);
+        // return;
         //post
         const res = await httpClient.request({
-          url: `/modules/billing/store`,
+          url: `/modules/billing/store-multiple`,
           method: "POST",
           data: dataPost,
           //baseURL: "",
@@ -159,6 +162,7 @@ const AttachmentBilling = (props) => {
               title: "Payment Screen",
               doc_no: item.doc_no,
               url: dataPay,
+              order_id:res.data.data?.order_id
             });
           }
         } else {
@@ -202,19 +206,22 @@ const AttachmentBilling = (props) => {
           debtor_phone: user.Handphone,
           debtor_email: user.email,
           virtual_acct: dataVA,
-          list_doc_no: params.selectedInvoices.map((item) => item.doc_no),
-          total_amt: params?.totalAmtNumber,
+          invoices: params.selectedInvoices.map((item) => ({
+            doc_no: item.doc_no,
+            doc_amt: item.mfinal_amt
+            })),
+          // total_amt: params?.totalAmtNumber,
           payment_channel: paymentMethod.payment_channel,
           type_payment: "Close",
         };
         console.log("289 post", dataPost);
-        alert(JSON.stringify(dataPost, null, 2));
+        // alert(JSON.stringify(dataPost, null, 2));
         // Alert.alert('Data Post', JSON.stringify(dataPost, null, 2));
-    setLoading(false);
-        return;
+        // setLoading(false);
+        // return;
         //post
         const res = await httpClient.request({
-          url: `/modules/billing/store`,
+          url: `/modules/billing/store-multiple`,
           method: "POST",
           data: dataPost,
           //baseURL: "",

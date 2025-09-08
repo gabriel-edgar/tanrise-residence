@@ -27,14 +27,14 @@ import { pdfSourceFunc } from "./pdfSourceFunc";
 
 const VAScreen = (props) => {
   const { navigation, route } = props;
-  console.log("route params", route);
+  console.log("30 route params", route);
   const { t } = useTranslation();
   const { colors } = useTheme();
   const stateReduxChoosedProject = useSelector(
     (state) => state.Dataproject.chooseProject
   );
   const replaceTotal_notdue = route.params.replaceTotal_notdue;
-  console.log("75VAS route.params: ", route.params);
+  console.log("75VAS route.params: ", route?.params);
 
   const pdfSource = pdfSourceFunc(route.params.paymentMethod.payment_channel);
 

@@ -130,7 +130,10 @@ const BillingHistory = () => {
       'Are you sure you want to cancel the payment?', // Message
       [
         {text: 'No', onPress: () => console.log('Cancel Pressed')}, // First button
-        {text: 'Yes', onPress: () => cancelPayment(item)}, // Second button
+        {text: 'Yes', onPress: () => {
+          item?.order_id ? 
+          cancelPaymentMultiple(item) :
+          cancelPayment(item)}}, // Second button
       ],
       {cancelable: false}, // Disable dismissing by tapping outside
     );
@@ -148,6 +151,32 @@ const BillingHistory = () => {
     await httpClient
       .request({
         url: `/modules/billing/update-status-payment`,
+        method: 'POST',
+        data: dataPost,
+      })
+      .then(res => {
+        alert(JSON.stringify(res.data.message));
+        onRefresh();
+      })
+      .catch(e => {
+        alert(JSON.stringify(e.response.data.message));
+        setLoading(false);
+        onRefresh();
+      });
+  };
+
+    const cancelPaymentMultiple = async item => {
+    setModalVisible(null);
+    const dataPost = {
+      entity_cd: item.entity_cd,
+      project_no: item.project_no,
+      debtor_acct: item.debtor_acct,
+      virtual_acct: item.virtual_acct,
+      order_id: item?.order_id
+    };
+    await httpClient
+      .request({
+        url: `/modules/billing/update-status-payment-multiple`,
         method: 'POST',
         data: dataPost,
       })
@@ -243,14 +272,14 @@ const BillingHistory = () => {
                       alignItems: 'center',
                     }}>
                     <View style={{alignSelf: 'start'}}>
-                      <Text style={{}}>Invoice</Text>
-                      <Text style={{}}>Payment</Text>
+                      <Text >{item?.order_id ? "OrderID" : "Invoice" }</Text>
+                      <Text >Payment</Text>
                       <Text>Amount</Text>
                       <Text>Processed by</Text>
                     </View>
 
                     <View style={{alignSelf: 'start'}}>
-                      <Text style={{}}>: {item?.doc_no}</Text>
+                      <Text >: {item?.order_id ? item.order_id : item?.doc_no }</Text>
                       <Text>: {item?.payment_channel}</Text>
                       <Text>: {removeAfterDot(item?.doc_amt)}</Text>
 
@@ -367,6 +396,7 @@ const BillingHistory = () => {
                                     navigation.navigate('WebviewScreen', {
                                       title: 'Payment Screen',
                                       doc_no: item?.doc_no,
+                                      order_id: item?.order_id,
                                       url: item?.response_url,
                                     });
                                     setModalVisible(null);

@@ -140,7 +140,7 @@ const Profile = (props) => {
           color: "white",
         },
       ]}
-      edges={["top", "right", "bottom", "left"]}
+      edges={["top", "right", "left"]}
     >
       <View
         style={[BaseStyle.safeAreaView, { backgroundColor: colors.background }]}

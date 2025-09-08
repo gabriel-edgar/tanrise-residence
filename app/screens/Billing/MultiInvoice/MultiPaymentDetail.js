@@ -377,7 +377,13 @@ item.doc_no+
             </View>
           ))}
 
-          <View
+
+
+
+        </View>
+      </ScrollView>
+      <View>
+      <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -416,11 +422,6 @@ item.doc_no+
               {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
             </View>
           </View>
-
-
-        </View>
-      </ScrollView>
-      <View>
                   <Button
             disable={loading}
             style={{ height: 45, margin: 10, marginTop: 20, opacity:loading?0.5:1 }}
@@ -439,25 +440,25 @@ item.doc_no+
               }
 
               // Handle "not found" case
-              if (notFoundDetail) {
-                Alert.alert(
-                  "Warning",
-                  `${notFoundDetail?.doc_no} does not has invoice detail`,
-                  [
-                    // {
-                    //   text: "Cancel",
-                    //   onPress: () => console.log("Cancelled"),
-                    //   style: "cancel",
-                    // },
-                    {
-                      text: "OK",
-                      onPress: () => {},
-                    },
-                  ]
-                );
-                setIsShowRefresh(true)
-                // return;
-              }
+              // if (notFoundDetail) {
+              //   Alert.alert(
+              //     "Warning",
+              //     `${notFoundDetail?.doc_no} does not has invoice detail`,
+              //     [
+              //       // {
+              //       //   text: "Cancel",
+              //       //   onPress: () => console.log("Cancelled"),
+              //       //   style: "cancel",
+              //       // },
+              //       {
+              //         text: "OK",
+              //         onPress: () => {},
+              //       },
+              //     ]
+              //   );
+              //   setIsShowRefresh(true)
+              //   // return;
+              // }
 
               let error;
               // Handle "error" case
@@ -472,25 +473,25 @@ item.doc_no+
               }
 
               // Handle "not found" case
-              if (error) {
-                Alert.alert(
-                  "Warning",
-                  `${error?.doc_no} error get invoice detail`,
-                  [
-                    // {
-                    //   text: "Cancel",
-                    //   onPress: () => console.log("Cancelled"),
-                    //   style: "cancel",
-                    // },
-                    {
-                      text: "OK",
-                      onPress: () => {},
-                    },
-                  ]
-                );
-                setIsShowRefresh(true)
-                return;
-              }
+              // if (error) {
+              //   Alert.alert(
+              //     "Warning",
+              //     `${error?.doc_no} error get invoice detail`,
+              //     [
+              //       // {
+              //       //   text: "Cancel",
+              //       //   onPress: () => console.log("Cancelled"),
+              //       //   style: "cancel",
+              //       // },
+              //       {
+              //         text: "OK",
+              //         onPress: () => {},
+              //       },
+              //     ]
+              //   );
+              //   setIsShowRefresh(true)
+              //   return;
+              // }
 
               // All good, proceed with navigation
               navigation.navigate("MultiMerchantList", {
