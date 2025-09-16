@@ -33,10 +33,10 @@ const VAScreen = (props) => {
   const stateReduxChoosedProject = useSelector(
     (state) => state.Dataproject.chooseProject
   );
-  const replaceTotal_notdue = route.params.replaceTotal_notdue;
-  console.log("75VAS route.params: ", route?.params);
+  const replaceTotal_notdue = route?.params?.replaceTotal_notdue;
+  const params = route?.params;
 
-  const pdfSource = pdfSourceFunc(route.params.paymentMethod.payment_channel);
+  const pdfSource = pdfSourceFunc(route?.params?.paymentMethod?.payment_channel);
 
   const copyToClipboard = (text) => {
     Clipboard.setString(text);
@@ -68,7 +68,7 @@ const VAScreen = (props) => {
         }}
       />
       <Text subhead bold style={{ textAlign: "center", marginBottom: 10 }}>
-        {"Invoice " + route.params.datadetailNotDue[0].doc_no}
+{"Invoice " + (route?.params?.datadetailNotDue?.[0]?.doc_no ?? 'Multiple')}
       </Text>
       <View
         style={{
@@ -94,7 +94,7 @@ const VAScreen = (props) => {
             fontSize: 16,
           }}
         >
-          {route.params.paymentMethod.payment_channel}
+          {route?.params?.paymentMethod.payment_channel}
         </Text>
         <Text>Virtual Account Number</Text>
         <View
@@ -104,13 +104,13 @@ const VAScreen = (props) => {
             justifyContent: "space-between",
           }}
         >
-          <Text>{route.params.VA}</Text>
+          <Text>{route?.params?.VA}</Text>
           <Button
             style={{
               height: 40,
               alignSelf: "center",
             }}
-            onPress={() => copyToClipboard(route.params.VA)}
+            onPress={() => copyToClipboard(route?.params?.VA)}
           >
             <Icon
               name="copy"
@@ -136,7 +136,7 @@ const VAScreen = (props) => {
               justifyContent: "space-between",
             }}
           >
-            <Text>Rp {replaceTotal_notdue}</Text>
+            <Text>Rp {params?.totalAmt ? params?.totalAmt : replaceTotal_notdue}</Text>
           </View>
         </View>
         {pdfSource.uri == "" ? null : (
@@ -151,7 +151,7 @@ const VAScreen = (props) => {
               navigation.navigate("PDFShow", {
                 title: "Cara Bayar",
                 pdfSource,
-                merchant: route.params.paymentMethod.payment_channel,
+                merchant: route?.params?.paymentMethod?.payment_channel,
               })
             }
           >

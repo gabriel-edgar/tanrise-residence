@@ -151,11 +151,11 @@ const SignUp = (props) => {
 
   const onSignUp = async () => {
     if (
-      name == "" ||
-      email == "" ||
-      password == "" ||
-      confirmPassword == "" ||
-      address == ""
+      name.trim() == "" ||
+      email.trim() == "" ||
+      password.trim() == "" ||
+      confirmPassword.trim() == "" ||
+      address.trim() == ""
     ) {
       alert(
         "Please complete form: \n" +
@@ -170,7 +170,7 @@ const SignUp = (props) => {
       if (!validateEmail(email)) {
         return;
       }
-      if (password != confirmPassword) {
+      if (password.trim() != confirmPassword.trim()) {
         alert("Passwords do not match");
         return;
       }
@@ -179,27 +179,17 @@ const SignUp = (props) => {
         return;
       }
       setLoading(true);
-      // const dataPost = { name, email, address };
       const dataPost = {
         // "entity_cd" : "1001",
         // "project_no" : "1001001",
-        name: name,
-        email: email,
-        handphone: address,
-        password: password,
-        confirm_password: password,
+        name: name.trim(),
+        email: email.trim(),
+        handphone: address.trim(),
+        password: password.trim(),
+        confirm_password: password.trim(),
         gender: gender.value,
         platform: Platform.OS,
       };
-      //alert(JSON.stringify(dataPost));
-      //return;
-      // setTimeout(() => {
-      //   setLoading(false);
-      //   //navigation.navigate("SignIn");
-      //   alert(JSON.stringify(dataPost));
-      //   alert("You will receive an email if your account request is approved.");
-      //   navigation.goBack();
-      // }, 500);
 
       await httpClient
         .request({
