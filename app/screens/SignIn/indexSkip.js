@@ -35,6 +35,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from "@react-native-firebase/messaging";
 import { baseURL as API_URL_LOKAL } from "@/controllers/HttpClient";
 import { useNavigation, useRoute } from "@react-navigation/core";
+import { FontWeight } from "../../config";
 
 const SignIn = (props) => {
   const { navigation } = props;
@@ -61,8 +62,8 @@ const SignIn = (props) => {
   );
   const loginklik = async () => {
     console.log("63 run login");
-    if (email === "" || password === "") {
-      alert("Please input email and password");
+    if (email === "" ) {
+      alert("Please input email");
       return;
     }
 
@@ -166,14 +167,43 @@ const SignIn = (props) => {
   };
 
   const getFcmToken = async () => {
-    const fcmToken = await messaging().getToken();
+    //alert("test");
+    //await messaging().deleteToken();
+    console.log("171 run ");
+    // Optionally, you can get the new token
+    // await messaging()
+    //   .registerDeviceForRemoteMessages()
+    //   .catch((e) => {
+    //     console.log("171 errorReg: " + e);
+    //   });
+    const fcmToken = await messaging()
+      .getToken()
+      .catch((e) => {
+        console.log("171 error: " + e);
+      });
+    console.log("171 token: ", fcmToken);
     if (fcmToken) {
       console.log(fcmToken);
-      console.log("Your Firebase Token is:", fcmToken);
+      console.log("888 Your Firebase Token is:", fcmToken);
+      //alert("Your Firebase Token is: " + fcmToken);
       setTokenFirebase(fcmToken);
+      //setEmail(fcmToken);
     } else {
-      console.log("Failed", "No token received");
+      console.log("888 Failed", "No token received");
+      //alert("Failed", "No token received");
     }
+  };
+
+  const handleSignUp = () => {
+    // Alert.alert("How to get account:", "Please contact admin to get account", [
+    //   {
+    //     text: "OK",
+    //     onPress: () => console.log("Cancel Pressed"),
+    //     style: "cancel",
+    //   },
+    //   //{ text: "OK", onPress: () => console.log("OK Pressed") },
+    // ]);
+    props.navigation.navigate("SignUp");
   };
 
   const offsetKeyboard = Platform.select({
@@ -189,31 +219,17 @@ const SignIn = (props) => {
         flex: 1,
       }}
     >
-      {/* <SafeAreaView
-        style={BaseStyle.safeAreaView}
-        edges={["top", "right", "bottom", "left"]}
-      > */}
       <View style={{ marginVertical: 50 }} />
-      <View></View>
 
       <View style={styles.contain}>
         <Image
-          // source={require('../../assets/images/pakubuwono.png')}
-          //source={require("../../assets/images/Default-Black.webp")}
-          //source={require("../../assets/images/logoIFCA.png")}
           source={require("../../assets/images/image-home/logo-tanrise-blackfont.png")}
           //resizeMode="cover"
           style={{
             height: 180,
             width: "100%",
             alignSelf: "center",
-            //marginHorizontal: 100,
-            //marginBottom: 40,
-            //marginTop: 10,
-            //flexDirection: "row",
             resizeMode: "contain",
-            // backgroundColor: "white",
-            //borderRadius: 10,
             marginBottom: 100,
           }}
         />
@@ -221,11 +237,11 @@ const SignIn = (props) => {
           style={[BaseStyle.textInput]}
           onChangeText={emailChanged}
           autoCorrect={false}
-          placeholder={t("input_id")}
+          placeholder={"Input email"}
           value={email}
           selectionColor={colors.primary}
         />
-        <TextInput
+        {/* <TextInput
           style={[BaseStyle.textInput, { marginTop: 10 }]}
           onChangeText={passwordChanged}
           autoCorrect={false}
@@ -242,11 +258,12 @@ const SignIn = (props) => {
               color={colors.text}
             />
           }
-        />
+        /> */}
         <View style={{ width: "100%", marginVertical: 16 }}>
           <Button
             full
             loading={loading}
+            disabled={loading}
             style={{ marginTop: 20 }}
             // onPress={loginUser}
             onPress={loginklik}
@@ -254,6 +271,39 @@ const SignIn = (props) => {
             {t("sign_in")}
           </Button>
         </View>
+        <TouchableOpacity
+          //onPress={loginklikGhalung}
+          onPress={handleSignUp}
+          style={{
+            //flex: 0,
+            backgroundColor: colors.background,
+            color: colors.primary,
+            borderWidth: 1,
+            borderColor: colors.primary,
+            padding: 15,
+            marginBottom: 20,
+            borderRadius: 10,
+            marginHorizontal: 0,
+          }}
+        >
+          <Text
+            body2
+            grayColor
+            style={{
+              //color: colors.background,
+              color: colors.primary,
+              //backgroundColor: "black",
+              alignSelf: "center",
+              fontSize: 15,
+              //marginRight: 10,
+              //marginBottom: 10,
+              fontWeight: 600,
+            }}
+          >
+            {/* {t("Sign Up")} */}
+            {t("Register")}
+          </Text>
+        </TouchableOpacity>
         <View style={styles.contentActionBottom}>
           <TouchableOpacity
             onPress={() => navigation.navigate("ResetPassword")}
@@ -262,41 +312,8 @@ const SignIn = (props) => {
               {t("forgot_your_password")}
             </Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={loginklikMGR}>
-            <Text body2 grayColor>
-              {t("MGR")}
-            </Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity onPress={loginklikGhalung}>
-            <Text
-              body2
-              style={{
-                color: colors.background,
-                //backgroundColor: "black",
-                alignSelf: "center",
-                //fontSize: 5,
-                marginRight: 30,
-              }}
-            >
-              {t(".")}
-            </Text>
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity onPress={() => navigation.navigate("AboutUs")}>
-            <Text body2 primaryColor>
-              {t("About Us")}
-            </Text>
-          </TouchableOpacity> */}
         </View>
       </View>
-
-      {/* <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={offsetKeyboard}
-        style={{
-          flex: 1,
-        }}></KeyboardAvoidingView> */}
-      {/* </SafeAreaView> */}
     </KeyboardAvoidingView>
   );
 };

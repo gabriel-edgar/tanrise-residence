@@ -530,7 +530,7 @@ const Billing = (props) => {
           style={{
             flex: 1,
             paddingHorizontal: 20,
-            paddingBottom: 5,
+            paddingBottom: 15,
             // backgroundColor: "blue",
             display: tab.id === 2 ? "flex" : "none",
           }}

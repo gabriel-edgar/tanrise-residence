@@ -103,7 +103,7 @@ const BillingHistory = () => {
     fetchData();
   };
 
-  useCustomTriggerOnFocus(onRefresh);
+  useCustomTriggerOnFocus(onRefresh, 20000);
 
   const copyToClipboard = text => {
     Clipboard.setString(text);
