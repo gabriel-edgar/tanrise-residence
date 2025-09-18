@@ -168,7 +168,7 @@ const Billing = (props) => {
       .catch((error) => {});
   };
 
-  useCustomTriggerOnFocus(onRefresh, 8000);
+  useCustomTriggerOnFocus(onRefresh, 10000);
 
   // not paid
   async function fetchData() {

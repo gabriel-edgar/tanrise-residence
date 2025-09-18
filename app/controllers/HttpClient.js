@@ -7,8 +7,8 @@ import { refreshTokenAction } from "../actions/UserActions";
 import { store, persist } from "../store";
 
 // const baseURL = API_URL_LOKAL;
-const baseURL = API_URL_TRAIN;
-// const baseURL = API_URL_LIVE;
+// const baseURL = API_URL_TRAIN;
+const baseURL = API_URL_LIVE;
 console.log("baseURL: ", baseURL);
 
 const client = axios.create({
