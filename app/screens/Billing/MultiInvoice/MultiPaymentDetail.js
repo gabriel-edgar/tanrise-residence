@@ -324,8 +324,8 @@ const MultiPaymentDetail = (props) => {
                       : ""
                     : "",
                 paddingHorizontal: 5,
-                borderTopWidth:colors.background == "white"?0:1,
-                borderColor:colors.text
+                borderTopWidth: colors.background == "white" ? 0 : 1,
+                borderColor: colors.text,
               }}
             >
               <View
@@ -334,19 +334,19 @@ const MultiPaymentDetail = (props) => {
                   justifyContent: "space-between",
                   width: "100%",
                   // paddingHorizontal: 10,
-                  paddingVertical: 0,
+                  paddingTop: 7,
                 }}
               >
                 <View style={{ width: "60%" }}>
-                  <Text style={{fontWeight:'700'}} subhead>
+                  <Text style={{ fontWeight: "700" }} subhead>
                     {
-                    // [key + 1] +
-                    //   ". " +
-                      moment(item.doc_date).format("DD MMMM YYYY") }
-                      </Text> 
+                      // [key + 1] +
+                      //   ". " +
+                      moment(item.doc_date).format("DD MMMM YYYY")
+                    }
+                  </Text>
                   <Text subhead>
-                    {
-item.doc_no+
+                    {item.doc_no +
                       "\n\n" +
                       item?.detail
                         ?.map(
@@ -361,150 +361,150 @@ item.doc_no+
                         .join("")}
                   </Text>
                 </View>
-                <View style={{ justifyContent: "center",  }}>
+                <View style={{ justifyContent: "center" }}>
                   <View
                     style={{
                       flexDirection: "row",
                     }}
                   >
                     <Text>Rp. </Text>
-                    <Text subhead>
-                      {numFormattanpaRupiah(item.mfinal_amt)}
-                    </Text>
+                    <Text subhead>{numFormattanpaRupiah(item.mfinal_amt)}</Text>
                   </View>
                 </View>
               </View>
             </View>
           ))}
-
-
-
-
         </View>
       </ScrollView>
       <View>
-      <View
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            // paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor:
+              colors.background == "white"
+                ? selectedInvoicesExtended.length % 2 == 0
+                  ? "lightgray"
+                  : ""
+                : "",
+            paddingHorizontal: 5,
+          }}
+        >
+          <View style={{ width: "50%", paddingLeft: 10 }}>
+            <Text subhead bold>
+              Total
+            </Text>
+          </View>
+          <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
-              // paddingHorizontal: 10,
-              paddingVertical: 5,
-              backgroundColor:
-                colors.background == "white"
-                  ? selectedInvoicesExtended.length % 2 == 0
-                    ? "lightgray"
-                    : ""
-                  : "",
-              paddingHorizontal: 5,
+
+              width: "50%",
             }}
           >
-            <View style={{ width: "50%", paddingLeft: 10 }}>
-              <Text subhead bold>
-                Total
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-
-                width: "50%",
-              }}
-            >
-              <Text subhead bold>
-                Rp.{" "}
-              </Text>
-              <Text subhead bold>
-                {params.totalAmt}
-                {/* 100.000.000.00 */}
-              </Text>
-              {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
-            </View>
-          </View>
-                  <Button
-            disable={loading}
-            style={{ height: 45, margin: 10, marginTop: 20, opacity:loading?0.5:1 }}
-            onPress={() => {
-              // Find the first detail that starts with "not found"
-              let notFoundDetail = null;
-
-              for (const item of selectedInvoicesExtended) {
-                const match = item.detail?.find((detailItem) =>
-                  detailItem?.descs?.toLowerCase().startsWith("not found")
-                );
-                if (match) {
-                  notFoundDetail = item;
-                  break;
-                }
-              }
-
-              // Handle "not found" case
-              // if (notFoundDetail) {
-              //   Alert.alert(
-              //     "Warning",
-              //     `${notFoundDetail?.doc_no} does not has invoice detail`,
-              //     [
-              //       // {
-              //       //   text: "Cancel",
-              //       //   onPress: () => console.log("Cancelled"),
-              //       //   style: "cancel",
-              //       // },
-              //       {
-              //         text: "OK",
-              //         onPress: () => {},
-              //       },
-              //     ]
-              //   );
-              //   setIsShowRefresh(true)
-              //   // return;
-              // }
-
-              let error;
-              // Handle "error" case
-              for (const item of selectedInvoicesExtended) {
-                const match2 = item.detail?.find((detailItem) =>
-                  detailItem?.descs?.toLowerCase().startsWith("error")
-                );
-                if (match2) {
-                  error = item;
-                  break;
-                }
-              }
-
-              // Handle "not found" case
-              // if (error) {
-              //   Alert.alert(
-              //     "Warning",
-              //     `${error?.doc_no} error get invoice detail`,
-              //     [
-              //       // {
-              //       //   text: "Cancel",
-              //       //   onPress: () => console.log("Cancelled"),
-              //       //   style: "cancel",
-              //       // },
-              //       {
-              //         text: "OK",
-              //         onPress: () => {},
-              //       },
-              //     ]
-              //   );
-              //   setIsShowRefresh(true)
-              //   return;
-              // }
-
-              // All good, proceed with navigation
-              navigation.navigate("MultiMerchantList", {
-                ...route.params,
-              });
-            }}
-          >
-            <Text style={{ color: "#fff", fontSize: 14, marginLeft: 10 }}>
-              Select Payment Method
+            <Text subhead bold>
+              Rp.{" "}
             </Text>
-            {/* {loading ? <ActivityIndicator></ActivityIndicator> : null} */}
-          </Button>
-          {isShowRefresh ? loading ? (
+            <Text subhead bold>
+              {params.totalAmt}
+              {/* 100.000.000.00 */}
+            </Text>
+            {/* <Text subhead>{numFormat(item.mbal_amt)}</Text> */}
+          </View>
+        </View>
+        <Button
+          disable={loading}
+          style={{
+            height: 45,
+            margin: 10,
+            marginTop: 20,
+            opacity: loading ? 0.5 : 1,
+          }}
+          onPress={() => {
+            // Find the first detail that starts with "not found"
+            let notFoundDetail = null;
+
+            for (const item of selectedInvoicesExtended) {
+              const match = item.detail?.find((detailItem) =>
+                detailItem?.descs?.toLowerCase().startsWith("not found")
+              );
+              if (match) {
+                notFoundDetail = item;
+                break;
+              }
+            }
+
+            // Handle "not found" case
+            // if (notFoundDetail) {
+            //   Alert.alert(
+            //     "Warning",
+            //     `${notFoundDetail?.doc_no} does not has invoice detail`,
+            //     [
+            //       // {
+            //       //   text: "Cancel",
+            //       //   onPress: () => console.log("Cancelled"),
+            //       //   style: "cancel",
+            //       // },
+            //       {
+            //         text: "OK",
+            //         onPress: () => {},
+            //       },
+            //     ]
+            //   );
+            //   setIsShowRefresh(true)
+            //   // return;
+            // }
+
+            let error;
+            // Handle "error" case
+            for (const item of selectedInvoicesExtended) {
+              const match2 = item.detail?.find((detailItem) =>
+                detailItem?.descs?.toLowerCase().startsWith("error")
+              );
+              if (match2) {
+                error = item;
+                break;
+              }
+            }
+
+            // Handle "not found" case
+            // if (error) {
+            //   Alert.alert(
+            //     "Warning",
+            //     `${error?.doc_no} error get invoice detail`,
+            //     [
+            //       // {
+            //       //   text: "Cancel",
+            //       //   onPress: () => console.log("Cancelled"),
+            //       //   style: "cancel",
+            //       // },
+            //       {
+            //         text: "OK",
+            //         onPress: () => {},
+            //       },
+            //     ]
+            //   );
+            //   setIsShowRefresh(true)
+            //   return;
+            // }
+
+            // All good, proceed with navigation
+            navigation.navigate("MultiMerchantList", {
+              ...route.params,
+            });
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 14, marginLeft: 10 }}>
+            Select Payment Method
+          </Text>
+          {/* {loading ? <ActivityIndicator></ActivityIndicator> : null} */}
+        </Button>
+        {isShowRefresh ? (
+          loading ? (
             <ActivityIndicator></ActivityIndicator>
           ) : (
             <Button
@@ -521,9 +521,13 @@ item.doc_no+
               }}
             >
               {/* <Icon name={isExpand ? "" : "chevron-down"} size={20} /> */}
-              <Text style={{ color: "white" , fontSize:13 }}> Refresh Invoice Detail</Text>
+              <Text style={{ color: "white", fontSize: 13 }}>
+                {" "}
+                Refresh Invoice Detail
+              </Text>
             </Button>
-          ): null}
+          )
+        ) : null}
       </View>
     </SafeAreaView>
   );
