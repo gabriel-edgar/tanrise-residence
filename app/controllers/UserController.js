@@ -160,7 +160,7 @@ class UserController {
   // logout = () => null;
 
   saveProfile = async (data) => {
-    console.log("save profile daata controler", data);
+    console.log("save profile data controler", data);
     try {
       const result = await httpClient.request({
         url: API_URL_LOKAL + `/auth/change-profile`,
