@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">ifcamobileapp.tanrise.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <!-- This will load your android/app/src/main/res/raw/server_cert.pem file -->
+            <certificates src="@raw/server_cert" /> 
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
